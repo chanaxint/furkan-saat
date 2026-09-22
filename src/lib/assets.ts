@@ -16,6 +16,11 @@
 
 export type ModelAsset = {
   src: string | null;
+  /**
+   * Point of the model (in its own units) that the showcase rotates around —
+   * normally the centre of the watch head, not the centre of the bracelet.
+   */
+  pivot?: [number, number, number];
   /** Optional Draco decoder path if the file is Draco-compressed. */
   draco?: boolean;
   /** Uniform scale / offset to normalise an exported model into scene units. */
@@ -47,6 +52,16 @@ export const ASSETS = {
     watch: { src: null } as ModelAsset,
     /** Optional: dark surface / set piece for the opening shot. */
     surface: { src: null } as ModelAsset,
+  },
+  showcase: {
+    /**
+     * Rolex Submariner Date (green) — single textured mesh, dial faces +Z.
+     * Geometry meshopt-compressed (23.6 MB → 10.8 MB); textures untouched.
+     */
+    watch: {
+      src: "/assets/models/emerald-watch.glb",
+      pivot: [0, 0, 0.695],
+    } as ModelAsset,
   },
   exploded: {
     /** 04 Exploded View — a single GLB whose parts are named nodes. */

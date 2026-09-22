@@ -20,6 +20,8 @@ const make = (): ProgressChannel => ({ target: 0, current: 0, velocity: 0, activ
 export const progress = {
   /** 01 Opening → 02 Reveal → 03 Features (one continuous stage). */
   story: make(),
+  /** Watch showcase (after the box exit, before the exploded view). */
+  showcase: make(),
   /** 04 Exploded View. */
   exploded: make(),
 };

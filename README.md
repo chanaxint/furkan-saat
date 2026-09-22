@@ -17,6 +17,7 @@ npm run typecheck
 | 01 | Cinematic Opening  | `sections/story/CinematicOpening` (on shared 3D stage) |
 | 02 | Watch Reveal       | `sections/story/WatchReveal`                           |
 | 03 | Watch Features     | `sections/story/WatchFeatures`                         |
+| —  | Watch Showcase     | `sections/showcase/WatchShowcase` + `three/showcase/*` (real GLB) |
 | 04 | Exploded View      | `sections/ExplodedView` + `three/WatchExplodedView`    |
 | 05 | New Arrival        | `sections/NewArrival` + `media/ProductShowcase`        |
 | 06 | Most Wanted        | `sections/MostWanted`                                  |
@@ -47,6 +48,29 @@ separate blocks.
 - `lib/scene/exploded.ts` — part list, offsets, sequencing and camera for 04
 - `three/CameraRig` — the only thing that moves a camera; damped, keyframed
 - `prefers-reduced-motion` disables Lenis and scroll choreography
+
+## Watch showcase (real model)
+
+`public/assets/models/emerald-watch.glb`: the Rolex Submariner Date model. The mesh is
+meshopt-compressed (23.6 MB → 10.8 MB) and the textures and materials are untouched.
+Scroll turns the watch front → ¾ → profile → ¾ → front hero.
+
+- `lib/scene/showcase.ts`: every angle, camera orbit, dolly and hold, plus the
+  hand-off poses `SHOWCASE_ENTRY_POSE` (what a future box-exit sequence must end on)
+  and `SHOWCASE_HERO_POSE` (where the exploded view picks up).
+- `lib/scene/spline.ts`: Hermite/Catmull-Rom curves. Motion flows *through*
+  the keys instead of stopping at each one.
+- `lib/scene/spring.ts`: a critically damped spring with a velocity cap. Scroll
+  sets a target and the watch follows with inertia. It never overshoots, never
+  jumps on a fast scroll, and stops dead when scrolling stops (no idle motion).
+- `three/showcase/ShowcaseRig`: one springed value drives both the watch and
+  the camera, so they can never drift apart.
+- `three/showcase/ShowcaseLighting`: procedural strip softboxes for steel.
+  `WatchShowcaseScene` adds subtle depth of field (desktop only), a vignette
+  and ACES tone mapping.
+
+Future box sequences go between `<WatchStory />` and `<WatchShowcase />` in
+`src/app/page.tsx`.
 
 ## Adding real assets
 

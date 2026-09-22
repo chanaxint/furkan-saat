@@ -36,17 +36,6 @@ export type VideoAsset = {
   poster: string | null;
 };
 
-/** A presentation box with a hinged lid (see lib/scene/intro.ts). */
-export type BoxAsset = ModelAsset & {
-  src: string;
-  /** Lid node names to look for, in order (Blender name first, then export fallbacks). */
-  lidNodes: string[];
-  /** Hinge axis position in the model's original units (lid rotates about +X here). */
-  hinge: [number, number, number];
-  /** Lid X-angle as modelled in the file (radians). */
-  modelledLidAngle: number;
-};
-
 export type ImageAsset = {
   src: string | null;
   alt: string;
@@ -56,18 +45,20 @@ export type ImageAsset = {
 export const SHOW_ASSET_HINTS = true;
 
 export const ASSETS = {
-  intro: {
+  hero: {
     /**
-     * Rolex presentation box. Meshopt-compressed (9.5 MB → 6.2 MB). Compression
-     * re-bakes node transforms, so the hinge is rebuilt in code from `hinge`.
+     * Opening footage — camera pulling back from the empty cushion. Played as
+     * a WebP frame sequence (public/assets/video/hero/000–239.webp) so scroll
+     * scrubbing is exact in every browser.
      */
-    box: {
-      src: "/assets/models/rolex-box.glb",
-      lidNodes: ["BoxLid", "Mesh_0002", "Mesh_0.002"],
-      hinge: [0.0744, -0.4457, -0.5269],
-      modelledLidAngle: 0.1733,
-      scale: 2.7,
-    } as BoxAsset,
+    frames: { dir: "/assets/video/hero", count: 240, ext: "webp" },
+    /**
+     * Jacob & Co. model the Rolex turns into at the end of the opening.
+     * Drop the file in public/assets/models/ and set `src`. It is centred and
+     * scaled to the Rolex automatically; use `rotation` so the dial faces +Z
+     * with 12 o'clock up.
+     */
+    jacob: { src: null, rotation: [0, 0, 0] } as ModelAsset,
   },
   showcase: {
     /**

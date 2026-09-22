@@ -1,0 +1,212 @@
+.section {
+  --film: 1;
+  --flash: 0;
+  position: relative;
+  /* Scroll length of the whole opening timeline. */
+  height: 1500svh;
+  background: var(--green-900);
+  color: var(--ivory);
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* The house green the footage dissolves into (same as the next sections). */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(46% 52% at 50% 48%, rgba(29, 70, 61, 0.55), transparent 72%),
+    radial-gradient(120% 90% at 50% 115%, #030d0b, transparent 60%),
+    var(--green-900);
+}
+
+.poster,
+.film {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: var(--film);
+}
+.poster[data-hidden] {
+  visibility: hidden;
+}
+
+/* Gentle grade over the footage: vignette + a touch of the house green. */
+.grade {
+  position: absolute;
+  inset: 0;
+  opacity: var(--film);
+  pointer-events: none;
+  background:
+    radial-gradient(85% 80% at 50% 48%, transparent 50%, rgba(8, 6, 3, 0.55) 100%),
+    linear-gradient(to bottom, rgba(7, 26, 22, 0.35), transparent 22%, transparent 78%, rgba(7, 26, 22, 0.45));
+}
+
+.canvas {
+  z-index: 3;
+}
+
+/* Brief bloom that hides the exact moment the Rolex becomes the Jacob & Co. */
+.flash {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: var(--flash);
+  background: radial-gradient(38% 42% at 50% 50%, rgba(255, 244, 222, 0.85), rgba(200, 185, 154, 0.25) 55%, transparent 75%);
+  mix-blend-mode: screen;
+}
+
+/* ------------------------------------------------------------ copy */
+.lines {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.line {
+  position: absolute;
+  max-width: 34vw;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 5.6vw, 6.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--ivory);
+  opacity: 0;
+  visibility: hidden;
+}
+.line em {
+  color: var(--champagne);
+}
+.line[data-index="0"] {
+  right: var(--gutter);
+  top: 20%;
+  text-align: right;
+}
+.line[data-index="1"] {
+  left: var(--gutter);
+  bottom: 18%;
+}
+.line[data-index="2"] {
+  right: var(--gutter);
+  bottom: 22%;
+  text-align: right;
+}
+
+/* ---------------------------------------------------------- chrome */
+.loader {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 12vh;
+  transform: translateX(-50%);
+  transition: opacity 1s var(--ease-lux);
+}
+.loader[data-ready] {
+  opacity: 0;
+}
+.loaderLine {
+  position: relative;
+  display: block;
+  width: 80px;
+  height: 1px;
+  overflow: hidden;
+  background: rgba(242, 237, 227, 0.14);
+}
+.loaderLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--champagne);
+  animation: load 1.8s var(--ease-soft) infinite;
+}
+@keyframes load {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+.title {
+  position: absolute;
+  z-index: 5;
+  left: var(--gutter);
+  bottom: 9vh;
+  display: grid;
+  gap: 16px;
+  max-width: 560px;
+  pointer-events: none;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35);
+}
+.title p {
+  color: var(--champagne);
+}
+.headline {
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  line-height: 0.95;
+}
+.headline em {
+  color: var(--champagne);
+}
+
+.cue {
+  position: absolute;
+  z-index: 5;
+  right: var(--gutter);
+  bottom: 9vh;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-muted);
+}
+.cueLine {
+  position: relative;
+  width: 1px;
+  height: 56px;
+  overflow: hidden;
+  background: rgba(242, 237, 227, 0.2);
+}
+.cueLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--champagne);
+  animation: cue 2.8s var(--ease-soft) infinite;
+}
+@keyframes cue {
+  0% { transform: translateY(-100%); }
+  60% { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+
+@media (max-width: 767px) {
+  .section {
+    height: 1300svh;
+  }
+  .line {
+    max-width: none;
+    left: var(--gutter) !important;
+    right: var(--gutter) !important;
+    font-size: clamp(2.2rem, 11vw, 3.4rem);
+  }
+  .line[data-index="0"],
+  .line[data-index="2"] {
+    top: calc(var(--nav-h) + 4vh);
+    bottom: auto;
+  }
+  .line[data-index="1"] {
+    top: auto;
+    bottom: 10vh;
+  }
+}

@@ -14,9 +14,8 @@ npm run typecheck
 
 | #  | Section            | Component                                              |
 |----|--------------------|--------------------------------------------------------|
-| 01 | Intro (box)        | `sections/intro/BoxIntro` + `three/intro/BoxIntroScene` + `lib/scene/intro.ts` |
-| —  | Watch Showcase     | `sections/showcase/WatchShowcase` + `three/showcase/*` (real GLB) |
-| 04 | In Detail (macro)  | `sections/details/WatchDetails` + `lib/scene/details.ts` (real GLB) |
+| 01 | Hero film          | `sections/hero/HeroFilm` + `three/hero/HeroWatchScene` + `lib/scene/hero.ts` |
+| —  | In Detail (macro)  | *parked:* `sections/details/WatchDetails` (not on the page for now) |
 | —  | Exploded View      | *parked:* `sections/ExplodedView` (not on the page for now) |
 | 05 | New Arrival        | `sections/NewArrival` + `media/ProductShowcase`        |
 | 06 | Most Wanted        | `sections/MostWanted`                                  |
@@ -27,8 +26,8 @@ npm run typecheck
 | 11 | Final CTA          | `sections/FinalCTA` (green → ivory)                    |
 | 12 | Footer             | `layout/Footer`                                        |
 
-The intro's last frame is the Showcase's first frame, so the box opening,
-the showcase and the close-ups read as one continuous product film.
+The opening ends in the house green, so the film flows straight into the
+rest of the page.
 opening, reveal and features are a single continuous camera move, not three
 separate blocks.
 
@@ -44,72 +43,42 @@ separate blocks.
 - `providers/SmoothScroll` — Lenis on GSAP's ticker (wheel only; touch stays native, no scroll-jacking)
 - `lib/gsap.ts` — single plugin registration
 - `lib/scene/progress.ts` — mutable progress channels written by ScrollTrigger, read by the R3F render loop (no React re-renders per frame)
-- `lib/scene/intro.ts`: the box intro as **one GSAP timeline** (scrubbed, `scrub: 1`)
+- `lib/scene/hero.ts`: the opening as **one GSAP timeline** (scrubbed, `scrub: 1`)
 - `lib/scene/exploded.ts` — part list, offsets, sequencing and camera for 04
 - `three/CameraRig` — the only thing that moves a camera; damped, keyframed
 - `prefers-reduced-motion` disables Lenis and scroll choreography
 
-## Watch showcase (real model)
+## Hero film (opening)
 
-`public/assets/models/emerald-watch.glb`: the Rolex Submariner Date model. The mesh is
-meshopt-compressed (23.6 MB → 10.8 MB) with full geometry kept. Textures and materials are untouched.
+The opening is filmed footage with the real 3D watch composited into it, all
+driven by scroll through **one GSAP timeline** (`buildHeroTimeline`, `scrub: 1`).
 
-The sequence, driven entirely by scroll:
-1. **Arrival**: the watch rises into frame and settles, dial to camera.
-2. **Presence**: it shows its face off: right, a touch right, a touch left.
-3. **Reverse**: it recedes through one full turn (caseback and bracelet, then the dial).
-4. **Perspective**: it comes forward with the dial tipped up, seen from a side angle.
-5. **Hero**: back to the straight front pose, where it holds.
+- **Footage:** `public/assets/video/hero/000–239.webp` (from the 10 s, 24 fps clip).
+  `FrameSequence` draws it to a canvas, loading coarse to fine and blending
+  neighbouring frames. A `<video>` element can't scrub frame-accurately.
+- **Seating the watch:** `lib/scene/heroTrack.ts` holds the cushion's position and
+  size in every frame, tracked from the footage (SIFT + RANSAC homographies).
+  `HeroWatchScene` turns that into a 3D anchor (cover-fit aware) and places the
+  watch on it, dial up and 12 o'clock toward the lid. An invisible cushion
+  shape hides the bracelet where it wraps behind the cushion and catches the
+  watch's shadow.
+- **Sequence:** seated → lifts off as the camera pulls back → comes to the lens,
+  turns right then left → spins away (the footage dissolves into the house green)
+  → three copy lines, with the watch turning to look at each one → on the last
+  line the Rolex spins fast and comes out of it as the Jacob & Co.
+- **Rotation rule:** spins only run about the two diagonal axes
+  (`SPIN_AXIS_A/B`), and every look-turn mixes yaw, pitch and roll. There are
+  no pure horizontal or pure vertical turns.
+- **Jacob & Co.:** set `ASSETS.hero.jacob.src`. The model is centred and scaled to
+  the Rolex automatically. Use `rotation` so its dial faces +Z. Until then the
+  handover spins back into the Rolex.
+- Copy lines, look directions and timing are in `HERO_LINES` / `HERO_BEATS`.
 
-Large type lines ("Water resistant to 300 metres", …) sweep across behind the
-watch from the right and left. Edit them in `SHOWCASE_MESSAGES`.
-
-- `lib/scene/showcase.ts`: every pose, the camera, the text lines, the speed
-  limits and the hand-off poses (`SHOWCASE_ARRIVED_POSE` for a future box-exit
-  sequence, `SHOWCASE_HERO_POSE` for the exploded view).
-- `lib/scene/spline.ts`: monotone Hermite curves. Motion flows through the poses,
-  eases like a pendulum where it changes direction, and never overshoots.
-- `lib/scene/spring.ts` + `advanceShowcase()`: a critically damped spring whose
-  speed limit follows how much the watch actually moves (max ~170°/s). A fast
-  scroll or anchor jump never teleports it. It stops dead when scrolling stops.
-- **Performance:** one render pass per frame (no post-processing, no shadow pass),
-  pixel ratio ≤ 1.5, and **on-demand rendering**: the GPU only draws while the
-  watch moves and is idle otherwise.
-- QA: `window.__showcaseSnap = true` in the console disables the spring (for captures).
-
-## In Detail (macro close-ups)
-
-This section stands in for the exploded view for now. The watch holds its hero
-pose and the camera moves: it starts on the showcase's closing frame, moves in
-on the dial, ceramic bezel, cyclops lens, crown and clasp, then orbits back to
-the front. Shots, camera positions and caption copy are all in
-`lib/scene/details.ts` (`DETAIL_SHOTS`).
+## In Detail (macro close-ups, parked)
 
 Both sections run on one shared engine, `lib/scene/sequence.ts`, with a generic
 `SequenceRig` and `ModelSequenceScene`. A new model sequence is just a
 `sample()` function plus speed limits.
-
-## Intro: the watch in its box
-
-`public/assets/models/rolex-box.glb` is the presentation box (meshopt, 9.5 → 6.2 MB).
-Its lid is the node `Mesh_0.002` (three.js reads it as `Mesh_0002`). A re-export with
-the lid named `BoxLid` also works, via `ASSETS.intro.box.lidNodes`. Compression re-bakes
-node transforms, so the hinge is rebuilt in code: the lid is re-parented to a pivot
-at `ASSETS.intro.box.hinge` (original hinge position) and rotated about X.
-
-`buildIntroTimeline()` in `lib/scene/intro.ts` holds every step as `tl.to(...)`:
-1. Top-down view of the closed box (`LID.closed`) on an invisible table (contact shadow only).
-2. The camera descends to a front-diagonal view (orbit: azimuth / elevation / distance / look-at).
-3. The lid opens back about its hinge (`LID.open`).
-4. The camera pushes in on the watch on the cushion (`WATCH_IN_BOX`).
-5. The watch lifts out and comes to the lens (`WATCH_HOVER`, head ≈ 90% of the frame),
-   turns right, then left.
-6. It spins +4π on Y while flying back, and the camera re-aims onto it (`cam.follow`).
-   This last frame equals `SHOWCASE_ENTRY_POSE`, and the Showcase continues from there.
-
-The timeline animates a plain state object. `BoxIntroScene` only reads it in `useFrame`
-(camera, lid pivot, watch ref) and renders on demand (the timeline wakes it). To bring the exploded view back, put `<ExplodedView />`
-after `<WatchDetails />`.
 
 ## Adding real assets
 
@@ -118,8 +87,9 @@ today and renders a placeholder; set a path and the real asset replaces it.
 
 | Asset | Where | Notes |
 |---|---|---|
-| Presentation box `.glb` | `ASSETS.intro.box` | lid node name, hinge position, modelled lid angle, scale |
-| Watch `.glb` | `ASSETS.showcase.watch` | dial faces +Z; `pivot` = watch-head centre (shared by intro, showcase, details) |
+| Opening footage | `ASSETS.hero.frames` | WebP frame sequence (re-export frames + re-run the cushion track if the clip changes) |
+| Jacob & Co. `.glb` | `ASSETS.hero.jacob` | dial toward +Z via `rotation`; auto centred and scaled |
+| Watch `.glb` | `ASSETS.showcase.watch` | dial faces +Z; `pivot` = watch-head centre (shared by the hero film and details) |
 | Exploded watch `.glb` | `ASSETS.exploded.watch` | nodes named `Crystal, Bezel, Hands, Dial, Case, Movement, Caseback, Strap` (see `lib/scene/exploded.ts`) — they are driven along local Z automatically |
 | New arrival | `ASSETS.newArrival.{model,film,still}` | model → film → still → placeholder |
 | Boutique film | `ASSETS.boutique.film` | `.webm` + `.mp4` + poster |

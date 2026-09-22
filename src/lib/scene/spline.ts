@@ -1,20 +1,27 @@
 import type { Keyframe, Vec3 } from "./keyframes";
 
 /**
- * Smooth keyframe curves (cubic Hermite, Catmull-Rom tangents).
+ * Smooth keyframe curves — monotone cubic Hermite (Fritsch–Butland tangents).
  *
- * Unlike per-segment smoothstep — which brakes to a stop at every key and
- * reads as mechanical — a Hermite curve passes *through* each key with a
- * continuous velocity, so a move from front → ¾ → profile flows like a single
- * camera/product move. The first and last keys get zero tangents, so the
- * sequence eases out of its start pose and settles into its end pose.
+ * Unlike per-segment smoothstep, which brakes to a stop at every key and
+ * reads as mechanical, the curve passes *through* keys that continue in the
+ * same direction with a continuous velocity. Where the motion reverses (e.g.
+ * a sway right → left) the tangent is zero, so the object eases through the
+ * turnaround like a pendulum. The curve never overshoots a key: no bounce,
+ * no drift past a pose. First and last keys ease in / out.
  */
 
 function tangent(keys: Keyframe<number>[], i: number) {
   if (i === 0 || i === keys.length - 1) return 0;
   const a = keys[i - 1];
+  const k = keys[i];
   const b = keys[i + 1];
-  return (b.value - a.value) / (b.at - a.at || 1);
+  const h0 = k.at - a.at || 1e-6;
+  const h1 = b.at - k.at || 1e-6;
+  const d0 = (k.value - a.value) / h0;
+  const d1 = (b.value - k.value) / h1;
+  if (d0 * d1 <= 0) return 0; // extremum or flat neighbour → ease through
+  return (3 * (h0 + h1)) / ((2 * h1 + h0) / d0 + (h1 + 2 * h0) / d1);
 }
 
 export function hermiteScalar(keys: Keyframe<number>[], p: number) {

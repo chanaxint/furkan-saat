@@ -13,6 +13,11 @@ export type ProgressChannel = {
   velocity: number;
   /** Whether the owning section is in (or near) the viewport. */
   active: boolean;
+  /** Set by an on-demand canvas: request a frame (called on scroll). */
+  wake?: () => void;
+  /** Called by the render loop with the *smoothed* progress each frame, so
+   *  DOM layers (captions, kinetic type) move in lock-step with the 3D. */
+  onFrame?: (p: number) => void;
 };
 
 const make = (): ProgressChannel => ({ target: 0, current: 0, velocity: 0, active: false });

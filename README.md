@@ -52,22 +52,30 @@ separate blocks.
 ## Watch showcase (real model)
 
 `public/assets/models/emerald-watch.glb`: the Rolex Submariner Date model. The mesh is
-meshopt-compressed (23.6 MB → 10.8 MB) and the textures and materials are untouched.
-Scroll turns the watch front → ¾ → profile → ¾ → front hero.
+meshopt-compressed (23.6 MB → 10.8 MB) with full geometry kept. Textures and materials are untouched.
 
-- `lib/scene/showcase.ts`: every angle, camera orbit, dolly and hold, plus the
-  hand-off poses `SHOWCASE_ENTRY_POSE` (what a future box-exit sequence must end on)
-  and `SHOWCASE_HERO_POSE` (where the exploded view picks up).
-- `lib/scene/spline.ts`: Hermite/Catmull-Rom curves. Motion flows *through*
-  the keys instead of stopping at each one.
-- `lib/scene/spring.ts`: a critically damped spring with a velocity cap. Scroll
-  sets a target and the watch follows with inertia. It never overshoots, never
-  jumps on a fast scroll, and stops dead when scrolling stops (no idle motion).
-- `three/showcase/ShowcaseRig`: one springed value drives both the watch and
-  the camera, so they can never drift apart.
-- `three/showcase/ShowcaseLighting`: procedural strip softboxes for steel.
-  `WatchShowcaseScene` adds subtle depth of field (desktop only), a vignette
-  and ACES tone mapping.
+The sequence, driven entirely by scroll:
+1. **Arrival**: the watch rises into frame and settles, dial to camera.
+2. **Presence**: it shows its face off: right, a touch right, a touch left.
+3. **Reverse**: it recedes through one full turn (caseback and bracelet, then the dial).
+4. **Perspective**: it comes forward with the dial tipped up, seen from a side angle.
+5. **Hero**: back to the straight front pose, where it holds.
+
+Large type lines ("Water resistant to 300 metres", …) sweep across behind the
+watch from the right and left. Edit them in `SHOWCASE_MESSAGES`.
+
+- `lib/scene/showcase.ts`: every pose, the camera, the text lines, the speed
+  limits and the hand-off poses (`SHOWCASE_ARRIVED_POSE` for a future box-exit
+  sequence, `SHOWCASE_HERO_POSE` for the exploded view).
+- `lib/scene/spline.ts`: monotone Hermite curves. Motion flows through the poses,
+  eases like a pendulum where it changes direction, and never overshoots.
+- `lib/scene/spring.ts` + `advanceShowcase()`: a critically damped spring whose
+  speed limit follows how much the watch actually moves (max ~170°/s). A fast
+  scroll or anchor jump never teleports it. It stops dead when scrolling stops.
+- **Performance:** one render pass per frame (no post-processing, no shadow pass),
+  pixel ratio ≤ 1.5, and **on-demand rendering**: the GPU only draws while the
+  watch moves and is idle otherwise.
+- QA: `window.__showcaseSnap = true` in the console disables the spring (for captures).
 
 Future box sequences go between `<WatchStory />` and `<WatchShowcase />` in
 `src/app/page.tsx`.

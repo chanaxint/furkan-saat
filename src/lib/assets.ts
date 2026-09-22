@@ -36,6 +36,17 @@ export type VideoAsset = {
   poster: string | null;
 };
 
+/** A presentation box with a hinged lid (see lib/scene/intro.ts). */
+export type BoxAsset = ModelAsset & {
+  src: string;
+  /** Lid node names to look for, in order (Blender name first, then export fallbacks). */
+  lidNodes: string[];
+  /** Hinge axis position in the model's original units (lid rotates about +X here). */
+  hinge: [number, number, number];
+  /** Lid X-angle as modelled in the file (radians). */
+  modelledLidAngle: number;
+};
+
 export type ImageAsset = {
   src: string | null;
   alt: string;
@@ -45,13 +56,18 @@ export type ImageAsset = {
 export const SHOW_ASSET_HINTS = true;
 
 export const ASSETS = {
-  story: {
-    /** 01 Cinematic Opening — realistic hand + wrist, rigged or baked. */
-    hand: { src: null } as ModelAsset,
-    /** 01 → 03 hero timepiece, shared by Opening / Reveal / Features. */
-    watch: { src: null } as ModelAsset,
-    /** Optional: dark surface / set piece for the opening shot. */
-    surface: { src: null } as ModelAsset,
+  intro: {
+    /**
+     * Rolex presentation box. Meshopt-compressed (9.5 MB → 6.2 MB). Compression
+     * re-bakes node transforms, so the hinge is rebuilt in code from `hinge`.
+     */
+    box: {
+      src: "/assets/models/rolex-box.glb",
+      lidNodes: ["BoxLid", "Mesh_0002", "Mesh_0.002"],
+      hinge: [0.0744, -0.4457, -0.5269],
+      modelledLidAngle: 0.1733,
+      scale: 2.7,
+    } as BoxAsset,
   },
   showcase: {
     /**

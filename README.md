@@ -14,9 +14,7 @@ npm run typecheck
 
 | #  | Section            | Component                                              |
 |----|--------------------|--------------------------------------------------------|
-| 01 | Cinematic Opening  | `sections/story/CinematicOpening` (on shared 3D stage) |
-| 02 | Watch Reveal       | `sections/story/WatchReveal`                           |
-| 03 | Watch Features     | `sections/story/WatchFeatures`                         |
+| 01 | Intro (box)        | `sections/intro/BoxIntro` + `three/intro/BoxIntroScene` + `lib/scene/intro.ts` |
 | —  | Watch Showcase     | `sections/showcase/WatchShowcase` + `three/showcase/*` (real GLB) |
 | 04 | In Detail (macro)  | `sections/details/WatchDetails` + `lib/scene/details.ts` (real GLB) |
 | —  | Exploded View      | *parked:* `sections/ExplodedView` (not on the page for now) |
@@ -29,7 +27,8 @@ npm run typecheck
 | 11 | Final CTA          | `sections/FinalCTA` (green → ivory)                    |
 | 12 | Footer             | `layout/Footer`                                        |
 
-01–03 share **one sticky WebGL stage** (`sections/story/WatchStory`), so the
+The intro's last frame is the Showcase's first frame, so the box opening,
+the showcase and the close-ups read as one continuous product film.
 opening, reveal and features are a single continuous camera move, not three
 separate blocks.
 
@@ -45,7 +44,7 @@ separate blocks.
 - `providers/SmoothScroll` — Lenis on GSAP's ticker (wheel only; touch stays native, no scroll-jacking)
 - `lib/gsap.ts` — single plugin registration
 - `lib/scene/progress.ts` — mutable progress channels written by ScrollTrigger, read by the R3F render loop (no React re-renders per frame)
-- `lib/scene/story.ts` — **all** keyframes for 01–03 (camera, hand, watch, light)
+- `lib/scene/intro.ts`: the box intro as **one GSAP timeline** (scrubbed, `scrub: 1`)
 - `lib/scene/exploded.ts` — part list, offsets, sequencing and camera for 04
 - `three/CameraRig` — the only thing that moves a camera; damped, keyframed
 - `prefers-reduced-motion` disables Lenis and scroll choreography
@@ -90,8 +89,26 @@ Both sections run on one shared engine, `lib/scene/sequence.ts`, with a generic
 `SequenceRig` and `ModelSequenceScene`. A new model sequence is just a
 `sample()` function plus speed limits.
 
-Future box sequences go between `<WatchStory />` and `<WatchShowcase />` in
-`src/app/page.tsx`. To bring the exploded view back, put `<ExplodedView />`
+## Intro: the watch in its box
+
+`public/assets/models/rolex-box.glb` is the presentation box (meshopt, 9.5 → 6.2 MB).
+Its lid is the node `Mesh_0.002` (three.js reads it as `Mesh_0002`). A re-export with
+the lid named `BoxLid` also works, via `ASSETS.intro.box.lidNodes`. Compression re-bakes
+node transforms, so the hinge is rebuilt in code: the lid is re-parented to a pivot
+at `ASSETS.intro.box.hinge` (original hinge position) and rotated about X.
+
+`buildIntroTimeline()` in `lib/scene/intro.ts` holds every step as `tl.to(...)`:
+1. Top-down view of the closed box (`LID.closed`) on an invisible table (contact shadow only).
+2. The camera descends to a front-diagonal view (orbit: azimuth / elevation / distance / look-at).
+3. The lid opens back about its hinge (`LID.open`).
+4. The camera pushes in on the watch on the cushion (`WATCH_IN_BOX`).
+5. The watch lifts out and comes to the lens (`WATCH_HOVER`, head ≈ 90% of the frame),
+   turns right, then left.
+6. It spins +4π on Y while flying back, and the camera re-aims onto it (`cam.follow`).
+   This last frame equals `SHOWCASE_ENTRY_POSE`, and the Showcase continues from there.
+
+The timeline animates a plain state object. `BoxIntroScene` only reads it in `useFrame`
+(camera, lid pivot, watch ref) and renders on demand (the timeline wakes it). To bring the exploded view back, put `<ExplodedView />`
 after `<WatchDetails />`.
 
 ## Adding real assets
@@ -101,9 +118,8 @@ today and renders a placeholder; set a path and the real asset replaces it.
 
 | Asset | Where | Notes |
 |---|---|---|
-| Hand + wrist `.glb` | `ASSETS.story.hand` | +Z faces camera when dial visible; empty named `WatchMount` at the wrist |
-| Hero watch `.glb` | `ASSETS.story.watch` | dial Ø ≈ 2 units, dial faces +Z (use `scale`/`rotation` to normalise) |
-| Set surface `.glb` | `ASSETS.story.surface` | optional |
+| Presentation box `.glb` | `ASSETS.intro.box` | lid node name, hinge position, modelled lid angle, scale |
+| Watch `.glb` | `ASSETS.showcase.watch` | dial faces +Z; `pivot` = watch-head centre (shared by intro, showcase, details) |
 | Exploded watch `.glb` | `ASSETS.exploded.watch` | nodes named `Crystal, Bezel, Hands, Dial, Case, Movement, Caseback, Strap` (see `lib/scene/exploded.ts`) — they are driven along local Z automatically |
 | New arrival | `ASSETS.newArrival.{model,film,still}` | model → film → still → placeholder |
 | Boutique film | `ASSETS.boutique.film` | `.webm` + `.mp4` + poster |

@@ -10,15 +10,16 @@ import { createAdvance, type SequencePose } from "./sequence";
  *   [box opening] → [box exit] → ▶ SHOWCASE ◀ → [exploded view]
  *
  * Beats (active progress 0 → 1):
- *   1. ARRIVAL      the watch rises into frame and settles, dial to camera
+ *   1. ARRIVAL      the watch (handed over by the box intro, far back) glides
+ *                   forward to the centre of the frame
  *   2. PRESENCE     it shows its face off — right, a touch right, a touch left
  *   3. REVERSE      it recedes while turning a full revolution:
  *                   caseback & bracelet → dial again
  *   4. PERSPECTIVE  it comes forward and tips its dial up, seen from a side angle
  *   5. HERO         it returns to the straight front pose and holds
  *
- * SHOWCASE_ENTRY_POSE is where the watch starts (below frame — the future
- * box-exit sequence replaces beat 1 by ending on SHOWCASE_ARRIVED_POSE).
+ * SHOWCASE_ENTRY_POSE is where the watch starts — exactly the last frame of
+ * the box intro (lib/scene/intro.ts).
  * SHOWCASE_HERO_POSE is the end pose the exploded view continues from.
  *
  * Angles in radians, Euler order XYZ, rotation around the watch head
@@ -41,9 +42,13 @@ export const SHOWCASE_FOV = 24;
 
 const FRONT_CAMERA = { azimuth: 0, elevation: deg(3), distance: SHOWCASE_DISTANCE, target: [0, -0.02, 0] as Vec3 };
 
+/**
+ * First frame = last frame of the box intro (lib/scene/intro.ts): the watch,
+ * dial front, centred on the lens axis about 10 units from the camera.
+ */
 export const SHOWCASE_ENTRY_POSE: ShowcasePose = {
-  position: [0, -2.8, -1.2],
-  rotation: [deg(22), deg(-34), deg(-4)],
+  position: [0, -0.2, -3.48],
+  rotation: [0, 0, 0],
   camera: FRONT_CAMERA,
 };
 
@@ -112,7 +117,7 @@ const AZIMUTH: Keyframe<number>[] = [
 ];
 
 const ELEVATION: Keyframe<number>[] = [
-  { at: 0, value: deg(1) },
+  { at: 0, value: FRONT_CAMERA.elevation },
   { at: 0.1, value: FRONT_CAMERA.elevation },
   { at: 0.44, value: deg(5) },
   { at: 0.72, value: deg(11) }, // look down onto the upturned dial
@@ -121,7 +126,7 @@ const ELEVATION: Keyframe<number>[] = [
 ];
 
 const DISTANCE: Keyframe<number>[] = [
-  { at: 0, value: SHOWCASE_DISTANCE * 1.04 },
+  { at: 0, value: SHOWCASE_DISTANCE },
   { at: 0.1, value: SHOWCASE_DISTANCE },
   { at: 0.23, value: SHOWCASE_DISTANCE * 0.94 }, // lean in while it shows off
   { at: 0.44, value: SHOWCASE_DISTANCE },
@@ -131,7 +136,7 @@ const DISTANCE: Keyframe<number>[] = [
 ];
 
 const TARGET: Keyframe<Vec3>[] = [
-  { at: 0, value: [0, -0.4, 0] },
+  { at: 0, value: FRONT_CAMERA.target },
   { at: 0.1, value: FRONT_CAMERA.target },
   { at: 0.44, value: [0, 0, -1.4] }, // follow the watch back
   { at: 0.64, value: [0, 0.02, -0.2] },

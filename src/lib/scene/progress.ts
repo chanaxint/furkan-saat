@@ -23,8 +23,8 @@ export type ProgressChannel = {
 const make = (): ProgressChannel => ({ target: 0, current: 0, velocity: 0, active: false });
 
 export const progress = {
-  /** 01 Opening → 02 Reveal → 03 Features (one continuous stage). */
-  story: make(),
+  /** Box intro (scrubbed GSAP timeline; only `wake` is used). */
+  intro: make(),
   /** Watch showcase (after the box exit, before the exploded view). */
   showcase: make(),
   /** Macro detail pass (stands in for the exploded view for now). */

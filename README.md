@@ -18,7 +18,8 @@ npm run typecheck
 | 02 | Watch Reveal       | `sections/story/WatchReveal`                           |
 | 03 | Watch Features     | `sections/story/WatchFeatures`                         |
 | —  | Watch Showcase     | `sections/showcase/WatchShowcase` + `three/showcase/*` (real GLB) |
-| 04 | Exploded View      | `sections/ExplodedView` + `three/WatchExplodedView`    |
+| 04 | In Detail (macro)  | `sections/details/WatchDetails` + `lib/scene/details.ts` (real GLB) |
+| —  | Exploded View      | *parked:* `sections/ExplodedView` (not on the page for now) |
 | 05 | New Arrival        | `sections/NewArrival` + `media/ProductShowcase`        |
 | 06 | Most Wanted        | `sections/MostWanted`                                  |
 | 07 | The Collection     | `sections/collection/*` (filters: brand/type/material/movement/price) |
@@ -77,8 +78,21 @@ watch from the right and left. Edit them in `SHOWCASE_MESSAGES`.
   watch moves and is idle otherwise.
 - QA: `window.__showcaseSnap = true` in the console disables the spring (for captures).
 
+## In Detail (macro close-ups)
+
+This section stands in for the exploded view for now. The watch holds its hero
+pose and the camera moves: it starts on the showcase's closing frame, moves in
+on the dial, ceramic bezel, cyclops lens, crown and clasp, then orbits back to
+the front. Shots, camera positions and caption copy are all in
+`lib/scene/details.ts` (`DETAIL_SHOTS`).
+
+Both sections run on one shared engine, `lib/scene/sequence.ts`, with a generic
+`SequenceRig` and `ModelSequenceScene`. A new model sequence is just a
+`sample()` function plus speed limits.
+
 Future box sequences go between `<WatchStory />` and `<WatchShowcase />` in
-`src/app/page.tsx`.
+`src/app/page.tsx`. To bring the exploded view back, put `<ExplodedView />`
+after `<WatchDetails />`.
 
 ## Adding real assets
 

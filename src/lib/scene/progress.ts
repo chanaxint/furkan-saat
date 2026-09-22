@@ -27,6 +27,8 @@ export const progress = {
   story: make(),
   /** Watch showcase (after the box exit, before the exploded view). */
   showcase: make(),
+  /** Macro detail pass (stands in for the exploded view for now). */
+  details: make(),
   /** 04 Exploded View. */
   exploded: make(),
 };

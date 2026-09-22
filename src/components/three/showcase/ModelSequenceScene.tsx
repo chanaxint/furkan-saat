@@ -4,20 +4,23 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import { ACESFilmicToneMapping, SRGBColorSpace } from "three";
 import { useInView } from "@/hooks/useInView";
-import { ASSETS } from "@/lib/assets";
-import { progress } from "@/lib/scene/progress";
-import { SHOWCASE_ENTRY_POSE, SHOWCASE_FOV } from "@/lib/scene/showcase";
+import type { ModelAsset } from "@/lib/assets";
+import type { ProgressChannel } from "@/lib/scene/progress";
 import { ShowcaseLighting } from "./ShowcaseLighting";
-import { ShowcaseRig } from "./ShowcaseRig";
+import { SequenceRig, type SequenceDefinition } from "./SequenceRig";
 
 type Props = {
+  asset: ModelAsset;
+  channel: ProgressChannel;
+  sequence: SequenceDefinition;
   className?: string;
   /** Called once the GLB is parsed and on stage. */
   onReady?: () => void;
 };
 
 /**
- * WatchShowcaseScene — self-contained WebGL stage for the showcase sequence.
+ * ModelSequenceScene — self-contained WebGL stage for a scroll-driven model
+ * sequence (the showcase, the detail close-ups, …).
  *
  * Performance budget (the model is ~534k triangles, kept at full detail):
  * - ONE render pass per frame: no post-processing, no contact-shadow pass.
@@ -27,11 +30,9 @@ type Props = {
  *   When scrolling stops, the GPU goes idle.
  * - Capped pixel ratio; the canvas is unmounted from the loop offscreen.
  */
-export default function WatchShowcaseScene({ className, onReady }: Props) {
+export default function ModelSequenceScene({ asset, channel, sequence, className, onReady }: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const inView = useInView(wrap, "25% 0px");
-  const asset = ASSETS.showcase.watch;
-  const { distance } = SHOWCASE_ENTRY_POSE.camera;
 
   if (!asset.src) return null;
 
@@ -40,7 +41,7 @@ export default function WatchShowcaseScene({ className, onReady }: Props) {
       <Canvas
         frameloop={inView ? "demand" : "never"}
         dpr={[1, 1.5]}
-        camera={{ position: [0, 0, distance], fov: SHOWCASE_FOV, near: 0.1, far: 40 }}
+        camera={{ position: [0, 0, 6.6], fov: sequence.fov, near: 0.05, far: 40 }}
         gl={{
           antialias: true,
           alpha: true,
@@ -54,7 +55,12 @@ export default function WatchShowcaseScene({ className, onReady }: Props) {
       >
         <ShowcaseLighting />
         <Suspense fallback={null}>
-          <ShowcaseRig asset={asset as typeof asset & { src: string }} channel={progress.showcase} onReady={onReady} />
+          <SequenceRig
+            asset={asset as ModelAsset & { src: string }}
+            channel={channel}
+            sequence={sequence}
+            onReady={onReady}
+          />
         </Suspense>
       </Canvas>
     </div>

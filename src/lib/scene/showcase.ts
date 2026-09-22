@@ -1,6 +1,6 @@
 import type { Keyframe, Vec3 } from "./keyframes";
 import { scalarTrack, vec3Track } from "./spline";
-import { stepSpring, type Spring } from "./spring";
+import { createAdvance, type SequencePose } from "./sequence";
 
 /**
  * WATCH SHOWCASE — choreography
@@ -26,14 +26,8 @@ import { stepSpring, type Spring } from "./spring";
  * −2π, which is visually identical to the front pose.
  */
 
-export type ShowcasePose = {
-  /** Watch position (scene units, relative to the frame centre). */
-  position: Vec3;
-  /** Watch rotation [tilt, yaw, roll]. Positive yaw turns the dial to screen-right. */
-  rotation: Vec3;
-  /** Camera orbit around the look-at point. */
-  camera: { azimuth: number; elevation: number; distance: number; target: Vec3 };
-};
+/** Positive yaw turns the dial to screen-right. */
+export type ShowcasePose = SequencePose;
 
 const deg = (d: number) => (d * Math.PI) / 180;
 const TURN = -Math.PI * 2;
@@ -172,11 +166,6 @@ export function sampleShowcasePose(p: number, out: ShowcasePose): ShowcasePose {
   return out;
 }
 
-export const createPose = (): ShowcasePose => ({
-  position: [0, 0, 0],
-  rotation: [0, 0, 0],
-  camera: { azimuth: 0, elevation: 0, distance: SHOWCASE_DISTANCE, target: [0, 0, 0] },
-});
 
 /* ------------------------------------------------------- kinetic type */
 
@@ -204,44 +193,16 @@ export const SHOWCASE_MESSAGES: ShowcaseMessage[] = [
 
 /** Visible speed limits — whatever the scroll does, the watch never exceeds these. */
 export const SHOWCASE_SPEED = {
-  /** Max rotation speed, degrees per second. */
   degreesPerSecond: 170,
-  /** Max travel speed, scene units per second. */
   unitsPerSecond: 2.4,
-  /** Absolute cap on progress speed (per second). */
   progressPerSecond: 0.5,
 };
 
-const probeA = createPose();
-const probeB = createPose();
-
-/** How much the watch visibly moves per unit of section progress around `p`. */
-function motionDensity(p: number) {
-  const e = 0.004;
-  sampleShowcasePose(Math.max(0, p - e), probeA);
-  sampleShowcasePose(Math.min(1, p + e), probeB);
-  let rot = 0;
-  let pos = 0;
-  for (let k = 0; k < 3; k++) {
-    rot = Math.max(rot, Math.abs(probeB.rotation[k] - probeA.rotation[k]));
-    pos = Math.max(pos, Math.abs(probeB.position[k] - probeA.position[k]));
-  }
-  const span = 2 * e;
-  return { degrees: (rot * 180) / Math.PI / span, units: pos / span };
-}
-
 /**
- * Advance the showcase spring one frame. The spring's speed limit adapts to
- * the choreography: where the watch turns fast per scroll (the full
- * revolution) the limit tightens, so even a violent scroll or an anchor jump
- * plays back as a smooth, bounded move — never a teleport.
+ * Advance the showcase spring one frame. Where the watch turns fast per
+ * scroll (the full revolution) the speed limit tightens, so even a violent
+ * scroll or an anchor jump plays back as a smooth, bounded move.
  */
-export function advanceShowcase(spring: Spring, target: number, dt: number) {
-  const { degrees, units } = motionDensity(spring.value);
-  const maxVelocity = Math.min(
-    SHOWCASE_SPEED.progressPerSecond,
-    degrees > 0 ? SHOWCASE_SPEED.degreesPerSecond / degrees : Infinity,
-    units > 0 ? SHOWCASE_SPEED.unitsPerSecond / units : Infinity,
-  );
-  return stepSpring(spring, target, dt, { maxVelocity: Math.max(0.02, maxVelocity) });
-}
+export const advanceShowcase = createAdvance(sampleShowcasePose, SHOWCASE_SPEED);
+
+export { createPose } from "./sequence";

@@ -6,12 +6,28 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import { type Group, type PerspectiveCamera, Vector3 } from "three";
 import type { ModelAsset } from "@/lib/assets";
 import type { ProgressChannel } from "@/lib/scene/progress";
-import { advanceShowcase, createPose, sampleShowcasePose, SHOWCASE_FOV } from "@/lib/scene/showcase";
-import { createSpring } from "@/lib/scene/spring";
+import { createPose, type SequenceSampler } from "@/lib/scene/sequence";
+import { createSpring, type Spring } from "@/lib/scene/spring";
+
+export type SequenceDefinition = {
+  sample: SequenceSampler;
+  advance: (spring: Spring, target: number, dt: number) => number;
+  fov: number;
+  /** Portrait screens: multiply camera distance by 1 + portrait × this. */
+  portraitPull?: number;
+  /**
+   * Landscape screens: shift the subject right by this fraction of the frame
+   * width (lens shift, no perspective change) to leave room for copy on the left.
+   */
+  frameShift?: number;
+  /** Portrait screens: lift the subject by this fraction of the frame height. */
+  portraitLift?: number;
+};
 
 type Props = {
   asset: ModelAsset & { src: string };
   channel: ProgressChannel;
+  sequence: SequenceDefinition;
   onReady?: () => void;
 };
 
@@ -24,12 +40,16 @@ type Props = {
  * No clock-based motion: when scroll stops, the spring settles, the loop stops
  * requesting frames and the image is perfectly still.
  */
-export function ShowcaseRig({ asset, channel, onReady }: Props) {
-  const { scene } = useGLTF(asset.src);
+export function SequenceRig({ asset, channel, sequence, onReady }: Props) {
+  const gltf = useGLTF(asset.src);
+  // Clone per canvas: one Object3D cannot live in two scenes. Geometry and
+  // materials are shared, so this is cheap.
+  const scene = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
   const turntable = useRef<Group>(null);
 
   const camera = useThree((s) => s.camera) as PerspectiveCamera;
-  const aspect = useThree((s) => s.size.width / s.size.height);
+  const size = useThree((s) => s.size);
+  const aspect = size.width / size.height;
   const invalidate = useThree((s) => s.invalidate);
 
   const spring = useMemo(() => createSpring(channel.target), [channel]);
@@ -56,9 +76,9 @@ export function ShowcaseRig({ asset, channel, onReady }: Props) {
       spring.value = channel.target;
       spring.velocity = 0;
     }
-    const p = advanceShowcase(spring, channel.target, Math.min(delta, 1 / 20));
+    const p = sequence.advance(spring, channel.target, Math.min(delta, 1 / 20));
     channel.current = p;
-    sampleShowcasePose(p, pose);
+    sequence.sample(p, pose);
     channel.onFrame?.(p);
 
     const g = turntable.current;
@@ -71,7 +91,7 @@ export function ShowcaseRig({ asset, channel, onReady }: Props) {
     // and keep wide poses (the bracelet loop) inside the frame.
     const portrait = aspect < 1 ? 1 - aspect : 0;
     const { azimuth, elevation, distance, target } = pose.camera;
-    const r = distance * (1 + portrait * 1.45);
+    const r = distance * (1 + portrait * (sequence.portraitPull ?? 1.45));
     tmp.target.set(target[0], target[1], target[2]);
     camera.position.set(
       target[0] + r * Math.cos(elevation) * Math.sin(azimuth),
@@ -79,8 +99,21 @@ export function ShowcaseRig({ asset, channel, onReady }: Props) {
       target[2] + r * Math.cos(elevation) * Math.cos(azimuth),
     );
     camera.lookAt(tmp.target);
-    if (Math.abs(camera.fov - SHOWCASE_FOV) > 0.01) {
-      camera.fov = SHOWCASE_FOV;
+    const shiftX = aspect > 1 ? (sequence.frameShift ?? 0) : 0;
+    const shiftY = aspect < 1 ? (sequence.portraitLift ?? 0) : 0;
+    if (shiftX !== 0 || shiftY !== 0) {
+      const ox = -size.width * shiftX;
+      const oy = size.height * shiftY;
+      const v = camera.view;
+      if (!v?.enabled || v.offsetX !== ox || v.offsetY !== oy || v.fullWidth !== size.width || camera.fov !== sequence.fov) {
+        camera.fov = sequence.fov;
+        camera.setViewOffset(size.width, size.height, ox, oy, size.width, size.height);
+      }
+    } else if (camera.view?.enabled) {
+      camera.clearViewOffset();
+    }
+    if (Math.abs(camera.fov - sequence.fov) > 0.01) {
+      camera.fov = sequence.fov;
       camera.updateProjectionMatrix();
     }
 

@@ -5,10 +5,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useGsap } from "@/hooks/useGsap";
 import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import { progress } from "@/lib/scene/progress";
-import { SHOWCASE_BEATS, SHOWCASE_MESSAGES, showcaseActive, type ShowcaseMessage } from "@/lib/scene/showcase";
+import { ASSETS } from "@/lib/assets";
+import {
+  advanceShowcase,
+  sampleShowcasePose,
+  SHOWCASE_BEATS,
+  SHOWCASE_FOV,
+  SHOWCASE_MESSAGES,
+  showcaseActive,
+  type ShowcaseMessage,
+} from "@/lib/scene/showcase";
 import styles from "./WatchShowcase.module.css";
 
-const WatchShowcaseScene = dynamic(() => import("@/components/three/showcase/WatchShowcaseScene"), { ssr: false });
+const ModelSequenceScene = dynamic(() => import("@/components/three/showcase/ModelSequenceScene"), { ssr: false });
+
+const SEQUENCE = { sample: sampleShowcasePose, advance: advanceShowcase, fov: SHOWCASE_FOV };
 
 export const SHOWCASE_PIECE = {
   brand: "Rolex",
@@ -150,7 +161,13 @@ export function WatchShowcase() {
           })}
         </div>
 
-        <WatchShowcaseScene className={styles.canvas} onReady={onReady} />
+        <ModelSequenceScene
+          asset={ASSETS.showcase.watch}
+          channel={progress.showcase}
+          sequence={SEQUENCE}
+          className={styles.canvas}
+          onReady={onReady}
+        />
         <div className={styles.vignette} aria-hidden />
 
         <div className={styles.loader} data-ready={ready || undefined} aria-hidden>

@@ -1,0 +1,66 @@
+.card {
+  display: grid;
+  gap: 22px;
+}
+
+.view {
+  position: absolute;
+  top: clamp(14px, 1.6vw, 22px);
+  right: clamp(14px, 1.6vw, 22px);
+  z-index: 3;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--fg);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.8s var(--ease-lux), transform 0.8s var(--ease-lux);
+}
+.card:hover .view {
+  opacity: 1;
+  transform: none;
+}
+
+.info {
+  display: grid;
+  gap: 8px;
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.brand {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps-wide);
+  text-transform: uppercase;
+}
+.index {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-on-light-faint);
+  font-variant-numeric: tabular-nums;
+}
+.model {
+  font-size: clamp(1.5rem, 2vw, 2.1rem);
+  line-height: 1.05;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  justify-self: start;
+  padding-bottom: 4px;
+  transition: background-size 1s var(--ease-lux);
+}
+.card:hover .model {
+  background-size: 100% 1px;
+}
+.spec {
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+.price {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  white-space: nowrap;
+}

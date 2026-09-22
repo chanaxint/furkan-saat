@@ -1,0 +1,123 @@
+.footer {
+  background: var(--ivory);
+  color: var(--green-900);
+  padding: clamp(64px, 8vw, 120px) var(--gutter) 28px;
+  overflow: hidden;
+}
+
+.top {
+  max-width: var(--max-w);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 48px;
+  padding-top: 36px;
+  border-top: 1px solid var(--line-on-light);
+}
+
+.statement {
+  grid-column: 1 / span 5;
+  font-family: var(--font-display);
+  font-size: var(--fs-display-s);
+  font-weight: 300;
+  line-height: 1.15;
+  max-width: 460px;
+}
+.statement em {
+  color: var(--champagne-600);
+}
+
+.nav {
+  grid-column: 7 / span 3;
+}
+.nav ul {
+  display: grid;
+  gap: 10px;
+}
+
+.contact {
+  grid-column: 10 / span 3;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.label {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-on-light-faint);
+}
+.muted {
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+
+.link {
+  font-size: var(--fs-small);
+  letter-spacing: 0.04em;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.8s var(--ease-lux);
+}
+.link:hover {
+  background-size: 100% 1px;
+}
+
+.wordmark {
+  max-width: var(--max-w);
+  margin: clamp(80px, 10vw, 160px) auto 0;
+  font-size: clamp(4rem, 17.5vw, 19rem);
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  text-align: center;
+}
+.wordmark em {
+  color: var(--champagne-600);
+}
+
+.bottom {
+  max-width: var(--max-w);
+  margin: clamp(28px, 4vw, 48px) auto 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-on-light);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+}
+.legal {
+  display: flex;
+  gap: 28px;
+}
+.legal .link {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+}
+
+@media (max-width: 900px) {
+  .statement {
+    grid-column: 1 / -1;
+  }
+  .nav {
+    grid-column: 1 / span 6;
+  }
+  .contact {
+    grid-column: 7 / span 6;
+  }
+}
+
+@media (max-width: 560px) {
+  .nav,
+  .contact {
+    grid-column: 1 / -1;
+  }
+  .wordmark {
+    font-size: 19vw;
+  }
+}

@@ -1,0 +1,206 @@
+.section {
+  position: relative;
+  background: var(--green-900);
+  color: var(--ivory);
+}
+
+.intro {
+  padding: var(--section-y) var(--gutter) calc(var(--section-y) * 0.7);
+  max-width: var(--max-w);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 36px;
+  align-items: end;
+}
+.intro > :first-child {
+  grid-column: 1 / -1;
+}
+.marker {
+  color: var(--champagne);
+}
+.heading {
+  grid-column: 1 / span 8;
+  font-size: var(--fs-display-xl);
+}
+.heading em {
+  color: var(--champagne);
+}
+.lede {
+  grid-column: 10 / span 3;
+  font-family: var(--font-display);
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--text-on-dark-muted);
+}
+
+/* ----------------------------------------------------------- panels */
+/* Each world holds the screen for a moment before the next one slides over
+   it. Panels share one container so later worlds stack on top (sticky). */
+.dwell {
+  height: 60svh;
+}
+
+.panel {
+  --ink: var(--ivory);
+  --ink-muted: var(--text-on-dark-muted);
+  --name: var(--ivory);
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.worldGreen {
+  --ground: var(--green-850);
+  --name: var(--ivory);
+}
+.worldDeep {
+  --ground: var(--green-950);
+  --name: var(--champagne);
+}
+.worldIvory {
+  --ground: var(--ivory);
+  --ink: var(--green-900);
+  --ink-muted: var(--text-on-light-muted);
+  --name: var(--green-900);
+}
+.worldStone {
+  --ground: var(--ivory-300);
+  --ink: var(--green-900);
+  --ink-muted: var(--text-on-light-muted);
+  --name: var(--green-900);
+}
+/* The one place the wine accent carries a whole moment. */
+.worldWine {
+  --ground: var(--ivory-200);
+  --ink: var(--green-900);
+  --ink-muted: var(--text-on-light-muted);
+  --name: var(--wine);
+}
+
+.inner {
+  position: relative;
+  height: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding: calc(var(--nav-h) + 3vh) var(--gutter) 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto 1fr auto;
+  column-gap: var(--gutter);
+  transform-origin: 50% 30%;
+  will-change: transform, opacity;
+}
+
+.meta {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: clamp(20px, 3vw, 48px);
+  padding-bottom: 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.count {
+  font-variant-numeric: tabular-nums;
+  margin-right: auto;
+  opacity: 0.6;
+}
+
+.media {
+  grid-column: 6 / -1;
+  grid-row: 2;
+  align-self: stretch;
+  margin-top: 4vh;
+  height: auto !important;
+  min-height: 0;
+}
+
+.copy {
+  grid-column: 1 / span 4;
+  grid-row: 2;
+  align-self: center;
+  display: grid;
+  gap: 26px;
+  justify-items: start;
+  padding-top: 4vh;
+}
+.signature {
+  font-size: var(--fs-display-s);
+  line-height: 1.1;
+}
+.description {
+  font-family: var(--font-display);
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--ink-muted);
+  max-width: 380px;
+}
+
+.name {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  overflow: hidden;
+  font-size: clamp(4rem, 12vw, 13.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+  color: var(--name);
+  padding-top: 0.04em;
+  margin-bottom: -0.06em;
+}
+.name span {
+  display: block;
+  will-change: transform;
+}
+
+@media (max-width: 1024px) {
+  .heading { grid-column: 1 / -1; }
+  .lede { grid-column: 1 / span 8; }
+  .media {
+    grid-column: 1 / -1;
+    margin-top: 3vh;
+  }
+  .copy {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    padding: 4vh 0 2vh;
+    gap: 16px;
+  }
+  .name {
+    grid-row: 4;
+    font-size: clamp(3.4rem, 16vw, 9rem);
+  }
+  .inner {
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .lede { grid-column: 1 / -1; }
+  .meta span:last-child {
+    display: none;
+  }
+  .description {
+    font-size: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .signature {
+    font-size: 1.5rem;
+  }
+  .name {
+    white-space: normal;
+    font-size: clamp(3rem, 17vw, 5.5rem);
+    line-height: 0.88;
+  }
+}

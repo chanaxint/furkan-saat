@@ -1,0 +1,215 @@
+.section {
+  --p: 0;
+  position: relative;
+  height: 420svh;
+  background:
+    linear-gradient(to bottom, var(--green-900), var(--green-850) 20%, var(--green-850) 80%, var(--green-900));
+  color: var(--ivory);
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(320px, 0.8fr) 1.2fr;
+}
+
+.canvasWrap {
+  position: absolute;
+  inset: 0 0 0 28%;
+}
+.canvas {
+  z-index: 1;
+}
+/* Faint technical axis behind the assembly */
+.axis {
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(200, 185, 154, 0.22), transparent);
+  transform: rotate(18deg);
+  opacity: calc(min(1, var(--p) * 10));
+}
+
+.copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: calc(var(--nav-h) + 2vh) 0 6vh var(--gutter);
+  max-width: 460px;
+}
+.marker {
+  color: var(--champagne);
+}
+.heading {
+  font-size: clamp(2.6rem, 4.4vw, 4.6rem);
+  line-height: 0.95;
+}
+.heading em {
+  color: var(--champagne);
+}
+.intro {
+  font-family: var(--font-display);
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--text-on-dark-muted);
+  max-width: 400px;
+}
+
+.parts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 32px;
+  border-top: 1px solid var(--line-on-dark);
+  margin-top: 6px;
+}
+.part {
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-on-dark);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-on-dark-faint);
+  transition: color 0.8s var(--ease-lux);
+}
+.part[data-past] {
+  color: var(--text-on-dark-muted);
+}
+.part[data-active] {
+  color: var(--ivory);
+}
+.partIndex {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  color: var(--champagne);
+  opacity: 0.7;
+}
+.partName {
+  position: relative;
+}
+.part[data-active] .partName::after {
+  content: "";
+  position: absolute;
+  left: calc(100% + 12px);
+  top: 50%;
+  width: 18px;
+  height: 1px;
+  background: var(--champagne);
+}
+
+.caption {
+  display: grid;
+  gap: 8px;
+  min-height: 4.8em;
+}
+.counter {
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--champagne);
+  font-variant-numeric: tabular-nums;
+}
+.captionText {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.45;
+  color: var(--text-on-dark-muted);
+  animation: caption 0.9s var(--ease-lux);
+}
+.captionText strong {
+  font-weight: 500;
+  color: var(--ivory);
+}
+@keyframes caption {
+  from { opacity: 0; transform: translateY(8px); }
+}
+
+.progress {
+  position: absolute;
+  z-index: 2;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: 4vh;
+  height: 1px;
+  background: var(--line-on-dark);
+}
+.progress span {
+  position: absolute;
+  inset: 0;
+  background: var(--champagne);
+  transform-origin: left;
+  transform: scaleX(var(--p));
+}
+
+.hint {
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter);
+  bottom: calc(4vh + 16px);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-faint);
+}
+
+/* Label styles for 3D-anchored part names (rendered by drei <Html>) */
+:global(.exploded-label) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ivory);
+  transform: translateY(-50%);
+}
+:global(.exploded-label__rule) {
+  width: 36px;
+  height: 1px;
+  background: rgba(200, 185, 154, 0.7);
+}
+:global(.exploded-label__index) {
+  color: var(--champagne);
+}
+
+@media (max-width: 1024px) {
+  .pin {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+  }
+  .canvasWrap {
+    inset: 0 0 38% 0;
+  }
+  .copy {
+    grid-row: 2;
+    max-width: none;
+    padding: 0 var(--gutter) 9vh;
+    gap: 16px;
+  }
+  .heading {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+  .intro,
+  .parts {
+    display: none;
+  }
+  .marker {
+    order: -1;
+  }
+  .hint {
+    display: none;
+  }
+}

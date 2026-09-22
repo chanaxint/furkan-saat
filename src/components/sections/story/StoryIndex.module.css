@@ -1,0 +1,53 @@
+.rail {
+  position: absolute;
+  z-index: 4;
+  left: var(--gutter);
+  bottom: 4.5vh;
+  display: grid;
+  gap: 14px;
+  width: min(300px, 26vw);
+  color: var(--ivory);
+  opacity: calc(min(1, var(--story) * 12) * min(1, (1 - var(--story)) * 14));
+  pointer-events: none;
+}
+
+.track {
+  position: relative;
+  height: 1px;
+  background: rgba(242, 237, 227, 0.16);
+}
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--champagne);
+  transform-origin: left;
+  transform: scaleX(var(--story));
+}
+
+.list {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.item {
+  --start: calc(var(--i) * 0.335);
+  display: flex;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  /* Active chapter lights up */
+  opacity: calc(0.32 + 0.68 * max(0, min(1, (var(--story) - var(--start)) * 30)) * max(0, min(1, (var(--start) + 0.335 - var(--story)) * 30)));
+}
+.num {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.6;
+}
+
+@media (max-width: 900px) {
+  .rail {
+    display: none;
+  }
+}

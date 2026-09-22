@@ -1,0 +1,47 @@
+@property --mix {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.section {
+  --mix: 0;
+  position: relative;
+  height: 200svh;
+  background: color-mix(in srgb, var(--ivory) calc(var(--mix) * 100%), var(--green-900));
+  color: color-mix(in srgb, var(--green-900) calc(var(--mix) * 100%), var(--ivory));
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(40px, 5vw, 72px);
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 0.22em;
+  font-size: var(--fs-display-xxl);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+}
+.mask {
+  display: inline-block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.mask > span {
+  display: inline-block;
+}
+.accent {
+  font-style: italic;
+  color: color-mix(in srgb, var(--champagne-600) calc(var(--mix) * 100%), var(--champagne));
+}

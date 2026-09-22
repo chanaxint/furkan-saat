@@ -1,0 +1,275 @@
+/* ==========================================================================
+   FURKAN SAAT — Design System
+   Palette: British Racing Green / Warm Ivory / Muted Champagne / Wine (rare)
+   ========================================================================== */
+
+:root {
+  /* — Core palette — */
+  --green-950: #04110e;
+  --green-900: #071a16; /* primary */
+  --green-850: #0a211c;
+  --green-800: #0d2822;
+  --green-700: #13342d;
+  --green-600: #1d463d;
+
+  --ivory: #f2ede3; /* primary light */
+  --ivory-200: #ebe5d8;
+  --ivory-300: #e0d8c8;
+  --stone: #d3c9b6;
+
+  --champagne: #c8b99a;
+  --champagne-600: #a8997b;
+  --champagne-soft: rgba(200, 185, 154, 0.55);
+
+  --wine: #5a1018; /* accent — use sparingly */
+
+  /* — Semantic — */
+  --text-on-dark: var(--ivory);
+  --text-on-dark-muted: rgba(242, 237, 227, 0.62);
+  --text-on-dark-faint: rgba(242, 237, 227, 0.38);
+  --text-on-light: var(--green-900);
+  --text-on-light-muted: rgba(7, 26, 22, 0.64);
+  --text-on-light-faint: rgba(7, 26, 22, 0.42);
+  --line-on-dark: rgba(242, 237, 227, 0.14);
+  --line-on-light: rgba(7, 26, 22, 0.14);
+
+  /* — Typography — */
+  --font-display: "Cormorant Garamond Variable", "Cormorant Garamond", "Times New Roman", serif;
+  --font-sans: "Inter Tight Variable", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+
+  --fs-display-xxl: clamp(4.25rem, 14vw, 15rem);
+  --fs-display-xl: clamp(3.25rem, 9vw, 9.5rem);
+  --fs-display-l: clamp(2.75rem, 6.4vw, 6.5rem);
+  --fs-display-m: clamp(2.1rem, 4.2vw, 4.25rem);
+  --fs-display-s: clamp(1.6rem, 2.6vw, 2.5rem);
+  --fs-lead: clamp(1.125rem, 1.35vw, 1.375rem);
+  --fs-body: clamp(0.95rem, 1vw, 1.0625rem);
+  --fs-small: 0.8125rem;
+  --fs-micro: 0.6875rem;
+
+  --tracking-caps: 0.26em;
+  --tracking-caps-wide: 0.38em;
+
+  /* — Spacing & layout — */
+  --gutter: clamp(20px, 4.4vw, 72px);
+  --section-y: clamp(120px, 16vw, 240px);
+  --max-w: 1680px;
+  --nav-h: 76px;
+
+  /* — Motion — */
+  --ease-lux: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-soft: cubic-bezier(0.33, 0.01, 0.12, 1);
+  --dur-fast: 0.45s;
+  --dur-med: 0.9s;
+  --dur-slow: 1.6s;
+}
+
+/* ---------------------------------------------------------------- reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--green-900);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--green-900);
+  color: var(--text-on-dark);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  font-weight: 380;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+::selection {
+  background: var(--champagne);
+  color: var(--green-900);
+}
+
+:focus-visible {
+  outline: 1px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+/* ---------------------------------------------------------- typography */
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+}
+.t-display em,
+.t-italic {
+  font-style: italic;
+  font-weight: 300;
+}
+.t-xxl { font-size: var(--fs-display-xxl); }
+.t-xl { font-size: var(--fs-display-xl); }
+.t-l { font-size: var(--fs-display-l); }
+.t-m { font-size: var(--fs-display-m); line-height: 1; }
+.t-s { font-size: var(--fs-display-s); line-height: 1.08; }
+
+.t-lead {
+  font-family: var(--font-display);
+  font-size: var(--fs-lead);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.005em;
+}
+
+.t-eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+.t-caps {
+  font-family: var(--font-sans);
+  font-size: var(--fs-small);
+  font-weight: 450;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.t-index {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  font-variant-numeric: tabular-nums;
+}
+
+.t-muted { opacity: 0.64; }
+
+/* ------------------------------------------------------------- layout */
+.container {
+  width: 100%;
+  max-width: var(--max-w);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.tone-dark {
+  background: var(--green-900);
+  color: var(--text-on-dark);
+}
+.tone-light {
+  background: var(--ivory);
+  color: var(--text-on-light);
+}
+
+.hairline {
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  opacity: 0.14;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Split text masks (see components/ui/SplitText) */
+.split-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+  margin-bottom: -0.06em;
+}
+.split-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.split-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Reveal defaults — elements are visible without JS */
+[data-reveal] {
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

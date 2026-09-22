@@ -1,0 +1,165 @@
+.features {
+  position: relative;
+  height: 230svh;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  pointer-events: none;
+}
+
+.header {
+  position: absolute;
+  top: calc(var(--nav-h) + 3vh);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  display: grid;
+  gap: 14px;
+}
+.header p {
+  color: var(--champagne);
+}
+.heading {
+  font-size: clamp(1.8rem, 2.6vw, 2.6rem);
+  line-height: 1;
+}
+.heading em {
+  color: var(--champagne);
+}
+
+/* ---------------------------------------------------- annotation */
+.note {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  gap: 22px;
+  width: min(340px, calc(50vw - 27vh - var(--gutter)));
+}
+
+.leader {
+  position: relative;
+  flex: none;
+  width: clamp(60px, 7vw, 130px);
+  height: 1px;
+  margin-top: 0.62rem;
+  background: linear-gradient(90deg, rgba(200, 185, 154, 0.8), rgba(200, 185, 154, 0.15));
+  transform-origin: left;
+}
+.node {
+  position: absolute;
+  left: -3px;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--champagne);
+  background: var(--green-900);
+}
+
+.body {
+  display: grid;
+  gap: 8px;
+}
+.index {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--champagne);
+  font-variant-numeric: tabular-nums;
+}
+.title {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.text {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  line-height: 1.45;
+  color: var(--text-on-dark-muted);
+}
+
+/* Left-side notes: leader points right, toward the watch. */
+.tl,
+.ml {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.tl .leader,
+.ml .leader {
+  transform-origin: right;
+  background: linear-gradient(270deg, rgba(200, 185, 154, 0.8), rgba(200, 185, 154, 0.15));
+}
+.tl .node,
+.ml .node {
+  left: auto;
+  right: -3px;
+}
+
+.tl { top: 24%; right: calc(50% + 25vh); }
+.tr { top: 28%; left: calc(50% + 25vh); }
+.ml { top: 58%; right: calc(50% + 27vh); }
+.mr { top: 62%; left: calc(50% + 27vh); }
+.bc {
+  bottom: 6vh;
+  left: 50%;
+  transform: translateX(-50%);
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+.bc .leader {
+  width: 1px;
+  height: 44px;
+  margin: 0;
+  transform-origin: top;
+  background: linear-gradient(0deg, rgba(200, 185, 154, 0.8), rgba(200, 185, 154, 0.1));
+}
+.bc .node {
+  top: auto;
+  bottom: -3px;
+}
+
+@media (max-width: 1100px) {
+  .leader { width: 48px; }
+  .text { font-size: 1rem; }
+}
+
+/* Mobile: one annotation at a time, lower third. */
+@media (max-width: 767px) {
+  .note,
+  .tl,
+  .tr,
+  .ml,
+  .mr,
+  .bc {
+    top: auto;
+    right: auto;
+    bottom: 7vh;
+    left: var(--gutter);
+    width: calc(100% - var(--gutter) * 2);
+    transform: none;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 14px;
+  }
+  .leader,
+  .tl .leader,
+  .ml .leader,
+  .bc .leader {
+    width: 48px;
+    height: 1px;
+    margin: 0;
+    transform-origin: left;
+    background: var(--champagne);
+  }
+  .node {
+    display: none;
+  }
+}

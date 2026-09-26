@@ -21,6 +21,7 @@ type Props = {
  * Brand page opening, one screen tall. The first scroll gesture plays the
  * film once, start to end (scrolling is held meanwhile); it stops on its last
  * frame — the watch — with the title, and normal scrolling continues.
+ * Scrolling up at the top plays it back to the car.
  */
 export function BrandFilmIntro({ dir, count, brand, title, accent, duration = 8 }: Props) {
   const root = useRef<HTMLElement>(null);
@@ -39,22 +40,6 @@ export function BrandFilmIntro({ dir, count, brand, title, accent, duration = 8 
     onResize();
     window.addEventListener("resize", onResize);
 
-    const showEnd = () => {
-      state.frame = last;
-      seq.draw(last, true);
-      gsap.set(copy.current, { autoAlpha: 1, y: 0 });
-      gsap.set(cue.current, { autoAlpha: 0 });
-    };
-
-    // Arrived mid-page, or reduced motion: just show the watch.
-    if (window.scrollY > 10 || prefersReducedMotion()) {
-      showEnd();
-      return () => {
-        window.removeEventListener("resize", onResize);
-        seq.dispose();
-      };
-    }
-
     let phase: "idle" | "playing" | "done" = "idle";
     const html = document.documentElement;
     const hold = (on: boolean) => {
@@ -62,40 +47,83 @@ export function BrandFilmIntro({ dir, count, brand, title, accent, duration = 8 
       if (on) lenis?.stop();
       else lenis?.start();
     };
-    hold(true);
+    const atTop = () => window.scrollY <= 2;
 
+    const showEnd = () => {
+      phase = "done";
+      state.frame = last;
+      seq.draw(last, true);
+      gsap.set(copy.current, { autoAlpha: 1, y: 0 });
+      gsap.set(cue.current, { autoAlpha: 0 });
+    };
+
+    // Forward: car → watch; scrolling is released on the watch.
     const play = () => {
       phase = "playing";
+      hold(true);
       gsap.to(cue.current, { autoAlpha: 0, duration: 0.4 });
       gsap.to(state, {
         frame: last,
-        duration,
+        duration: duration * (1 - state.frame / last),
         ease: "none",
         onUpdate: () => seq.draw(state.frame),
         onComplete: () => {
           phase = "done";
           gsap.fromTo(copy.current, { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1.2, ease: "power2.out" });
           hold(false);
-          detach();
         },
       });
     };
 
-    // Any scroll intent (wheel, touch, keys) starts playback and is swallowed.
-    let touchY = 0;
-    const onWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      if (phase === "idle" && e.deltaY > 0) play();
+    // Backward (scrolling up at the top): watch → car; the page stays held
+    // on the car until the next downward scroll plays it forward again.
+    const rewind = () => {
+      phase = "playing";
+      hold(true);
+      gsap.to(copy.current, { autoAlpha: 0, y: 20, duration: 0.5 });
+      gsap.to(state, {
+        frame: 0,
+        duration: duration * (state.frame / last),
+        ease: "none",
+        onUpdate: () => seq.draw(state.frame),
+        onComplete: () => {
+          phase = "idle";
+          gsap.to(cue.current, { autoAlpha: 1, duration: 0.6 });
+        },
+      });
     };
+
+    // Arrived mid-page, or reduced motion: just show the watch.
+    if (window.scrollY > 10 || prefersReducedMotion()) showEnd();
+    else hold(true);
+
+    const reduced = prefersReducedMotion();
+    const intent = (down: boolean, e: Event) => {
+      if (phase === "playing") return e.preventDefault();
+      if (phase === "idle") {
+        e.preventDefault();
+        if (down) play();
+        return;
+      }
+      // done: only an upward scroll at the very top rewinds.
+      if (!down && atTop() && !reduced) {
+        e.preventDefault();
+        rewind();
+      }
+    };
+
+    let touchY = 0;
+    const onWheel = (e: WheelEvent) => Math.abs(e.deltaY) > 1 && intent(e.deltaY > 0, e);
     const onTouchStart = (e: TouchEvent) => (touchY = e.touches[0].clientY);
     const onTouchMove = (e: TouchEvent) => {
-      e.preventDefault();
-      if (phase === "idle" && touchY - e.touches[0].clientY > 8) play();
+      const dy = touchY - e.touches[0].clientY;
+      if (phase !== "done" && e.cancelable) e.preventDefault();
+      if (Math.abs(dy) > 8) intent(dy > 0, e);
     };
     const onKey = (e: KeyboardEvent) => {
-      if (!["ArrowDown", "PageDown", " ", "Spacebar", "End"].includes(e.key)) return;
-      e.preventDefault();
-      if (phase === "idle") play();
+      const down = ["ArrowDown", "PageDown", " ", "Spacebar", "End"].includes(e.key);
+      const up = ["ArrowUp", "PageUp", "Home"].includes(e.key);
+      if (down || up) intent(down, e);
     };
     const opts = { passive: false } as const;
     window.addEventListener("wheel", onWheel, opts);

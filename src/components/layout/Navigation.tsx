@@ -34,14 +34,18 @@ export function Navigation() {
       lastY.current = y;
       // Stay minimal (wordmark only) for the whole opening film.
       const hero = document.getElementById("top");
-      const heroEnd = hero ? hero.offsetTop + hero.offsetHeight - vh * 1.2 : vh * 0.6;
+      const heroEnd = hero
+        ? hero.offsetTop + hero.offsetHeight - vh * 1.2
+        : vh * 0.6;
       if (y < heroEnd) setMode("immersive");
       else if (down && y > vh * 2.5) setMode("hidden");
       else setMode("visible");
 
       // Sample the section beneath the bar.
       const probe = document.elementsFromPoint(window.innerWidth / 2, 40);
-      const themed = probe.map((el) => el.closest<HTMLElement>("[data-nav-theme]")).find(Boolean);
+      const themed = probe
+        .map((el) => el.closest<HTMLElement>("[data-nav-theme]"))
+        .find(Boolean);
       const next = (themed?.dataset.navTheme as "dark" | "light") ?? "dark";
       setTheme(next);
     };
@@ -58,7 +62,8 @@ export function Navigation() {
 
   // Section links (#…) scroll on the home page; elsewhere they go to "/#…".
   const onHome = pathname === "/";
-  const to = (href: string) => (href.startsWith("#") && !onHome ? `/${href}` : href);
+  const to = (href: string) =>
+    href.startsWith("#") && !onHome ? `/${href}` : href;
   const go = (href: string) => (e: React.MouseEvent) => {
     if (!href.startsWith("#") || !onHome) {
       setOpen(false);
@@ -83,20 +88,35 @@ export function Navigation() {
         data-theme={theme}
       >
         <div className={styles.inner}>
-          <Link href="/" className={styles.wordmark} aria-label="Furkan Saat — ana sayfa" onClick={go("#top")}>
+          {/* The wordmark leads to the brands (four tiles) on the home page. */}
+          <Link
+            href={to("#markalar")}
+            className={styles.wordmark}
+            aria-label="Furkan Saat — markalar"
+            onClick={go("#markalar")}
+          >
             Furkan <span>Saat</span>
           </Link>
 
           <nav className={styles.links} aria-label="Ana menü">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={to(l.href)} onClick={go(l.href)} className={styles.link}>
+              <a
+                key={l.href}
+                href={to(l.href)}
+                onClick={go(l.href)}
+                className={styles.link}
+              >
                 {l.label}
               </a>
             ))}
           </nav>
 
           <div className={styles.aside}>
-            <a href={to("#boutique")} onClick={go("#boutique")} className={styles.appointment}>
+            <a
+              href={to("#boutique")}
+              onClick={go("#boutique")}
+              className={styles.appointment}
+            >
               Randevu
             </a>
             <button
@@ -105,7 +125,9 @@ export function Navigation() {
               aria-controls="mobile-menu"
               onClick={() => setOpen((v) => !v)}
             >
-              <span className={styles.menuLabel}>{open ? "Kapat" : "Menü"}</span>
+              <span className={styles.menuLabel}>
+                {open ? "Kapat" : "Menü"}
+              </span>
               <span className={styles.menuIcon} aria-hidden>
                 <span />
                 <span />
@@ -114,7 +136,12 @@ export function Navigation() {
           </div>
         </div>
       </header>
-      <MobileMenu open={open} onNavigate={go} hrefFor={to} onClose={() => setOpen(false)} />
+      <MobileMenu
+        open={open}
+        onNavigate={go}
+        hrefFor={to}
+        onClose={() => setOpen(false)}
+      />
     </>
   );
 }

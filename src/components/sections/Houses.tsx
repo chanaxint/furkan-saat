@@ -96,7 +96,7 @@ export function Houses() {
   return (
     <section
       ref={root}
-      className={styles.section}
+      className={`green-sheen ${styles.section}`}
       id="houses"
       aria-label="Markalar"
     >

@@ -48,7 +48,7 @@ export function Boutique() {
   const film = ASSETS.boutique.film;
 
   return (
-    <section ref={root} className={styles.section} id="boutique" data-nav-theme="dark" aria-label="Butiği ziyaret edin">
+    <section ref={root} className={`green-sheen ${styles.section}`} id="boutique" data-nav-theme="dark" aria-label="Butiği ziyaret edin">
       <div className={styles.frame} data-frame>
         <MediaSlot
           tone="deep"

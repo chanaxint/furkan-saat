@@ -15,7 +15,7 @@ import styles from "./BrandReels.module.css";
 export function BrandReels() {
   return (
     <section
-      className={styles.section}
+      className={`green-sheen ${styles.section}`}
       id="markalar"
       data-nav-theme="dark"
       aria-label="Markalar"

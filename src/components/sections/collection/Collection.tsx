@@ -15,7 +15,7 @@ import styles from "./Collection.module.css";
 const OPTIONS = filterOptions(WATCHES);
 
 /**
- * 07 — THE COLLECTION
+ * 06 — THE COLLECTION
  * The shift from storytelling to discovery. Three generous columns with an
  * offset middle column, text-led filters, and slow entrance for each piece.
  */
@@ -59,11 +59,11 @@ export function Collection() {
   return (
     <section ref={root} className={styles.section} id="collection" data-nav-theme="light" aria-label="Koleksiyon">
       <header className={styles.header}>
-        <SectionMarker index="07" label="Koleksiyon" />
+        <SectionMarker index="06" label="Koleksiyon" />
         <SplitText text={"*Koleksiyon*"} className={`t-display ${styles.heading}`} />
         <p className={styles.lede}>
-          Altı evimizin güncel stoğu. Her saat orijinalliği doğrulanmış, gerektiğinde bakımı yapılmış ve orijinal
-          belgeleriyle teslim edilir.
+          Markalarımızdan seçtiğimiz saatler. Her biri orijinalliği doğrulanmış, gerektiğinde bakımı yapılmış ve
+          orijinal belgeleriyle teslim edilir.
         </p>
       </header>
 

@@ -273,3 +273,50 @@ ol {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ---------------------------------------------------------------- green sheen
+   A soft white light drifting slowly across the green grounds. */
+.green-sheen {
+  position: relative;
+  isolation: isolate;
+  /* clip, not hidden: keeps position: sticky working inside. */
+  overflow: clip;
+}
+.green-sheen::before,
+.green-sheen::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  width: 90vmax;
+  height: 90vmax;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05) 55%, transparent);
+  filter: blur(20px);
+  will-change: transform;
+}
+.green-sheen::before {
+  top: -30vmax;
+  left: -30vmax;
+  animation: green-sheen-a 22s ease-in-out infinite alternate;
+}
+.green-sheen::after {
+  bottom: -40vmax;
+  right: -35vmax;
+  opacity: 0.8;
+  animation: green-sheen-b 28s ease-in-out infinite alternate;
+}
+@keyframes green-sheen-a {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(55vw, 20vh, 0) scale(1.15); }
+  100% { transform: translate3d(95vw, 5vh, 0) scale(0.95); }
+}
+@keyframes green-sheen-b {
+  0% { transform: translate3d(0, 0, 0) scale(1.05); }
+  50% { transform: translate3d(-50vw, -25vh, 0) scale(0.9); }
+  100% { transform: translate3d(-90vw, -8vh, 0) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .green-sheen::before,
+  .green-sheen::after { animation: none; }
+}

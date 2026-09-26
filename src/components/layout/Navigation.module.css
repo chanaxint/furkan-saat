@@ -48,6 +48,8 @@
 }
 
 .links {
+  /* Links live in the menu panel on every screen size. */
+  display: none !important;
   grid-column: 1;
   grid-row: 1;
   justify-self: start;
@@ -95,7 +97,7 @@
 }
 
 .menuButton {
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 14px;
 }

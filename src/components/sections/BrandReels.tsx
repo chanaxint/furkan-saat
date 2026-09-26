@@ -21,7 +21,7 @@ export function BrandReels() {
       aria-label="Markalar"
     >
       <header className={styles.header}>
-        <SectionMarker index="04" label="Markalar" className={styles.marker} />
+        <SectionMarker index="05" label="Markalar" className={styles.marker} />
         <h2 className={styles.title}>
           Dünyanın en seçkin <em>markaları</em>
         </h2>
@@ -93,7 +93,6 @@ function Tile({ reel }: { reel: BrandReel }) {
         <span className={styles.brand} lang="en">
           {reel.brand}
         </span>
-        <span className={styles.watch}>{reel.watch}</span>
         <span className={styles.cta}>
           Saati keşfedin <span aria-hidden>→</span>
         </span>

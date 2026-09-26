@@ -22,6 +22,7 @@ export function NewArrival() {
   const watch = useRef<HTMLImageElement>(null);
   const copy = useRef<HTMLDivElement>(null);
   const intro = useRef<HTMLDivElement>(null);
+  const edge = useRef<HTMLDivElement>(null);
   const seq = useRef<FrameSequence | null>(null);
   const live = useRef(false);
 
@@ -111,6 +112,10 @@ export function NewArrival() {
     tl.to(state, { frame: last, duration: 7, ease: "power1.inOut" }, 0.6);
     // Opening title: holds on the closed box, leaves as the lid starts to lift.
     if (intro.current) tl.to(intro.current, { autoAlpha: 0, y: -30, duration: 1.4, ease: "power2.in" }, 0.5);
+    // The box starts lower and smaller so the title sits clear above it, then
+    // settles into the full frame as the lid lifts.
+    if (stage.current) tl.fromTo(stage.current, { y: "14vh", scale: 0.88 }, { y: 0, scale: 1, duration: 2.2, ease: "power2.inOut" }, 0.4);
+    if (edge.current) tl.fromTo(edge.current, { autoAlpha: 1 }, { autoAlpha: 0, duration: 2.2, ease: "power2.inOut" }, 0.4);
     if (copy.current) tl.fromTo(copy.current, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1.4, ease: "power2.out" }, 5.2);
     tl.set({}, {}, 10);
     tl.eventCallback("onUpdate", () => {
@@ -145,6 +150,8 @@ export function NewArrival() {
             draggable={false}
           />
           <div className={styles.shade} aria-hidden />
+          {/* Feathers the film's edges while it is shrunk at the start. */}
+          <div ref={edge} className={styles.edge} aria-hidden />
         </div>
 
         <div ref={intro} className={styles.intro}>
@@ -158,7 +165,7 @@ export function NewArrival() {
 
         <div ref={copy} className={styles.copy}>
           <p className={styles.eyebrow}>
-            <span>05</span>
+            <span>04</span>
             <span className={styles.rule} aria-hidden />
             <span>Yeni Gelen</span>
           </p>

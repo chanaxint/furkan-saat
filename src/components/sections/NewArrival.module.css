@@ -63,6 +63,38 @@
     linear-gradient(to bottom, rgba(8, 7, 6, 0.5), transparent 18%, transparent 82%, rgba(8, 7, 6, 0.6));
 }
 
+/* Opening title over the closed box */
+.intro {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: calc(var(--nav-h) + 6vh);
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+  pointer-events: none;
+}
+.introEyebrow {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps-wide);
+  text-transform: uppercase;
+  color: var(--champagne);
+}
+.introTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.8rem, 6.5vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.introTitle em {
+  color: var(--champagne);
+}
+
 /* ------------------------------------------------------------ copy */
 .copy {
   position: absolute;

@@ -21,6 +21,7 @@ export function NewArrival() {
   const film = useRef<HTMLCanvasElement>(null);
   const watch = useRef<HTMLImageElement>(null);
   const copy = useRef<HTMLDivElement>(null);
+  const intro = useRef<HTMLDivElement>(null);
   const seq = useRef<FrameSequence | null>(null);
   const live = useRef(false);
 
@@ -107,7 +108,9 @@ export function NewArrival() {
     const state = { frame: 0 };
     const last = FILM.count - 1;
     const tl = gsap.timeline({ defaults: { ease: "none" } });
-    tl.to(state, { frame: last, duration: 7, ease: "power1.inOut" }, 0);
+    tl.to(state, { frame: last, duration: 7, ease: "power1.inOut" }, 0.6);
+    // Opening title: holds on the closed box, leaves as the lid starts to lift.
+    if (intro.current) tl.to(intro.current, { autoAlpha: 0, y: -30, duration: 1.4, ease: "power2.in" }, 0.5);
     if (copy.current) tl.fromTo(copy.current, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1.4, ease: "power2.out" }, 5.2);
     tl.set({}, {}, 10);
     tl.eventCallback("onUpdate", () => {
@@ -142,6 +145,15 @@ export function NewArrival() {
             draggable={false}
           />
           <div className={styles.shade} aria-hidden />
+        </div>
+
+        <div ref={intro} className={styles.intro}>
+          <p className={styles.introEyebrow}>
+            <span lang="en">{NEW_ARRIVAL.brand}</span>
+          </p>
+          <h2 className={styles.introTitle}>
+            Yeni Gelen <em>Model</em>
+          </h2>
         </div>
 
         <div ref={copy} className={styles.copy}>

@@ -1,4 +1,5 @@
 import { Footer } from "@/components/layout/Footer";
+import { BrandReels } from "@/components/sections/BrandReels";
 import { Boutique } from "@/components/sections/Boutique";
 import { Collection } from "@/components/sections/collection/Collection";
 import { Editorial } from "@/components/sections/Editorial";
@@ -19,6 +20,7 @@ export default function Home() {
   return (
     <main>
       <HeroFilm />
+      <BrandReels />
       <NewArrival />
       <MostWanted />
       <Collection />

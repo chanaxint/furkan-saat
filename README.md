@@ -66,7 +66,9 @@ driven by scroll through **one GSAP timeline** (`buildHeroTimeline`, `scrub: 1`)
   into the house green → four feature lines, and for each one the watch turns
   (diagonally) to show that part: *Oyster Kasa* (case flank), *Perpetual Mekanizma*
   (caseback), *Cerachrom Çerçeve* (bezel close-up), *Oyster Bileklik* (bracelet) → one
-  diagonal spin into the Patek Philippe, with its brand and model beneath it.
+  diagonal spin into the Patek Philippe ("İstediğiniz her saat" with its name beneath)
+  → three shorter Patek beats (sky chart, strap, platinum case; `PATEK_LINES`) →
+  "ve daha fazlası" while the watch spins away and the home page continues.
   Lines and poses are in `HERO_LINES`, the closing text in `HERO_FINALE`.
 - **Pacing:** ≈ 60svh of scroll per timeline second, so each turn takes about
   one scroll gesture; `scrub: 1` smooths it.

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
 import { ScrollTrigger } from "@/lib/gsap";
-import { buildHeroTimeline, createHeroState, HERO_FINALE, HERO_LINES } from "@/lib/scene/hero";
+import { ALL_LINES, buildHeroTimeline, createHeroState, HERO_FINALE, HERO_LINES, HERO_OUTRO } from "@/lib/scene/hero";
 import { MOVEMENT_FILM, movementFrameSrc } from "@/lib/scene/movement";
 import { progress } from "@/lib/scene/progress";
 import { FrameSequence } from "./FrameSequence";
@@ -26,6 +26,7 @@ export function HeroFilm() {
   const film = useRef<HTMLCanvasElement>(null);
   const cue = useRef<HTMLDivElement>(null);
   const finale = useRef<HTMLDivElement>(null);
+  const outro = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLElement | null)[]>([]);
   const seq = useRef<FrameSequence | null>(null);
   const movement = useRef<HTMLCanvasElement>(null);
@@ -56,7 +57,12 @@ export function HeroFilm() {
   }, []);
 
   useGsap(() => {
-    const tl = buildHeroTimeline(state, { cue: cue.current, lines: lines.current, finale: finale.current });
+    const tl = buildHeroTimeline(state, {
+      cue: cue.current,
+      lines: lines.current,
+      finale: finale.current,
+      outro: outro.current,
+    });
     const el = root.current!;
     tl.eventCallback("onUpdate", () => {
       seq.current?.draw(state.frame);
@@ -99,8 +105,10 @@ export function HeroFilm() {
 
         {/* Feature lines — the watch turns to show each part as its line arrives */}
         <div className={styles.lines}>
-          {HERO_LINES.map((l, i) => {
+          {ALL_LINES.map((l, i) => {
             const [before, after] = l.title.split(l.accent);
+            // Numbering restarts for the Patek Philippe.
+            const n = i < HERO_LINES.length ? i + 1 : i - HERO_LINES.length + 1;
             return (
               <div
                 key={l.id}
@@ -108,7 +116,7 @@ export function HeroFilm() {
                 className={styles.line}
                 data-side={l.side}
               >
-                <p className={styles.index}>{String(i + 1).padStart(2, "0")}</p>
+                <p className={styles.index}>{String(n).padStart(2, "0")}</p>
                 <h2 className={styles.lineTitle}>
                   {before}
                   <em>{l.accent}</em>
@@ -120,14 +128,29 @@ export function HeroFilm() {
           })}
         </div>
 
-        {/* Beneath the Patek Philippe after the handover */}
+        {/* Handover: the line above, the Patek Philippe's name beneath the watch */}
         <div ref={finale} className={styles.finale}>
-          {/* lang="en": brand names use English capitals (PHILIPPE, not PHİLİPPE). */}
-          <p className={styles.finaleBrand} lang="en">
-            {HERO_FINALE.brand}
-          </p>
-          <h2 className={styles.finaleModel}>{HERO_FINALE.model}</h2>
-          <p className={styles.finaleRef}>{HERO_FINALE.reference}</p>
+          <h2 className={styles.finaleLine}>
+            {HERO_FINALE.line.split(HERO_FINALE.accent)[0]}
+            <em>{HERO_FINALE.accent}</em>
+          </h2>
+          <div className={styles.finaleName}>
+            {/* lang="en": brand names use English capitals (PHILIPPE, not PHİLİPPE). */}
+            <p className={styles.finaleBrand} lang="en">
+              {HERO_FINALE.brand}
+            </p>
+            <p className={styles.finaleModel}>{HERO_FINALE.model}</p>
+            <p className={styles.finaleRef}>{HERO_FINALE.reference}</p>
+          </div>
+        </div>
+
+        {/* Outro — hands over to the rest of the home page */}
+        <div ref={outro} className={styles.outro}>
+          <h2 className={styles.outroLine}>
+            {HERO_OUTRO.line.split(HERO_OUTRO.accent)[0]}
+            <em>{HERO_OUTRO.accent}</em>
+          </h2>
+          <span className={styles.outroCue} aria-hidden />
         </div>
 
         <HeroWatchScene state={state} className={styles.canvas} onReady={onReady} />

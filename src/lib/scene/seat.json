@@ -1,8 +1,8 @@
 {
-  "offsetX": 0,
-  "offsetY": 0.14,
-  "offsetZ": 0,
-  "tilt": 0,
+  "offsetX": 0.01,
+  "offsetY": 0.24,
+  "offsetZ": 0.055,
+  "tilt": 10.75,
   "yaw": 0,
   "roll": 0,
   "scale": 1,

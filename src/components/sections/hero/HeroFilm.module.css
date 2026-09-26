@@ -3,7 +3,7 @@
   --flash: 0;
   position: relative;
   /* Scroll length of the whole opening timeline. */
-  height: 1360svh;
+  height: 2000svh;
   background: var(--green-900);
   color: var(--ivory);
 }
@@ -133,21 +133,71 @@
   color: var(--text-on-dark-muted);
 }
 
-/* Brand and model beneath the Patek Philippe */
+/* Handover: line at the top, the Patek Philippe's name beneath the watch */
 .finale {
   position: absolute;
   z-index: 5;
-  left: 0;
-  right: 0;
-  bottom: 7vh;
+  inset: 0;
   display: grid;
+  grid-template-rows: auto 1fr auto;
   justify-items: center;
-  gap: 8px;
+  padding: calc(var(--nav-h) + 3vh) var(--gutter) 6vh;
   text-align: center;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
+.finaleLine {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.4rem, 4.6vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.finaleLine em {
+  color: var(--champagne);
+}
+.finaleName {
+  grid-row: 3;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+/* Outro: "ve daha fazlası" */
+.outro {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  justify-content: center;
+  padding-top: 24vh;
+  justify-items: center;
+  gap: 28px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.outroLine {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(3.4rem, 9vw, 10rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+.outroLine em {
+  color: var(--champagne);
+}
+.outroCue {
+  width: 1px;
+  height: 64px;
+  background: linear-gradient(to bottom, var(--champagne), transparent);
+}
+
 .finaleBrand {
   font-size: var(--fs-micro);
   font-weight: 500;
@@ -238,7 +288,7 @@
 
 @media (max-width: 767px) {
   .section {
-    height: 1240svh;
+    height: 1820svh;
   }
   /* Mobile: the copy sits above the watch, on a soft fade, so close-ups never cover it. */
   .lines {
@@ -247,6 +297,8 @@
   .lines::before {
     content: "";
     position: absolute;
+    /* Reset the desktop rule's inset: 0, or top would win over bottom. */
+    top: auto;
     left: 0;
     right: 0;
     bottom: 0;

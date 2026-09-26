@@ -56,8 +56,14 @@ export function Navigation() {
     document.documentElement.style.overflow = open ? "hidden" : "";
   }, [open, lenis]);
 
+  // Section links (#…) scroll on the home page; elsewhere they go to "/#…".
+  const onHome = pathname === "/";
+  const to = (href: string) => (href.startsWith("#") && !onHome ? `/${href}` : href);
   const go = (href: string) => (e: React.MouseEvent) => {
-    if (!href.startsWith("#")) return;
+    if (!href.startsWith("#") || !onHome) {
+      setOpen(false);
+      return;
+    }
     e.preventDefault();
     setOpen(false);
     requestAnimationFrame(() => {
@@ -74,7 +80,7 @@ export function Navigation() {
       <header
         className={styles.nav}
         data-mode={open ? "visible" : mode}
-        data-theme={open ? "light" : theme}
+        data-theme={theme}
       >
         <div className={styles.inner}>
           <Link href="/" className={styles.wordmark} aria-label="Furkan Saat — ana sayfa" onClick={go("#top")}>
@@ -83,14 +89,14 @@ export function Navigation() {
 
           <nav className={styles.links} aria-label="Ana menü">
             {NAV_LINKS.map((l) => (
-              <a key={l.href} href={l.href} onClick={go(l.href)} className={styles.link}>
+              <a key={l.href} href={to(l.href)} onClick={go(l.href)} className={styles.link}>
                 {l.label}
               </a>
             ))}
           </nav>
 
           <div className={styles.aside}>
-            <a href="#boutique" onClick={go("#boutique")} className={styles.appointment}>
+            <a href={to("#boutique")} onClick={go("#boutique")} className={styles.appointment}>
               Randevu
             </a>
             <button
@@ -108,7 +114,7 @@ export function Navigation() {
           </div>
         </div>
       </header>
-      <MobileMenu open={open} onNavigate={go} />
+      <MobileMenu open={open} onNavigate={go} hrefFor={to} onClose={() => setOpen(false)} />
     </>
   );
 }

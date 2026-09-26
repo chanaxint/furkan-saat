@@ -260,7 +260,7 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
     /* 5 — light: warm like the footage while on the cushion, studio after */
     if (warmKey.current) {
       warmKey.current.color.lerpColors(tmp.neutral, tmp.warm, state.film);
-      warmKey.current.intensity = 0.6 + 1.6 * state.film;
+      warmKey.current.intensity = 0.25 + 1.9 * state.film;
     }
 
     // Shadows only matter while the watch is on (or just above) the cushion.

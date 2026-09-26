@@ -5,12 +5,12 @@ import { Navigation } from "@/components/layout/Navigation";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
-  title: "Furkan Saat — Fine Watches, İstanbul",
+  title: "Furkan Saat — Seçkin Saatler, İstanbul",
   description:
-    "A private house for exceptional timepieces. Rolex, Patek Philippe, Richard Mille, Jacob & Co., Audemars Piguet and Cartier — presented by appointment in İstanbul.",
+    "Seçkin saatler için özel bir ev. Rolex, Patek Philippe, Richard Mille, Jacob & Co., Audemars Piguet ve Cartier — İstanbul'da randevu ile.",
   openGraph: {
-    title: "Furkan Saat — Fine Watches",
-    description: "A private house for exceptional timepieces.",
+    title: "Furkan Saat — Seçkin Saatler",
+    description: "Seçkin saatler için özel bir ev.",
     type: "website",
   },
 };
@@ -23,7 +23,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="tr">
       <head>
         <link rel="preload" href="/fonts/cormorant-garamond-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="preload" href="/fonts/cormorant-garamond-latin-wght-italic.woff2" as="font" type="font/woff2" crossOrigin="" />

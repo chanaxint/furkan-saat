@@ -38,12 +38,12 @@ export function FinalCTA() {
   }, root);
 
   return (
-    <section ref={root} className={styles.section} data-nav-theme="dark" aria-label="Find your time">
+    <section ref={root} className={styles.section} data-nav-theme="dark" aria-label="Zamanınızı bulun">
       <div className={styles.pin}>
-        <h2 className={`t-display ${styles.heading}`} aria-label="Find your time.">
-          {["Find", "your", "time."].map((w, i) => (
+        <h2 className={`t-display ${styles.heading}`} aria-label="Zamanınızı bulun.">
+          {["Zamanınızı", "bulun."].map((w, i) => (
             <span key={w} className={styles.mask} aria-hidden>
-              <span data-word className={i === 2 ? styles.accent : undefined}>
+              <span data-word className={i === 1 ? styles.accent : undefined}>
                 {w}
               </span>
             </span>
@@ -51,7 +51,7 @@ export function FinalCTA() {
         </h2>
         <div className={styles.cta} data-cta>
           <ArrowLink href="#collection" variant="frame">
-            Explore collection
+            Koleksiyonu keşfedin
           </ArrowLink>
         </div>
       </div>

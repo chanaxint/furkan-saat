@@ -44,16 +44,16 @@ export function NewArrival() {
   }, root);
 
   return (
-    <section ref={root} className={styles.section} id="new-arrival" data-nav-theme="dark" aria-label="New arrival">
+    <section ref={root} className={styles.section} id="new-arrival" data-nav-theme="dark" aria-label="Yeni gelen">
       <div className={styles.top}>
-        <SectionMarker index="05" label="Just arrived" className={styles.marker} />
+        <SectionMarker index="05" label="Yeni geldi" className={styles.marker} />
         <p className={styles.ref}>Ref. {NEW_ARRIVAL.reference}</p>
       </div>
 
-      <h2 className={`t-display ${styles.title}`} data-title aria-label="New Arrival">
-        <span>New</span>
+      <h2 className={`t-display ${styles.title}`} data-title aria-label="Yeni Gelen">
+        <span>Yeni</span>
         <span>
-          <em>Arrival</em>
+          <em>Gelen</em>
         </span>
       </h2>
 
@@ -65,7 +65,7 @@ export function NewArrival() {
             still={ASSETS.newArrival.still}
             tone="deep"
             className={styles.stage}
-            hint="Product · GLB / film / still"
+            hint="Ürün · GLB / film / fotoğraf"
           />
         </div>
 
@@ -81,7 +81,7 @@ export function NewArrival() {
               </div>
             ))}
           </dl>
-          <ArrowLink href={NEW_ARRIVAL.href}>Discover timepiece</ArrowLink>
+          <ArrowLink href={NEW_ARRIVAL.href}>Saati keşfedin</ArrowLink>
         </Reveal>
       </div>
     </section>

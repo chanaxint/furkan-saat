@@ -57,13 +57,13 @@ export function Collection() {
   );
 
   return (
-    <section ref={root} className={styles.section} id="collection" data-nav-theme="light" aria-label="The collection">
+    <section ref={root} className={styles.section} id="collection" data-nav-theme="light" aria-label="Koleksiyon">
       <header className={styles.header}>
-        <SectionMarker index="07" label="The Collection" />
-        <SplitText text={"The *Collection*"} className={`t-display ${styles.heading}`} />
+        <SectionMarker index="07" label="Koleksiyon" />
+        <SplitText text={"*Koleksiyon*"} className={`t-display ${styles.heading}`} />
         <p className={styles.lede}>
-          Current availability across our six houses. Every piece is authenticated, serviced where required and
-          delivered with its original papers.
+          Altı evimizin güncel stoğu. Her saat orijinalliği doğrulanmış, gerektiğinde bakımı yapılmış ve orijinal
+          belgeleriyle teslim edilir.
         </p>
       </header>
 
@@ -87,17 +87,17 @@ export function Collection() {
         </ul>
       ) : (
         <div className={styles.empty}>
-          <p className="t-display t-s">No timepiece matches this selection.</p>
-          <p className={styles.emptyText}>Our concierge can source pieces beyond the current collection.</p>
+          <p className="t-display t-s">Bu seçime uyan bir saat yok.</p>
+          <p className={styles.emptyText}>Danışmanlarımız mevcut koleksiyonun dışındaki saatleri de sizin için bulabilir.</p>
           <button className={styles.reset} onClick={() => setFilters(EMPTY_FILTERS)}>
-            Reset filters
+            Filtreleri sıfırla
           </button>
         </div>
       )}
 
       <div className={styles.footer}>
         <ArrowLink href="/collection" variant="frame">
-          View the full collection
+          Tüm koleksiyonu görün
         </ArrowLink>
       </div>
     </section>

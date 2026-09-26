@@ -12,14 +12,14 @@ export function ProductCard({ watch, index }: { watch: Watch; index: number }) {
         tone={watch.tone}
         ratio="4 / 5"
         image={watch.image}
-        alt={`${watch.brand} ${watch.model}, reference ${watch.reference}`}
+        alt={`${watch.brand} ${watch.model}, referans ${watch.reference}`}
         interactive
         motif="stage"
-        hint="Photography · 4:5"
+        hint="Fotoğraf · 4:5"
         sizes="(max-width: 767px) 100vw, (max-width: 1100px) 50vw, 33vw"
       >
         <span className={styles.view} aria-hidden>
-          View
+          İncele
         </span>
       </MediaSlot>
       <div className={styles.info}>

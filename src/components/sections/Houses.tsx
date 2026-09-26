@@ -98,21 +98,21 @@ export function Houses() {
       ref={root}
       className={styles.section}
       id="houses"
-      aria-label="The houses"
+      aria-label="Markalar"
     >
       <header className={styles.intro} data-nav-theme="dark">
         <SectionMarker
           index="08"
-          label="The Houses"
+          label="Markalar"
           className={styles.marker}
         />
         <SplitText
-          text={"Six houses.\nSix *worlds.*"}
+          text={"Altı ev.\nAltı *dünya.*"}
           className={`t-display ${styles.heading}`}
         />
         <p className={styles.lede}>
-          We are authorised partners to a small circle of manufactures. Each
-          keeps its own language — we simply give it room.
+          Küçük ve seçkin bir manüfaktür çevresinin yetkili iş ortağıyız. Her biri kendi dilini
+          korur — biz yalnızca ona alan açarız.
         </p>
       </header>
 
@@ -133,7 +133,7 @@ export function Houses() {
                       {String(i + 1).padStart(2, "0")} /{" "}
                       {String(HOUSES.length).padStart(2, "0")}
                     </span>
-                    <span>Est. {h.founded}</span>
+                    <span>Kuruluş {h.founded}</span>
                     <span>{h.origin}</span>
                   </div>
 
@@ -141,8 +141,8 @@ export function Houses() {
                     tone={world.media}
                     image={h.media.image}
                     video={h.media.video ? { mp4: h.media.video } : null}
-                    alt={`${h.name} — house film`}
-                    hint="House film · 16:9"
+                    alt={`${h.name} — marka filmi`}
+                    hint="Marka filmi · 16:9"
                     motif="horizon"
                     className={styles.media}
                   />
@@ -152,7 +152,7 @@ export function Houses() {
                       <em>{h.signature}</em>
                     </p>
                     <p className={styles.description}>{h.description}</p>
-                    <ArrowLink href={h.href}>Discover house</ArrowLink>
+                    <ArrowLink href={h.href}>Markayı keşfedin</ArrowLink>
                   </div>
 
                   <h3 className={`t-display ${styles.name}`} data-name>

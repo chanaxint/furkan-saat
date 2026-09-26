@@ -38,8 +38,8 @@ export function CollectionFilters({ options, filters, onToggle, onClear, count }
   return (
     <div ref={ref} className={styles.wrap}>
       <div className={styles.bar}>
-        <span className={styles.lead}>Refine</span>
-        <div className={styles.keys} role="tablist" aria-label="Filters">
+        <span className={styles.lead}>Daralt</span>
+        <div className={styles.keys} role="tablist" aria-label="Filtreler">
           {KEYS.map((k) => (
             <button
               key={k}
@@ -56,7 +56,7 @@ export function CollectionFilters({ options, filters, onToggle, onClear, count }
           ))}
         </div>
         <span className={styles.count}>
-          {String(count).padStart(2, "0")} {count === 1 ? "timepiece" : "timepieces"}
+          {String(count).padStart(2, "0")} saat
         </span>
       </div>
 
@@ -85,11 +85,11 @@ export function CollectionFilters({ options, filters, onToggle, onClear, count }
           {active.map(({ key, value }) => (
             <button key={`${key}-${value}`} className={styles.tag} onClick={() => onToggle(key, value)}>
               {labelFor(key, value)} <span aria-hidden>×</span>
-              <span className="visually-hidden">remove filter</span>
+              <span className="visually-hidden">filtreyi kaldır</span>
             </button>
           ))}
           <button className={styles.clear} onClick={onClear}>
-            Clear all
+            Tümünü temizle
           </button>
         </div>
       )}

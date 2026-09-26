@@ -1,8 +1,8 @@
 export type Tone = "green" | "deep" | "ivory" | "stone" | "champagne" | "wine";
 
-export type WatchType = "Dress" | "Sport" | "Chronograph" | "Complication" | "Jewellery";
-export type Material = "Steel" | "White Gold" | "Rose Gold" | "Yellow Gold" | "Platinum" | "Titanium" | "Carbon";
-export type Movement = "Automatic" | "Manual" | "Quartz";
+export type WatchType = "Klasik" | "Spor" | "Kronograf" | "Komplikasyon" | "Mücevher";
+export type Material = "Çelik" | "Beyaz Altın" | "Kırmızı Altın" | "Sarı Altın" | "Platin" | "Titanyum" | "Karbon";
+export type Movement = "Otomatik" | "Manuel" | "Kuvars";
 
 export type Watch = {
   id: string;

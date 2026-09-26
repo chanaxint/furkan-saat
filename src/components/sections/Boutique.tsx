@@ -48,12 +48,12 @@ export function Boutique() {
   const film = ASSETS.boutique.film;
 
   return (
-    <section ref={root} className={styles.section} id="boutique" data-nav-theme="dark" aria-label="Visit the boutique">
+    <section ref={root} className={styles.section} id="boutique" data-nav-theme="dark" aria-label="Butiği ziyaret edin">
       <div className={styles.frame} data-frame>
         <MediaSlot
           tone="deep"
           video={film.webm || film.mp4 ? film : null}
-          hint="Boutique film · full-bleed"
+          hint="Butik filmi · tam genişlik"
           motif="horizon"
           className={styles.media}
         />
@@ -61,30 +61,30 @@ export function Boutique() {
 
         <div className={styles.content}>
           <p className={`t-eyebrow ${styles.eyebrow}`} data-fade>
-            10 — The Boutique · {BOUTIQUE.city}
+            10 — Butik · {BOUTIQUE.city}
           </p>
-          <SplitText text={"Visit\nFurkan *Saat*"} className={`t-display ${styles.heading}`} start="top 70%" />
+          <SplitText text={"Furkan *Saat*\nButiği"} className={`t-display ${styles.heading}`} start="top 70%" />
           <p className={styles.support} data-fade>
-            A private experience for exceptional timepieces.
+            Seçkin saatler için özel bir deneyim.
           </p>
           <div data-fade>
             <ArrowLink href="/appointment" variant="frame" className={styles.cta}>
-              Book an appointment
+              Randevu alın
             </ArrowLink>
           </div>
         </div>
 
         <dl className={styles.facts}>
           <div data-fade>
-            <dt>Location</dt>
+            <dt>Konum</dt>
             <dd>{BOUTIQUE.city}</dd>
           </div>
           <div data-fade>
-            <dt>Hours</dt>
+            <dt>Saatler</dt>
             <dd>{BOUTIQUE.hours}</dd>
           </div>
           <div data-fade>
-            <dt>Concierge</dt>
+            <dt>Danışma</dt>
             <dd>
               <a href={`mailto:${BOUTIQUE.email}`}>{BOUTIQUE.email}</a>
             </dd>

@@ -50,13 +50,13 @@ export function MostWanted() {
   }, root);
 
   return (
-    <section ref={root} className={styles.section} id="most-wanted" data-nav-theme="light" aria-label="Most wanted">
+    <section ref={root} className={styles.section} id="most-wanted" data-nav-theme="light" aria-label="En çok arananlar">
       <header className={styles.header}>
-        <SectionMarker index="06" label="Most Wanted" />
-        <SplitText text={"The pieces\nasked for *by name*"} className={`t-display ${styles.heading}`} />
+        <SectionMarker index="06" label="En Çok Arananlar" />
+        <SplitText text={"Adıyla\n*istenen* saatler"} className={`t-display ${styles.heading}`} />
         <p className={styles.lede}>
-          Four watches that define their houses — and our waiting list. Each is available to view privately at the
-          boutique.
+          Evlerini tanımlayan dört saat — ve bekleme listemizin başındakiler. Her biri butiğimizde özel olarak
+          incelenebilir.
         </p>
       </header>
 
@@ -71,12 +71,12 @@ export function MostWanted() {
                 alt={`${w.brand} ${w.model}`}
                 interactive
                 motif="stage"
-                hint="Photography"
+                hint="Fotoğraf"
                 sizes="(max-width: 767px) 100vw, 50vw"
                 className={styles.media}
               >
                 <span className={styles.discover} aria-hidden>
-                  Discover <span>→</span>
+                  Keşfedin <span>→</span>
                 </span>
               </MediaSlot>
               <div className={styles.caption}>

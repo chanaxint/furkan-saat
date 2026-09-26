@@ -9,10 +9,10 @@ export function Footer() {
     <footer className={styles.footer} id="contact" data-nav-theme="light">
       <div className={styles.top}>
         <p className={styles.statement}>
-          A private house for exceptional timepieces — <em>{BOUTIQUE.city}.</em>
+          Seçkin saatler için özel bir ev — <em>{BOUTIQUE.city}.</em>
         </p>
 
-        <nav aria-label="Footer" className={styles.nav}>
+        <nav aria-label="Alt menü" className={styles.nav}>
           <ul>
             {FOOTER_LINKS.map((l) => (
               <li key={l.label}>
@@ -26,7 +26,7 @@ export function Footer() {
         </nav>
 
         <div className={styles.contact}>
-          <p className={styles.label}>Contact</p>
+          <p className={styles.label}>İletişim</p>
           <a href={`mailto:${BOUTIQUE.email}`} className={styles.link}>
             {BOUTIQUE.email}
           </a>

@@ -1,27 +1,27 @@
 export const NAV_LINKS = [
-  { label: "Collection", href: "#collection" },
-  { label: "Brands", href: "#houses" },
-  { label: "Boutique", href: "#boutique" },
-  { label: "Journal", href: "#journal" },
-  { label: "Contact", href: "#contact" },
+  { label: "Koleksiyon", href: "#collection" },
+  { label: "Markalar", href: "#houses" },
+  { label: "Butik", href: "#boutique" },
+  { label: "Dergi", href: "#journal" },
+  { label: "İletişim", href: "#contact" },
 ];
 
 export const FOOTER_LINKS = [
-  { label: "Collections", href: "#collection" },
-  { label: "Brands", href: "#houses" },
-  { label: "Boutique", href: "#boutique" },
-  { label: "Journal", href: "#journal" },
-  { label: "Contact", href: "#contact" },
+  { label: "Koleksiyonlar", href: "#collection" },
+  { label: "Markalar", href: "#houses" },
+  { label: "Butik", href: "#boutique" },
+  { label: "Dergi", href: "#journal" },
+  { label: "İletişim", href: "#contact" },
   { label: "Instagram", href: "https://instagram.com", external: true },
 ];
 
 export const LEGAL_LINKS = [
-  { label: "Privacy", href: "/privacy" },
-  { label: "Terms", href: "/terms" },
+  { label: "Gizlilik", href: "/privacy" },
+  { label: "Kullanım Koşulları", href: "/terms" },
 ];
 
 export const BOUTIQUE = {
   city: "İstanbul",
-  hours: "By appointment · Monday to Saturday",
+  hours: "Randevu ile · Pazartesi – Cumartesi",
   email: "concierge@furkansaat.com",
 };

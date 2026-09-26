@@ -3,7 +3,7 @@
   --flash: 0;
   position: relative;
   /* Scroll length of the whole opening timeline. */
-  height: 1500svh;
+  height: 920svh;
   background: var(--green-900);
   color: var(--ivory);
 }
@@ -89,16 +89,8 @@
 }
 .line[data-index="0"] {
   right: var(--gutter);
-  top: 20%;
-  text-align: right;
-}
-.line[data-index="1"] {
-  left: var(--gutter);
-  bottom: 18%;
-}
-.line[data-index="2"] {
-  right: var(--gutter);
-  bottom: 22%;
+  top: 50%;
+  margin-top: -1em;
   text-align: right;
 }
 
@@ -134,27 +126,6 @@
   to { transform: translateX(100%); }
 }
 
-.title {
-  position: absolute;
-  z-index: 5;
-  left: var(--gutter);
-  bottom: 9vh;
-  display: grid;
-  gap: 16px;
-  max-width: 560px;
-  pointer-events: none;
-  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.35);
-}
-.title p {
-  color: var(--champagne);
-}
-.headline {
-  font-size: clamp(2.6rem, 5vw, 5rem);
-  line-height: 0.95;
-}
-.headline em {
-  color: var(--champagne);
-}
 
 .cue {
   position: absolute;
@@ -192,7 +163,7 @@
 
 @media (max-width: 767px) {
   .section {
-    height: 1300svh;
+    height: 860svh;
   }
   .line {
     max-width: none;
@@ -200,13 +171,9 @@
     right: var(--gutter) !important;
     font-size: clamp(2.2rem, 11vw, 3.4rem);
   }
-  .line[data-index="0"],
-  .line[data-index="2"] {
-    top: calc(var(--nav-h) + 4vh);
-    bottom: auto;
-  }
-  .line[data-index="1"] {
+  .line[data-index="0"] {
     top: auto;
-    bottom: 10vh;
+    bottom: 12vh;
+    margin-top: 0;
   }
 }

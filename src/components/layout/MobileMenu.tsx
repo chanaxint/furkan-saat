@@ -41,7 +41,7 @@ export function MobileMenu({
 
   return (
     <div ref={root} id="mobile-menu" className={styles.menu} aria-hidden={!open} style={{ visibility: "hidden" }}>
-      <nav className={styles.list} aria-label="Mobile">
+      <nav className={styles.list} aria-label="Mobil menü">
         {NAV_LINKS.map((l, i) => (
           <a key={l.href} href={l.href} onClick={onNavigate(l.href)} className={styles.row} tabIndex={open ? 0 : -1}>
             <span className={styles.mask}>
@@ -54,10 +54,10 @@ export function MobileMenu({
         ))}
       </nav>
       <div className={styles.footer}>
-        <p data-meta className="t-eyebrow">Boutique — {BOUTIQUE.city}</p>
+        <p data-meta className="t-eyebrow">Butik — {BOUTIQUE.city}</p>
         <p data-meta className={styles.hours}>{BOUTIQUE.hours}</p>
         <a data-meta href="#boutique" onClick={onNavigate("#boutique")} className={styles.cta} tabIndex={open ? 0 : -1}>
-          Book an appointment →
+          Randevu alın →
         </a>
       </div>
     </div>

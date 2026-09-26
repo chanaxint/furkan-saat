@@ -30,7 +30,10 @@ export function Navigation() {
       const vh = window.innerHeight;
       const down = y > lastY.current;
       lastY.current = y;
-      if (y < vh * 0.6) setMode("immersive");
+      // Stay minimal (wordmark only) for the whole opening film.
+      const hero = document.getElementById("top");
+      const heroEnd = hero ? hero.offsetTop + hero.offsetHeight - vh * 1.2 : vh * 0.6;
+      if (y < heroEnd) setMode("immersive");
       else if (down && y > vh * 2.5) setMode("hidden");
       else setMode("visible");
 
@@ -69,11 +72,11 @@ export function Navigation() {
         data-theme={open ? "light" : theme}
       >
         <div className={styles.inner}>
-          <Link href="/" className={styles.wordmark} aria-label="Furkan Saat — home" onClick={go("#top")}>
+          <Link href="/" className={styles.wordmark} aria-label="Furkan Saat — ana sayfa" onClick={go("#top")}>
             Furkan <span>Saat</span>
           </Link>
 
-          <nav className={styles.links} aria-label="Primary">
+          <nav className={styles.links} aria-label="Ana menü">
             {NAV_LINKS.map((l) => (
               <a key={l.href} href={l.href} onClick={go(l.href)} className={styles.link}>
                 {l.label}
@@ -83,7 +86,7 @@ export function Navigation() {
 
           <div className={styles.aside}>
             <a href="#boutique" onClick={go("#boutique")} className={styles.appointment}>
-              Appointment
+              Randevu
             </a>
             <button
               className={styles.menuButton}
@@ -91,7 +94,7 @@ export function Navigation() {
               aria-controls="mobile-menu"
               onClick={() => setOpen((v) => !v)}
             >
-              <span className={styles.menuLabel}>{open ? "Close" : "Menu"}</span>
+              <span className={styles.menuLabel}>{open ? "Kapat" : "Menü"}</span>
               <span className={styles.menuIcon} aria-hidden>
                 <span />
                 <span />

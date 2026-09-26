@@ -47,10 +47,10 @@ export function Editorial() {
   }, root);
 
   return (
-    <section ref={root} className={styles.section} id="journal" data-nav-theme="light" aria-label="The world of horology">
+    <section ref={root} className={styles.section} id="journal" data-nav-theme="light" aria-label="Saatçilik dünyası">
       <header className={styles.header}>
-        <SectionMarker index="09" label="Journal" />
-        <SplitText text={"The World\nof *Horology*"} className={`t-display ${styles.heading}`} />
+        <SectionMarker index="09" label="Dergi" />
+        <SplitText text={"Saatçiliğin\n*Dünyası*"} className={`t-display ${styles.heading}`} />
       </header>
 
       <div className={styles.grid}>
@@ -63,7 +63,7 @@ export function Editorial() {
                 image={s.media.image}
                 video={s.media.video ? { mp4: s.media.video } : null}
                 alt=""
-                hint={i === 0 ? "Story film · 21:10" : "Story image"}
+                hint={i === 0 ? "Hikâye filmi · 21:10" : "Hikâye görseli"}
                 motif={i === 1 ? "horizon" : "none"}
                 interactive
                 className={styles.media}
@@ -79,7 +79,7 @@ export function Editorial() {
                   {s.excerpt}
                 </p>
                 <span className={styles.read} data-fade>
-                  Read the story <span aria-hidden>→</span>
+                  Hikâyeyi okuyun <span aria-hidden>→</span>
                 </span>
               </div>
             </Link>
@@ -88,7 +88,7 @@ export function Editorial() {
       </div>
 
       <div className={styles.footer}>
-        <ArrowLink href="/journal">All stories</ArrowLink>
+        <ArrowLink href="/journal">Tüm hikâyeler</ArrowLink>
       </div>
     </section>
   );

@@ -11,7 +11,6 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./MostWanted.module.css";
 
 const PIECES = MOST_WANTED_IDS.map((id) => WATCHES.find((w) => w.id === id)!).filter(Boolean);
-const RATIOS = ["4 / 5", "3 / 4", "3 / 4", "4 / 5"];
 
 /**
  * 06 — MOST WANTED
@@ -36,13 +35,8 @@ export function MostWanted() {
       },
     );
 
-    // Pieces drift at slightly different speeds; media moves within its frame.
-    q("[data-piece]").forEach((piece, i) => {
-      gsap.fromTo(
-        piece,
-        { y: [60, 140, 40, 110][i] },
-        { y: -[60, 140, 40, 110][i], ease: "none", scrollTrigger: { trigger: piece, start: "top bottom", end: "bottom top", scrub: true } },
-      );
+    // Equal cards; only the media drifts gently inside its frame.
+    q("[data-piece]").forEach((piece) => {
       const inner = piece.querySelector("[data-media-inner]");
       if (inner)
         gsap.fromTo(inner, { yPercent: -5 }, { yPercent: 5, ease: "none", scrollTrigger: { trigger: piece, start: "top bottom", end: "bottom top", scrub: true } });
@@ -62,11 +56,11 @@ export function MostWanted() {
 
       <ol className={styles.grid}>
         {PIECES.map((w, i) => (
-          <li key={w.id} className={`${styles.piece} ${styles[`p${i + 1}`]}`} data-piece>
+          <li key={w.id} className={styles.piece} data-piece>
             <Link href={w.href} prefetch={false} className={styles.link}>
               <MediaSlot
                 tone={w.tone}
-                ratio={RATIOS[i]}
+                ratio="4 / 5"
                 image={w.image}
                 alt={`${w.brand} ${w.model}`}
                 interactive

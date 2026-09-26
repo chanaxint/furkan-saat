@@ -47,6 +47,9 @@
 .model {
   font-size: clamp(1.5rem, 2vw, 2.1rem);
   line-height: 1.05;
+  /* Two lines reserved so every card in a row lines up. */
+  min-height: 2.1em;
+  align-self: start;
   background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
   justify-self: start;
   padding-bottom: 4px;

@@ -173,17 +173,18 @@ export const WATCHES: Watch[] = [
 
 /** Section 05 — the single timepiece staged as New Arrival. */
 export const NEW_ARRIVAL = {
-  brand: "Patek Philippe",
-  model: "Calatrava 6119G",
-  reference: "6119G-001",
+  brand: "Jacob & Co.",
+  // Descriptive name — replace with the exact model and reference when known.
+  model: "İskelet Tourbillon",
+  reference: "Yeni koleksiyon",
   description:
-    "Markanın kurucu diline sessiz bir dönüş. Clous de Paris desenli bezel, elle kurmalı 30-255 PS kalibre ve 1932'nin ölçülülüğüyle çizilmiş bir kasa — bugünün bileğine göre oranlanmış.",
+    "Pırlanta dizili kasa ve kulplar, iskelet kadranın ardında açıkça görünen mekanizma ve safir kabaşon kurma kolu. Kutusundan ilk kez çıkıyor.",
   details: [
-    ["Kasa", "39 mm beyaz altın"],
-    ["Kalibre", "30-255 PS, manuel"],
-    ["Güç rezervi", "65 saat"],
+    ["Kasa", "Pırlanta dizili"],
+    ["Kadran", "İskelet, açık mekanizma"],
+    ["Kordon", "Siyah timsah deri"],
   ] as [string, string][],
-  href: "/collection/patek-6119g",
+  href: "/collection/jacob-co-skeleton-tourbillon",
 };
 
 /** Section 06 — curated selection. */

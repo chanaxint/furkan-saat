@@ -45,9 +45,11 @@
   column-gap: clamp(24px, 3.4vw, 64px);
   row-gap: clamp(72px, 8vw, 140px);
 }
-/* Editorial rhythm: middle column sits lower */
-.item:nth-child(3n + 2) {
-  transform: translateY(clamp(40px, 8vw, 140px));
+.item {
+  display: flex;
+}
+.item > * {
+  flex: 1;
 }
 
 .empty {
@@ -80,12 +82,6 @@
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .item:nth-child(3n + 2) {
-    transform: none;
-  }
-  .item:nth-child(2n) {
-    transform: translateY(80px);
-  }
   .heading { grid-column: 1 / -1; }
   .lede { grid-column: 1 / span 8; }
 }
@@ -94,9 +90,6 @@
   .grid {
     grid-template-columns: 1fr;
     row-gap: 64px;
-  }
-  .item:nth-child(2n) {
-    transform: none;
   }
   .lede { grid-column: 1 / -1; }
   .footer { margin-top: 96px; }

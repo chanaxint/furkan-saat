@@ -11,7 +11,7 @@ import { HeroFilm } from "@/components/sections/hero/HeroFilm";
 /**
  * FURKAN SAAT — Homepage
  * One continuous experience, top to bottom:
- *   Hero film (footage + 3D watch: lift-out, turns, copy beats, Rolex → Jacob & Co.)
+ *   Hero film (footage + 3D watch: lift-out, turns, copy beats, Rolex → Patek Philippe)
  *   05 New Arrival · 06 Most Wanted · 07 Collection
  *   08 Houses · 09 Editorial · 10 Boutique · 11 Final CTA · 12 Footer
  */

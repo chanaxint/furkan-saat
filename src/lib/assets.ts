@@ -53,12 +53,16 @@ export const ASSETS = {
      */
     frames: { dir: "/assets/video/hero", count: 240, ext: "webp" },
     /**
-     * Jacob & Co. model the Rolex turns into at the end of the opening.
-     * Drop the file in public/assets/models/ and set `src`. It is centred and
-     * scaled to the Rolex automatically; use `rotation` so the dial faces +Z
-     * with 12 o'clock up.
+     * Patek Philippe Celestial (moon phase) — the watch the Rolex turns into at
+     * the end of the opening. Single textured mesh, dial faces +Z, 12 o'clock
+     * up; geometry meshopt-compressed (26.6 MB → 11.1 MB), textures untouched.
+     * `pivot` = centre of the watch head; `scale` matches the Rolex on screen.
      */
-    jacob: { src: null, rotation: [0, 0, 0] } as ModelAsset,
+    next: {
+      src: "/assets/models/patek-celestial.glb",
+      pivot: [-0.007, 0, 0.711],
+      scale: 0.88,
+    } as ModelAsset,
   },
   showcase: {
     /**

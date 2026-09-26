@@ -20,7 +20,7 @@ import { HERO_VIDEO } from "./heroTrack";
  *   5  PROFILE     settle on a level side profile of the case
  *   6  RETURN      one diagonal turn back to the front
  *   7  HANDOVER    the only copy line arrives; the Rolex spins on a diagonal
- *                  and comes out of it as the Jacob & Co., which looks at it
+ *                  and comes out of it as the Patek Philippe, which looks at it
  *
  * No copy appears before the handover. Each turn is sized to roughly one
  * scroll gesture; `scrub: 1` smooths it so it reads fluid, never snappy.
@@ -51,7 +51,7 @@ export const SPIN_AXIS_B: [number, number, number] = [-0.66, 0.7, 0.27];
 
 export type CopyLine = { id: string; text: string; accent: string; side: "left" | "right"; yaw: number; pitch: number };
 
-/** The single copy line, shown with the handover to the Jacob & Co. */
+/** The single copy line, shown with the handover to the Patek Philippe */
 export const HERO_LINES: CopyLine[] = [
   { id: "models", text: "İstediğiniz her model", accent: "her model", side: "right", yaw: deg(24), pitch: deg(-9) },
 ];
@@ -76,7 +76,7 @@ export type HeroState = {
   spinA: number;
   spinB: number;
   scale: number;
-  /** 0 = Rolex, 1 = Jacob & Co. (cross-fades around 0.5). */
+  /** 0 = Rolex, 1 = Patek Philippe (cross-fades around 0.5). */
   swap: number;
   /** Momentary light bloom during the handover. */
   flash: number;
@@ -157,7 +157,7 @@ export function buildHeroTimeline(s: HeroState, dom: Dom = {}) {
     .to(s, { swap: 1, duration: 0.36, ease: "none" }, mid - 0.18)
     .to(s, { flash: 1, duration: 0.25, ease: "power2.in" }, mid - 0.25)
     .to(s, { flash: 0, duration: 0.6, ease: "power2.out" }, mid)
-    // The Jacob & Co. turns to look at the line (diagonal: yaw + pitch + roll).
+    // The Patek Philippe turns to look at the line (diagonal: yaw + pitch + roll).
     .to(s, { yaw: HERO_LINES[0].yaw, pitch: HERO_LINES[0].pitch, roll: deg(4), duration: 0.9, ease: "power3.out" }, H.at + H.dur);
 
   // Close: back to straight, copy leaves, short hold.

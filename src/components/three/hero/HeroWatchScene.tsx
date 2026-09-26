@@ -127,17 +127,17 @@ function setOpacity(mats: Material[], o: number) {
 
 function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void }) {
   const rolexAsset = ASSETS.showcase.watch as ModelAsset & { src: string };
-  const jacobAsset = ASSETS.hero.jacob;
+  const nextAsset = ASSETS.hero.next;
 
   const rolexGltf = useGLTF(rolexAsset.src);
-  // Until the Jacob & Co. file exists, the handover spins back into the Rolex.
-  const jacobGltf = useGLTF(jacobAsset.src ?? rolexAsset.src);
+  // Without a second model file, the handover spins back into the Rolex.
+  const nextGltf = useGLTF(nextAsset.src ?? rolexAsset.src);
   const rolex = useOwnedClone(rolexGltf.scene);
-  const jacob = useOwnedClone(jacobGltf.scene);
+  const next = useOwnedClone(nextGltf.scene);
 
   const watch = useRef<Group>(null);
   const rolexRef = useRef<Group>(null);
-  const jacobRef = useRef<Group>(null);
+  const nextRef = useRef<Group>(null);
   const seatRig = useRef<Group>(null);
   const shadowLight = useRef<DirectionalLight>(null);
   const warmKey = useRef<DirectionalLight>(null);
@@ -148,18 +148,24 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
   const camera = useThree((s) => s.camera) as PerspectiveCamera;
   const invalidate = useThree((s) => s.invalidate);
 
-  // Normalise the Jacob & Co. model to the Rolex: centre it and match size.
-  const jacobFit = useMemo(() => {
-    if (!jacobAsset.src) {
+  // Place the second model like the Rolex: its pivot (watch-head centre) at the
+  // origin. Without a pivot it is centred on its bounding box and sized to match.
+  const nextFit = useMemo(() => {
+    if (!nextAsset.src) {
       const p = rolexAsset.pivot ?? [0, 0, 0];
       return { position: new Vector3(-p[0], -p[1], -p[2]), scale: 1 };
     }
-    const box = new Box3().setFromObject(jacob.clone);
+    const scale = nextAsset.scale ?? 1;
+    if (nextAsset.pivot) {
+      const [px, py, pz] = nextAsset.pivot;
+      return { position: new Vector3(-px * scale, -py * scale, -pz * scale), scale };
+    }
+    const box = new Box3().setFromObject(next.clone);
     const dims = box.getSize(new Vector3());
     const centre = box.getCenter(new Vector3());
-    const scale = 1.9 / Math.max(dims.x, dims.y, dims.z);
-    return { position: centre.multiplyScalar(-scale), scale };
-  }, [jacob.clone, jacobAsset.src, rolexAsset.pivot]);
+    const fit = 1.9 / Math.max(dims.x, dims.y, dims.z);
+    return { position: centre.multiplyScalar(-fit), scale: fit };
+  }, [next.clone, nextAsset.src, nextAsset.pivot, nextAsset.scale, rolexAsset.pivot]);
 
   const tmp = useMemo(
     () => ({
@@ -234,7 +240,8 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
     /* 2 — free pose (camera space) */
     const portrait = aspect < 1 ? 1 - aspect : 0;
     const pull = 1 + portrait * 1.35;
-    tmp.freePos.set(state.x * (1 - portrait * 0.6), state.y, state.z * pull);
+    // Portrait: the copy sits below the watch, so sideways shifts fade out.
+    tmp.freePos.set(state.x * Math.max(0, 1 - portrait * 2), state.y, state.z * pull);
     tmp.e.set(-state.pitch, state.yaw, state.roll, "YXZ");
     tmp.free.setFromEuler(tmp.e);
     tmp.q.setFromAxisAngle(AXIS_B, state.spinB);
@@ -250,12 +257,12 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
       watch.current.scale.setScalar(state.scale);
     }
 
-    /* 4 — Rolex → Jacob & Co. cross-fade */
+    /* 4 — Rolex → Patek Philippe cross-fade */
     const sw = smooth(Math.min(1, Math.max(0, state.swap)));
     if (rolexRef.current) rolexRef.current.visible = sw < 0.999;
-    if (jacobRef.current) jacobRef.current.visible = sw > 0.001;
+    if (nextRef.current) nextRef.current.visible = sw > 0.001;
     setOpacity(rolex.mats, 1 - sw);
-    setOpacity(jacob.mats, sw);
+    setOpacity(next.mats, sw);
 
     /* 5 — light: warm like the footage while on the cushion, studio after */
     if (warmKey.current) {
@@ -279,9 +286,9 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
         <group ref={rolexRef}>
           <primitive object={rolex.clone} position={[-rp[0], -rp[1], -rp[2]]} />
         </group>
-        <group ref={jacobRef} visible={false}>
-          <group rotation={jacobAsset.rotation ?? [0, 0, 0]}>
-            <primitive object={jacob.clone} position={jacobFit.position} scale={jacobFit.scale} />
+        <group ref={nextRef} visible={false}>
+          <group rotation={nextAsset.rotation ?? [0, 0, 0]}>
+            <primitive object={next.clone} position={nextFit.position} scale={nextFit.scale} />
           </group>
         </group>
       </group>
@@ -337,3 +344,4 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
 }
 
 useGLTF.preload("/assets/models/emerald-watch.glb");
+useGLTF.preload("/assets/models/patek-celestial.glb");

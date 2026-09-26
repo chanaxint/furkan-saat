@@ -75,7 +75,7 @@ export function HeroFilm() {
         <canvas ref={film} className={styles.film} aria-hidden />
         <div className={styles.grade} aria-hidden />
 
-        {/* The only copy line — arrives with the Jacob & Co. handover */}
+        {/* The only copy line — arrives with the Patek Philippe handover */}
         <div className={styles.lines}>
           {HERO_LINES.map((l, i) => {
             const [before, after] = l.text.split(l.accent);

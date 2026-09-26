@@ -1,14 +1,9 @@
 .section {
   position: relative;
-  height: 420svh;
-  background: #050505;
-  color: var(--ivory);
-}
-.pin {
-  position: sticky;
-  top: 0;
   height: 100svh;
   overflow: hidden;
+  background: #050505;
+  color: var(--ivory);
 }
 .film {
   position: absolute;
@@ -55,12 +50,24 @@
   position: absolute;
   left: 50%;
   bottom: 5vh;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.cue span {
+  position: relative;
   width: 1px;
   height: 56px;
   overflow: hidden;
   background: rgba(242, 237, 227, 0.2);
 }
-.cue span {
+.cue span::after {
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--champagne);

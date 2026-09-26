@@ -70,7 +70,7 @@ export function NewArrival() {
         </div>
 
         <Reveal className={styles.details} stagger={0.12}>
-          <p className={styles.brand}>{NEW_ARRIVAL.brand}</p>
+          <p className={styles.brand} lang="en">{NEW_ARRIVAL.brand}</p>
           <h3 className={`t-display ${styles.model}`}>{NEW_ARRIVAL.model}</h3>
           <p className={styles.description}>{NEW_ARRIVAL.description}</p>
           <dl className={styles.specs}>

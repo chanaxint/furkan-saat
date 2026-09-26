@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { NAV_LINKS } from "@/lib/data/navigation";
 import { ScrollTrigger } from "@/lib/gsap";
@@ -23,6 +24,7 @@ export function Navigation() {
   const [open, setOpen] = useState(false);
   const lastY = useRef(0);
   const { scrollTo, lenis } = useSmoothScroll();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => {
@@ -63,6 +65,9 @@ export function Navigation() {
       ScrollTrigger.refresh();
     });
   };
+
+  // Internal tools (the /kontrol page) run without the site navigation.
+  if (pathname?.startsWith("/kontrol")) return null;
 
   return (
     <>

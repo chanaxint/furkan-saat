@@ -24,7 +24,7 @@ export function ProductCard({ watch, index }: { watch: Watch; index: number }) {
       </MediaSlot>
       <div className={styles.info}>
         <div className={styles.row}>
-          <p className={styles.brand}>{watch.brand}</p>
+          <p className={styles.brand} lang="en">{watch.brand}</p>
           <span className={styles.index}>{String(index + 1).padStart(2, "0")}</span>
         </div>
         <h3 className={`t-display ${styles.model}`}>{watch.model}</h3>

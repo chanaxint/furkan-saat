@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
 import { ScrollTrigger } from "@/lib/gsap";
-import { buildHeroTimeline, createHeroState, HERO_LINES } from "@/lib/scene/hero";
+import { buildHeroTimeline, createHeroState, HERO_FINALE, HERO_LINES } from "@/lib/scene/hero";
 import { progress } from "@/lib/scene/progress";
 import { FrameSequence } from "./FrameSequence";
 import styles from "./HeroFilm.module.css";
@@ -24,6 +24,7 @@ export function HeroFilm() {
   const root = useRef<HTMLElement>(null);
   const film = useRef<HTMLCanvasElement>(null);
   const cue = useRef<HTMLDivElement>(null);
+  const finale = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLElement | null)[]>([]);
   const seq = useRef<FrameSequence | null>(null);
   const [ready, setReady] = useState(false);
@@ -47,11 +48,13 @@ export function HeroFilm() {
   }, []);
 
   useGsap(() => {
-    const tl = buildHeroTimeline(state, { cue: cue.current, lines: lines.current });
+    const tl = buildHeroTimeline(state, { cue: cue.current, lines: lines.current, finale: finale.current });
     const el = root.current!;
     tl.eventCallback("onUpdate", () => {
       seq.current?.draw(state.frame);
       el.style.setProperty("--film", state.film.toFixed(3));
+      // Mobile copy fade: only once the footage has gone.
+      el.style.setProperty("--copy", (1 - state.film).toFixed(3));
       el.style.setProperty("--flash", state.flash.toFixed(3));
       progress.intro.wake?.();
     });
@@ -75,24 +78,37 @@ export function HeroFilm() {
         <canvas ref={film} className={styles.film} aria-hidden />
         <div className={styles.grade} aria-hidden />
 
-        {/* The only copy line — arrives with the Patek Philippe handover */}
+        {/* Feature lines — the watch turns to show each part as its line arrives */}
         <div className={styles.lines}>
           {HERO_LINES.map((l, i) => {
-            const [before, after] = l.text.split(l.accent);
+            const [before, after] = l.title.split(l.accent);
             return (
-              <p
+              <div
                 key={l.id}
                 ref={(node) => void (lines.current[i] = node)}
                 className={styles.line}
                 data-side={l.side}
-                data-index={i}
               >
-                {before}
-                <em>{l.accent}</em>
-                {after}
-              </p>
+                <p className={styles.index}>{String(i + 1).padStart(2, "0")}</p>
+                <h2 className={styles.lineTitle}>
+                  {before}
+                  <em>{l.accent}</em>
+                  {after}
+                </h2>
+                <p className={styles.lineText}>{l.text}</p>
+              </div>
             );
           })}
+        </div>
+
+        {/* Beneath the Patek Philippe after the handover */}
+        <div ref={finale} className={styles.finale}>
+          {/* lang="en": brand names use English capitals (PHILIPPE, not PHİLİPPE). */}
+          <p className={styles.finaleBrand} lang="en">
+            {HERO_FINALE.brand}
+          </p>
+          <h2 className={styles.finaleModel}>{HERO_FINALE.model}</h2>
+          <p className={styles.finaleRef}>{HERO_FINALE.reference}</p>
         </div>
 
         <HeroWatchScene state={state} className={styles.canvas} onReady={onReady} />

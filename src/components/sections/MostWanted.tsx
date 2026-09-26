@@ -82,7 +82,7 @@ export function MostWanted() {
               <div className={styles.caption}>
                 <span className={styles.index}>{String(i + 1).padStart(2, "0")}</span>
                 <div className={styles.names}>
-                  <p className={styles.brand}>{w.brand}</p>
+                  <p className={styles.brand} lang="en">{w.brand}</p>
                   <h3 className={`t-display ${styles.model}`}>{w.model}</h3>
                 </div>
                 <p className={styles.meta}>

@@ -3,7 +3,7 @@
   --flash: 0;
   position: relative;
   /* Scroll length of the whole opening timeline. */
-  height: 920svh;
+  height: 1100svh;
   background: var(--green-900);
   color: var(--ivory);
 }
@@ -73,25 +73,80 @@
 }
 .line {
   position: absolute;
-  max-width: 34vw;
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(2.6rem, 5.6vw, 6.4rem);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  color: var(--ivory);
+  top: 50%;
+  width: min(430px, 34vw);
+  display: grid;
+  gap: 14px;
+  transform: translateY(-50%);
   opacity: 0;
   visibility: hidden;
 }
-.line em {
+.line[data-side="left"] {
+  left: var(--gutter);
+}
+.line[data-side="right"] {
+  right: var(--gutter);
+  text-align: right;
+}
+.index {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  color: var(--champagne);
+  font-variant-numeric: tabular-nums;
+}
+.lineTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 4.8vw, 5.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--ivory);
+}
+.lineTitle em {
   color: var(--champagne);
 }
-.line[data-index="0"] {
-  right: var(--gutter);
-  top: 50%;
-  margin-top: -1em;
-  text-align: right;
+.lineText {
+  font-family: var(--font-display);
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: var(--text-on-dark-muted);
+}
+
+/* Brand and model beneath the Patek Philippe */
+.finale {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  bottom: 7vh;
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.finaleBrand {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps-wide);
+  text-transform: uppercase;
+  color: var(--champagne);
+}
+.finaleModel {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  line-height: 1.05;
+}
+.finaleRef {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-faint);
 }
 
 /* ---------------------------------------------------------- chrome */
@@ -163,17 +218,38 @@
 
 @media (max-width: 767px) {
   .section {
-    height: 860svh;
+    height: 1000svh;
   }
-  .line {
-    max-width: none;
-    left: var(--gutter) !important;
-    right: var(--gutter) !important;
-    font-size: clamp(2.2rem, 11vw, 3.4rem);
+  /* Mobile: the copy sits above the watch, on a soft fade, so close-ups never cover it. */
+  .lines {
+    z-index: 4;
   }
-  .line[data-index="0"] {
+  .lines::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 38%;
+    background: linear-gradient(to top, rgba(7, 26, 22, 0.92), rgba(7, 26, 22, 0.6) 55%, transparent);
+    opacity: var(--copy, 0);
+    transition: opacity 0.6s var(--ease-lux);
+  }
+  .line,
+  .line[data-side="left"],
+  .line[data-side="right"] {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
     top: auto;
-    bottom: 12vh;
-    margin-top: 0;
+    bottom: 8vh;
+    transform: none;
+    text-align: left;
+  }
+  .lineTitle {
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+  }
+  .lineText {
+    font-size: 1rem;
   }
 }

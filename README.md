@@ -62,13 +62,12 @@ driven by scroll through **one GSAP timeline** (`buildHeroTimeline`, `scrub: 1`)
   watch on it, dial up and 12 o'clock toward the lid. An invisible cushion
   shape hides the bracelet where it wraps behind the cushion and catches the
   watch's shadow.
-- **Sequence** (modelled on the reference clip's camera move): seated → lifts off and
-  comes large to the lens as the footage dissolves into the house green → slow
-  push-in to a dial macro, drifting across the hands → orbit to the crown side at
-  a low angle → level side profile of the case → one diagonal turn back to the
-  front → handover: the only copy line ("İstediğiniz her model") arrives and the
-  Rolex spins into the Patek Philippe No copy appears before the handover; the nav
-  stays minimal (logo only) for the whole opening.
+- **Sequence:** seated → lifts off and comes large to the lens as the footage dissolves
+  into the house green → four feature lines, and for each one the watch turns
+  (diagonally) to show that part: *Oyster Kasa* (case flank), *Perpetual Mekanizma*
+  (caseback), *Cerachrom Çerçeve* (bezel close-up), *Oyster Bileklik* (bracelet) → one
+  diagonal spin into the Patek Philippe, with its brand and model beneath it.
+  Lines and poses are in `HERO_LINES`, the closing text in `HERO_FINALE`.
 - **Pacing:** ≈ 60svh of scroll per timeline second, so each turn takes about
   one scroll gesture; `scrub: 1` smooths it.
 - **Rotation rule:** spins only run about the two diagonal axes
@@ -79,6 +78,20 @@ driven by scroll through **one GSAP timeline** (`buildHeroTimeline`, `scrub: 1`)
 - Copy line, look direction and timing are in `HERO_LINES` / `HERO_BEATS`.
 
 The whole site is in Turkish (`lang="tr"`, `tr-TR` number formatting).
+
+## Placing the watch on the cushion — `/kontrol`
+
+Open **http://localhost:4321/kontrol** while `npm run dev -- -p 4321` is running.
+
+- Left: the first frame of the footage with the 3D watch on it. The *Video karesi*
+  slider (or *Oynat*) scrubs the footage to check that the watch stays on the cushion.
+- *Gizli şekilleri göster* shows the invisible helpers: **red** = the cushion that
+  hides the bracelet behind it, **blue** = the insert around it, **green** = the well floor.
+- Right: every value with a slider, −/+ buttons and a number field.
+- Keyboard: ← → left/right · ↑ ↓ forward/back · Page Up/Down up/down ·
+  Q/E turn · W/S tilt · A/D roll · +/− size · hold Shift for 10× steps.
+- **Kaydet** writes `src/lib/scene/seat.json` (development only). Commit that file to
+  publish. **Kopyala** copies the values, and **Sıfırla** returns to the saved file.
 
 ## In Detail (macro close-ups, parked)
 

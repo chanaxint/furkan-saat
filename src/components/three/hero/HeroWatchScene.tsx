@@ -21,9 +21,6 @@ import {
 import { useInView } from "@/hooks/useInView";
 import { ASSETS, type ModelAsset } from "@/lib/assets";
 import {
-  CUSHION_DEPTH,
-  CUSHION_WIDTH,
-  FOOTAGE_ELEVATION,
   HERO_FOV,
   type HeroState,
   SPIN_AXIS_A,
@@ -31,15 +28,24 @@ import {
 } from "@/lib/scene/hero";
 import { CUSHION_TRACK, HERO_VIDEO } from "@/lib/scene/heroTrack";
 import { progress } from "@/lib/scene/progress";
+import { SEAT_DEFAULTS, type SeatConfig } from "@/lib/scene/seat";
 import { HeroLighting } from "./HeroLighting";
 
-type Props = { state: HeroState; className?: string; onReady?: () => void };
+type Props = {
+  state: HeroState;
+  className?: string;
+  onReady?: () => void;
+  /** Seat on the cushion (defaults to seat.json; the /kontrol page passes live values). */
+  seat?: SeatConfig;
+  /** Show the hidden cushion / insert shapes in colour (control page). */
+  debug?: boolean;
+};
 
 /**
  * HeroWatchScene — the WebGL layer composited over the footage.
  * Renders on demand: the scrubbed timeline wakes it on every update.
  */
-export default function HeroWatchScene({ state, className, onReady }: Props) {
+export default function HeroWatchScene({ state, className, onReady, seat = SEAT_DEFAULTS, debug = false }: Props) {
   const wrap = useRef<HTMLDivElement>(null);
   const inView = useInView(wrap, "25% 0px");
   return (
@@ -63,7 +69,7 @@ export default function HeroWatchScene({ state, className, onReady }: Props) {
       >
         <HeroLighting />
         <Suspense fallback={null}>
-          <HeroRig state={state} onReady={onReady} />
+          <HeroRig state={state} onReady={onReady} seat={seat} debug={debug} />
         </Suspense>
       </Canvas>
     </div>
@@ -73,19 +79,27 @@ export default function HeroWatchScene({ state, className, onReady }: Props) {
 /* --------------------------------------------------------------- helpers */
 
 /** Cushion-well geometry (table frame, cushion top centre at the origin). */
-const INSERT_TOP = -0.38;
 const WELL_FLOOR = -1.02;
-// The cushion's base meets the insert at its front edge: the bracelet drapes
-// down the front face and tucks in at the insert line.
-const WELL = { front: CUSHION_DEPTH / 2 - 0.12, back: -CUSHION_DEPTH / 2 - 0.2, half: CUSHION_WIDTH / 2 + 0.04 };
-const wallH = INSERT_TOP - WELL_FLOOR;
-const wallY = (INSERT_TOP + WELL_FLOOR) / 2;
-const INSERT_BLOCKS: { size: [number, number, number]; position: [number, number, number] }[] = [
-  { size: [4, wallH, 1.6], position: [0, wallY, WELL.front + 0.8] },
-  { size: [4, wallH, 1.6], position: [0, wallY, WELL.back - 0.8] },
-  { size: [1.4, wallH, WELL.front - WELL.back], position: [WELL.half + 0.7, wallY, (WELL.front + WELL.back) / 2] },
-  { size: [1.4, wallH, WELL.front - WELL.back], position: [-(WELL.half + 0.7), wallY, (WELL.front + WELL.back) / 2] },
-];
+type Block = { size: [number, number, number]; position: [number, number, number] };
+
+/**
+ * Insert around the cushion well: solid blocks from the insert surface down to
+ * the well floor, so the bracelet disappears into the gap in front of / behind
+ * the cushion exactly like a real one.
+ */
+function insertBlocks(seat: SeatConfig): Block[] {
+  const wallH = seat.insertTop - WELL_FLOOR;
+  const wallY = (seat.insertTop + WELL_FLOOR) / 2;
+  const half = seat.cushionWidth / 2 + 0.04;
+  const mid = (seat.wellFront + seat.wellBack) / 2;
+  const len = seat.wellFront - seat.wellBack;
+  return [
+    { size: [4, wallH, 1.6], position: [0, wallY, seat.wellFront + 0.8] },
+    { size: [4, wallH, 1.6], position: [0, wallY, seat.wellBack - 0.8] },
+    { size: [1.4, wallH, len], position: [half + 0.7, wallY, mid] },
+    { size: [1.4, wallH, len], position: [-(half + 0.7), wallY, mid] },
+  ];
+}
 
 const X = new Vector3(1, 0, 0);
 const Y = new Vector3(0, 1, 0);
@@ -125,7 +139,18 @@ function setOpacity(mats: Material[], o: number) {
 
 /* ------------------------------------------------------------------- rig */
 
-function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void }) {
+function HeroRig({
+  state,
+  onReady,
+  seat,
+  debug,
+}: {
+  state: HeroState;
+  onReady?: () => void;
+  seat: SeatConfig;
+  debug: boolean;
+}) {
+  const blocks = useMemo(() => insertBlocks(seat), [seat]);
   const rolexAsset = ASSETS.showcase.watch as ModelAsset & { src: string };
   const nextAsset = ASSETS.hero.next;
 
@@ -178,6 +203,9 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
       free: new Quaternion(),
       q: new Quaternion(),
       e: new Euler(),
+      offset: new Vector3(),
+      extra: new Quaternion(),
+      extraE: new Euler(),
       warm: new Color("#ffcf96"),
       neutral: new Color("#fff4e2"),
     }),
@@ -219,20 +247,27 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
     const cover = Math.max(W / HERO_VIDEO.width, H / HERO_VIDEO.height);
     const sx = (cx - HERO_VIDEO.width / 2) * cover + W / 2;
     const sy = (cy - HERO_VIDEO.height / 2) * cover + H / 2;
-    const depth = (CUSHION_WIDTH * (H / 2)) / (cw * cover * tanHalf);
+    const depth = (seat.cushionWidth * (H / 2)) / (cw * cover * tanHalf);
     const ndcX = (sx / W) * 2 - 1;
     const ndcY = 1 - (sy / H) * 2;
     tmp.anchor.set(ndcX * depth * tanHalf * aspect, ndcY * depth * tanHalf, -depth);
 
     // Table frame as seen by the footage camera.
-    tmp.boxQuat.setFromAxisAngle(X, FOOTAGE_ELEVATION);
-    tmp.up.set(0, Math.cos(FOOTAGE_ELEVATION), Math.sin(FOOTAGE_ELEVATION));
-    // Seated: dial up, 12 o'clock toward the lid; head resting on the cushion.
-    tmp.seatQuat.setFromAxisAngle(X, FOOTAGE_ELEVATION - Math.PI / 2);
-    tmp.seatPos.copy(tmp.anchor).addScaledVector(tmp.up, 0.14 + state.lift);
+    const elevation = (seat.footageElevation * Math.PI) / 180;
+    tmp.boxQuat.setFromAxisAngle(X, elevation);
+    tmp.up.set(0, Math.cos(elevation), Math.sin(elevation));
+    // Seated: dial up, 12 o'clock toward the lid, plus the tuned extra rotation
+    // (yaw about the table normal, then tilt, then roll).
+    const d2r = Math.PI / 180;
+    tmp.extraE.set(-Math.PI / 2 + seat.tilt * d2r, seat.yaw * d2r, seat.roll * d2r, "YXZ");
+    tmp.extra.setFromEuler(tmp.extraE);
+    tmp.seatQuat.copy(tmp.boxQuat).multiply(tmp.extra);
+    // Tuned offset in the table frame; the lift rises along the table normal.
+    tmp.offset.set(seat.offsetX, seat.offsetY + state.lift, seat.offsetZ).applyQuaternion(tmp.boxQuat);
+    tmp.seatPos.copy(tmp.anchor).add(tmp.offset);
 
     if (seatRig.current) {
-      seatRig.current.visible = state.seat > 0.02 && state.film > 0.02;
+      seatRig.current.visible = (state.seat > 0.02 && state.film > 0.02) || debug;
       seatRig.current.position.copy(tmp.anchor);
       seatRig.current.quaternion.copy(tmp.boxQuat);
     }
@@ -254,7 +289,7 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
     if (watch.current) {
       watch.current.position.lerpVectors(tmp.freePos, tmp.seatPos, k);
       watch.current.quaternion.slerpQuaternions(tmp.free, tmp.seatQuat, k);
-      watch.current.scale.setScalar(state.scale);
+      watch.current.scale.setScalar(state.scale + (seat.scale - state.scale) * k);
     }
 
     /* 4 — Rolex → Patek Philippe cross-fade */
@@ -297,31 +332,40 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
           bracelet that wraps behind/under it and catches the watch's shadow. */}
       <group ref={seatRig}>
         {/* Occluder sits just inside the bracelet loop so it never pokes through the links. */}
-        <RoundedBox args={[CUSHION_WIDTH, 0.95, CUSHION_DEPTH - 0.17]} radius={0.2} smoothness={4} position={[0, -0.475, 0]} renderOrder={-1}>
-          <meshBasicMaterial colorWrite={false} />
+        <RoundedBox
+          args={[seat.cushionWidth, seat.cushionHeight, Math.max(0.2, seat.cushionDepth - seat.occluderInset)]}
+          radius={0.2}
+          smoothness={4}
+          position={[0, -seat.cushionHeight / 2, 0]}
+          renderOrder={-1}
+        >
+          <HiddenMaterial debug={debug} color="#ff3b30" />
         </RoundedBox>
-        <RoundedBox args={[CUSHION_WIDTH + 0.01, 0.955, CUSHION_DEPTH + 0.01]} radius={0.22} smoothness={4} position={[0, -0.475, 0]} receiveShadow>
-          <shadowMaterial transparent opacity={0.55} color="#1f1004" polygonOffset polygonOffsetFactor={-2} />
+        <RoundedBox
+          args={[seat.cushionWidth + 0.01, seat.cushionHeight + 0.005, seat.cushionDepth + 0.01]}
+          radius={0.22}
+          smoothness={4}
+          position={[0, -seat.cushionHeight / 2, 0]}
+          receiveShadow
+        >
+          <shadowMaterial transparent opacity={seat.shadowOpacity} color="#1f1004" polygonOffset polygonOffsetFactor={-2} />
         </RoundedBox>
-        {/* The insert around the cushion well: solid blocks from the insert
-            surface down to the well floor, so the bracelet disappears into the
-            gap in front of / behind the cushion exactly like a real one. */}
-        {INSERT_BLOCKS.map((b, i) => (
+        {blocks.map((b, i) => (
           <mesh key={i} position={b.position} renderOrder={-1}>
             <boxGeometry args={b.size} />
-            <meshBasicMaterial colorWrite={false} />
+            <HiddenMaterial debug={debug} color="#2f7bff" />
           </mesh>
         ))}
         {/* Shadow on the insert surface (visible while the watch lifts). */}
-        <mesh position={[0, INSERT_TOP + 0.002, 0]} rotation-x={-Math.PI / 2} receiveShadow>
+        <mesh position={[0, seat.insertTop + 0.002, 0]} rotation-x={-Math.PI / 2} receiveShadow>
           <planeGeometry args={[4, 4]} />
-          <shadowMaterial transparent opacity={0.4} color="#1f1004" />
+          <shadowMaterial transparent opacity={seat.shadowOpacity * 0.72} color="#1f1004" />
         </mesh>
         <group ref={shadowTarget} />
         {/* Floor of the cushion well — nothing shows below it. */}
         <mesh position={[0, WELL_FLOOR, 0]} rotation-x={-Math.PI / 2} renderOrder={-1}>
           <planeGeometry args={[6, 6]} />
-          <meshBasicMaterial colorWrite={false} />
+          <HiddenMaterial debug={debug} color="#34c759" />
         </mesh>
         <directionalLight
           ref={shadowLight}
@@ -340,6 +384,16 @@ function HeroRig({ state, onReady }: { state: HeroState; onReady?: () => void })
         />
       </group>
     </>
+  );
+}
+
+/** Invisible depth-only material; shown as a translucent colour on the control page. */
+function HiddenMaterial({ debug, color }: { debug: boolean; color: string }) {
+  // Distinct keys so React builds a fresh material instead of patching the old one.
+  return debug ? (
+    <meshBasicMaterial key="debug" color={color} colorWrite transparent opacity={0.32} depthWrite={false} />
+  ) : (
+    <meshBasicMaterial key="hidden" colorWrite={false} />
   );
 }
 

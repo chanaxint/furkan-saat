@@ -1,0 +1,18 @@
+{
+  "offsetX": 0,
+  "offsetY": 0.14,
+  "offsetZ": 0,
+  "tilt": 0,
+  "yaw": 0,
+  "roll": 0,
+  "scale": 1,
+  "cushionWidth": 1.3,
+  "cushionDepth": 1.62,
+  "cushionHeight": 0.95,
+  "occluderInset": 0.17,
+  "insertTop": -0.38,
+  "wellFront": 0.69,
+  "wellBack": -1.01,
+  "footageElevation": 52,
+  "shadowOpacity": 0.55
+}

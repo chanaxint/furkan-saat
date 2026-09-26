@@ -6,6 +6,7 @@ import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
 import { ScrollTrigger } from "@/lib/gsap";
 import { buildHeroTimeline, createHeroState, HERO_FINALE, HERO_LINES } from "@/lib/scene/hero";
+import { MOVEMENT_FILM, movementFrameSrc } from "@/lib/scene/movement";
 import { progress } from "@/lib/scene/progress";
 import { FrameSequence } from "./FrameSequence";
 import styles from "./HeroFilm.module.css";
@@ -27,6 +28,8 @@ export function HeroFilm() {
   const finale = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLElement | null)[]>([]);
   const seq = useRef<FrameSequence | null>(null);
+  const movement = useRef<HTMLCanvasElement>(null);
+  const movementSeq = useRef<FrameSequence | null>(null);
   const [ready, setReady] = useState(false);
   const [filmReady, setFilmReady] = useState(false);
   const onReady = useCallback(() => setReady(true), []);
@@ -37,13 +40,18 @@ export function HeroFilm() {
     if (!film.current) return;
     const s = new FrameSequence(film.current, frameSrc, count, () => setFilmReady(true));
     seq.current = s;
-    const onResize = () => s.resize();
+    const onResize = () => {
+      s.resize();
+      movementSeq.current?.resize();
+    };
     onResize();
     window.addEventListener("resize", onResize);
     return () => {
       window.removeEventListener("resize", onResize);
       s.dispose();
       seq.current = null;
+      movementSeq.current?.dispose();
+      movementSeq.current = null;
     };
   }, []);
 
@@ -52,6 +60,15 @@ export function HeroFilm() {
     const el = root.current!;
     tl.eventCallback("onUpdate", () => {
       seq.current?.draw(state.frame);
+      // Movement film: start loading once the opening is underway, draw while visible.
+      if (!movementSeq.current && movement.current && tl.progress() > 0.12) {
+        movementSeq.current = new FrameSequence(movement.current, movementFrameSrc, MOVEMENT_FILM.count);
+        movementSeq.current.resize();
+      }
+      if (state.mechFilm > 0) movementSeq.current?.draw(state.mech);
+      el.style.setProperty("--mech", state.mechFilm.toFixed(3));
+      // The whole 3D layer fades (not its materials), so the swap shows no see-through ghosting.
+      el.style.setProperty("--hide", state.hide.toFixed(3));
       el.style.setProperty("--film", state.film.toFixed(3));
       // Mobile copy fade: only once the footage has gone.
       el.style.setProperty("--copy", (1 - state.film).toFixed(3));
@@ -76,6 +93,8 @@ export function HeroFilm() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={frameSrc(0)} alt="" className={styles.poster} data-hidden={filmReady || undefined} aria-hidden />
         <canvas ref={film} className={styles.film} aria-hidden />
+        {/* Movement film — takes over from the 3D watch in the mechanism beat */}
+        <canvas ref={movement} className={styles.movement} aria-hidden />
         <div className={styles.grade} aria-hidden />
 
         {/* Feature lines — the watch turns to show each part as its line arrives */}

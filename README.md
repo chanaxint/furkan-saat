@@ -79,6 +79,20 @@ driven by scroll through **one GSAP timeline** (`buildHeroTimeline`, `scrub: 1`)
 
 The whole site is in Turkish (`lang="tr"`, `tr-TR` number formatting).
 
+## Movement film (mechanism beat)
+
+In the *Perpetual Mekanizma* beat the watch turns while the camera zooms onto the
+exact framing of `public/assets/video/movement/000–119.webp`. The film then swaps
+in invisibly, separates the movement as you scroll, reassembles it, and hands back
+to the 3D watch, which continues to the bezel.
+
+- The clip was made from one of our own 3D frames. `lib/scene/movement.ts` stores
+  how it relates to that frame (4.06× crop, measured with SIFT + RANSAC).
+  `applyFilmLock()` in `HeroWatchScene` turns this into a camera view offset, so
+  the 3D matches the film on any screen shape.
+- A caption baked into the right edge of the clip was removed (inpainted) during export.
+- Frames start loading only once the opening is underway (about 9 MB).
+
 ## Placing the watch on the cushion — `/kontrol`
 
 Open **http://localhost:4321/kontrol** while `npm run dev -- -p 4321` is running.

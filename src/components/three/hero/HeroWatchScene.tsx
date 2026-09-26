@@ -27,6 +27,7 @@ import {
   SPIN_AXIS_B,
 } from "@/lib/scene/hero";
 import { CUSHION_TRACK, HERO_VIDEO } from "@/lib/scene/heroTrack";
+import { MOVEMENT_FILM } from "@/lib/scene/movement";
 import { progress } from "@/lib/scene/progress";
 import { SEAT_DEFAULTS, type SeatConfig } from "@/lib/scene/seat";
 import { HeroLighting } from "./HeroLighting";
@@ -235,6 +236,7 @@ function HeroRig({
       camera.fov = HERO_FOV;
       camera.updateProjectionMatrix();
     }
+    applyFilmLock(camera, W, H, state.lock);
 
     /* 1 — cushion anchor from the footage track (cover-fit, like the frames) */
     const f = Math.min(HERO_VIDEO.frames - 1, Math.max(0, state.frame));
@@ -274,9 +276,13 @@ function HeroRig({
 
     /* 2 — free pose (camera space) */
     const portrait = aspect < 1 ? 1 - aspect : 0;
-    const pull = 1 + portrait * 1.35;
+    // While locked onto the movement film the pose must be exactly the one the
+    // film was made from, so the portrait adjustments fade out with the lock.
+    const lock = smooth(Math.min(1, Math.max(0, state.lock)));
+    const pull = 1 + portrait * 1.35 * (1 - lock);
     // Portrait: the copy sits below the watch, so sideways shifts fade out.
-    tmp.freePos.set(state.x * Math.max(0, 1 - portrait * 2), state.y, state.z * pull);
+    const xFactor = Math.max(0, 1 - portrait * 2) * (1 - lock) + lock;
+    tmp.freePos.set(state.x * xFactor, state.y, state.z * pull);
     tmp.e.set(-state.pitch, state.yaw, state.roll, "YXZ");
     tmp.free.setFromEuler(tmp.e);
     tmp.q.setFromAxisAngle(AXIS_B, state.spinB);
@@ -385,6 +391,33 @@ function HeroRig({
       </group>
     </>
   );
+}
+
+/**
+ * Zoom the render onto the movement film's framing (a pure 2D magnification,
+ * done with the camera's view offset, exactly like the film's own crop).
+ *
+ *   film cover-fit on screen:  screen = c·(A·s + t) + o
+ *   our unzoomed render:       r = (H/900)·(s − ref/2) + (W,H)/2
+ *   ⇒ screen = k·r + b,  k = c·A·900/H
+ *
+ * `lock` blends k from 1 and b from 0, so the zoom eases in with the turn.
+ */
+function applyFilmLock(camera: PerspectiveCamera, W: number, H: number, lockRaw: number) {
+  const lock = smooth(Math.min(1, Math.max(0, lockRaw)));
+  if (lock < 1e-4) {
+    if (camera.view?.enabled) camera.clearViewOffset();
+    return;
+  }
+  const F = MOVEMENT_FILM;
+  const c = Math.max(W / F.width, H / F.height);
+  const ox = (W - F.width * c) / 2;
+  const oy = (H - F.height * c) / 2;
+  const kT = (c * F.align.scale * F.ref.height) / H;
+  const bx = -kT * (W / 2) + c * F.align.scale * (F.ref.width / 2) + c * F.align.tx + ox;
+  const by = -kT * (H / 2) + c * F.align.scale * (F.ref.height / 2) + c * F.align.ty + oy;
+  const k = 1 + (kT - 1) * lock;
+  camera.setViewOffset(W * k, H * k, -bx * lock, -by * lock, W, H);
 }
 
 /** Invisible depth-only material; shown as a translucent colour on the control page. */

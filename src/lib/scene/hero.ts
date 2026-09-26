@@ -2,6 +2,7 @@
 
 import { gsap } from "@/lib/gsap";
 import { HERO_VIDEO } from "./heroTrack";
+import { MOVEMENT_FILM } from "./movement";
 
 /**
  * HERO FILM — the opening of the site
@@ -17,7 +18,8 @@ import { HERO_VIDEO } from "./heroTrack";
  *                  and comes large to the lens; the footage dissolves into
  *                  the house green
  *   3  FEATURES    four lines arrive in turn, and for each one the watch
- *                  turns (diagonally) to show that part:
+ *                  turns (diagonally) to show that part (for the movement it
+ *                  zooms onto a film that separates the parts on scroll):
  *                  Oyster Kasa → case flank · Perpetual Mekanizma → caseback
  *                  Cerachrom Çerçeve → bezel close-up · Oyster Bileklik → bracelet
  *   4  HANDOVER    one diagonal spin into the Patek Philippe; its brand and
@@ -119,6 +121,13 @@ export type HeroState = {
   swap: number;
   /** Momentary light bloom during the handover. */
   flash: number;
+  /** 0 → 1: zoom the camera onto the movement film's exact framing. */
+  lock: number;
+  /** Movement film frame (float, 0 → 119) and its visibility. */
+  mech: number;
+  mechFilm: number;
+  /** 1 = hide the 3D watch (while the film is on screen). */
+  hide: number;
 };
 
 export const createHeroState = (): HeroState => ({
@@ -137,6 +146,10 @@ export const createHeroState = (): HeroState => ({
   scale: 1,
   swap: 0,
   flash: 0,
+  lock: 0,
+  mech: 0,
+  mechFilm: 0,
+  hide: 0,
 });
 
 /** Timeline times (seconds). Scroll length ≈ 60svh per second, so a turn ≈ one scroll gesture. */
@@ -145,10 +158,16 @@ export const HERO_BEATS = {
   lift: { at: 1.1, dur: 1.4 },
   toLens: { at: 2.0, dur: 2.4 },
   fade: { at: 4.0, dur: 1.2 },
-  /** Feature beats: the watch turns (dur), the line shows while it holds. */
-  features: { first: 4.8, every: 2.4, turn: 1.3 },
-  handover: { at: 14.6, dur: 1.8 },
-  end: 18.2,
+  /** Feature beats: when each turn starts (one per HERO_LINES entry). */
+  features: { starts: [4.8, 7.2, 14.0, 16.4], turn: 1.3 },
+  /**
+   * Movement film (during the mechanism beat): the 3D watch has zoomed onto
+   * the film's framing; the film takes over, separates the movement on
+   * scroll, reassembles it, and hands back to the 3D watch.
+   */
+  movement: { swapIn: 8.55, explode: { at: 8.9, dur: 2.8 }, reassemble: { at: 12.0, dur: 1.5 }, swapOut: 13.55 },
+  handover: { at: 19.0, dur: 1.8 },
+  end: 22.6,
 } as const;
 
 type Dom = { cue?: Element | null; lines?: (Element | null)[]; finale?: Element | null };
@@ -166,15 +185,30 @@ export function buildHeroTimeline(s: HeroState, dom: Dom = {}) {
 
   // 3 Features: turn to the part, then the line arrives and holds.
   const F = B.features;
+  const nextStart = (i: number) => (i + 1 < F.starts.length ? F.starts[i + 1] : B.handover.at);
   HERO_LINES.forEach((line, i) => {
-    const at = F.first + i * F.every;
+    const at = F.starts[i];
     tl.to(s, { ...line.pose, duration: F.turn }, at);
     const el = dom.lines?.[i];
     if (!el) return;
     const from = line.side === "left" ? -50 : 50;
     tl.fromTo(el, { autoAlpha: 0, x: from }, { autoAlpha: 1, x: 0, duration: 0.7, ease: "power3.out" }, at + F.turn * 0.55);
-    tl.to(el, { autoAlpha: 0, x: -from / 2, duration: 0.5, ease: "power2.in" }, at + F.every - 0.35);
+    tl.to(el, { autoAlpha: 0, x: -from / 2, duration: 0.5, ease: "power2.in" }, nextStart(i) - 0.35);
   });
+
+  // 3b Mechanism: while the watch turns in, the camera zooms onto the film's
+  //    framing; the film swaps in, separates and reassembles the movement,
+  //    then swaps back and the camera zoom releases during the next turn.
+  const M = B.movement;
+  const last = MOVEMENT_FILM.count - 1;
+  tl.to(s, { lock: 1, duration: F.turn }, F.starts[1])
+    .to(s, { mechFilm: 1, duration: 0.2, ease: "none" }, M.swapIn)
+    .to(s, { hide: 1, duration: 0.25, ease: "none" }, M.swapIn + 0.15)
+    .to(s, { mech: last, duration: M.explode.dur, ease: "power1.inOut" }, M.explode.at)
+    .to(s, { mech: 0, duration: M.reassemble.dur, ease: "power1.inOut" }, M.reassemble.at)
+    .to(s, { hide: 0, duration: 0.25, ease: "none" }, M.swapOut)
+    .to(s, { mechFilm: 0, duration: 0.2, ease: "none" }, M.swapOut + 0.2)
+    .to(s, { lock: 0, duration: F.turn }, F.starts[2]);
 
   // 4 Handover: back to the front while spinning once on the diagonal; the
   //   models cross-fade at peak speed behind a soft bloom.

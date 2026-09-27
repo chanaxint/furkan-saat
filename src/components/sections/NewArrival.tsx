@@ -165,7 +165,7 @@ export function NewArrival() {
 
         <div ref={copy} className={styles.copy}>
           <p className={styles.eyebrow}>
-            <span>04</span>
+            <span>01</span>
             <span className={styles.rule} aria-hidden />
             <span>Yeni Gelen</span>
           </p>

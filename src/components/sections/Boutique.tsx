@@ -11,7 +11,7 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./Boutique.module.css";
 
 /**
- * 10 — BOUTIQUE
+ * 06 — BOUTIQUE
  * Full-bleed boutique film (ASSETS.boutique.film). The frame opens from an
  * inset window to full width, then settles — calm, wide, unhurried.
  */
@@ -61,7 +61,7 @@ export function Boutique() {
 
         <div className={styles.content}>
           <p className={`t-eyebrow ${styles.eyebrow}`} data-fade>
-            10 — Butik · {BOUTIQUE.city}
+            06 — Butik · {BOUTIQUE.city}
           </p>
           <SplitText text={"Furkan *Saat*\nButiği"} className={`t-display ${styles.heading}`} start="top 70%" />
           <p className={styles.support} data-fade>

@@ -19,7 +19,7 @@
 }
 .heading {
   grid-column: 1 / span 8;
-  font-size: var(--fs-display-xl);
+  font-size: var(--fs-display-l);
 }
 .heading em {
   color: var(--champagne-600);

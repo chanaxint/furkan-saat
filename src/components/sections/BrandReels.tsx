@@ -21,7 +21,7 @@ export function BrandReels() {
       aria-label="Markalar"
     >
       <header className={styles.header}>
-        <SectionMarker index="05" label="Markalar" className={styles.marker} />
+        <SectionMarker index="02" label="Markalar" className={styles.marker} />
         <h2 className={styles.title}>
           Dünyanın en seçkin <em>markaları</em>
         </h2>

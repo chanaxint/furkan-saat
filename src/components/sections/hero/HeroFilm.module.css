@@ -80,7 +80,8 @@
 .lines {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  /* Above the 3D watch, so a passing close-up never covers the copy. */
+  z-index: 4;
   pointer-events: none;
 }
 /* While the movement film plays, a soft shade keeps the copy readable over it. */

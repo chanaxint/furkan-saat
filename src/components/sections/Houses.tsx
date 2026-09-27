@@ -47,8 +47,9 @@ export function Houses() {
       // Name rises as the world arrives.
       gsap.fromTo(
         name,
-        { yPercent: 60 },
+        { y: 0, yPercent: 60 },
         {
+          y: 0,
           yPercent: 0,
           ease: "none",
           scrollTrigger: {
@@ -62,7 +63,7 @@ export function Houses() {
       if (media)
         gsap.fromTo(
           media,
-          { yPercent: -6, scale: 1.08 },
+          { y: 0, yPercent: -6, scale: 1.08 },
           {
             yPercent: 6,
             scale: 1,
@@ -98,12 +99,12 @@ export function Houses() {
       ref={root}
       className={`green-sheen ${styles.section}`}
       id="houses"
-      aria-label="Markalar"
+      aria-label="Saat evleri"
     >
       <header className={styles.intro} data-nav-theme="dark">
         <SectionMarker
-          index="08"
-          label="Markalar"
+          index="04"
+          label="Saat Evleri"
           className={styles.marker}
         />
         <SplitText

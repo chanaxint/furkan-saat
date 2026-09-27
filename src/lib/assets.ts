@@ -42,7 +42,7 @@ export type ImageAsset = {
 };
 
 /** Show small, discreet captions inside empty placeholders (asset hints). */
-export const SHOW_ASSET_HINTS = true;
+export const SHOW_ASSET_HINTS = false;
 
 export const ASSETS = {
   hero: {

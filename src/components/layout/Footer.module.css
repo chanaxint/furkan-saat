@@ -93,7 +93,12 @@
 }
 .legal {
   display: flex;
-  gap: 28px;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+.bottom > *,
+.legal .link {
+  white-space: nowrap;
 }
 .legal .link {
   font-size: 10px;
@@ -119,5 +124,9 @@
   }
   .wordmark {
     font-size: 19vw;
+  }
+  .bottom {
+    flex-direction: column;
+    gap: 14px;
   }
 }

@@ -13,7 +13,7 @@
   gap: 36px;
 }
 .heading {
-  font-size: var(--fs-display-xl);
+  font-size: var(--fs-display-l);
 }
 .heading em {
   color: var(--champagne-600);

@@ -17,8 +17,9 @@
   margin: 0;
   font-family: var(--font-display);
   font-weight: 300;
-  font-size: var(--fs-display-m);
-  line-height: 1;
+  font-size: var(--fs-display-l);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
 }
 .title em {
   color: var(--champagne);

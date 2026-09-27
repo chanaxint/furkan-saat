@@ -32,7 +32,7 @@ export function Editorial() {
       if (inner)
         gsap.fromTo(
           inner,
-          { yPercent: -6 },
+          { y: 0, yPercent: -6 },
           { yPercent: 6, ease: "none", scrollTrigger: { trigger: story, start: "top bottom", end: "bottom top", scrub: true } },
         );
       gsap.from(story.querySelectorAll("[data-fade]"), {
@@ -49,7 +49,7 @@ export function Editorial() {
   return (
     <section ref={root} className={styles.section} id="journal" data-nav-theme="light" aria-label="Saatçilik dünyası">
       <header className={styles.header}>
-        <SectionMarker index="09" label="Dergi" />
+        <SectionMarker index="05" label="Dergi" />
         <SplitText text={"Saatçiliğin\n*Dünyası*"} className={`t-display ${styles.heading}`} />
       </header>
 

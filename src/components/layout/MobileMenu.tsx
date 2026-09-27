@@ -53,8 +53,9 @@ export function MobileMenu({
       );
       gsap.fromTo(
         items,
-        { yPercent: 110 },
+        { y: 0, yPercent: 110 },
         {
+          y: 0,
           yPercent: 0,
           duration: 1.1,
           ease: "expo.out",

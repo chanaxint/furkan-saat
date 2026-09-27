@@ -1,14 +1,14 @@
 export const NAV_LINKS = [
+  { label: "Markalar", href: "#markalar" },
   { label: "Koleksiyon", href: "#collection" },
-  { label: "Markalar", href: "#houses" },
   { label: "Butik", href: "#boutique" },
   { label: "Dergi", href: "#journal" },
   { label: "İletişim", href: "#contact" },
 ];
 
 export const FOOTER_LINKS = [
-  { label: "Koleksiyonlar", href: "#collection" },
-  { label: "Markalar", href: "#houses" },
+  { label: "Markalar", href: "#markalar" },
+  { label: "Koleksiyon", href: "#collection" },
   { label: "Butik", href: "#boutique" },
   { label: "Dergi", href: "#journal" },
   { label: "İletişim", href: "#contact" },

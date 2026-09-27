@@ -33,7 +33,7 @@ export function FinalCTA() {
       defaults: { ease: "none" },
     });
     tl.fromTo(root.current, { "--mix": 0 }, { "--mix": 1, duration: 0.55 }, 0.1)
-      .fromTo(q("[data-word]"), { yPercent: 105 }, { yPercent: 0, stagger: 0.08, duration: 0.3 }, 0)
+      .fromTo(q("[data-word]"), { y: 0, yPercent: 105 }, { y: 0, yPercent: 0, stagger: 0.08, duration: 0.3 }, 0)
       .fromTo(q("[data-cta]"), { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.2 }, 0.55);
   }, root);
 

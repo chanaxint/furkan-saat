@@ -36,8 +36,10 @@ export function SplitText({
     if (!el || trigger === "none" || prefersReducedMotion()) return;
     const ctx = gsap.context(() => {
       const words = el.querySelectorAll<HTMLElement>(".split-inner");
-      gsap.set(words, { yPercent: 110, rotate: 2 });
-      gsap.to(words, {
+      // Explicit start and end (y: 0 included) so a re-run — e.g. React Strict
+      // Mode mounting twice — can't inherit a stale pixel offset and stop halfway.
+      gsap.fromTo(words, { y: 0, yPercent: 110, rotate: 2 }, {
+        y: 0,
         yPercent: 0,
         rotate: 0,
         duration: 1.5,

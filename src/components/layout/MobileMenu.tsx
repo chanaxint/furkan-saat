@@ -10,6 +10,9 @@ const LINKS = [
   { label: "Koleksiyon", href: "/koleksiyon" },
   { label: "Markalar", href: "/markalar" },
   { label: "Favoriler", href: "/favoriler" },
+  { label: "Özel Gösterim", href: "/ozel-gosterim" },
+  { label: "Saatinizi Satın", href: "/saatinizi-satin" },
+  { label: "Takas", href: "/takas" },
   { label: "Hakkımızda", href: "/hakkimizda" },
   { label: "İletişim", href: "/iletisim" },
 ];
@@ -28,7 +31,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
       <div className={styles.footer}>
         <p className="t-eyebrow">Butik — {BOUTIQUE.city}</p>
         <p className={styles.hours}>{BOUTIQUE.hours}</p>
-        <Link href="/iletisim" onClick={onClose} className={styles.cta}>
+        <Link href="/ozel-gosterim" onClick={onClose} className={styles.cta}>
           Özel randevu alın →
         </Link>
       </div>

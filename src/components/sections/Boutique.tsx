@@ -68,7 +68,7 @@ export function Boutique() {
             Saatleri butiğimizde, size ayrılmış bir saatte ve acele etmeden inceleyin.
           </p>
           <div data-fade>
-            <ArrowLink href="/iletisim" variant="frame" className={styles.cta}>
+            <ArrowLink href="/ozel-gosterim" variant="frame" className={styles.cta}>
               Randevu alın
             </ArrowLink>
           </div>

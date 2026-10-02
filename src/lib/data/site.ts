@@ -38,6 +38,14 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
     ],
   },
   {
+    title: "Hizmetler",
+    links: [
+      { label: "Özel gösterim", href: "/ozel-gosterim" },
+      { label: "Saatinizi satın", href: "/saatinizi-satin" },
+      { label: "Takas", href: "/takas" },
+    ],
+  },
+  {
     title: "Kurumsal",
     links: [
       { label: "Hakkımızda", href: "/hakkimizda" },

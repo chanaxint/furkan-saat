@@ -5,8 +5,10 @@
 .wide {
   width: 100%;
 }
-.whatsapp {
-  justify-self: start;
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
   margin-top: 14px;
 }
 .wish {

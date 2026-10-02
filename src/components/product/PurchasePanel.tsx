@@ -35,9 +35,14 @@ export function PurchasePanel({ product }: { product: Product }) {
       <ButtonLink href={enquiry.email} variant={purchasable ? "frame" : "solid"} className={styles.wide}>
         Bilgi al
       </ButtonLink>
-      <ButtonLink href={enquiry.whatsapp} variant="line" external className={styles.whatsapp}>
-        WhatsApp ile iletişime geçin
-      </ButtonLink>
+      <div className={styles.links}>
+        <ButtonLink href={enquiry.whatsapp} variant="line" external>
+          WhatsApp ile iletişime geçin
+        </ButtonLink>
+        <ButtonLink href={`/ozel-gosterim?saat=${product.slug}`} variant="line">
+          Butikte görün
+        </ButtonLink>
+      </div>
       <WishlistButton slug={product.slug} labelled className={styles.wish} />
     </div>
   );

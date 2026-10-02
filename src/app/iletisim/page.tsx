@@ -3,7 +3,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ButtonLink } from "@/components/ui/Button";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { BOUTIQUE } from "@/lib/data/site";
-import { mailtoUrl, whatsappUrl } from "@/lib/services/enquiries";
+import { whatsappUrl } from "@/lib/services/enquiries";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -52,20 +52,14 @@ export default function ContactPage() {
               Saatleri sakin bir ortamda, <em>acele etmeden</em> inceleyin.
             </p>
             <p className={styles.text}>
-              Görmek istediğiniz saatleri ve size uygun günü yazın; randevunuzu teyit edelim.
+              Görmek istediğiniz saatleri ve size uygun günü bildirin; randevunuzu teyit edelim.
             </p>
             <div className={styles.actions}>
-              <ButtonLink
-                href={whatsappUrl("Merhaba, butikte özel bir randevu almak istiyorum.")}
-                external
-                variant="solid"
-              >
-                WhatsApp ile randevu
+              <ButtonLink href="/ozel-gosterim" variant="solid">
+                Randevu talep edin
               </ButtonLink>
-              <ButtonLink
-                href={mailtoUrl("Özel randevu talebi", "Merhaba,\n\nButikte özel bir randevu almak istiyorum.\n\nTercih ettiğim gün ve saat:\nGörmek istediğim saatler:\n")}
-              >
-                E-posta ile
+              <ButtonLink href={whatsappUrl("Merhaba, butikte özel bir randevu almak istiyorum.")} external>
+                WhatsApp ile
               </ButtonLink>
             </div>
           </aside>

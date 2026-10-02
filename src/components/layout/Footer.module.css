@@ -17,7 +17,7 @@
 }
 
 .statement {
-  grid-column: 1 / span 6;
+  grid-column: 1 / span 4;
   font-family: var(--font-display);
   font-size: var(--fs-display-s);
   font-weight: 300;

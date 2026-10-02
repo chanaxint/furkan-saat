@@ -1,0 +1,75 @@
+.flow {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: clamp(20px, 2.4vw, 40px);
+  position: relative;
+}
+/* The hairline that runs through the dots. */
+.flow::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--line-on-light);
+}
+.step {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green-900);
+  margin-bottom: 18px;
+}
+.step:last-child .dot {
+  background: var(--champagne-600);
+}
+.num {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  color: var(--text-on-light-faint);
+}
+.title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.1;
+}
+.text {
+  font-size: var(--fs-small);
+  line-height: 1.7;
+  color: var(--text-on-light-muted);
+  max-width: 28ch;
+}
+
+@media (max-width: 900px) {
+  .flow {
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .flow::before {
+    top: 0;
+    bottom: 0;
+    left: 3px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+  .step {
+    grid-template-columns: 7px 1fr;
+    column-gap: 24px;
+    padding-bottom: 32px;
+  }
+  .dot {
+    grid-row: 1 / span 3;
+    margin: 6px 0 0;
+  }
+}

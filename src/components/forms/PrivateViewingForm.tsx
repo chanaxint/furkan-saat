@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { EnquiryForm } from "./EnquiryForm";
 import { FieldGroup, SelectField, TextArea, TextField } from "./fields";
 import { contactAnswers, ContactFields } from "./fieldsets";
-import { BRAND_OPTIONS, TIME_OPTIONS, WATCH_OPTIONS, watchLabel } from "./options";
+import { BRAND_OPTIONS, TIME_OPTIONS, WATCH_OPTIONS, watchOptionLabel } from "./options";
 
 const today = () => {
   const d = new Date();
@@ -32,7 +32,7 @@ export function PrivateViewingForm() {
           ["Tarih", String(d.get("date") ?? "")],
           ["Saat", String(d.get("time") ?? "")],
           ["İlgilendiğim marka", String(d.get("brand") ?? "")],
-          ["İlgilendiğim saat", d.get("watch") ? watchLabel(String(d.get("watch"))) : ""],
+          ["İlgilendiğim saat", d.get("watch") ? watchOptionLabel(String(d.get("watch"))) : ""],
           ["Not", String(d.get("note") ?? "")],
           ...contactAnswers(d),
         ],

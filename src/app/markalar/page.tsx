@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Markalar — Furkan Saat",
-  description: "Rolex, Patek Philippe, Richard Mille, Audemars Piguet, Cartier, Jacob & Co. ve diğer saat evleri.",
+  description: "Casio, Daniel Klein, Essence ve Freelook: butiğimizdeki saat markaları.",
 };
 
 /** The brand directory: an index set in type, one house per line. */
@@ -20,8 +20,8 @@ export default async function BrandsPage() {
       <main className="page" data-nav-theme="light">
         <PageHeader
           marker="Markalar"
-          title="Saat *evleri*"
-          lede="Temsil ettiğimiz manüfaktürler. Her biri kendi dilini korur — biz yalnızca ona alan açarız."
+          title="*Markalar*"
+          lede="Butiğimizde bulunan markalar ve saatleri."
         />
         <ol className={`container ${styles.index}`}>
           {brands.map((b, i) => (

@@ -6,6 +6,7 @@ import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { Drawer } from "@/components/ui/Drawer";
 import { brandName } from "@/lib/services/catalog";
 import { useCart, useCartDrawer } from "@/lib/services/cart";
+import { refLabel } from "@/lib/format";
 import styles from "./CartDrawer.module.css";
 
 /** The cart as a side panel, opened from the bag icon or after "Satın al". */
@@ -54,7 +55,7 @@ export function CartDrawer() {
               <div className={styles.text}>
                 <p className={styles.brand}>{brandName(p.brand)}</p>
                 <p className={styles.model}>{p.model}</p>
-                <p className={styles.ref}>Ref. {p.reference}</p>
+                {p.reference && <p className={styles.ref}>{refLabel(p.reference)}</p>}
                 <button className={styles.remove} onClick={() => cart.remove(p.slug)}>
                   Kaldır
                 </button>

@@ -11,6 +11,7 @@ import { ButtonLink } from "@/components/ui/Button";
 import { saveAddress, saveProfile, useAccount } from "@/lib/services/account";
 import { brandName } from "@/lib/services/catalog";
 import { useCart } from "@/lib/services/cart";
+import { refLabel } from "@/lib/format";
 import { placeOrder } from "@/lib/services/orders";
 import { PAYMENT_PROVIDERS, startPayment } from "@/lib/services/payments";
 import styles from "./CheckoutView.module.css";
@@ -152,7 +153,7 @@ export function CheckoutView() {
               <span className={styles.lineText}>
                 <span className={styles.brand}>{brandName(item.brand)}</span>
                 <span className={styles.model}>{item.model}</span>
-                <span className={styles.ref}>Ref. {item.reference}</span>
+                {item.reference && <span className={styles.ref}>{refLabel(item.reference)}</span>}
               </span>
               <PriceDisplay price={item.price} currency={item.currency} className={styles.price} />
             </li>

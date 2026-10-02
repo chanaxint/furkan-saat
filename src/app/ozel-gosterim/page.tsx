@@ -26,8 +26,8 @@ export default function PrivateViewingPage() {
             <>
               <div className={styles.image}>
                 <Image
-                  src="/assets/images/watches/rolex-submariner-126619lb-3.webp"
-                  alt="Rolex Submariner 126619LB kadranı, yakın plan"
+                  src="/assets/images/watches/daniel-klein-exclusive-gumus-kadran.webp"
+                  alt="Daniel Klein Exclusive, gümüş kadran"
                   fill
                   sizes="(max-width: 900px) 100vw, 36vw"
                   priority

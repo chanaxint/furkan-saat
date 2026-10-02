@@ -1,4 +1,3 @@
-
 /** Allowed values — the admin panel offers exactly these. */
 export const TONES = ["green", "deep", "ivory", "stone", "champagne", "wine"] as const;
 export const MOVEMENTS = ["Otomatik", "Manuel", "Kuvars"] as const;
@@ -18,7 +17,7 @@ export type ProductSpecs = {
   movement: Movement;
   caliber?: string;
   powerReserve?: string;
-  caseDiameter: string;
+  caseDiameter?: string;
   caseMaterial: string;
   crystal?: string;
   waterResistance?: string;
@@ -32,6 +31,7 @@ export type Product = {
   /** Brand slug — see BRANDS. */
   brand: string;
   model: string;
+  /** Manufacturer reference; empty when the maker does not publish one. */
   reference: string;
   /** `null` = price upon request (enquiry only, no purchase). */
   price: number | null;
@@ -62,8 +62,8 @@ export type Brand = {
   /** One quiet line under the name. */
   signature: string;
   description: string;
-  /** Optional scroll film for the brand page (frame sequence). */
-  film?: { dir: string; count: number; accent: string };
+  /** Photograph for the brand tile and the brand page. */
+  cover: string;
 };
 
 export type CollectionDef = {

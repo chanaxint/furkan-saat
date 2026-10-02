@@ -10,7 +10,7 @@ import { PRODUCTS } from "@/lib/data/products";
 import type { Product } from "@/lib/data/types";
 import { brandName, findProduct } from "@/lib/services/catalog";
 import { MAX_COMPARE, useCompare } from "@/lib/services/compare";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, refLabel, watchLabel } from "@/lib/format";
 import styles from "./CompareView.module.css";
 
 /** The rows compared, in reading order: price first, then the specification rows. */
@@ -23,7 +23,7 @@ const ROWS: { label: string; value: (p: Product) => string | undefined }[] = [
 export function CompareView() {
   const compare = useCompare();
   const products = compare.slugs.flatMap((s) => findProduct(s) ?? []);
-  const addable = PRODUCTS.filter((p) => !compare.has(p.slug)).map((p) => ({ value: p.slug, label: `${brandName(p.brand)} ${p.model} — ${p.reference}` }));
+  const addable = PRODUCTS.filter((p) => !compare.has(p.slug)).map((p) => ({ value: p.slug, label: watchLabel(brandName(p.brand), p.model, p.reference) }));
 
   const picker = !compare.full && (
     <div className={styles.picker}>
@@ -67,7 +67,7 @@ export function CompareView() {
                   <Link href={`/saat/${p.slug}`} className={styles.model}>
                     {p.model}
                   </Link>
-                  <span className={styles.ref}>Ref. {p.reference}</span>
+                  {p.reference && <span className={styles.ref}>{refLabel(p.reference)}</span>}
                   <button className={styles.remove} onClick={() => compare.remove(p.slug)}>
                     Çıkar
                   </button>

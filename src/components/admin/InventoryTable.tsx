@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AVAILABILITY, type Product } from "@/lib/data/types";
-import { formatPrice } from "@/lib/format";
+import { formatPrice, refLabel } from "@/lib/format";
 import { putJson } from "./api";
 import { useStatus } from "./useStatus";
 import styles from "./admin.module.css";
@@ -45,7 +45,7 @@ export function InventoryTable({ products, brands }: { products: Product[]; bran
               <td>
                 <p className={styles.muted}>{brands[p.brand] ?? p.brand}</p>
                 <p className={styles.name}>{p.model}</p>
-                <p className={styles.muted}>Ref. {p.reference}</p>
+                <p className={styles.muted}>{refLabel(p.reference)}</p>
               </td>
               <td>{formatPrice(p.price, p.currency)}</td>
               <td>

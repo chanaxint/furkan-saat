@@ -26,9 +26,6 @@ export const BOUTIQUE: Settings["boutique"] = settings.boutique;
 /** Bank transfer details shown after checkout. Placeholder — replace with the real account. */
 export const BANK: Settings["bank"] = settings.bank;
 
-/** The watch staged in the box-opening film on the home page. */
-export const NEW_ARRIVAL_SLUG = "jacob-co-skeleton-tourbillon";
-
 export type NavLink = { label: string; href: string };
 
 /** Main navigation (desktop bar and menu drawer). */

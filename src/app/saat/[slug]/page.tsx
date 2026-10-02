@@ -10,6 +10,7 @@ import { ProductSpecs } from "@/components/product/ProductSpecs";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
 import { SectionMarker } from "@/components/ui/SectionMarker";
 import { brandName, getProduct, getProducts, getRelated } from "@/lib/services/catalog";
+import { refLabel } from "@/lib/format";
 import styles from "./page.module.css";
 
 export const dynamicParams = false;
@@ -21,7 +22,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/saat/[slug]">): Promise<Metadata> {
   const p = await getProduct((await params).slug);
   if (!p) return {};
-  const title = `${brandName(p.brand)} ${p.model} ${p.reference} — Furkan Saat`;
+  const title = `${brandName(p.brand)} ${p.model}${p.reference ? ` ${p.reference}` : ""} — Furkan Saat`;
   return {
     title,
     description: p.description,
@@ -41,7 +42,7 @@ export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
     "@type": "Product",
     name: `${brand} ${product.model}`,
     brand: { "@type": "Brand", name: brand },
-    sku: product.reference,
+    ...(product.reference && { sku: product.reference }),
     description: product.description,
     image: product.images,
     ...(product.price !== null && {
@@ -76,9 +77,11 @@ export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
               <h1 className={`t-display rise ${styles.model}`} style={{ "--i": 2 } as React.CSSProperties}>
                 {product.model}
               </h1>
-              <p className={`rise ${styles.reference}`} style={{ "--i": 3 } as React.CSSProperties}>
-                Ref. {product.reference}
-              </p>
+              {product.reference && (
+                <p className={`rise ${styles.reference}`} style={{ "--i": 3 } as React.CSSProperties}>
+                  {refLabel(product.reference)}
+                </p>
+              )}
 
               <div className={`rise ${styles.priceRow}`} style={{ "--i": 4 } as React.CSSProperties}>
                 <PriceDisplay price={product.price} currency={product.currency} className={styles.price} />

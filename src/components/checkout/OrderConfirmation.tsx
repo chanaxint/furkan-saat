@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { findOrder, useAccount, type Order } from "@/lib/services/account";
-import { formatDate, formatPrice } from "@/lib/format";
+import { formatDate, formatPrice, refLabel } from "@/lib/format";
 import { getProvider, startPayment, type PaymentResult } from "@/lib/services/payments";
 import styles from "./OrderConfirmation.module.css";
 
@@ -61,7 +61,7 @@ export function OrderConfirmation() {
           {order.items.map((i) => (
             <li key={i.slug}>
               <span>
-                {i.name} <span className={styles.muted}>· Ref. {i.reference}</span>
+                {i.name} {i.reference && <span className={styles.muted}>· {refLabel(i.reference)}</span>}
               </span>
               <span>{formatPrice(i.price, order.currency)}</span>
             </li>

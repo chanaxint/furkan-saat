@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/data/types";
 import { brandName } from "@/lib/services/catalog";
+import { refLabel } from "@/lib/format";
 import { PriceDisplay } from "./PriceDisplay";
 import { WishlistButton } from "./WishlistButton";
 import styles from "./ProductCard.module.css";
@@ -27,7 +28,7 @@ export function ProductCard({ product, priority = false, sizes }: { product: Pro
           <p className={styles.brand}>{brandName(product.brand)}</p>
           <h3 className={styles.model}>{product.model}</h3>
           <p className={styles.meta}>
-            <span>Ref. {product.reference}</span>
+            <span>{refLabel(product.reference)}</span>
             <PriceDisplay price={product.price} currency={product.currency} className={styles.price} />
           </p>
         </div>

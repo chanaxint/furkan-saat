@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://furkansaat.com"),
   title: "Furkan Saat — Seçkin Saatler, İstanbul",
   description:
-    "Seçkin saatler için özel bir ev. Rolex, Patek Philippe, Jacob & Co. ve daha fazlası — orijinalliği doğrulanmış saatler, İstanbul'da randevu ile.",
+    "Seçkin saatler için özel bir ev. Casio, Daniel Klein, Essence ve Freelook — orijinal saatler, İstanbul.",
   openGraph: {
     title: "Furkan Saat — Seçkin Saatler",
     description: "Seçkin saatler için özel bir ev.",

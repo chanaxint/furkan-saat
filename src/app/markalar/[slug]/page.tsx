@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { ArticleCard } from "@/components/journal/ArticleCard";
 import { ProductGrid } from "@/components/product/ProductGrid";
-import { BrandFilmIntro } from "@/components/sections/brand/BrandFilmIntro";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionMarker } from "@/components/ui/SectionMarker";
 import { getArticlesByBrand, getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
@@ -23,7 +22,7 @@ export async function generateMetadata({ params }: PageProps<"/markalar/[slug]">
   return { title: `${b.name} Saatleri — Furkan Saat`, description: b.description };
 }
 
-/** A house: its opening (film when there is one), its story in brief, its watches. */
+/** A house: its story in brief, then its watches. */
 export default async function BrandPage({ params }: PageProps<"/markalar/[slug]">) {
   const brand = await getBrand((await params).slug);
   if (!brand) notFound();
@@ -33,11 +32,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   return (
     <>
       <main>
-        {brand.film && (
-          <BrandFilmIntro dir={brand.film.dir} count={brand.film.count} brand={brand.name} title={brand.name} accent={brand.film.accent} />
-        )}
-
-        <div className={`page ${brand.film ? styles.afterFilm : ""}`} data-nav-theme="light">
+        <div className="page" data-nav-theme="light">
           <header className={`container ${styles.intro}`}>
             <div className={`rise ${styles.facts}`}>
               <SectionMarker label="Saat evi" />
@@ -52,17 +47,11 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
                 </div>
               </dl>
             </div>
-            {brand.film ? (
-              <h2 className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
-                {brand.signature}
-              </h2>
-            ) : (
-              <h1 className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
-                {brand.name}
-              </h1>
-            )}
+            <h1 className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
+              {brand.name}
+            </h1>
             <div className={`rise ${styles.story}`} style={{ "--i": 2 } as React.CSSProperties}>
-              {!brand.film && <p className={styles.signature}>{brand.signature}</p>}
+              <p className={styles.signature}>{brand.signature}</p>
               <p className="t-lead">{brand.description}</p>
             </div>
           </header>
@@ -72,7 +61,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
               {products.length > 0 ? `Koleksiyonda · ${products.length} saat` : "Koleksiyonda"}
             </p>
             {products.length > 0 ? (
-              <ProductGrid products={products} priorityCount={brand.film ? 0 : 3} />
+              <ProductGrid products={products} priorityCount={3} />
             ) : (
               <div className={styles.empty}>
                 <p className={styles.emptyText}>

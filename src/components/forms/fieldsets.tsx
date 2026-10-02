@@ -22,8 +22,8 @@ export function WatchFields({ title = "Saatiniz" }: { title?: string }) {
   return (
     <FieldGroup title={title}>
       <SelectField name="brand" label="Marka" options={BRAND_OPTIONS} required />
-      <TextField name="model" label="Model" required placeholder="Örn. Submariner Date" />
-      <TextField name="reference" label="Referans" placeholder="Örn. 126610LN" hint="Kasa arkasında ya da garanti belgesinde yazar." />
+      <TextField name="model" label="Model" required placeholder="Örn. Edifice Slim" />
+      <TextField name="reference" label="Referans" placeholder="Örn. EFR-S108DE-3AV" hint="Kasa arkasında ya da garanti belgesinde yazar." />
       <TextField name="year" label="Yıl" inputMode="numeric" placeholder="Örn. 2021" />
       <SelectField name="condition" label="Durum" options={CONDITION_OPTIONS} required wide />
       <ChoiceField name="box" label="Kutu" options={YES_NO} required />

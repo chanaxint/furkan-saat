@@ -25,7 +25,7 @@ export type PaymentProvider = {
 const summary = (o: Order) =>
   [
     `Sipariş no: ${o.id}`,
-    ...o.items.map((i) => `${i.name} — Ref. ${i.reference} (${formatPrice(i.price, o.currency)})`),
+    ...o.items.map((i) => `${i.reference ? `${i.name} — ${i.reference}` : i.name} (${formatPrice(i.price, o.currency)})`),
     `Toplam: ${formatPrice(o.total, o.currency)}`,
     `Teslimat: ${o.delivery.method === "butik" ? "Butikten teslim" : "Sigortalı kargo"}`,
     `Ad soyad: ${o.customer.name}`,

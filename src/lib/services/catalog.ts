@@ -63,7 +63,7 @@ const SIZE_BANDS = [
   { value: "large", label: "43 mm ve üzeri", test: (mm: number) => mm > 42 },
 ];
 
-const mm = (p: Product) => parseFloat(p.specs.caseDiameter);
+const mm = (p: Product) => parseFloat((p.specs.caseDiameter ?? "").replace(",", "."));
 
 type Facet = {
   key: FacetKey;

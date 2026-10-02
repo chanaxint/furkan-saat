@@ -6,9 +6,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { brandName, search } from "@/lib/services/catalog";
+import { refLabel } from "@/lib/format";
 import styles from "./SearchOverlay.module.css";
 
-const SUGGESTIONS = ["Submariner", "Patek Philippe", "126610LN", "Tourbillon", "Platin", "Bakım"];
+const SUGGESTIONS = ["Edifice", "F-91W", "Daniel Klein", "Sedef", "Kronograf", "Taşlı"];
 
 /** Full-screen search: results update as you type, grouped into watches and brands. */
 export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -96,7 +97,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                         <span className={styles.watchText}>
                           <span className={styles.brand}>{brandName(p.brand)}</span>
                           <span className={styles.model}>{p.model}</span>
-                          <span className={styles.ref}>Ref. {p.reference}</span>
+                          {p.reference && <span className={styles.ref}>{refLabel(p.reference)}</span>}
                         </span>
                         <PriceDisplay price={p.price} currency={p.currency} className={styles.price} />
                       </Link>

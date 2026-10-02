@@ -6,6 +6,7 @@ import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { ButtonLink } from "@/components/ui/Button";
 import { brandName } from "@/lib/services/catalog";
 import { useCart } from "@/lib/services/cart";
+import { refLabel } from "@/lib/format";
 import styles from "./AccountViews.module.css";
 
 /**
@@ -35,7 +36,7 @@ export function CartView() {
               <Link href={`/saat/${p.slug}`} className={styles.model}>
                 {p.model}
               </Link>
-              <p className={styles.muted}>Ref. {p.reference}</p>
+              {p.reference && <p className={styles.muted}>{refLabel(p.reference)}</p>}
               <p className={styles.muted}>Adet: {quantity}</p>
               <button className={styles.remove} onClick={() => cart.remove(p.slug)}>
                 Kaldır

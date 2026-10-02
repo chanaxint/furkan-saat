@@ -92,7 +92,7 @@ export function ProductEditor({
         <FieldGroup title="Saat">
           <SelectField name="brand" label="Marka" options={brands} required defaultValue={p?.brand} />
           <TextField name="model" label="Model" required defaultValue={p?.model} onChange={(e) => setName(e.target.value)} />
-          <TextField name="reference" label="Referans" required defaultValue={p?.reference} />
+          <TextField name="reference" label="Referans" defaultValue={p?.reference} hint="Üreticinin model numarası; yoksa boş bırakın." />
           <TextField name="addedAt" label="Eklenme tarihi" type="date" required defaultValue={p?.addedAt ?? today()} />
           <TextArea name="description" label="Kısa açıklama" required defaultValue={p?.description} />
         </FieldGroup>
@@ -111,7 +111,7 @@ export function ProductEditor({
           <SelectField name="movement" label="Mekanizma" options={opts(MOVEMENTS)} required defaultValue={p?.specs.movement} />
           <TextField name="caliber" label="Kalibre" defaultValue={p?.specs.caliber} />
           <TextField name="powerReserve" label="Güç rezervi" defaultValue={p?.specs.powerReserve} placeholder="Yaklaşık 70 saat" />
-          <TextField name="caseDiameter" label="Kasa çapı" required defaultValue={p?.specs.caseDiameter} placeholder="41 mm" />
+          <TextField name="caseDiameter" label="Kasa çapı" defaultValue={p?.specs.caseDiameter} placeholder="41 mm" />
           <TextField name="caseMaterial" label="Kasa malzemesi" required defaultValue={p?.specs.caseMaterial} />
           <TextField name="crystal" label="Cam" defaultValue={p?.specs.crystal} placeholder="Safir" />
           <TextField name="waterResistance" label="Su geçirmezlik" defaultValue={p?.specs.waterResistance} placeholder="300 m" />

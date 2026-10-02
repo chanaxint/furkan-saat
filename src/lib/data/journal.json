@@ -6,14 +6,9 @@
     "excerpt": "Yer çekimine karşı bir dakikada bir tur atan kafes: iki yüz yıllık bir icat, bugün saatçiliğin en saf gösterisi.",
     "date": "2026-09-24",
     "readTime": "6 dk okuma",
-    "cover": "/assets/images/watches/jacob-co-skeleton-tourbillon-1.webp",
-    "brands": [
-      "jacob-co",
-      "breguet"
-    ],
-    "products": [
-      "jacob-co-skeleton-tourbillon"
-    ],
+    "cover": "/assets/images/journal/tourbillon.webp",
+    "brands": [],
+    "products": [],
     "body": [
       {
         "type": "p",
@@ -52,15 +47,9 @@
     "excerpt": "Dalgıçlar için tasarlanan bir saat nasıl oldu da şehirde, toplantıda ve akşam yemeğinde aynı rahatlıkla taşınan bir ölçüye dönüştü?",
     "date": "2026-09-12",
     "readTime": "5 dk okuma",
-    "cover": "/assets/images/watches/rolex-submariner-126610ln-3.webp",
-    "brands": [
-      "rolex"
-    ],
-    "products": [
-      "rolex-submariner-116610lv",
-      "rolex-submariner-126610ln",
-      "rolex-submariner-126619lb"
-    ],
+    "cover": "/assets/images/journal/submariner.webp",
+    "brands": [],
+    "products": [],
     "body": [
       {
         "type": "p",
@@ -95,13 +84,9 @@
     "excerpt": "Cenevre'de 1839'dan beri süren bir aile hikâyesi, kendi mührü ve “gelecek nesil için” verilen bir söz.",
     "date": "2026-08-30",
     "readTime": "7 dk okuma",
-    "cover": "/assets/images/watches/patek-philippe-celestial-6102p-3.webp",
-    "brands": [
-      "patek-philippe"
-    ],
-    "products": [
-      "patek-philippe-celestial-6102p"
-    ],
+    "cover": "/assets/images/journal/celestial.webp",
+    "brands": [],
+    "products": [],
     "body": [
       {
         "type": "p",
@@ -136,12 +121,9 @@
     "excerpt": "Ana yaydan eşapmana: pilsiz, devresiz, yalnızca yay, dişli ve taşlarla zamanı ölçen bir makinenin anatomisi.",
     "date": "2026-08-14",
     "readTime": "8 dk okuma",
-    "cover": "/assets/images/watches/rolex-submariner-116610lv-2.webp",
+    "cover": "/assets/images/journal/mekanizma.webp",
     "brands": [],
-    "products": [
-      "rolex-submariner-116610lv",
-      "mercedes-benz-classic-automatic"
-    ],
+    "products": [],
     "body": [
       {
         "type": "p",
@@ -176,12 +158,9 @@
     "excerpt": "İkinci el bir saati değerlendirirken referans, seri numarası, belgeler ve bakım geçmişi neden saatin kendisi kadar önemlidir?",
     "date": "2026-07-28",
     "readTime": "4 dk okuma",
-    "cover": "/assets/images/watches/rolex-submariner-126619lb-2.webp",
+    "cover": "/assets/images/journal/kutu-ve-belgeler.webp",
     "brands": [],
-    "products": [
-      "rolex-submariner-126619lb",
-      "patek-philippe-celestial-6102p"
-    ],
+    "products": [],
     "body": [
       {
         "type": "p",

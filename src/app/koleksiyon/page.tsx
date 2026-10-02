@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Koleksiyon — Furkan Saat",
-  description: "Rolex, Patek Philippe, Jacob & Co. ve daha fazlası. Orijinalliği doğrulanmış seçkin saatler, İstanbul.",
+  description: "Casio, Daniel Klein, Essence ve Freelook saatleri. Orijinal, faturalı ve garantili saatler, İstanbul.",
 };
 
 export default async function CollectionPage() {

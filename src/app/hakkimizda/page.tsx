@@ -39,8 +39,8 @@ export default function AboutPage() {
 
         <figure className={`container ${styles.figure}`}>
           {[
-            ["/assets/images/watches/patek-philippe-celestial-6102p-1.webp", "Patek Philippe Grand Complications Celestial"],
-            ["/assets/images/watches/jacob-co-skeleton-tourbillon-1.webp", "Jacob & Co. İskelet Tourbillon"],
+            ["/assets/images/watches/essence-kare-yesil-roma.webp", "Essence kare yeşil kadranlı saat"],
+            ["/assets/images/watches/casio-edifice-efr-s108de-3av.webp", "Casio Edifice Slim Sapphire"],
           ].map(([src, alt], i) => (
             <div key={src} className={styles.image}>
               <Image src={src} alt={alt} fill sizes="(max-width: 900px) 100vw, 45vw" priority={i === 0} />

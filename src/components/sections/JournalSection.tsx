@@ -5,14 +5,14 @@ import { SplitText } from "@/components/ui/SplitText";
 import { getArticles } from "@/lib/services/catalog";
 import styles from "./JournalSection.module.css";
 
-/** 07 — JOURNAL. The latest article large, two more beside it. */
+/** 06 — JOURNAL. The latest article large, two more beside it. */
 export async function JournalSection() {
   const [featured, ...rest] = await getArticles();
   return (
     <section className={styles.section} id="dergi" data-nav-theme="light" aria-label="Dergi">
       <div className="container">
         <header className={styles.header}>
-          <SectionMarker index="07" label="Dergi" />
+          <SectionMarker index="06" label="Dergi" />
           <SplitText text={"Saatçiliğin\n*dünyası*"} className={`t-display ${styles.heading}`} />
         </header>
         <div className={styles.layout}>

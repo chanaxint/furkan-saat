@@ -20,7 +20,7 @@ export const normalize = (s: string) =>
 export const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(`${iso}T12:00:00`));
 
-/** URL-safe slug from free text, Turkish letters folded: "Rolex Submariner 126610LN" → "rolex-submariner-126610ln". */
+/** URL-safe slug from free text, Turkish letters folded: "Casio Edifice EFR-S108DE" → "casio-edifice-efr-s108de". */
 export const slugify = (s: string) =>
   s
     .toLocaleLowerCase("tr")
@@ -29,3 +29,10 @@ export const slugify = (s: string) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+/** "Ref. EFR-S108DE-3AV" — or nothing when the maker publishes no reference. */
+export const refLabel = (reference: string) => (reference ? `Ref. ${reference}` : "");
+
+/** "Casio Edifice Slim — EFR-S108DE-3AV", or without the dash when there is no reference. */
+export const watchLabel = (brand: string, model: string, reference: string) =>
+  reference ? `${brand} ${model} — ${reference}` : `${brand} ${model}`;

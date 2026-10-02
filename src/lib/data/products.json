@@ -1,211 +1,933 @@
 [
   {
-    "slug": "rolex-submariner-116610lv",
-    "brand": "rolex",
-    "model": "Submariner Date",
-    "reference": "116610LV",
-    "price": 16500,
-    "currency": "EUR",
+    "slug": "casio-edifice-efb-730d-3av",
+    "brand": "casio",
+    "model": "Edifice Sapphire Kronograf",
+    "reference": "EFB-730D-3AV",
+    "price": null,
+    "currency": "TRY",
     "images": [
-      "/assets/images/watches/rolex-submariner-116610lv-1.webp",
-      "/assets/images/watches/rolex-submariner-116610lv-2.webp",
-      "/assets/images/watches/rolex-submariner-116610lv-3.webp",
-      "/assets/images/watches/rolex-submariner-116610lv-4.webp"
+      "/assets/images/watches/casio-edifice-efb-730d-3av.webp"
     ],
-    "description": "Yeşil kadran ve yeşil Cerachrom çerçeveyle üretilen son çelik Submariner. Üretimden kalktığından beri en çok aranan modern referanslardan biri.",
+    "description": "Açık yeşil kadranın üzerinde koyu alt kadranlar: klasik yarış kronograflarından ilham alan 3-6-9 düzeni, safir cam ve çelik bilezik. Edifice serisinin en zarif kronograflarından biri.",
     "specs": {
-      "movement": "Otomatik",
-      "caliber": "3135",
-      "powerReserve": "Yaklaşık 48 saat",
+      "movement": "Kuvars",
       "caseDiameter": "40 mm",
-      "caseMaterial": "Oystersteel",
+      "caseMaterial": "Paslanmaz çelik",
       "crystal": "Safir",
-      "waterResistance": "300 m",
-      "strap": "Oyster bilezik, Glidelock uzatma",
-      "year": "2019"
+      "waterResistance": "100 m",
+      "strap": "Paslanmaz çelik bilezik"
     },
-    "condition": "Mükemmel",
+    "condition": "Yeni",
     "availability": "Stokta",
     "fullSet": true,
     "collections": [
-      "ikonik",
+      "kronograf",
       "spor",
-      "nadir-parcalar"
+      "yeni-gelenler"
     ],
-    "featured": true,
-    "addedAt": "2026-09-02",
+    "addedAt": "2026-10-02",
+    "tone": "green",
+    "featured": true
+  },
+  {
+    "slug": "casio-edifice-efr-s108de-3av",
+    "brand": "casio",
+    "model": "Edifice Slim Sapphire",
+    "reference": "EFR-S108DE-3AV",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-edifice-efr-s108de-3av.webp"
+    ],
+    "description": "7,8 mm inceliğinde kasa, saç teli işlemeli sekizgen çerçeve ve dokulu yeşil kadran. Safir camıyla Edifice'in en rafine üç ibreli modellerinden biri.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseDiameter": "39,9 mm",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "waterResistance": "100 m",
+      "strap": "Paslanmaz çelik bilezik, tek dokunuşlu katlanır toka"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green",
+    "featured": true
+  },
+  {
+    "slug": "casio-mtp-e515d-2a2",
+    "brand": "casio",
+    "model": "Kronograf — Yeşil Kadran",
+    "reference": "MTP-E515D-2A2",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-mtp-e515d-2a2.webp"
+    ],
+    "description": "Derin yeşil kadran, 24 saat ve kronometre alt kadranları, tarih penceresi ve karanlıkta parlayan ibreler. Günlük kullanım için sportif ve okunaklı bir kronograf.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseDiameter": "41 mm",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Mineral",
+      "waterResistance": "50 m",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor"
+    ],
+    "addedAt": "2026-10-02",
     "tone": "green"
   },
   {
-    "slug": "rolex-submariner-126610ln",
-    "brand": "rolex",
-    "model": "Submariner Date",
-    "reference": "126610LN",
-    "price": 14900,
-    "currency": "EUR",
-    "images": [
-      "/assets/images/watches/rolex-submariner-126610ln-1.webp",
-      "/assets/images/watches/rolex-submariner-126610ln-2.webp",
-      "/assets/images/watches/rolex-submariner-126610ln-3.webp",
-      "/assets/images/watches/rolex-submariner-126610ln-4.webp"
-    ],
-    "description": "Siyah kadran, siyah seramik çerçeve ve yeni nesil 3235 kalibre. Dalış saatinin ölçüsü olmaya devam eden referans.",
-    "specs": {
-      "movement": "Otomatik",
-      "caliber": "3235",
-      "powerReserve": "Yaklaşık 70 saat",
-      "caseDiameter": "41 mm",
-      "caseMaterial": "Oystersteel",
-      "crystal": "Safir",
-      "waterResistance": "300 m",
-      "strap": "Oyster bilezik, Glidelock uzatma",
-      "year": "2023"
-    },
-    "condition": "Kullanılmamış",
-    "availability": "Stokta",
-    "fullSet": true,
-    "collections": [
-      "ikonik",
-      "spor"
-    ],
-    "featured": true,
-    "addedAt": "2026-09-18",
-    "tone": "deep"
-  },
-  {
-    "slug": "rolex-submariner-126619lb",
-    "brand": "rolex",
-    "model": "Submariner Date",
-    "reference": "126619LB",
-    "price": 46500,
-    "currency": "EUR",
-    "images": [
-      "/assets/images/watches/rolex-submariner-126619lb-1.webp",
-      "/assets/images/watches/rolex-submariner-126619lb-2.webp",
-      "/assets/images/watches/rolex-submariner-126619lb-3.webp",
-      "/assets/images/watches/rolex-submariner-126619lb-4.webp"
-    ],
-    "description": "18 ayar beyaz altın kasa, kraliyet mavisi kadran ve çerçeve. Çelik bir alet saatinin ağırlığını taşıyan en sessiz lüks.",
-    "specs": {
-      "movement": "Otomatik",
-      "caliber": "3235",
-      "powerReserve": "Yaklaşık 70 saat",
-      "caseDiameter": "41 mm",
-      "caseMaterial": "18 ayar beyaz altın",
-      "crystal": "Safir",
-      "waterResistance": "300 m",
-      "strap": "Oyster bilezik, Glidelock uzatma",
-      "year": "2022"
-    },
-    "condition": "Mükemmel",
-    "availability": "Rezerve",
-    "fullSet": true,
-    "collections": [
-      "spor",
-      "nadir-parcalar"
-    ],
-    "featured": true,
-    "addedAt": "2026-08-21",
-    "tone": "stone"
-  },
-  {
-    "slug": "patek-philippe-celestial-6102p",
-    "brand": "patek-philippe",
-    "model": "Grand Complications Celestial",
-    "reference": "6102P-001",
+    "slug": "casio-mtp-1374d-5av",
+    "brand": "casio",
+    "model": "Multifonksiyon — Kırmızı Çerçeve",
+    "reference": "MTP-1374D-5AV",
     "price": null,
-    "currency": "EUR",
+    "currency": "TRY",
     "images": [
-      "/assets/images/watches/patek-philippe-celestial-6102p-1.webp",
-      "/assets/images/watches/patek-philippe-celestial-6102p-2.webp",
-      "/assets/images/watches/patek-philippe-celestial-6102p-3.webp",
-      "/assets/images/watches/patek-philippe-celestial-6102p-4.webp"
+      "/assets/images/watches/casio-mtp-1374d-5av.webp"
     ],
-    "description": "Safir kadranın ardında dönen yıldız haritası, Ay'ın evreleri ve gökteki yolculuğu. İstanbul semasını değil, Cenevre semasını gösterir.",
+    "description": "Siyah kadranı saran bordo çerçeve; gün, tarih ve 24 saat alt kadranları, parlayan ibre ve indeksler. Sportif karakterli, güçlü bir günlük saat.",
     "specs": {
-      "movement": "Otomatik",
-      "caliber": "240 LU CL C",
-      "powerReserve": "38 – 48 saat",
+      "movement": "Kuvars",
       "caseDiameter": "44 mm",
-      "caseMaterial": "Platin",
-      "crystal": "Safir, ön ve arka",
-      "waterResistance": "30 m",
-      "strap": "Lacivert timsah derisi, platin katlanır toka",
-      "year": "2021"
-    },
-    "condition": "Mükemmel",
-    "availability": "Stokta",
-    "fullSet": true,
-    "collections": [
-      "nadir-parcalar",
-      "klasik",
-      "ikonik"
-    ],
-    "featured": true,
-    "addedAt": "2026-09-10",
-    "tone": "deep"
-  },
-  {
-    "slug": "jacob-co-skeleton-tourbillon",
-    "brand": "jacob-co",
-    "model": "İskelet Tourbillon",
-    "reference": "Yeni koleksiyon",
-    "price": null,
-    "currency": "EUR",
-    "images": [
-      "/assets/images/watches/jacob-co-skeleton-tourbillon-1.webp"
-    ],
-    "description": "Pırlanta dizili kasa ve kulplar, iskelet kadranın ardında açıkça görünen mekanizma ve safir kabaşon kurma kolu. Kutusundan ilk kez çıkıyor.",
-    "specs": {
-      "movement": "Manuel",
-      "caseDiameter": "44 mm",
-      "caseMaterial": "Beyaz altın, pırlanta dizili",
-      "crystal": "Safir",
-      "strap": "Siyah timsah derisi",
-      "year": "2026"
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Mineral",
+      "waterResistance": "50 m",
+      "strap": "Paslanmaz çelik bilezik"
     },
     "condition": "Yeni",
     "availability": "Stokta",
     "fullSet": true,
     "collections": [
-      "yeni-gelenler",
-      "tourbillon",
-      "iskelet",
-      "nadir-parcalar"
+      "spor"
     ],
-    "featured": true,
-    "addedAt": "2026-09-25",
+    "addedAt": "2026-10-02",
+    "tone": "wine"
+  },
+  {
+    "slug": "casio-la680wga-4c",
+    "brand": "casio",
+    "model": "Vintage Mini — Altın, Çiçek Desenli",
+    "reference": "LA680WGA-4C",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-la680wga-4c.webp"
+    ],
+    "description": "Altın tonlu retro kasa ve kadranın köşesinde pembe çiçek motifleri. LED ışık, alarm, kronometre ve takvimiyle Casio Vintage serisinin en sevilen kadın modellerinden.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseDiameter": "28,6 mm",
+      "caseMaterial": "Altın renk kaplama reçine",
+      "waterResistance": "30 m",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "dijital",
+      "ikonik",
+      "kadin"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne",
+    "featured": true
+  },
+  {
+    "slug": "casio-a700w-1a",
+    "brand": "casio",
+    "model": "Vintage İnce Dijital",
+    "reference": "A700W-1A",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-a700w-1a.webp"
+    ],
+    "description": "Yaklaşık 6 mm inceliğinde kasa, siyah çerçeveli ekran ve çelik bilezik. Alarm, 1/100 saniye kronometre, takvim ve LED ışık; retro Casio çizgisinin en ince yorumu.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseDiameter": "35,5 mm",
+      "caseMaterial": "Reçine kasa",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "dijital",
+      "ikonik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "stone"
+  },
+  {
+    "slug": "casio-f-91w-gumus-metal",
+    "brand": "casio",
+    "model": "F-91W — Gümüş Metal",
+    "reference": "F-91W",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-f-91w-gumus-metal.webp"
+    ],
+    "description": "1989'dan beri neredeyse hiç değişmeyen efsanevi F-91W, gümüş tonlu kasa ve çelik bilezikle. Alarm, kronometre ve LED ışık.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseDiameter": "35,2 mm",
+      "caseMaterial": "Gümüş tonlu kasa",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "dijital",
+      "ikonik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "stone"
+  },
+  {
+    "slug": "casio-f-91ws-2",
+    "brand": "casio",
+    "model": "F-91W — Şeffaf Mavi",
+    "reference": "F-91WS-2",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-f-91ws-2.webp"
+    ],
+    "description": "Efsanevi F-91W'nun şeffaf mavi reçine kasa ve kayışlı hali. Alarm, kronometre, LED ışık ve yaklaşık 7 yıllık pil ömrü.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseDiameter": "35,2 mm",
+      "caseMaterial": "Şeffaf reçine",
+      "strap": "Şeffaf mavi reçine kayış"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "dijital",
+      "ikonik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "stone"
+  },
+  {
+    "slug": "casio-ltp-v009g-7e",
+    "brand": "casio",
+    "model": "Dikdörtgen — Altın, Beyaz Kadran",
+    "reference": "LTP-V009G-7E",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/casio-ltp-v009g-7e.webp"
+    ],
+    "description": "Altın renk kaplama dikdörtgen kasa, sade beyaz kadran ve ince çubuk indeksler. Zarif ve hafif bir günlük kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
     "tone": "champagne"
   },
   {
-    "slug": "mercedes-benz-classic-automatic",
-    "brand": "mercedes-benz",
-    "model": "Classic Automatic",
-    "reference": "MB-01",
+    "slug": "casio-ltp-1275sg-7b",
+    "brand": "casio",
+    "model": "Klasik — Bicolor, Beyaz Kadran",
+    "reference": "LTP-1275SG-7B",
     "price": null,
-    "currency": "EUR",
+    "currency": "TRY",
     "images": [
-      "/assets/images/watches/mercedes-benz-classic-automatic-1.webp",
-      "/assets/images/watches/mercedes-benz-classic-automatic-2.webp"
+      "/assets/images/watches/casio-ltp-1275sg-7b.webp"
     ],
-    "description": "Kadranın merkezinde üç köşeli yıldız. Mercedes-Benz'in tasarım dilini sade bir üç ibreli saate taşır.",
+    "description": "Gümüş ve altın tonlarının birleştiği bilezik, okunaklı Arap rakamlı beyaz kadran. Zamansız ve kolay kombinlenen bir kadın saati.",
     "specs": {
-      "movement": "Otomatik",
-      "caseDiameter": "42 mm",
-      "caseMaterial": "Paslanmaz çelik",
-      "crystal": "Safir",
-      "strap": "Siyah deri kayış",
-      "year": "2026"
+      "movement": "Kuvars",
+      "caseDiameter": "28 mm",
+      "caseMaterial": "Paslanmaz çelik, iki renk",
+      "crystal": "Mineral",
+      "waterResistance": "30 m",
+      "strap": "Bicolor paslanmaz çelik bilezik"
     },
     "condition": "Yeni",
-    "availability": "Sipariş üzerine",
+    "availability": "Stokta",
     "fullSet": true,
     "collections": [
-      "yeni-gelenler",
+      "kadin",
       "klasik"
     ],
-    "featured": true,
-    "addedAt": "2026-09-28",
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "daniel-klein-exclusive-siyah-deri",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Siyah, Deri Kayış",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-siyah-deri.webp"
+    ],
+    "description": "Siyah kaplama kasa, dokulu siyah kadran ve gün göstergeli alt kadranlar. Turuncu detaylı kurma kolu ve siyah deri kayışla güçlü bir akşam saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah kaplama paslanmaz çelik",
+      "strap": "Siyah deri kayış"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "deep"
+  },
+  {
+    "slug": "daniel-klein-yesil-kadran-bicolor",
+    "brand": "daniel-klein",
+    "model": "Klasik — Yeşil Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-yesil-kadran-bicolor.webp"
+    ],
+    "description": "Güneş ışını efektli yeşil kadran, altın çerçeve ve tarih penceresi. Gümüş-altın bicolor bilezikle şık ve klasik bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green"
+  },
+  {
+    "slug": "daniel-klein-exclusive-yesil-altin",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Yeşil Kadran, Altın Kasa",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-yesil-altin.webp"
+    ],
+    "description": "Altın tonlu kasa, yeşil kadran ve altın çerçeveli alt kadranlar; gün ve tarih göstergeleriyle. Kahverengi deri kayış klasik bir tamamlayıcı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Kahverengi deri kayış"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green"
+  },
+  {
+    "slug": "daniel-klein-exclusive-pembe-kadran",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Pudra Kadran, Siyah Alt Kadranlar",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-pembe-kadran.webp"
+    ],
+    "description": "Kum dokulu pudra pembesi kadranın üzerinde siyah alt kadranlar ve tarih. Köşeli kasa ve entegre görünümlü çelik bilezik.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne",
+    "featured": true
+  },
+  {
+    "slug": "daniel-klein-exclusive-siyah-celik",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Siyah Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-siyah-celik.webp"
+    ],
+    "description": "Baştan sona siyah: siyah kaplama kasa ve bilezik, siyah kadran, gün ve tarih göstergeleri. Parlayan beyaz indekslerle okunaklı ve iddialı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah kaplama paslanmaz çelik",
+      "strap": "Siyah kaplama paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "deep"
+  },
+  {
+    "slug": "daniel-klein-gun-tarih-tirtikli",
+    "brand": "daniel-klein",
+    "model": "Gün-Tarih — Tırtıklı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-gun-tarih-tirtikli.webp"
+    ],
+    "description": "Tırtıklı çerçeve, gün adını tam yazan pencere, büyüteçli tarih ve beş sıralı bilezik. Klasik bir elbise saatinin kolay ulaşılır yorumu.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
     "tone": "stone"
+  },
+  {
+    "slug": "daniel-klein-exclusive-yesil-siyah",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Siyah Kasa, Yeşil Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-yesil-siyah.webp"
+    ],
+    "description": "Siyah kasanın içinde güneş ışını efektli koyu yeşil kadran, bakır tonlu detaylar ve tarih. Köşeli hatlarla sportif ve modern.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah kaplama paslanmaz çelik",
+      "strap": "Siyah kaplama paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green"
+  },
+  {
+    "slug": "daniel-klein-exclusive-gumus-kadran",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Gümüş Kadran, Köşeli Kasa",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-gumus-kadran.webp"
+    ],
+    "description": "Gümüş kadran, mavi vurgulu alt kadranlar, gün ve tarih göstergeleri. Vida detaylı köşeli kasa ve çelik bilezikle sportif bir görünüm.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "stone"
+  },
+  {
+    "slug": "daniel-klein-exclusive-beyaz-cizgili",
+    "brand": "daniel-klein",
+    "model": "Exclusive — Beyaz Yatay Çizgili Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/daniel-klein-exclusive-beyaz-cizgili.webp"
+    ],
+    "description": "Yuvarlatılmış köşeli kasa, yatay çizgili beyaz kadran, alt kadranlar ve tarih. Entegre görünümlü çelik bilezikle sade ve modern bir spor şıklığı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "ivory"
+  },
+  {
+    "slug": "essence-kare-yesil-roma",
+    "brand": "essence",
+    "model": "Kare — Yeşil Kadran, Roma Rakamları",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-kare-yesil-roma.webp"
+    ],
+    "description": "Altın tonlu kare kasa, derin yeşil kadran ve Roma rakamları. Boncuk dizisi gibi işlenmiş bilezikle mücevher etkisi veren bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk boncuk bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green",
+    "featured": true
+  },
+  {
+    "slug": "essence-kare-sedef-tasli-bilezik",
+    "brand": "essence",
+    "model": "Kare — Sedef Kadran, Taşlı Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-kare-sedef-tasli-bilezik.webp"
+    ],
+    "description": "Geniş altın kasa, taş indeksli sedef kadran ve sıra sıra kristal taşlarla bezeli geniş bilezik. Gece için tasarlanmış bir mücevher saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Kristal taşlı altın renk bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "essence-sekizgen-sedef-zincir",
+    "brand": "essence",
+    "model": "Sekizgen — Sedef Kadran, Zincir Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-sekizgen-sedef-zincir.webp"
+    ],
+    "description": "Fasetalı camın altında sedef kadran, taşlı sekizgen çerçeve ve kalın zincir bilezik. Klasik bir formun cesur ve modern yorumu.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk zincir bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "essence-sedef-tasli-bicolor-rose",
+    "brand": "essence",
+    "model": "Sedef Kadran — Taşlı Çerçeve, Rose Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-sedef-tasli-bicolor-rose.webp"
+    ],
+    "description": "Sekizgen hatlı çerçevede çift sıra taş, rose altın detaylı sedef kadran. Gümüş ve rose altın bicolor bilezik.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, rose altın detaylı",
+      "strap": "Gümüş-rose bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "essence-multifonksiyon-altin",
+    "brand": "essence",
+    "model": "Multifonksiyon — Altın, Tırtıklı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-multifonksiyon-altin.webp"
+    ],
+    "description": "Tırtıklı altın çerçeve, Roma rakamlı sedef kadran ve üç alt kadran. Altın bilezikle klasik ve güçlü bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "essence-yesil-kadran-tasli",
+    "brand": "essence",
+    "model": "Yeşil Kadran — Taşlı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-yesil-kadran-tasli.webp"
+    ],
+    "description": "Yeşil sedef efektli kadranı saran kristal taşlı çerçeve ve sade altın indeksler. Altın bilezikle göz alıcı bir renk dengesi.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green"
+  },
+  {
+    "slug": "essence-dikdortgen-sedef-bicolor",
+    "brand": "essence",
+    "model": "Dikdörtgen — Sedef Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-dikdortgen-sedef-bicolor.webp"
+    ],
+    "description": "Altın kenarlı dikdörtgen kasa, Arap rakamlı sedef kadran ve bicolor bilezik. Zamansız, gündüzden akşama uyum sağlayan bir model.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, altın detaylı",
+      "strap": "Bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "ivory"
+  },
+  {
+    "slug": "essence-mini-sedef-rose",
+    "brand": "essence",
+    "model": "Mini — Sedef Kadran, Rose Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/essence-mini-sedef-rose.webp"
+    ],
+    "description": "Küçük yuvarlak kasa, taşlı çerçeve ve sedef kadran; gümüş ve rose altın bilezik. İnce bileklere zarif bir dokunuş.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, rose altın detaylı",
+      "strap": "Gümüş-rose bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "freelook-baget-tasli-yesil",
+    "brand": "freelook",
+    "model": "Baget Taşlı — Yeşil Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-baget-tasli-yesil.webp"
+    ],
+    "description": "Baget kesim taşlarla çevrili yeşil kadran ve gümüş-altın bicolor bilezik. Freelook'un ışıltılı Paris çizgisinin en dikkat çeken modellerinden.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, altın detaylı",
+      "strap": "Bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green",
+    "featured": true
+  },
+  {
+    "slug": "freelook-yesil-kadran-tasli",
+    "brand": "freelook",
+    "model": "Yeşil Kadran — Taşlı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-yesil-kadran-tasli.webp"
+    ],
+    "description": "Güneş ışını efektli yeşil kadran, taşlı çerçeve ve baget taşlı kulp detayları. Bicolor bilezikle canlı ve zarif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, altın detaylı",
+      "strap": "Bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "green"
+  },
+  {
+    "slug": "freelook-diamond-sedef",
+    "brand": "freelook",
+    "model": "Diamond — Sedef Kadran, Taşlı Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-diamond-sedef.webp"
+    ],
+    "description": "Taşlı çerçeveli küçük yuvarlak kasa, sedef kadran ve tek sıra taşlı ince bilezik. Bir bileklik kadar narin bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Taşlı paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "ivory"
+  },
+  {
+    "slug": "freelook-multifonksiyon-leopar",
+    "brand": "freelook",
+    "model": "Multifonksiyon — Altın, Desenli Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-multifonksiyon-leopar.webp"
+    ],
+    "description": "Taşlı altın çerçeve, siyah ve altın desenli kadran, gün ve tarih alt kadranları. İddialı ve ışıltılı bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "freelook-roma-rakamli-bicolor",
+    "brand": "freelook",
+    "model": "Roma Rakamları — Taş İndeksli, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-roma-rakamli-bicolor.webp"
+    ],
+    "description": "Dokulu gümüş kadranda Roma rakamları ve taş indeksler; vida detaylı çerçeve ve bicolor bilezik.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, altın detaylı",
+      "strap": "Bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "stone"
+  },
+  {
+    "slug": "freelook-kare-gumus-tasli",
+    "brand": "freelook",
+    "model": "Kare — Gümüş Kadran, Taşlı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-kare-gumus-tasli.webp"
+    ],
+    "description": "Taşlarla çevrili kare kasa, güneş ışını efektli gümüş kadran ve bicolor bilezik. Modern ve sade bir mücevher saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik, altın detaylı",
+      "strap": "Bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "stone"
+  },
+  {
+    "slug": "freelook-dikdortgen-beyaz-altin",
+    "brand": "freelook",
+    "model": "Dikdörtgen — Beyaz Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-dikdortgen-beyaz-altin.webp"
+    ],
+    "description": "Altın tonlu dikdörtgen kasa, Roma rakamlı beyaz kadran ve altın bilezik. Klasik bir tank formunun zarif yorumu.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
+  },
+  {
+    "slug": "freelook-klasik-beyaz-altin",
+    "brand": "freelook",
+    "model": "Klasik — Desenli Beyaz Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/freelook-klasik-beyaz-altin.webp"
+    ],
+    "description": "Geometrik desenli beyaz kadran, altın indeksler ve altın bilezik. Her gün takılabilecek, sade ve ışıltılı bir model.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik"
+    ],
+    "addedAt": "2026-10-02",
+    "tone": "champagne"
   }
 ]

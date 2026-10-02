@@ -8,7 +8,9 @@ import styles from "./MobileMenu.module.css";
 const LINKS = [
   { label: "Ana Sayfa", href: "/" },
   { label: "Koleksiyon", href: "/koleksiyon" },
+  { label: "Koleksiyonlar", href: "/koleksiyonlar" },
   { label: "Markalar", href: "/markalar" },
+  { label: "Dergi", href: "/dergi" },
   { label: "Favoriler", href: "/favoriler" },
   { label: "Özel Gösterim", href: "/ozel-gosterim" },
   { label: "Saatinizi Satın", href: "/saatinizi-satin" },

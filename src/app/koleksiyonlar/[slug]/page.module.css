@@ -1,0 +1,79 @@
+.opening {
+  --ground: var(--ivory);
+  --ink: var(--green-900);
+  --accent: var(--champagne-600);
+  background: var(--ground);
+  color: var(--ink);
+  padding: var(--page-top) 0 var(--space-xl);
+}
+.opening[data-ground="green"] {
+  --ground: var(--green-900);
+  --ink: var(--ivory);
+  --accent: var(--champagne);
+}
+.opening[data-ground="wine"] {
+  --ground: var(--wine);
+  --ink: var(--ivory);
+  --accent: var(--champagne);
+}
+.opening[data-ground="stone"] {
+  --ground: var(--stone);
+}
+.openingInner {
+  display: grid;
+  gap: 28px;
+}
+.name {
+  font-size: var(--fs-display-xl);
+}
+.description {
+  max-width: 34ch;
+  opacity: 0.75;
+}
+.count {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.body {
+  background: var(--ivory);
+  color: var(--green-900);
+  padding-top: var(--space-xl);
+}
+.empty {
+  display: grid;
+  gap: 28px;
+  justify-items: start;
+}
+.emptyText {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--fs-display-s);
+  line-height: 1.2;
+  max-width: 28ch;
+}
+.others {
+  padding-block: var(--space-xl);
+}
+.label {
+  margin-bottom: var(--space-m);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line-on-light);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.others ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 36px;
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2vw, 1.9rem);
+}
+.others a:hover {
+  opacity: 0.55;
+}

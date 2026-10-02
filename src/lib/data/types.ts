@@ -63,4 +63,32 @@ export type CollectionDef = {
   slug: string;
   name: string;
   description: string;
+  /** Ground colour of the collection page's opening — its own note within the house palette. */
+  ground: "ivory" | "green" | "wine" | "stone";
 };
+
+/** A block of article text. */
+export type ArticleBlock =
+  | { type: "p"; text: string }
+  | { type: "h"; text: string }
+  | { type: "quote"; text: string };
+
+export type Article = {
+  /** URL key: /dergi/[slug] */
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  /** ISO date */
+  date: string;
+  readTime: string;
+  cover: string;
+  body: ArticleBlock[];
+  /** Brand slugs the article is about — shown on those brand pages. */
+  brands: string[];
+  /** Watches from the catalogue to show under the article. */
+  products: string[];
+};
+
+/** A titled block of an information page (teslimat, iade, garanti, orijinallik). */
+export type InfoSection = { title: string; text: string[] };

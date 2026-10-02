@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
+import { ArticleCard } from "@/components/journal/ArticleCard";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { BrandFilmIntro } from "@/components/sections/brand/BrandFilmIntro";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionMarker } from "@/components/ui/SectionMarker";
-import { getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
+import { getArticlesByBrand, getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
 import { whatsappUrl } from "@/lib/services/enquiries";
 import styles from "./page.module.css";
 
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: PageProps<"/markalar/[slug]">
 export default async function BrandPage({ params }: PageProps<"/markalar/[slug]">) {
   const brand = await getBrand((await params).slug);
   if (!brand) notFound();
-  const [products, brands] = await Promise.all([getProductsByBrand(brand.slug), getBrands()]);
+  const [products, brands, articles] = await Promise.all([getProductsByBrand(brand.slug), getBrands(), getArticlesByBrand(brand.slug)]);
   const others = brands.filter((b) => b.slug !== brand.slug);
 
   return (
@@ -83,6 +84,19 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
               </div>
             )}
           </section>
+
+          {articles.length > 0 && (
+            <section className={`container ${styles.watches}`} aria-label="Dergiden">
+              <p className={styles.label}>Dergiden</p>
+              <ul className={styles.articles}>
+                {articles.map((a) => (
+                  <li key={a.slug}>
+                    <ArticleCard article={a} feature />
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <nav className={`container ${styles.others}`} aria-label="Diğer markalar">
             <p className={styles.label}>Diğer saat evleri</p>

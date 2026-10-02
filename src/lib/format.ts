@@ -15,3 +15,7 @@ export const normalize = (s: string) =>
     .replace(/ı/g, "i")
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
+
+/** "24 Eylül 2026" */
+export const formatDate = (iso: string) =>
+  new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(`${iso}T12:00:00`));

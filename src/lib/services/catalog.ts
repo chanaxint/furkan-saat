@@ -1,7 +1,8 @@
 import { BRANDS } from "@/lib/data/brands";
 import { COLLECTIONS } from "@/lib/data/collections";
 import { PRODUCTS } from "@/lib/data/products";
-import type { Brand, Product } from "@/lib/data/types";
+import { ARTICLES } from "@/lib/data/journal";
+import type { Article, Brand, CollectionDef, Product } from "@/lib/data/types";
 import { normalize } from "@/lib/format";
 
 /**
@@ -15,6 +16,16 @@ export const getFeatured = async () => PRODUCTS.filter((p) => p.featured);
 export const getProductsByBrand = async (brand: string) => PRODUCTS.filter((p) => p.brand === brand);
 export const getBrands = async (): Promise<Brand[]> => BRANDS;
 export const getBrand = async (slug: string) => BRANDS.find((b) => b.slug === slug) ?? null;
+
+export const getCollections = async (): Promise<CollectionDef[]> => COLLECTIONS;
+export const getCollection = async (slug: string) => COLLECTIONS.find((c) => c.slug === slug) ?? null;
+export const getProductsInCollection = async (slug: string) => PRODUCTS.filter((p) => p.collections.includes(slug));
+
+/** Journal articles, newest first. */
+export const getArticles = async (): Promise<Article[]> => [...ARTICLES].sort((a, b) => b.date.localeCompare(a.date));
+export const getArticle = async (slug: string) => ARTICLES.find((a) => a.slug === slug) ?? null;
+export const getArticlesByBrand = async (brand: string) => (await getArticles()).filter((a) => a.brands.includes(brand));
+export const getProductsBySlugs = async (slugs: string[]) => slugs.flatMap((s) => PRODUCTS.find((p) => p.slug === s) ?? []);
 
 /** Other pieces to show under a watch: same brand first, then the rest. */
 export const getRelated = async (product: Product, limit = 3) =>
@@ -124,12 +135,12 @@ export function sortProducts(products: Product[], sort: SortKey) {
 
 /* ----------------------------------------------------------------- search */
 
-export type SearchResults = { watches: Product[]; brands: Brand[] };
+export type SearchResults = { watches: Product[]; brands: Brand[]; articles: Article[] };
 
-/** Every word must match somewhere: brand, model, reference, caliber or collection. */
+/** Every word must match somewhere: brand, model, reference, caliber, collection — or an article. */
 export function search(query: string): SearchResults {
   const words = normalize(query).split(" ").filter(Boolean);
-  if (!words.length) return { watches: [], brands: [] };
+  if (!words.length) return { watches: [], brands: [], articles: [] };
   const hit = (text: string) => {
     const t = normalize(text);
     const compact = t.replace(/ /g, "");
@@ -149,5 +160,6 @@ export function search(query: string): SearchResults {
     ),
   );
   const brands = BRANDS.filter((b) => hit(b.name));
-  return { watches, brands };
+  const articles = ARTICLES.filter((a) => hit([a.title, a.category, a.excerpt, ...a.brands.map(brandName)].join(" ")));
+  return { watches, brands, articles };
 }

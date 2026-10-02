@@ -28,26 +28,6 @@ export function Footer() {
           </nav>
         ))}
 
-        <div className={styles.col}>
-          <p className={styles.label}>Bize ulaşın</p>
-          <ul>
-            <li>
-              <a href={BOUTIQUE.instagram} target="_blank" rel="noreferrer" className={styles.link}>
-                Instagram
-              </a>
-            </li>
-            <li>
-              <a href={whatsappUrl("Merhaba,")} target="_blank" rel="noreferrer" className={styles.link}>
-                WhatsApp
-              </a>
-            </li>
-            <li>
-              <a href={`mailto:${BOUTIQUE.email}`} className={styles.link}>
-                {BOUTIQUE.email}
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
 
       <p className={`t-display ${styles.wordmark}`} aria-hidden>
@@ -56,7 +36,23 @@ export function Footer() {
 
       <div className={styles.bottom}>
         <p>© {year} Furkan Saat</p>
-        <p>{BOUTIQUE.hours}</p>
+        <ul className={styles.social}>
+          <li>
+            <a href={BOUTIQUE.instagram} target="_blank" rel="noreferrer" className={styles.link}>
+              Instagram
+            </a>
+          </li>
+          <li>
+            <a href={whatsappUrl("Merhaba,")} target="_blank" rel="noreferrer" className={styles.link}>
+              WhatsApp
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${BOUTIQUE.email}`} className={styles.link}>
+              {BOUTIQUE.email}
+            </a>
+          </li>
+        </ul>
       </div>
     </footer>
   );

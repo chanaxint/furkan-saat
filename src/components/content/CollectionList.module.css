@@ -1,0 +1,89 @@
+.list {
+  display: grid;
+}
+.row {
+  display: grid;
+  /* Fixed thumbnail column so every row lines up, whatever its photo count. */
+  grid-template-columns: 56px minmax(0, 1.3fr) minmax(0, 1fr) 156px 80px;
+  align-items: center;
+  gap: 24px;
+  padding-block: clamp(20px, 2.2vw, 32px);
+  border-top: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+}
+.list li:last-child .row {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 14%, transparent);
+}
+.num {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  opacity: 0.45;
+}
+.name {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 3.8vw, 3.9rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  transition: transform 1s var(--ease-lux);
+}
+.description {
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  opacity: 0.64;
+}
+.thumbs {
+  display: flex;
+  gap: 6px;
+}
+.thumb {
+  position: relative;
+  width: 48px;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #151515;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.8s var(--ease-lux), transform 0.8s var(--ease-lux);
+}
+.thumb:nth-child(2) {
+  transition-delay: 60ms;
+}
+.thumb:nth-child(3) {
+  transition-delay: 120ms;
+}
+.thumb img {
+  object-fit: cover;
+}
+.count {
+  justify-self: end;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.64;
+}
+@media (hover: hover) {
+  .row:hover .name {
+    transform: translateX(12px);
+  }
+  .row:hover .thumb {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 40px 1fr auto;
+    row-gap: 8px;
+  }
+  .description {
+    grid-column: 2 / -1;
+  }
+  .thumbs {
+    display: none;
+  }
+  .count {
+    grid-row: 1;
+    grid-column: 3;
+  }
+}

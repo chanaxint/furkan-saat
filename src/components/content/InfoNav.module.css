@@ -1,0 +1,27 @@
+.nav {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  font-size: var(--fs-small);
+}
+.nav a {
+  color: var(--text-on-light-muted);
+  transition: color 0.4s var(--ease-lux);
+}
+.nav a:hover,
+.nav a[aria-current="page"] {
+  color: var(--text-on-light);
+}
+.nav a[aria-current="page"]::before {
+  content: "— ";
+}
+
+@media (max-width: 900px) {
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line-on-light);
+  }
+}

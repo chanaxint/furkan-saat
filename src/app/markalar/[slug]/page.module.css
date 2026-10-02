@@ -76,6 +76,11 @@
   max-width: 26ch;
 }
 
+.articles {
+  display: grid;
+  gap: var(--space-l);
+}
+
 .others {
   padding-block: var(--space-xl);
 }

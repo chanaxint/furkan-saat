@@ -1,0 +1,23 @@
+.collections {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+.collections span {
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  margin-right: 8px;
+}
+.collections a {
+  color: var(--text-on-light-muted);
+  transition: color 0.4s var(--ease-lux);
+}
+.collections a:hover {
+  color: var(--text-on-light);
+}

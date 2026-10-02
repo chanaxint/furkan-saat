@@ -48,24 +48,25 @@ export const ASSETS = {
      */
     frames: { dir: "/assets/video/hero", count: 240, ext: "webp" },
     /**
-     * Patek Philippe Celestial (moon phase) — the watch the Rolex turns into at
-     * the end of the opening. Single textured mesh, dial faces +Z, 12 o'clock
+     * Second intro watch — the one the first watch turns into at the end of
+     * the opening (placeholder model, to be replaced). Single textured mesh, dial faces +Z, 12 o'clock
      * up; geometry meshopt-compressed (26.6 MB → 11.1 MB), textures untouched.
-     * `pivot` = centre of the watch head; `scale` matches the Rolex on screen.
+     * `pivot` = centre of the watch head; `scale` matches the first watch on screen.
      */
     next: {
-      src: "/assets/models/patek-celestial.glb",
+      src: "/assets/models/hero-watch-2.glb",
       pivot: [-0.007, 0, 0.711],
       scale: 0.88,
     } as ModelAsset,
   },
   showcase: {
     /**
-     * Rolex Submariner Date (green) — single textured mesh, dial faces +Z.
+     * First intro watch (placeholder model, to be replaced) — single textured
+     * mesh, dial faces +Z.
      * Geometry meshopt-compressed (23.6 MB → 10.8 MB); textures untouched.
      */
     watch: {
-      src: "/assets/models/emerald-watch.glb",
+      src: "/assets/models/hero-watch-1.glb",
       pivot: [0, 0, 0.695],
     } as ModelAsset,
   },

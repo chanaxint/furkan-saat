@@ -1,5 +1,5 @@
 /**
- * MOVEMENT FILM — the scroll-scrubbed exploded view of the Rolex movement
+ * MOVEMENT FILM — the scroll-scrubbed exploded view of the watch movement
  * ----------------------------------------------------------------------------
  * The clip (public/assets/video/movement/000–119.webp, 1920×1080, from a
  * 3840×2160 source) starts on a frame of our own 3D mechanism beat. Its

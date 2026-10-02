@@ -152,17 +152,17 @@ function HeroRig({
   debug: boolean;
 }) {
   const blocks = useMemo(() => insertBlocks(seat), [seat]);
-  const rolexAsset = ASSETS.showcase.watch as ModelAsset & { src: string };
+  const firstAsset = ASSETS.showcase.watch as ModelAsset & { src: string };
   const nextAsset = ASSETS.hero.next;
 
-  const rolexGltf = useGLTF(rolexAsset.src);
-  // Without a second model file, the handover spins back into the Rolex.
-  const nextGltf = useGLTF(nextAsset.src ?? rolexAsset.src);
-  const rolex = useOwnedClone(rolexGltf.scene);
+  const firstGltf = useGLTF(firstAsset.src);
+  // Without a second model file, the handover spins back into the first watch.
+  const nextGltf = useGLTF(nextAsset.src ?? firstAsset.src);
+  const first = useOwnedClone(firstGltf.scene);
   const next = useOwnedClone(nextGltf.scene);
 
   const watch = useRef<Group>(null);
-  const rolexRef = useRef<Group>(null);
+  const firstRef = useRef<Group>(null);
   const nextRef = useRef<Group>(null);
   const seatRig = useRef<Group>(null);
   const shadowLight = useRef<DirectionalLight>(null);
@@ -174,11 +174,11 @@ function HeroRig({
   const camera = useThree((s) => s.camera) as PerspectiveCamera;
   const invalidate = useThree((s) => s.invalidate);
 
-  // Place the second model like the Rolex: its pivot (watch-head centre) at the
+  // Place the second model like the first watch: its pivot (watch-head centre) at the
   // origin. Without a pivot it is centred on its bounding box and sized to match.
   const nextFit = useMemo(() => {
     if (!nextAsset.src) {
-      const p = rolexAsset.pivot ?? [0, 0, 0];
+      const p = firstAsset.pivot ?? [0, 0, 0];
       return { position: new Vector3(-p[0], -p[1], -p[2]), scale: 1 };
     }
     const scale = nextAsset.scale ?? 1;
@@ -191,7 +191,7 @@ function HeroRig({
     const centre = box.getCenter(new Vector3());
     const fit = 1.9 / Math.max(dims.x, dims.y, dims.z);
     return { position: centre.multiplyScalar(-fit), scale: fit };
-  }, [next.clone, nextAsset.src, nextAsset.pivot, nextAsset.scale, rolexAsset.pivot]);
+  }, [next.clone, nextAsset.src, nextAsset.pivot, nextAsset.scale, firstAsset.pivot]);
 
   const tmp = useMemo(
     () => ({
@@ -298,11 +298,11 @@ function HeroRig({
       watch.current.scale.setScalar(state.scale + (seat.scale - state.scale) * k);
     }
 
-    /* 4 — Rolex → Patek Philippe cross-fade */
+    /* 4 — first watch → second watch cross-fade */
     const sw = smooth(Math.min(1, Math.max(0, state.swap)));
-    if (rolexRef.current) rolexRef.current.visible = sw < 0.999;
+    if (firstRef.current) firstRef.current.visible = sw < 0.999;
     if (nextRef.current) nextRef.current.visible = sw > 0.001;
-    setOpacity(rolex.mats, 1 - sw);
+    setOpacity(first.mats, 1 - sw);
     setOpacity(next.mats, sw);
 
     /* 5 — light: warm like the footage while on the cushion, studio after */
@@ -317,15 +317,15 @@ function HeroRig({
     if (shadowsOn) gl.shadowMap.needsUpdate = true;
   });
 
-  const rp = rolexAsset.pivot ?? [0, 0, 0];
+  const rp = firstAsset.pivot ?? [0, 0, 0];
 
   return (
     <>
       <directionalLight ref={warmKey} position={[-2.5, 3, 2]} intensity={2} color="#ffcf96" />
 
       <group ref={watch}>
-        <group ref={rolexRef}>
-          <primitive object={rolex.clone} position={[-rp[0], -rp[1], -rp[2]]} />
+        <group ref={firstRef}>
+          <primitive object={first.clone} position={[-rp[0], -rp[1], -rp[2]]} />
         </group>
         <group ref={nextRef} visible={false}>
           <group rotation={nextAsset.rotation ?? [0, 0, 0]}>
@@ -430,5 +430,5 @@ function HiddenMaterial({ debug, color }: { debug: boolean; color: string }) {
   );
 }
 
-useGLTF.preload("/assets/models/emerald-watch.glb");
-useGLTF.preload("/assets/models/patek-celestial.glb");
+useGLTF.preload("/assets/models/hero-watch-1.glb");
+useGLTF.preload("/assets/models/hero-watch-2.glb");

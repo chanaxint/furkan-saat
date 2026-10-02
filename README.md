@@ -63,27 +63,26 @@ driven by scroll through **one GSAP timeline** (`buildHeroTimeline`, `scrub: 1`)
   shape hides the bracelet where it wraps behind the cushion and catches the
   watch's shadow.
 - **Sequence:** seated → lifts off and comes large to the lens as the footage dissolves
-  into the house green → four feature lines, and for each one the watch turns
-  (diagonally) to show that part: *Oyster Kasa* (case flank), *Perpetual Mekanizma*
-  (caseback), *Cerachrom Çerçeve* (bezel close-up), *Oyster Bileklik* (bracelet) → one
-  diagonal spin into the Patek Philippe ("İstediğiniz her saat" with its name beneath)
-  → three shorter Patek beats (sky chart, strap, platinum case; `PATEK_LINES`) →
-  "ve daha fazlası" while the watch spins away and the home page continues.
-  Lines and poses are in `HERO_LINES`, the closing text in `HERO_FINALE`.
+  into the house green → four feature turns, each showing
+  (diagonally) one part: case flank, caseback (movement film), bezel
+  close-up, bracelet → one diagonal spin into the second watch → three shorter
+  turns of it (`SECOND_BEATS`) →
+  the watch spins away and the home page continues. The intro has no on-screen
+  text; poses are in `FIRST_BEATS` / `SECOND_BEATS`.
 - **Pacing:** ≈ 60svh of scroll per timeline second, so each turn takes about
   one scroll gesture; `scrub: 1` smooths it.
 - **Rotation rule:** spins only run about the two diagonal axes
   (`SPIN_AXIS_A/B`), and every look-turn mixes yaw, pitch and roll. There are
   no pure horizontal or pure vertical turns.
-- **Second watch:** Patek Philippe Celestial (`ASSETS.hero.next`, `patek-celestial.glb`), placed on its
-  watch-head `pivot` and scaled to match the Rolex. Swap `src`/`pivot`/`scale` to use another model.
-- Copy line, look direction and timing are in `HERO_LINES` / `HERO_BEATS`.
+- **Second watch:** placeholder model (`ASSETS.hero.next`, `hero-watch-2.glb`), placed on its
+  watch-head `pivot` and scaled to match the first watch. Swap `src`/`pivot`/`scale` to use another model.
+- Look direction and timing are in `ALL_BEATS` / `HERO_BEATS`.
 
 The whole site is in Turkish (`lang="tr"`, `tr-TR` number formatting).
 
 ## Movement film (mechanism beat)
 
-In the *Perpetual Mekanizma* beat the watch turns while the camera zooms onto the
+In the caseback (mechanism) beat the watch turns while the camera zooms onto the
 exact framing of `public/assets/video/movement/000–119.webp`. The film then swaps
 in invisibly, separates the movement as you scroll, reassembles it, and hands back
 to the 3D watch, which continues to the bezel.
@@ -123,7 +122,7 @@ today and renders a placeholder; set a path and the real asset replaces it.
 | Asset | Where | Notes |
 |---|---|---|
 | Opening footage | `ASSETS.hero.frames` | WebP frame sequence (re-export frames + re-run the cushion track if the clip changes) |
-| Second watch `.glb` | `ASSETS.hero.next` | dial toward +Z; `pivot` = watch-head centre, `scale` to match the Rolex |
+| Second watch `.glb` | `ASSETS.hero.next` | dial toward +Z; `pivot` = watch-head centre, `scale` to match the first watch |
 | Watch `.glb` | `ASSETS.showcase.watch` | dial faces +Z; `pivot` = watch-head centre (shared by the hero film and details) |
 | Exploded watch `.glb` | `ASSETS.exploded.watch` | nodes named `Crystal, Bezel, Hands, Dial, Case, Movement, Caseback, Strap` (see `lib/scene/exploded.ts`) — they are driven along local Z automatically |
 | New arrival | `ASSETS.newArrival.{model,film,still}` | model → film → still → placeholder |

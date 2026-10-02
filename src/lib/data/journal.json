@@ -1,127 +1,12 @@
 [
   {
-    "slug": "tourbillon-sanati",
-    "title": "Tourbillon Sanatı",
-    "category": "Zanaat",
-    "excerpt": "Yer çekimine karşı bir dakikada bir tur atan kafes: iki yüz yıllık bir icat, bugün saatçiliğin en saf gösterisi.",
-    "date": "2026-09-24",
-    "readTime": "6 dk okuma",
-    "cover": "/assets/images/journal/tourbillon.webp",
-    "brands": [],
-    "products": [],
-    "body": [
-      {
-        "type": "p",
-        "text": "Cep saatleri günün büyük bölümünü yelek cebinde, dik durarak geçirirdi. Bu konumda yer çekimi, saatin kalbi olan balans çarkını hep aynı yönden çeker ve küçük ama birikerek büyüyen bir sapmaya yol açar. Abraham-Louis Breguet'nin çözümü dahiyaneydi: eşapmanı ve balansı dönen bir kafesin içine yerleştirmek."
-      },
-      {
-        "type": "p",
-        "text": "1801'de patentlenen bu düzenekte kafes genellikle dakikada bir tur atar. Böylece yer çekiminin etkisi tek bir yöne yığılmaz, tur boyunca ortalanır. Breguet buna “tourbillon”, yani girdap adını verdi."
-      },
-      {
-        "type": "h",
-        "text": "Bir problemden bir imzaya"
-      },
-      {
-        "type": "p",
-        "text": "Kol saati sürekli hareket ettiği için tourbillonun hassasiyete katkısı bugün tartışmalıdır. Ama değeri başka bir yerdedir: yüzlerce parçadan oluşan, bir gramın altında ağırlıktaki bir kafesi kusursuz biçimde dengelemek, bir saat ustasının ulaşabileceği en ince işlerden biridir."
-      },
-      {
-        "type": "quote",
-        "text": "Tourbillon artık bir düzeltme değil, bir ustalık beyanıdır."
-      },
-      {
-        "type": "p",
-        "text": "Çağdaş manüfaktürler bu beyanı kendi diliyle yapar. Kimi kafesi kadranın altına saklar ve yalnızca küçük bir pencereden gösterir; kimi, Jacob & Co. gibi, mekanizmayı iskelet bir kadranın ardında tümüyle açığa çıkarır ve kafesi saatin sahnesine dönüştürür."
-      },
-      {
-        "type": "p",
-        "text": "Bir tourbillonu incelerken kafesin dönüşüne, köprülerin el bitirmesine ve pahların keskinliğine bakın. İyi bir tourbillon, büyüteçle bakıldığında da aynı sakinliği korur."
-      }
-    ]
-  },
-  {
-    "slug": "submariner-bir-ikonun-hikayesi",
-    "title": "Submariner: Bir Alet Saatinin İkonlaşması",
-    "category": "İkonlar",
-    "excerpt": "Dalgıçlar için tasarlanan bir saat nasıl oldu da şehirde, toplantıda ve akşam yemeğinde aynı rahatlıkla taşınan bir ölçüye dönüştü?",
-    "date": "2026-09-12",
-    "readTime": "5 dk okuma",
-    "cover": "/assets/images/journal/submariner.webp",
-    "brands": [],
-    "products": [],
-    "body": [
-      {
-        "type": "p",
-        "text": "Rolex Submariner 1953'te, profesyonel dalış henüz yeni bir meslekken tanıtıldı. Döner çerçeve, okunaklı kadran ve vidalı kurma kolu, su altında hayatta kalmayı kolaylaştıran araçlardı; hiçbiri süs için orada değildi."
-      },
-      {
-        "type": "p",
-        "text": "Zamanla su geçirmezlik derinliği arttı, cam safire döndü, çerçeve alüminyumdan çizilmeye ve solmaya dayanıklı Cerachrom seramiğe geçti. Ama siluet neredeyse hiç değişmedi. Submariner'ı ikon yapan da bu sadakattir: yetmiş yıl sonra bile ilk bakışta tanınır."
-      },
-      {
-        "type": "h",
-        "text": "Üç renk, üç karakter"
-      },
-      {
-        "type": "p",
-        "text": "Siyah kadran ve siyah çerçeve modelin özüdür. Yeşil çerçeveli çelik versiyonlar, koleksiyonerler arasında kendine özgü bir yer edindi. Beyaz altın kasa ve kraliyet mavisi ise aynı aleti çok daha sessiz bir lükse taşır."
-      },
-      {
-        "type": "quote",
-        "text": "Bir alet saati, işlevini hiç kaybetmeden zarafete ulaştığında ikon olur."
-      },
-      {
-        "type": "p",
-        "text": "2020'de kasa 41 milimetreye çıktı ve yaklaşık 70 saat güç rezervli 3235 kalibresi geldi. Ölçüler değişti; karakter aynı kaldı."
-      }
-    ]
-  },
-  {
-    "slug": "patek-philippe-in-icinde",
-    "title": "Patek Philippe'in İçinde",
-    "category": "Manüfaktür",
-    "excerpt": "Cenevre'de 1839'dan beri süren bir aile hikâyesi, kendi mührü ve “gelecek nesil için” verilen bir söz.",
-    "date": "2026-08-30",
-    "readTime": "7 dk okuma",
-    "cover": "/assets/images/journal/celestial.webp",
-    "brands": [],
-    "products": [],
-    "body": [
-      {
-        "type": "p",
-        "text": "Patek Philippe'in hikâyesi 1839'da Cenevre'de, Antoni Patek ve François Czapek'in ortaklığıyla başlar. 1845'te ekibe katılan Jean Adrien Philippe, saati bir anahtar yerine kurma koluyla kurmayı mümkün kılan mekanizmayı getirdi; bugün her saatte gördüğümüz o küçük taç, onun icadıdır."
-      },
-      {
-        "type": "p",
-        "text": "1932'den bu yana Stern ailesine ait olan manüfaktür, Cenevre'de bağımsızlığını koruyan son büyük aile şirketlerinden biri. Bu bağımsızlık, kararların yıllara değil kuşaklara göre verilmesine imkân tanır."
-      },
-      {
-        "type": "h",
-        "text": "Kendi mührü"
-      },
-      {
-        "type": "p",
-        "text": "2009'da manüfaktür, yalnızca mekanizmayı değil saatin tamamını, kasasından hassasiyetine kadar kapsayan kendi kalite standardını, Patek Philippe Mührü'nü tanıttı. Mühür, saatin ömrü boyunca bakımının yapılabileceğinin de güvencesidir."
-      },
-      {
-        "type": "quote",
-        "text": "Bir Patek Philippe'e hiçbir zaman tam olarak sahip olmazsınız; onu yalnızca gelecek nesil için korursunuz."
-      },
-      {
-        "type": "p",
-        "text": "Celestial bu felsefenin şiirsel bir örneğidir: safir kadranın ardında dönen yıldız haritası, Ay'ın evreleri ve gökteki yolculuğu, ince bir mikro rotorlu kalibreyle bileğe sığar."
-      }
-    ]
-  },
-  {
     "slug": "mekanik-saatler-nasil-calisir",
     "title": "Mekanik Saatler Nasıl Çalışır?",
     "category": "Mekanik",
     "excerpt": "Ana yaydan eşapmana: pilsiz, devresiz, yalnızca yay, dişli ve taşlarla zamanı ölçen bir makinenin anatomisi.",
     "date": "2026-08-14",
     "readTime": "8 dk okuma",
-    "cover": "/assets/images/journal/mekanizma.webp",
+    "cover": "/assets/images/watches/daniel-klein-exclusive-beyaz-cizgili.webp",
     "brands": [],
     "products": [],
     "body": [
@@ -158,7 +43,7 @@
     "excerpt": "İkinci el bir saati değerlendirirken referans, seri numarası, belgeler ve bakım geçmişi neden saatin kendisi kadar önemlidir?",
     "date": "2026-07-28",
     "readTime": "4 dk okuma",
-    "cover": "/assets/images/journal/kutu-ve-belgeler.webp",
+    "cover": "/assets/images/watches/essence-kare-sedef-tasli-bilezik.webp",
     "brands": [],
     "products": [],
     "body": [

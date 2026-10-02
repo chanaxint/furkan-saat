@@ -10,7 +10,7 @@ import { HeroFilm } from "@/components/sections/hero/HeroFilm";
 
 /**
  * FURKAN SAAT — Homepage
- * Opening film (box → watch → Rolex → Patek Philippe)
+ * Opening film (box → watch → second watch)
  * · 01 Selected watches · 02 Brands · 03 Collections · 04 Trust · 05 Private viewing
  * · 06 Journal · Final CTA · Footer
  */

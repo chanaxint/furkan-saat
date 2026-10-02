@@ -38,7 +38,7 @@
   visibility: hidden;
 }
 
-/* Movement film: under the copy and the 3D watch; shown only in the mechanism beat. */
+/* Movement film: under the 3D watch; shown only in the mechanism beat. */
 .movement {
   position: absolute;
   inset: 0;
@@ -65,7 +65,7 @@
   opacity: calc(1 - var(--hide, 0));
 }
 
-/* Brief bloom that hides the exact moment the Rolex becomes the Patek Philippe. */
+/* Brief bloom that hides the exact moment the first watch becomes the second. */
 .flash {
   position: absolute;
   inset: 0;
@@ -74,150 +74,6 @@
   opacity: var(--flash);
   background: radial-gradient(38% 42% at 50% 50%, rgba(255, 244, 222, 0.85), rgba(200, 185, 154, 0.25) 55%, transparent 75%);
   mix-blend-mode: screen;
-}
-
-/* ------------------------------------------------------------ copy */
-.lines {
-  position: absolute;
-  inset: 0;
-  /* Above the 3D watch, so a passing close-up never covers the copy. */
-  z-index: 4;
-  pointer-events: none;
-}
-/* While the movement film plays, a soft shade keeps the copy readable over it. */
-.lines::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to left, rgba(7, 26, 22, 0.88), rgba(7, 26, 22, 0.55) 28%, transparent 48%);
-  opacity: var(--mech, 0);
-}
-.line {
-  position: absolute;
-  top: 50%;
-  width: min(430px, 34vw);
-  display: grid;
-  gap: 14px;
-  transform: translateY(-50%);
-  opacity: 0;
-  visibility: hidden;
-}
-.line[data-side="left"] {
-  left: var(--gutter);
-}
-.line[data-side="right"] {
-  right: var(--gutter);
-  text-align: right;
-}
-.index {
-  font-size: var(--fs-micro);
-  letter-spacing: 0.2em;
-  color: var(--champagne);
-  font-variant-numeric: tabular-nums;
-}
-.lineTitle {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(2.6rem, 4.8vw, 5.4rem);
-  line-height: 0.98;
-  letter-spacing: -0.02em;
-  color: var(--ivory);
-}
-.lineTitle em {
-  color: var(--champagne);
-}
-.lineText {
-  font-family: var(--font-display);
-  font-size: var(--fs-lead);
-  line-height: 1.5;
-  color: var(--text-on-dark-muted);
-}
-
-/* Handover: line at the top, the Patek Philippe's name beneath the watch */
-.finale {
-  position: absolute;
-  z-index: 5;
-  inset: 0;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  justify-items: center;
-  padding: calc(var(--nav-h) + 3vh) var(--gutter) 6vh;
-  text-align: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.finaleLine {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(2.4rem, 4.6vw, 5rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-.finaleLine em {
-  color: var(--champagne);
-}
-.finaleName {
-  grid-row: 3;
-  display: grid;
-  justify-items: center;
-  gap: 8px;
-}
-
-/* Outro: "ve daha fazlası" */
-.outro {
-  position: absolute;
-  z-index: 5;
-  inset: 0;
-  display: grid;
-  align-content: start;
-  justify-content: center;
-  padding-top: 24vh;
-  justify-items: center;
-  gap: 28px;
-  text-align: center;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.outroLine {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(3.4rem, 9vw, 10rem);
-  line-height: 0.9;
-  letter-spacing: -0.03em;
-}
-.outroLine em {
-  color: var(--champagne);
-}
-.outroCue {
-  width: 1px;
-  height: 64px;
-  background: linear-gradient(to bottom, var(--champagne), transparent);
-}
-
-.finaleBrand {
-  font-size: var(--fs-micro);
-  font-weight: 500;
-  letter-spacing: var(--tracking-caps-wide);
-  text-transform: uppercase;
-  color: var(--champagne);
-}
-.finaleModel {
-  margin: 0;
-  font-family: var(--font-display);
-  font-weight: 300;
-  font-size: clamp(1.8rem, 3vw, 3rem);
-  line-height: 1.05;
-}
-.finaleRef {
-  font-size: var(--fs-micro);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-on-dark-faint);
 }
 
 /* ---------------------------------------------------------- chrome */
@@ -290,39 +146,5 @@
 @media (max-width: 767px) {
   .section {
     height: 1820svh;
-  }
-  /* Mobile: the copy sits above the watch, on a soft fade, so close-ups never cover it. */
-  .lines {
-    z-index: 4;
-  }
-  .lines::before {
-    content: "";
-    position: absolute;
-    /* Reset the desktop rule's inset: 0, or top would win over bottom. */
-    top: auto;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 38%;
-    background: linear-gradient(to top, rgba(7, 26, 22, 0.92), rgba(7, 26, 22, 0.6) 55%, transparent);
-    opacity: var(--copy, 0);
-    transition: opacity 0.6s var(--ease-lux);
-  }
-  .line,
-  .line[data-side="left"],
-  .line[data-side="right"] {
-    left: var(--gutter);
-    right: var(--gutter);
-    width: auto;
-    top: auto;
-    bottom: 8vh;
-    transform: none;
-    text-align: left;
-  }
-  .lineTitle {
-    font-size: clamp(2.2rem, 10vw, 3.2rem);
-  }
-  .lineText {
-    font-size: 1rem;
   }
 }

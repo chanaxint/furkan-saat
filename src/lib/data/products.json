@@ -1,0 +1,211 @@
+[
+  {
+    "slug": "rolex-submariner-116610lv",
+    "brand": "rolex",
+    "model": "Submariner Date",
+    "reference": "116610LV",
+    "price": 16500,
+    "currency": "EUR",
+    "images": [
+      "/assets/images/watches/rolex-submariner-116610lv-1.webp",
+      "/assets/images/watches/rolex-submariner-116610lv-2.webp",
+      "/assets/images/watches/rolex-submariner-116610lv-3.webp",
+      "/assets/images/watches/rolex-submariner-116610lv-4.webp"
+    ],
+    "description": "Yeşil kadran ve yeşil Cerachrom çerçeveyle üretilen son çelik Submariner. Üretimden kalktığından beri en çok aranan modern referanslardan biri.",
+    "specs": {
+      "movement": "Otomatik",
+      "caliber": "3135",
+      "powerReserve": "Yaklaşık 48 saat",
+      "caseDiameter": "40 mm",
+      "caseMaterial": "Oystersteel",
+      "crystal": "Safir",
+      "waterResistance": "300 m",
+      "strap": "Oyster bilezik, Glidelock uzatma",
+      "year": "2019"
+    },
+    "condition": "Mükemmel",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "ikonik",
+      "spor",
+      "nadir-parcalar"
+    ],
+    "featured": true,
+    "addedAt": "2026-09-02",
+    "tone": "green"
+  },
+  {
+    "slug": "rolex-submariner-126610ln",
+    "brand": "rolex",
+    "model": "Submariner Date",
+    "reference": "126610LN",
+    "price": 14900,
+    "currency": "EUR",
+    "images": [
+      "/assets/images/watches/rolex-submariner-126610ln-1.webp",
+      "/assets/images/watches/rolex-submariner-126610ln-2.webp",
+      "/assets/images/watches/rolex-submariner-126610ln-3.webp",
+      "/assets/images/watches/rolex-submariner-126610ln-4.webp"
+    ],
+    "description": "Siyah kadran, siyah seramik çerçeve ve yeni nesil 3235 kalibre. Dalış saatinin ölçüsü olmaya devam eden referans.",
+    "specs": {
+      "movement": "Otomatik",
+      "caliber": "3235",
+      "powerReserve": "Yaklaşık 70 saat",
+      "caseDiameter": "41 mm",
+      "caseMaterial": "Oystersteel",
+      "crystal": "Safir",
+      "waterResistance": "300 m",
+      "strap": "Oyster bilezik, Glidelock uzatma",
+      "year": "2023"
+    },
+    "condition": "Kullanılmamış",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "ikonik",
+      "spor"
+    ],
+    "featured": true,
+    "addedAt": "2026-09-18",
+    "tone": "deep"
+  },
+  {
+    "slug": "rolex-submariner-126619lb",
+    "brand": "rolex",
+    "model": "Submariner Date",
+    "reference": "126619LB",
+    "price": 46500,
+    "currency": "EUR",
+    "images": [
+      "/assets/images/watches/rolex-submariner-126619lb-1.webp",
+      "/assets/images/watches/rolex-submariner-126619lb-2.webp",
+      "/assets/images/watches/rolex-submariner-126619lb-3.webp",
+      "/assets/images/watches/rolex-submariner-126619lb-4.webp"
+    ],
+    "description": "18 ayar beyaz altın kasa, kraliyet mavisi kadran ve çerçeve. Çelik bir alet saatinin ağırlığını taşıyan en sessiz lüks.",
+    "specs": {
+      "movement": "Otomatik",
+      "caliber": "3235",
+      "powerReserve": "Yaklaşık 70 saat",
+      "caseDiameter": "41 mm",
+      "caseMaterial": "18 ayar beyaz altın",
+      "crystal": "Safir",
+      "waterResistance": "300 m",
+      "strap": "Oyster bilezik, Glidelock uzatma",
+      "year": "2022"
+    },
+    "condition": "Mükemmel",
+    "availability": "Rezerve",
+    "fullSet": true,
+    "collections": [
+      "spor",
+      "nadir-parcalar"
+    ],
+    "featured": true,
+    "addedAt": "2026-08-21",
+    "tone": "stone"
+  },
+  {
+    "slug": "patek-philippe-celestial-6102p",
+    "brand": "patek-philippe",
+    "model": "Grand Complications Celestial",
+    "reference": "6102P-001",
+    "price": null,
+    "currency": "EUR",
+    "images": [
+      "/assets/images/watches/patek-philippe-celestial-6102p-1.webp",
+      "/assets/images/watches/patek-philippe-celestial-6102p-2.webp",
+      "/assets/images/watches/patek-philippe-celestial-6102p-3.webp",
+      "/assets/images/watches/patek-philippe-celestial-6102p-4.webp"
+    ],
+    "description": "Safir kadranın ardında dönen yıldız haritası, Ay'ın evreleri ve gökteki yolculuğu. İstanbul semasını değil, Cenevre semasını gösterir.",
+    "specs": {
+      "movement": "Otomatik",
+      "caliber": "240 LU CL C",
+      "powerReserve": "38 – 48 saat",
+      "caseDiameter": "44 mm",
+      "caseMaterial": "Platin",
+      "crystal": "Safir, ön ve arka",
+      "waterResistance": "30 m",
+      "strap": "Lacivert timsah derisi, platin katlanır toka",
+      "year": "2021"
+    },
+    "condition": "Mükemmel",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "nadir-parcalar",
+      "klasik",
+      "ikonik"
+    ],
+    "featured": true,
+    "addedAt": "2026-09-10",
+    "tone": "deep"
+  },
+  {
+    "slug": "jacob-co-skeleton-tourbillon",
+    "brand": "jacob-co",
+    "model": "İskelet Tourbillon",
+    "reference": "Yeni koleksiyon",
+    "price": null,
+    "currency": "EUR",
+    "images": [
+      "/assets/images/watches/jacob-co-skeleton-tourbillon-1.webp"
+    ],
+    "description": "Pırlanta dizili kasa ve kulplar, iskelet kadranın ardında açıkça görünen mekanizma ve safir kabaşon kurma kolu. Kutusundan ilk kez çıkıyor.",
+    "specs": {
+      "movement": "Manuel",
+      "caseDiameter": "44 mm",
+      "caseMaterial": "Beyaz altın, pırlanta dizili",
+      "crystal": "Safir",
+      "strap": "Siyah timsah derisi",
+      "year": "2026"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler",
+      "tourbillon",
+      "iskelet",
+      "nadir-parcalar"
+    ],
+    "featured": true,
+    "addedAt": "2026-09-25",
+    "tone": "champagne"
+  },
+  {
+    "slug": "mercedes-benz-classic-automatic",
+    "brand": "mercedes-benz",
+    "model": "Classic Automatic",
+    "reference": "MB-01",
+    "price": null,
+    "currency": "EUR",
+    "images": [
+      "/assets/images/watches/mercedes-benz-classic-automatic-1.webp",
+      "/assets/images/watches/mercedes-benz-classic-automatic-2.webp"
+    ],
+    "description": "Kadranın merkezinde üç köşeli yıldız. Mercedes-Benz'in tasarım dilini sade bir üç ibreli saate taşır.",
+    "specs": {
+      "movement": "Otomatik",
+      "caseDiameter": "42 mm",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Siyah deri kayış",
+      "year": "2026"
+    },
+    "condition": "Yeni",
+    "availability": "Sipariş üzerine",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler",
+      "klasik"
+    ],
+    "featured": true,
+    "addedAt": "2026-09-28",
+    "tone": "stone"
+  }
+]

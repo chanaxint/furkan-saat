@@ -147,6 +147,26 @@ textarea.input {
   border-color: var(--wine);
 }
 
+/* ------------------------------------------------------------ checkboxes */
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--fs-small);
+  cursor: pointer;
+}
+.check[data-wide] {
+  grid-column: 1 / -1;
+}
+.check input {
+  accent-color: var(--green-900);
+}
+
 /* ------------------------------------------------------------ photos */
 .drop {
   display: grid;

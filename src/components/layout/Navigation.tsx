@@ -68,8 +68,8 @@ export function Navigation() {
     ScrollTrigger.refresh();
   };
 
-  // Internal tools (the /kontrol page) run without the site navigation.
-  if (pathname?.startsWith("/kontrol")) return null;
+  // Internal tools (/kontrol, /yonetim) run without the site navigation.
+  if (pathname?.startsWith("/kontrol") || pathname?.startsWith("/yonetim")) return null;
 
   return (
     <>

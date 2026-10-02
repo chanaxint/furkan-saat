@@ -19,3 +19,13 @@ export const normalize = (s: string) =>
 /** "24 Eylül 2026" */
 export const formatDate = (iso: string) =>
   new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", year: "numeric" }).format(new Date(`${iso}T12:00:00`));
+
+/** URL-safe slug from free text, Turkish letters folded: "Rolex Submariner 126610LN" → "rolex-submariner-126610ln". */
+export const slugify = (s: string) =>
+  s
+    .toLocaleLowerCase("tr")
+    .replace(/ı/g, "i")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");

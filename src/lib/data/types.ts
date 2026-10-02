@@ -1,10 +1,17 @@
-/** Placeholder tone used by MediaSlot while a photograph is missing. */
-export type Tone = "green" | "deep" | "ivory" | "stone" | "champagne" | "wine";
 
-export type Movement = "Otomatik" | "Manuel" | "Kuvars";
-export type Condition = "Yeni" | "Kullanılmamış" | "Mükemmel" | "Çok iyi";
-export type Availability = "Stokta" | "Rezerve" | "Sipariş üzerine";
-export type Currency = "EUR" | "TRY" | "USD";
+/** Allowed values — the admin panel offers exactly these. */
+export const TONES = ["green", "deep", "ivory", "stone", "champagne", "wine"] as const;
+export const MOVEMENTS = ["Otomatik", "Manuel", "Kuvars"] as const;
+export const CONDITIONS = ["Yeni", "Kullanılmamış", "Mükemmel", "Çok iyi"] as const;
+export const AVAILABILITY = ["Stokta", "Rezerve", "Sipariş üzerine"] as const;
+export const CURRENCIES = ["EUR", "TRY", "USD"] as const;
+
+export type Movement = (typeof MOVEMENTS)[number];
+export type Condition = (typeof CONDITIONS)[number];
+export type Availability = (typeof AVAILABILITY)[number];
+export type Currency = (typeof CURRENCIES)[number];
+/** Placeholder tone used by MediaSlot while a photograph is missing. */
+export type Tone = (typeof TONES)[number];
 
 /** Technical data shown on the watch page and in comparisons. Missing values are simply not shown. */
 export type ProductSpecs = {

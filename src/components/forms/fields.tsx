@@ -183,3 +183,30 @@ export function FieldGroup({ title, children }: { title: string; children: React
     </fieldset>
   );
 }
+
+/** A single yes/no box (e.g. "featured"). */
+export function CheckboxField({ name, label, defaultChecked, wide }: { name: string; label: string; defaultChecked?: boolean; wide?: boolean }) {
+  return (
+    <label className={styles.check} data-wide={wide || undefined}>
+      <input type="checkbox" name={name} defaultChecked={defaultChecked} />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+/** Several boxes under one label; the form receives every checked value under `name`. */
+export function CheckboxGroup({ name, label, options, defaultValue = [] }: { name: string; label: string; options: Option[]; defaultValue?: string[] }) {
+  return (
+    <fieldset className={`${styles.field} ${styles.choice}`} data-wide>
+      <legend className={styles.label}>{label}</legend>
+      <div className={styles.checks}>
+        {options.map((o) => (
+          <label key={o.value} className={styles.check}>
+            <input type="checkbox" name={name} value={o.value} defaultChecked={defaultValue.includes(o.value)} />
+            <span>{o.label}</span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}

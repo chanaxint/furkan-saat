@@ -1,26 +1,30 @@
+import settings from "./settings.json";
+
 /**
- * Boutique details and site-wide content in one place.
- * Placeholder contact details — replace with the real ones before going live.
+ * Boutique details and site-wide content in one place. Contact and bank
+ * details live in settings.json (editable from /yonetim/ayarlar).
+ * Placeholder values — replace with the real ones before going live.
  */
-export const BOUTIQUE = {
-  name: "Furkan Saat",
-  city: "İstanbul",
-  address: "Nişantaşı, Şişli — İstanbul",
-  hours: "Randevu ile · Pazartesi – Cumartesi, 10.00 – 19.00",
-  email: "concierge@furkansaat.com",
-  phone: "+90 212 000 00 00",
-  /** International format, digits only — used for wa.me links. */
-  whatsapp: "902120000000",
-  instagram: "https://instagram.com",
-  mapUrl: "https://maps.google.com/?q=Ni%C5%9Fanta%C5%9F%C4%B1+%C4%B0stanbul",
+export type Settings = {
+  boutique: {
+    name: string;
+    city: string;
+    address: string;
+    hours: string;
+    email: string;
+    phone: string;
+    /** International format, digits only — used for wa.me links. */
+    whatsapp: string;
+    instagram: string;
+    mapUrl: string;
+  };
+  bank: { holder: string; bank: string; iban: string };
 };
 
+export const BOUTIQUE: Settings["boutique"] = settings.boutique;
+
 /** Bank transfer details shown after checkout. Placeholder — replace with the real account. */
-export const BANK = {
-  holder: "Furkan Saat",
-  bank: "Banka adı",
-  iban: "TR00 0000 0000 0000 0000 0000 00",
-};
+export const BANK: Settings["bank"] = settings.bank;
 
 /** The watch staged in the box-opening film on the home page. */
 export const NEW_ARRIVAL_SLUG = "jacob-co-skeleton-tourbillon";

@@ -1,15 +1,18 @@
 "use client";
 
+import { useAccount } from "@/lib/services/account";
 import { ChoiceField, FieldGroup, PhoneField, SelectField, TextField } from "./fields";
 import { BRAND_OPTIONS, CONDITION_OPTIONS, YES_NO } from "./options";
 
-/** Who is asking — the same three fields on every form. */
+/** Who is asking — the same three fields on every form, filled from the saved profile. */
 export function ContactFields() {
+  const { profile: p } = useAccount();
   return (
     <FieldGroup title="İletişim bilgileriniz">
-      <TextField name="name" label="Ad soyad" required autoComplete="name" wide />
-      <TextField name="email" label="E-posta" type="email" required autoComplete="email" />
-      <PhoneField name="phone" required />
+      {/* Keyed so the saved profile appears once it has loaded. */}
+      <TextField key={`n${p?.name}`} name="name" label="Ad soyad" required autoComplete="name" defaultValue={p?.name} wide />
+      <TextField key={`e${p?.email}`} name="email" label="E-posta" type="email" required autoComplete="email" defaultValue={p?.email} />
+      <PhoneField key={`p${p?.phone}`} name="phone" required defaultValue={p?.phone} />
     </FieldGroup>
   );
 }

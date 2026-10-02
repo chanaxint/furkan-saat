@@ -163,7 +163,7 @@ export const FAQ: { group: string; items: { q: string; a: string }[] }[] = [
       },
       {
         q: "Online ödeme yapabilir miyim?",
-        a: "Satın alma talebinizi siteden gönderebilirsiniz. Danışmanımız saatin durumunu teyit ettikten sonra ödeme ve teslimatı sizinle birlikte planlar.",
+        a: "Siparişinizi siteden verebilir, ödemeyi banka havalesiyle ya da danışmanınızla birlikte (kredi kartı, butikte ödeme) tamamlayabilirsiniz. Saat, ödeme süresince sizin için ayrılır.",
       },
       {
         q: "Saati satın almadan önce görebilir miyim?",

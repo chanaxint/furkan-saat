@@ -3,11 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
-import { ButtonLink } from "@/components/ui/Button";
 import { Drawer } from "@/components/ui/Drawer";
 import { brandName } from "@/lib/services/catalog";
 import { useCart, useCartDrawer } from "@/lib/services/cart";
-import { orderEnquiry } from "@/lib/services/enquiries";
 import styles from "./CartDrawer.module.css";
 
 /** The cart as a side panel, opened from the bag icon or after "Satın al". */
@@ -29,9 +27,9 @@ export function CartDrawer() {
               <span>Ara toplam</span>
               <PriceDisplay price={cart.subtotal} currency={cart.currency} />
             </p>
-            <ButtonLink href={orderEnquiry(cart.items.map((i) => i.product))} external variant="solid" className={styles.wide}>
-              Satın alma talebi gönder
-            </ButtonLink>
+            <Link href="/odeme" onClick={close} className={`${styles.wide} ${styles.checkout}`}>
+              Ödemeye geçin
+            </Link>
             <Link href="/sepet" onClick={close} className={styles.view}>
               Sepeti görüntüle
             </Link>

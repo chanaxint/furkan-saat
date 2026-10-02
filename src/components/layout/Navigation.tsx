@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
-import { BagIcon, HeartIcon, SearchIcon } from "@/components/product/icons";
+import { BagIcon, HeartIcon, PersonIcon, SearchIcon } from "@/components/product/icons";
 import { NAV_LINKS } from "@/lib/data/site";
 import { ScrollTrigger } from "@/lib/gsap";
 import { useCart, useCartDrawer } from "@/lib/services/cart";
@@ -103,6 +103,9 @@ export function Navigation() {
             <Link href="/favoriler" className={styles.icon} aria-label={`Favoriler (${wishlist.slugs.length})`}>
               <HeartIcon />
               {wishlist.slugs.length > 0 && <sup>{wishlist.slugs.length}</sup>}
+            </Link>
+            <Link href="/hesap" className={`${styles.icon} ${styles.account}`} aria-label="Hesabım">
+              <PersonIcon />
             </Link>
             <button className={styles.icon} onClick={() => cartDrawer.setOpen(true)} aria-label={`Sepet (${cart.count})`}>
               <BagIcon />

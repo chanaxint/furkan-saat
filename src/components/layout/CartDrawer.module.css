@@ -72,6 +72,23 @@
 .wide {
   width: 100%;
 }
+/* Same face as the solid house button; a Link so the drawer can close on navigation. */
+.checkout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  background: var(--green-900);
+  color: var(--ivory);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  transition: background-color 0.6s var(--ease-lux);
+}
+.checkout:hover {
+  background: var(--green-700);
+}
 .view {
   justify-self: center;
   font-size: var(--fs-micro);

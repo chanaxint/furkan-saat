@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, type ReactNode } from "react";
-import { useFieldError } from "./EnquiryForm";
+import { useFieldError } from "./Form";
 import styles from "./forms.module.css";
 
 type Base = {
@@ -66,7 +66,7 @@ export function TextField({
 }
 
 /** Phone number: digits, spaces, +, brackets and dashes; at least ten characters. */
-export function PhoneField(props: Omit<Base, "label"> & { label?: string }) {
+export function PhoneField(props: Omit<Base, "label"> & { label?: string; defaultValue?: string }) {
   return (
     <TextField
       label="Telefon"
@@ -130,7 +130,15 @@ export function SelectField({
 }
 
 /** A short set of answers shown side by side (Evet / Hayır). */
-export function ChoiceField({ name, label, required, wide, options }: Base & { options: Option[] }) {
+export function ChoiceField({
+  name,
+  label,
+  required,
+  wide,
+  options,
+  value,
+  onChange,
+}: Base & { options: Option[]; value?: string; onChange?: (value: string) => void }) {
   const id = useId();
   const { error, clear } = useFieldError(name);
   return (
@@ -142,7 +150,17 @@ export function ChoiceField({ name, label, required, wide, options }: Base & { o
       <div className={styles.choices}>
         {options.map((o) => (
           <label key={o.value} className={styles.choiceOption}>
-            <input type="radio" name={name} value={o.value} required={required} onChange={clear} />
+            <input
+              type="radio"
+              name={name}
+              value={o.value}
+              required={required}
+              {...(value !== undefined ? { checked: value === o.value } : {})}
+              onChange={() => {
+                clear();
+                onChange?.(o.value);
+              }}
+            />
             <span>{o.label}</span>
           </label>
         ))}

@@ -1,0 +1,193 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+  gap: clamp(40px, 6vw, 120px);
+  align-items: start;
+  padding-bottom: var(--space-xl);
+}
+
+.notice {
+  grid-column: 1 / -1;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: var(--text-on-light-muted);
+}
+
+.payments {
+  grid-column: 1 / -1;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+.payment {
+  position: relative;
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 18px;
+  padding-block: 20px;
+  border-top: 1px solid var(--line-on-light);
+  cursor: pointer;
+}
+.payment:last-child {
+  border-bottom: 1px solid var(--line-on-light);
+}
+.payment input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  margin: 6px 0 0;
+  border: 1px solid color-mix(in srgb, var(--green-900) 40%, transparent);
+  border-radius: 50%;
+  transition: box-shadow 0.4s var(--ease-lux), border-color 0.4s var(--ease-lux);
+}
+.payment input:checked {
+  border-color: var(--green-900);
+  box-shadow: inset 0 0 0 3px var(--ivory), inset 0 0 0 7px var(--green-900);
+}
+.payment input:focus-visible {
+  outline: 1px solid var(--champagne);
+  outline-offset: 3px;
+}
+.paymentText {
+  display: grid;
+  gap: 4px;
+}
+.paymentLabel {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+}
+.paymentDescription {
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+
+.remember {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+  cursor: pointer;
+}
+.remember input {
+  margin-top: 3px;
+  accent-color: var(--green-900);
+}
+
+/* ------------------------------------------------------------ summary */
+.summary {
+  position: sticky;
+  top: calc(var(--nav-h) + 32px);
+  display: grid;
+  gap: 22px;
+  padding-top: 22px;
+  border-top: 1px solid var(--green-900);
+}
+.label {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.lines {
+  display: grid;
+  gap: 18px;
+}
+.line {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #151515;
+}
+.thumb img {
+  object-fit: cover;
+}
+.lineText {
+  display: grid;
+  gap: 3px;
+}
+.brand {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.model {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  line-height: 1.15;
+}
+.ref {
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+.price {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+.totals {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-on-light);
+}
+.totals div {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-small);
+}
+.totals dd {
+  margin: 0;
+}
+.total {
+  padding-top: 12px;
+  border-top: 1px solid var(--line-on-light);
+}
+.total dt {
+  font-weight: 500;
+}
+.total dd {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+.back {
+  justify-self: start;
+  font-size: var(--fs-small);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: var(--text-on-light-muted);
+}
+
+.empty {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+  padding-bottom: var(--space-xl);
+}
+.emptyTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--fs-display-s);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  /* Phones: the summary comes first, so the order is clear before the form. */
+  .summary {
+    position: static;
+    order: -1;
+  }
+}

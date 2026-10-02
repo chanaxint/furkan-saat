@@ -173,6 +173,10 @@
 }
 
 @media (max-width: 560px) {
+  /* Phones: the account lives in the menu drawer. */
+  .account {
+    display: none;
+  }
   .menuLabel {
     display: none;
   }

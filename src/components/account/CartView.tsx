@@ -6,12 +6,10 @@ import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { ButtonLink } from "@/components/ui/Button";
 import { brandName } from "@/lib/services/catalog";
 import { useCart } from "@/lib/services/cart";
-import { orderEnquiry } from "@/lib/services/enquiries";
 import styles from "./AccountViews.module.css";
 
 /**
- * The cart page. Online payment is not connected yet: the purchase request
- * goes to an advisor, who confirms the piece and arranges payment and delivery.
+ * The cart page: the pieces, the total and the way to checkout.
  */
 export function CartView() {
   const cart = useCart();
@@ -62,11 +60,11 @@ export function CartView() {
             <dd>Sigortalı, ücretsiz</dd>
           </div>
         </dl>
-        <ButtonLink href={orderEnquiry(cart.items.map((i) => i.product))} external variant="solid" className={styles.wide}>
-          Satın alma talebi gönder
+        <ButtonLink href="/odeme" variant="solid" className={styles.wide}>
+          Ödemeye geçin
         </ButtonLink>
         <p className={styles.note}>
-          Talebiniz bir danışmana iletilir; saatin durumunu teyit edip ödeme ve teslimatı sizinle birlikte planlar.
+          Ödeme adımında banka havalesi ya da danışmanla ödeme seçebilirsiniz. Saat, ödeme süresince sizin için ayrılır.
         </p>
       </aside>
     </div>

@@ -12,6 +12,7 @@ const LINKS = [
   { label: "Markalar", href: "/markalar" },
   { label: "Dergi", href: "/dergi" },
   { label: "Favoriler", href: "/favoriler" },
+  { label: "Hesabım", href: "/hesap" },
   { label: "Özel Gösterim", href: "/ozel-gosterim" },
   { label: "Saatinizi Satın", href: "/saatinizi-satin" },
   { label: "Takas", href: "/takas" },

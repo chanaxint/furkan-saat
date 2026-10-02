@@ -27,12 +27,6 @@ export const productEnquiry = (p: Product) => ({
   ),
 });
 
-/** Hands a cart to an advisor, who confirms availability and arranges payment. */
-export const orderEnquiry = (products: Product[]) =>
-  whatsappUrl(
-    `Merhaba, aşağıdaki saat(ler)i satın almak istiyorum:\n\n${products.map(describe).join("\n\n")}`,
-  );
-
 /* -------------------------------------------------------------- requests */
 
 export type EnquiryKind = "ozel-gosterim" | "degerleme" | "takas";

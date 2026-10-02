@@ -15,6 +15,13 @@ export const BOUTIQUE = {
   mapUrl: "https://maps.google.com/?q=Ni%C5%9Fanta%C5%9F%C4%B1+%C4%B0stanbul",
 };
 
+/** Bank transfer details shown after checkout. Placeholder — replace with the real account. */
+export const BANK = {
+  holder: "Furkan Saat",
+  bank: "Banka adı",
+  iban: "TR00 0000 0000 0000 0000 0000 00",
+};
+
 /** The watch staged in the box-opening film on the home page. */
 export const NEW_ARRIVAL_SLUG = "jacob-co-skeleton-tourbillon";
 
@@ -37,7 +44,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
       { label: "Koleksiyonlar", href: "/koleksiyonlar" },
       { label: "Markalar", href: "/markalar" },
       { label: "Dergi", href: "/dergi" },
-      { label: "Favoriler", href: "/favoriler" },
+      { label: "Karşılaştır", href: "/karsilastir" },
     ],
   },
   {
@@ -63,6 +70,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
     links: [
       { label: "Hakkımızda", href: "/hakkimizda" },
       { label: "İletişim", href: "/iletisim" },
+      { label: "Hesabım", href: "/hesap" },
     ],
   },
 ];

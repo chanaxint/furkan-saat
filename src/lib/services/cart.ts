@@ -35,6 +35,7 @@ export function useCart() {
       );
     },
     remove: (slug: string) => store.set(store.get().filter((l) => l.slug !== slug)),
+    clear: () => store.set([]),
   };
 }
 

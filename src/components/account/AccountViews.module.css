@@ -124,3 +124,67 @@
     grid-column: 2;
   }
 }
+
+/* ------------------------------------------------------------ account */
+.stack {
+  display: grid;
+  gap: var(--space-l);
+}
+.records {
+  border-top: 1px solid var(--line-on-light);
+}
+.record {
+  display: grid;
+  gap: 10px;
+  padding-block: 24px;
+  border-bottom: 1px solid var(--line-on-light);
+}
+.recordHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+}
+.recordTitle {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+.recordBody {
+  font-size: var(--fs-small);
+}
+.status {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--champagne-600);
+}
+.link {
+  justify-self: start;
+  font-size: var(--fs-small);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: var(--text-on-light-muted);
+}
+.answers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 24px;
+  margin: 0;
+  font-size: var(--fs-small);
+}
+.answers dt {
+  color: var(--text-on-light-muted);
+}
+.answers dd {
+  margin: 2px 0 0;
+}
+.add {
+  margin-top: 16px;
+}
+@media (max-width: 560px) {
+  .answers {
+    grid-template-columns: 1fr;
+  }
+}

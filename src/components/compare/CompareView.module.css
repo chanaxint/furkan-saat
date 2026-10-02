@@ -1,0 +1,106 @@
+.scroller {
+  overflow-x: auto;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+}
+.table {
+  width: 100%;
+  min-width: calc(160px + var(--cols) * 220px);
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.table th,
+.table td {
+  padding: 16px 20px 16px 0;
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.table thead th:first-child,
+.table tbody th {
+  width: 160px;
+}
+.table tbody th {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  padding-top: 20px;
+}
+.table tbody tr {
+  border-top: 1px solid var(--line-on-light);
+}
+.table tbody tr:last-child {
+  border-bottom: 1px solid var(--line-on-light);
+}
+.table td {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+.watch {
+  padding-bottom: 32px !important;
+}
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 18px;
+  overflow: hidden;
+  background: #151515;
+}
+.media img {
+  object-fit: cover;
+}
+.brand,
+.model,
+.ref {
+  display: block;
+}
+.brand {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.model {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.1;
+}
+.ref {
+  margin-top: 6px;
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+.remove {
+  margin-top: 12px;
+  font-size: var(--fs-small);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  color: var(--text-on-light-muted);
+}
+
+/* Padding, not margin: a bottom margin would escape the page and show the green beneath. */
+.picker {
+  max-width: 520px;
+  padding-block: var(--space-l) var(--space-xl);
+}
+.empty {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+.empty .picker {
+  width: 100%;
+  padding-block: 24px;
+}
+.emptyTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--fs-display-s);
+  line-height: 1.2;
+  max-width: 26ch;
+}

@@ -1,0 +1,77 @@
+.wrap {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+  max-width: calc(820px + var(--gutter) * 2);
+  padding-bottom: var(--space-xl);
+}
+.eyebrow,
+.label {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.title {
+  font-size: var(--fs-display-l);
+}
+.title em {
+  color: var(--champagne-600);
+}
+.muted {
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+.next {
+  width: 100%;
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+  margin-top: 16px;
+  padding: clamp(28px, 3vw, 44px);
+  background: var(--green-900);
+  color: var(--ivory);
+}
+.next .label {
+  color: var(--champagne);
+}
+.steps {
+  display: grid;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+/* The solid button inverts on the green panel. */
+.next a {
+  background: var(--ivory);
+  color: var(--green-900);
+}
+.items {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+.items ul {
+  display: grid;
+  border-top: 1px solid var(--line-on-light);
+}
+.items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-block: 14px;
+  border-bottom: 1px solid var(--line-on-light);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+.total {
+  font-weight: 500;
+}
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  margin-top: 16px;
+}

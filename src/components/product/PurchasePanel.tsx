@@ -3,6 +3,7 @@
 import { Button, ButtonLink } from "@/components/ui/Button";
 import type { Product } from "@/lib/data/types";
 import { useCart, useCartDrawer } from "@/lib/services/cart";
+import { useCompare } from "@/lib/services/compare";
 import { productEnquiry } from "@/lib/services/enquiries";
 import { WishlistButton } from "./WishlistButton";
 import styles from "./PurchasePanel.module.css";
@@ -17,6 +18,8 @@ export function PurchasePanel({ product }: { product: Product }) {
   const enquiry = productEnquiry(product);
   const purchasable = product.price !== null && product.availability !== "Rezerve";
   const inCart = cart.has(product.slug);
+  const compare = useCompare();
+  const comparing = compare.has(product.slug);
 
   return (
     <div className={styles.panel}>
@@ -42,6 +45,17 @@ export function PurchasePanel({ product }: { product: Product }) {
         <ButtonLink href={`/ozel-gosterim?saat=${product.slug}`} variant="line">
           Butikte görün
         </ButtonLink>
+        {comparing ? (
+          <ButtonLink href="/karsilastir" variant="line">
+            Karşılaştırmada — görüntüle
+          </ButtonLink>
+        ) : (
+          !compare.full && (
+            <Button variant="line" onClick={() => compare.toggle(product.slug)}>
+              Karşılaştırmaya ekle
+            </Button>
+          )
+        )}
       </div>
       <WishlistButton slug={product.slug} labelled className={styles.wish} />
     </div>

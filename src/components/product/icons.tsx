@@ -14,6 +14,13 @@ export const SearchIcon = () => (
   </svg>
 );
 
+export const PersonIcon = () => (
+  <svg {...base}>
+    <circle cx="10" cy="7" r="3.2" />
+    <path d="M3.8 17c.9-3.2 3.3-4.8 6.2-4.8s5.3 1.6 6.2 4.8" />
+  </svg>
+);
+
 export const BagIcon = () => (
   <svg {...base}>
     <path d="M4 7h12l-1 10H5L4 7Z" />

@@ -9,7 +9,7 @@ import styles from "./BrandReels.module.css";
 
 /**
  * BRANDS — four equal tiles. Each shows its logo; hovering plays the clip in
- * which the logo becomes a watch, leaving rewinds it. Clicking opens that watch.
+ * which the logo becomes a watch, leaving rewinds it. Clicking opens the brand page.
  * On touch screens (no hover) a tile plays when it scrolls into view.
  */
 export function BrandReels() {
@@ -21,7 +21,7 @@ export function BrandReels() {
       aria-label="Markalar"
     >
       <header className={styles.header}>
-        <SectionMarker index="02" label="Markalar" className={styles.marker} />
+        <SectionMarker index="03" label="Markalar" className={styles.marker} />
         <h2 className={styles.title}>
           Dünyanın en seçkin <em>markaları</em>
         </h2>
@@ -67,7 +67,7 @@ function Tile({ reel }: { reel: BrandReel }) {
 
   return (
     <Link
-      href={reel.href}
+      href={`/markalar/${reel.id}`}
       prefetch={false}
       className={styles.tile}
       onPointerEnter={(e) => e.pointerType === "mouse" && play()}
@@ -94,7 +94,7 @@ function Tile({ reel }: { reel: BrandReel }) {
           {reel.brand}
         </span>
         <span className={styles.cta}>
-          Saati keşfedin <span aria-hidden>→</span>
+          Markayı keşfedin <span aria-hidden>→</span>
         </span>
       </span>
     </Link>

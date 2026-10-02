@@ -1,0 +1,117 @@
+.gallery {
+  position: relative;
+}
+
+.list {
+  display: grid;
+  gap: clamp(8px, 1vw, 16px);
+}
+.item {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: #151515;
+  overflow: hidden;
+}
+.open {
+  position: absolute;
+  inset: 0;
+  cursor: zoom-in;
+}
+.image {
+  object-fit: cover;
+  transition: transform 1.8s var(--ease-lux);
+}
+@media (hover: hover) {
+  .open:hover .image {
+    transform: scale(1.02);
+  }
+}
+.counter {
+  display: none;
+}
+
+/* ------------------------------------------------------------ full screen */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: #0d0d0d;
+  color: var(--ivory);
+  animation: fade 0.6s var(--ease-lux);
+}
+@keyframes fade {
+  from { opacity: 0; }
+}
+.full {
+  object-fit: contain;
+}
+.close,
+.lightboxCount {
+  position: absolute;
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.close {
+  top: 28px;
+  right: var(--gutter);
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+.close span {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+.lightboxCount {
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.6;
+}
+.nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 20px;
+  font-size: 1.4rem;
+  opacity: 0.7;
+  transition: opacity 0.4s var(--ease-lux);
+}
+.nav:hover {
+  opacity: 1;
+}
+.prev {
+  left: calc(var(--gutter) - 20px);
+}
+.next {
+  right: calc(var(--gutter) - 20px);
+}
+
+/* ------------------------------------------------------------ phones */
+@media (max-width: 900px) {
+  .list {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+  .item {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+  .counter {
+    display: block;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    color: var(--ivory);
+    font-size: var(--fs-micro);
+    letter-spacing: 0.2em;
+  }
+}

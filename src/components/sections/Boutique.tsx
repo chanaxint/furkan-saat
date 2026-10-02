@@ -6,12 +6,12 @@ import { ArrowLink } from "@/components/ui/ArrowLink";
 import { SplitText } from "@/components/ui/SplitText";
 import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
-import { BOUTIQUE } from "@/lib/data/navigation";
+import { BOUTIQUE } from "@/lib/data/site";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./Boutique.module.css";
 
 /**
- * 06 — BOUTIQUE
+ * 05 — PRIVATE VIEWING (boutique)
  * Full-bleed boutique film (ASSETS.boutique.film). The frame opens from an
  * inset window to full width, then settles — calm, wide, unhurried.
  */
@@ -48,7 +48,7 @@ export function Boutique() {
   const film = ASSETS.boutique.film;
 
   return (
-    <section ref={root} className={`green-sheen ${styles.section}`} id="boutique" data-nav-theme="dark" aria-label="Butiği ziyaret edin">
+    <section ref={root} className={`green-sheen ${styles.section}`} id="boutique" data-nav-theme="dark" aria-label="Özel gösterim">
       <div className={styles.frame} data-frame>
         <MediaSlot
           tone="deep"
@@ -61,14 +61,14 @@ export function Boutique() {
 
         <div className={styles.content}>
           <p className={`t-eyebrow ${styles.eyebrow}`} data-fade>
-            06 — Butik · {BOUTIQUE.city}
+            05 — Özel gösterim · {BOUTIQUE.city}
           </p>
-          <SplitText text={"Furkan *Saat*\nButiği"} className={`t-display ${styles.heading}`} start="top 70%" />
+          <SplitText text={"Özel\n*gösterim*"} className={`t-display ${styles.heading}`} start="top 70%" />
           <p className={styles.support} data-fade>
-            Seçkin saatler için özel bir deneyim.
+            Saatleri butiğimizde, size ayrılmış bir saatte ve acele etmeden inceleyin.
           </p>
           <div data-fade>
-            <ArrowLink href="/appointment" variant="frame" className={styles.cta}>
+            <ArrowLink href="/iletisim" variant="frame" className={styles.cta}>
               Randevu alın
             </ArrowLink>
           </div>

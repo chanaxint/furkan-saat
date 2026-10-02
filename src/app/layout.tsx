@@ -5,9 +5,10 @@ import { Navigation } from "@/components/layout/Navigation";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://furkansaat.com"),
   title: "Furkan Saat — Seçkin Saatler, İstanbul",
   description:
-    "Seçkin saatler için özel bir ev. Rolex, Patek Philippe, Richard Mille, Jacob & Co., Audemars Piguet ve Cartier — İstanbul'da randevu ile.",
+    "Seçkin saatler için özel bir ev. Rolex, Patek Philippe, Jacob & Co. ve daha fazlası — orijinalliği doğrulanmış saatler, İstanbul'da randevu ile.",
   openGraph: {
     title: "Furkan Saat — Seçkin Saatler",
     description: "Seçkin saatler için özel bir ev.",

@@ -17,7 +17,7 @@
 }
 
 .statement {
-  grid-column: 1 / span 5;
+  grid-column: 1 / span 6;
   font-family: var(--font-display);
   font-size: var(--fs-display-s);
   font-weight: 300;
@@ -28,19 +28,15 @@
   color: var(--champagne-600);
 }
 
-.nav {
-  grid-column: 7 / span 3;
-}
-.nav ul {
+.col {
+  grid-column: span 2;
   display: grid;
-  gap: 10px;
-}
-
-.contact {
-  grid-column: 10 / span 3;
-  display: grid;
-  gap: 10px;
+  gap: 14px;
   align-content: start;
+}
+.col ul {
+  display: grid;
+  gap: 10px;
 }
 
 .label {
@@ -48,10 +44,6 @@
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--text-on-light-faint);
-}
-.muted {
-  font-size: var(--fs-small);
-  color: var(--text-on-light-muted);
 }
 
 .link {
@@ -91,35 +83,24 @@
   text-transform: uppercase;
   color: var(--text-on-light-muted);
 }
-.legal {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 28px;
-}
-.bottom > *,
-.legal .link {
+.bottom > * {
   white-space: nowrap;
-}
-.legal .link {
-  font-size: 10px;
-  letter-spacing: 0.22em;
 }
 
 @media (max-width: 900px) {
   .statement {
     grid-column: 1 / -1;
   }
-  .nav {
-    grid-column: 1 / span 6;
-  }
-  .contact {
-    grid-column: 7 / span 6;
+  .col {
+    grid-column: span 4;
   }
 }
 
 @media (max-width: 560px) {
-  .nav,
-  .contact {
+  .col {
+    grid-column: span 6;
+  }
+  .col:last-child {
     grid-column: 1 / -1;
   }
   .wordmark {
@@ -128,5 +109,8 @@
   .bottom {
     flex-direction: column;
     gap: 14px;
+  }
+  .bottom > * {
+    white-space: normal;
   }
 }

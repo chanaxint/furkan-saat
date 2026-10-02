@@ -1,46 +1,66 @@
+/** Placeholder tone used by MediaSlot while a photograph is missing. */
 export type Tone = "green" | "deep" | "ivory" | "stone" | "champagne" | "wine";
 
-export type WatchType = "Klasik" | "Spor" | "Kronograf" | "Komplikasyon" | "Mücevher";
-export type Material = "Çelik" | "Beyaz Altın" | "Kırmızı Altın" | "Sarı Altın" | "Platin" | "Titanyum" | "Karbon";
 export type Movement = "Otomatik" | "Manuel" | "Kuvars";
+export type Condition = "Yeni" | "Kullanılmamış" | "Mükemmel" | "Çok iyi";
+export type Availability = "Stokta" | "Rezerve" | "Sipariş üzerine";
+export type Currency = "EUR" | "TRY" | "USD";
 
-export type Watch = {
-  id: string;
+/** Technical data shown on the watch page and in comparisons. Missing values are simply not shown. */
+export type ProductSpecs = {
+  movement: Movement;
+  caliber?: string;
+  powerReserve?: string;
+  caseDiameter: string;
+  caseMaterial: string;
+  crystal?: string;
+  waterResistance?: string;
+  strap?: string;
+  year?: string;
+};
+
+export type Product = {
+  /** URL key: /saat/[slug] */
+  slug: string;
+  /** Brand slug — see BRANDS. */
   brand: string;
   model: string;
   reference: string;
-  type: WatchType;
-  material: Material;
-  movement: Movement;
-  diameter: string;
-  /** Price in EUR. `null` = price upon request. */
+  /** `null` = price upon request (enquiry only, no purchase). */
   price: number | null;
-  /** Placeholder tone until photography is available. */
+  currency: Currency;
+  /** Gallery, first image is the cover; the second is shown on hover. */
+  images: string[];
+  /** Short editorial line for the watch page. */
+  description: string;
+  specs: ProductSpecs;
+  condition: Condition;
+  availability: Availability;
+  /** Box and papers included. */
+  fullSet: boolean;
+  /** Collection slugs — see COLLECTIONS. */
+  collections: string[];
+  /** Shown in the home page selection. */
+  featured?: boolean;
+  /** ISO date the piece arrived; used for "newest" sorting. */
+  addedAt: string;
   tone: Tone;
-  /** Future product photography (jpg/png/webp). */
-  image: string | null;
-  href: string;
 };
 
-export type House = {
-  id: string;
+export type Brand = {
+  slug: string;
   name: string;
   founded: string;
   origin: string;
+  /** One quiet line under the name. */
   signature: string;
   description: string;
-  tone: Tone;
-  media: { image: string | null; video: string | null };
-  href: string;
+  /** Optional scroll film for the brand page (frame sequence). */
+  film?: { dir: string; count: number; accent: string };
 };
 
-export type Story = {
-  id: string;
-  category: string;
-  title: string;
-  excerpt: string;
-  readTime: string;
-  tone: Tone;
-  media: { image: string | null; video: string | null };
-  href: string;
+export type CollectionDef = {
+  slug: string;
+  name: string;
+  description: string;
 };

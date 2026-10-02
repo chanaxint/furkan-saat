@@ -4,8 +4,9 @@ import { useEffect, useRef } from "react";
 import { FrameSequence } from "@/components/sections/hero/FrameSequence";
 import { ArrowLink } from "@/components/ui/ArrowLink";
 import { useGsap } from "@/hooks/useGsap";
-import { NEW_ARRIVAL } from "@/lib/data/watches";
+import { NEW_ARRIVAL_SLUG } from "@/lib/data/site";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { brandName, findProduct } from "@/lib/services/catalog";
 import { NEW_ARRIVAL_FILM as FILM, newArrivalFrameSrc } from "@/lib/scene/newArrival";
 import styles from "./NewArrival.module.css";
 
@@ -15,6 +16,20 @@ import styles from "./NewArrival.module.css";
  * On the last frame the film hands over to a two-layer still — box plate and
  * cut-out watch — and only the watch follows the pointer, like a 3D object.
  */
+// The watch staged in the box film, read from the catalogue.
+const piece = findProduct(NEW_ARRIVAL_SLUG)!;
+const NEW_ARRIVAL = {
+  brand: brandName(piece.brand),
+  model: piece.model,
+  description: piece.description,
+  details: [
+    ["Kasa", piece.specs.caseMaterial],
+    ["Mekanizma", piece.specs.movement],
+    ["Kordon", piece.specs.strap ?? ""],
+  ].filter(([, v]) => v),
+  href: `/saat/${piece.slug}`,
+};
+
 export function NewArrival() {
   const root = useRef<HTMLElement>(null);
   const stage = useRef<HTMLDivElement>(null);

@@ -36,11 +36,6 @@ export type VideoAsset = {
   poster: string | null;
 };
 
-export type ImageAsset = {
-  src: string | null;
-  alt: string;
-};
-
 /** Show small, discreet captions inside empty placeholders (asset hints). */
 export const SHOW_ASSET_HINTS = false;
 
@@ -73,15 +68,6 @@ export const ASSETS = {
       src: "/assets/models/emerald-watch.glb",
       pivot: [0, 0, 0.695],
     } as ModelAsset,
-  },
-  exploded: {
-    /** 04 Exploded View — a single GLB whose parts are named nodes. */
-    watch: { src: null } as ModelAsset,
-  },
-  newArrival: {
-    model: { src: null } as ModelAsset,
-    film: { webm: null, mp4: null, poster: null } as VideoAsset,
-    still: { src: null, alt: "" } as ImageAsset,
   },
   boutique: {
     film: { webm: null, mp4: null, poster: null } as VideoAsset,

@@ -1,0 +1,15 @@
+.panel {
+  display: grid;
+  gap: 12px;
+}
+.wide {
+  width: 100%;
+}
+.whatsapp {
+  justify-self: start;
+  margin-top: 14px;
+}
+.wish {
+  justify-self: start;
+  margin-top: 18px;
+}

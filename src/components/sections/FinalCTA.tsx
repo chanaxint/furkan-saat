@@ -50,7 +50,7 @@ export function FinalCTA() {
           ))}
         </h2>
         <div className={styles.cta} data-cta>
-          <ArrowLink href="#collection" variant="frame">
+          <ArrowLink href="/koleksiyon" variant="frame">
             Koleksiyonu keşfedin
           </ArrowLink>
         </div>

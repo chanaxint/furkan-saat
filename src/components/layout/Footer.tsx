@@ -1,36 +1,52 @@
 import Link from "next/link";
-import { BOUTIQUE, FOOTER_LINKS, LEGAL_LINKS } from "@/lib/data/navigation";
+import { BOUTIQUE, FOOTER_COLUMNS } from "@/lib/data/site";
+import { whatsappUrl } from "@/lib/services/enquiries";
 import styles from "./Footer.module.css";
 
-/** 12 — FOOTER. Quiet, typographic, nothing superfluous. */
+/** Footer: statement, link columns, contact — and the wordmark set large. */
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className={styles.footer} id="contact" data-nav-theme="light">
+    <footer className={styles.footer} data-nav-theme="light">
       <div className={styles.top}>
         <p className={styles.statement}>
           Seçkin saatler için özel bir ev — <em>{BOUTIQUE.city}.</em>
         </p>
 
-        <nav aria-label="Alt menü" className={styles.nav}>
-          <ul>
-            {FOOTER_LINKS.map((l) => (
-              <li key={l.label}>
-                <a href={l.href} {...(l.external ? { target: "_blank", rel: "noreferrer" } : {})} className={styles.link}>
-                  {l.label}
-                  {l.external && <span aria-hidden> ↗</span>}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {FOOTER_COLUMNS.map((col) => (
+          <nav key={col.title} aria-label={col.title} className={styles.col}>
+            <p className={styles.label}>{col.title}</p>
+            <ul>
+              {col.links.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className={styles.link}>
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
 
-        <div className={styles.contact}>
-          <p className={styles.label}>İletişim</p>
-          <a href={`mailto:${BOUTIQUE.email}`} className={styles.link}>
-            {BOUTIQUE.email}
-          </a>
-          <p className={styles.muted}>{BOUTIQUE.hours}</p>
+        <div className={styles.col}>
+          <p className={styles.label}>Bize ulaşın</p>
+          <ul>
+            <li>
+              <a href={BOUTIQUE.instagram} target="_blank" rel="noreferrer" className={styles.link}>
+                Instagram
+              </a>
+            </li>
+            <li>
+              <a href={whatsappUrl("Merhaba,")} target="_blank" rel="noreferrer" className={styles.link}>
+                WhatsApp
+              </a>
+            </li>
+            <li>
+              <a href={`mailto:${BOUTIQUE.email}`} className={styles.link}>
+                {BOUTIQUE.email}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -40,15 +56,7 @@ export function Footer() {
 
       <div className={styles.bottom}>
         <p>© {year} Furkan Saat</p>
-        <ul className={styles.legal}>
-          {LEGAL_LINKS.map((l) => (
-            <li key={l.label}>
-              <Link href={l.href} className={styles.link}>
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <p>{BOUTIQUE.hours}</p>
       </div>
     </footer>
   );

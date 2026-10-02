@@ -55,6 +55,13 @@
   --section-y: clamp(120px, 16vw, 240px);
   --max-w: 1680px;
   --nav-h: 76px;
+  /* Vertical rhythm for inner pages. */
+  --space-xs: 12px;
+  --space-s: 20px;
+  --space-m: clamp(28px, 3vw, 44px);
+  --space-l: clamp(56px, 6vw, 96px);
+  --space-xl: clamp(96px, 11vw, 180px);
+  --page-top: calc(var(--nav-h) + clamp(56px, 8vw, 128px));
 
   /* — Motion — */
   --ease-lux: cubic-bezier(0.19, 1, 0.22, 1);
@@ -319,4 +326,24 @@ ol {
 @media (prefers-reduced-motion: reduce) {
   .green-sheen::before,
   .green-sheen::after { animation: none; }
+}
+
+/* ---------------------------------------------------------------- page
+   Inner pages: ivory ground, room under the fixed bar. */
+.page {
+  min-height: 100svh;
+  background: var(--ivory);
+  color: var(--text-on-light);
+  padding-top: var(--page-top);
+}
+
+/* ---------------------------------------------------------------- motion
+   One quiet entrance shared by inner pages: fade up once on load. */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise-in 1.4s var(--ease-lux) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 80ms);
 }

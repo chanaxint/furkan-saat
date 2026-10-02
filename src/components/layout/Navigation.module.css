@@ -1,6 +1,6 @@
 .nav {
   --ink: var(--ivory);
-  --bar: rgba(7, 26, 22, 0);
+  --ground: var(--green-900);
   position: fixed;
   inset: 0 0 auto 0;
   z-index: 50;
@@ -8,11 +8,25 @@
   color: var(--ink);
   transition:
     transform 1s var(--ease-lux),
-    color 0.8s var(--ease-lux),
-    background-color 0.8s var(--ease-lux);
+    color 0.8s var(--ease-lux);
 }
 .nav[data-theme="light"] {
   --ink: var(--green-900);
+  --ground: var(--ivory);
+}
+
+/* Once the page has scrolled, the bar takes the ground colour of the section beneath. */
+.nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--ground);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-lux), background-color 0.8s var(--ease-lux);
+}
+.nav[data-solid]::before {
+  opacity: 0.94;
 }
 
 .inner {
@@ -34,10 +48,6 @@
   text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;
-  /* Wordmark sits top-centre; links to the left, appointment/menu to the right. */
-  grid-column: 2;
-  grid-row: 1;
-  justify-self: center;
   transition: opacity 1s var(--ease-lux), letter-spacing 1.4s var(--ease-lux);
 }
 .wordmark span {
@@ -47,18 +57,16 @@
   text-transform: none;
 }
 
-.links {
-  /* Links live in the menu panel on every screen size. */
-  display: none !important;
-  grid-column: 1;
-  grid-row: 1;
+.start {
   justify-self: start;
   display: flex;
-  gap: clamp(22px, 2.8vw, 48px);
+  align-items: center;
 }
-
+.links {
+  display: flex;
+  gap: clamp(22px, 2.6vw, 44px);
+}
 .link,
-.appointment,
 .menuLabel {
   position: relative;
   font-size: var(--fs-micro);
@@ -67,9 +75,7 @@
   text-transform: uppercase;
   padding-block: 8px;
 }
-
-.link::after,
-.appointment::after {
+.link::after {
   content: "";
   position: absolute;
   left: 0;
@@ -82,22 +88,37 @@
   transition: transform 0.8s var(--ease-lux);
 }
 .link:hover::after,
-.appointment:hover::after {
+.link[aria-current="page"]::after {
   transform: scaleX(1);
   transform-origin: left;
 }
 
-.aside {
-  grid-column: 3;
-  grid-row: 1;
+.end {
   justify-self: end;
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: clamp(14px, 1.6vw, 26px);
+}
+.icon {
+  position: relative;
+  display: inline-flex;
+  padding: 6px;
+  transition: opacity 0.4s var(--ease-lux);
+}
+.icon:hover {
+  opacity: 0.6;
+}
+.icon sup {
+  position: absolute;
+  top: 0;
+  right: -4px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0;
 }
 
 .menuButton {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: 14px;
 }
@@ -112,7 +133,6 @@
   right: 0;
   height: 1px;
   background: currentColor;
-  transition: transform 0.7s var(--ease-lux), top 0.7s var(--ease-lux);
 }
 .menuIcon span:first-child {
   top: 0;
@@ -120,23 +140,16 @@
 .menuIcon span:last-child {
   top: 7px;
 }
-.menuButton[aria-expanded="true"] .menuIcon span:first-child {
-  top: 4px;
-  transform: rotate(45deg);
-}
-.menuButton[aria-expanded="true"] .menuIcon span:last-child {
-  top: 4px;
-  transform: rotate(-45deg);
-}
 
 /* ------------------------------------------------------------ modes */
 .links,
-.appointment {
+.end,
+.menuButton {
   transition: opacity 1.2s var(--ease-lux), transform 1.2s var(--ease-lux);
 }
-
 .nav[data-mode="immersive"] .links,
-.nav[data-mode="immersive"] .appointment {
+.nav[data-mode="immersive"] .end,
+.nav[data-mode="immersive"] .menuButton {
   opacity: 0;
   transform: translateY(-6px);
   pointer-events: none;
@@ -145,25 +158,8 @@
   opacity: 0.72;
   letter-spacing: 0.42em;
 }
-
 .nav[data-mode="hidden"] {
   transform: translateY(-110%);
-}
-
-/* hairline appears once the bar sits above content */
-.nav::after {
-  content: "";
-  position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: 0;
-  height: 1px;
-  background: currentColor;
-  opacity: 0;
-  transition: opacity 1s var(--ease-lux);
-}
-.nav[data-mode="visible"]::after {
-  opacity: 0.12;
 }
 
 /* ------------------------------------------------------ responsive */
@@ -177,7 +173,7 @@
 }
 
 @media (max-width: 560px) {
-  .appointment {
+  .menuLabel {
     display: none;
   }
   .wordmark {
@@ -186,5 +182,8 @@
   }
   .nav[data-mode="immersive"] .wordmark {
     letter-spacing: 0.3em;
+  }
+  .end {
+    gap: 10px;
   }
 }

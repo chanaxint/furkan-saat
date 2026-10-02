@@ -74,11 +74,6 @@
   text-transform: uppercase;
   color: var(--ivory);
 }
-.watch {
-  font-family: var(--font-display);
-  font-size: clamp(1.2rem, 1.5vw, 1.6rem);
-  line-height: 1.1;
-}
 .cta {
   margin-top: 6px;
   font-size: 10px;

@@ -1,0 +1,74 @@
+.card {
+  position: relative;
+}
+
+.link {
+  display: grid;
+  gap: 24px;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #151515;
+}
+.image {
+  object-fit: cover;
+  transition: transform 1.8s var(--ease-lux), opacity 1s var(--ease-lux);
+}
+.alt {
+  opacity: 0;
+}
+@media (hover: hover) {
+  .link:hover .image {
+    transform: scale(1.03);
+  }
+  .link:hover .alt {
+    opacity: 1;
+  }
+}
+
+.info {
+  display: grid;
+  gap: 8px;
+}
+.brand {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps-wide);
+  text-transform: uppercase;
+}
+.model {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(1.45rem, 1.8vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+.price {
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  color: var(--text-on-light);
+  white-space: nowrap;
+}
+.price[data-request] {
+  font-style: italic;
+  color: var(--text-on-light-muted);
+}
+
+/* Heart sits on the photograph, top right. */
+.wish {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: var(--ivory);
+}

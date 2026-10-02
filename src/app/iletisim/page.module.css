@@ -1,0 +1,100 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(48px, 7vw, 140px);
+  align-items: start;
+  padding-bottom: var(--space-xl);
+}
+
+.rows {
+  margin: 0;
+  border-top: 1px solid var(--line-on-light);
+}
+.row {
+  display: grid;
+  grid-template-columns: minmax(130px, 1fr) 2.4fr;
+  gap: 24px;
+  padding-block: 26px;
+  border-bottom: 1px solid var(--line-on-light);
+}
+.row dt {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  padding-top: 6px;
+}
+.row dd {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 20px;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.6vw, 1.6rem);
+}
+.action {
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+}
+
+.appointment {
+  display: grid;
+  gap: 22px;
+  padding: clamp(32px, 3.4vw, 56px);
+  background: var(--green-900);
+  color: var(--ivory);
+}
+.label {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--champagne);
+}
+.title {
+  font-size: var(--fs-display-s);
+  line-height: 1.12;
+}
+.title em {
+  color: var(--champagne);
+}
+.text {
+  font-size: var(--fs-small);
+  line-height: 1.7;
+  opacity: 0.7;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+/* The solid button inverts on the green panel. */
+.actions > :first-child {
+  background: var(--ivory);
+  color: var(--green-900);
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+  .row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .row dt {
+    padding-top: 0;
+  }
+  .row dd {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,24 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px;
+  margin: -6px;
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  transition: opacity 0.5s var(--ease-lux), transform 0.5s var(--ease-lux);
+}
+.button:hover {
+  opacity: 0.6;
+}
+.button[aria-pressed="true"] svg {
+  color: var(--wine);
+}
+.button:active svg {
+  transform: scale(0.88);
+}
+.button svg {
+  transition: transform 0.4s var(--ease-lux), color 0.4s var(--ease-lux);
+}

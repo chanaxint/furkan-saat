@@ -1,0 +1,32 @@
+.header {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  row-gap: 28px;
+  align-items: end;
+  margin-bottom: var(--space-l);
+}
+.header > :first-child {
+  grid-column: 1 / -1;
+}
+.title {
+  grid-column: 1 / span 7;
+  font-size: var(--fs-display-l);
+}
+.title em {
+  color: var(--champagne-600);
+}
+.lede {
+  grid-column: 9 / span 4;
+  color: var(--text-on-light-muted);
+}
+.aside {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .title,
+  .lede {
+    grid-column: 1 / -1;
+  }
+}

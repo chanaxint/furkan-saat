@@ -61,12 +61,12 @@ and the same film reversed: `intro-*-reverse.*`), registered in `ASSETS.intro.fi
 6. **rewinding** — scrolling back up at the top removes the titles and plays the reversed film
    (2× speed) back to the first frame; the next scroll down plays it again.
 
-**Sound** (`lib/sound/introSound.ts`, synthesised with Web Audio, no files): wind that gathers
-speed with the film (brighter, louder, gusting faster), cut dead on the cut to black, and
-falling away on the rewind. No controls and no text about it anywhere. Browsers only allow
-sound after the visitor has clicked, tapped or pressed a key (a mouse-wheel scroll alone does
-not count; on phones a swipe on the held intro counts as a tap); from then on the wind joins
-the film where it is.
+**Sound** (`lib/sound/introSound.ts`, synthesised with Web Audio, no files): watch ticks that
+keep accelerating with the film over a rising swell and a low drone, a deep hit on the cut to
+black, a soft chime with the name, and the ticks slowing down on the rewind. No controls and no
+text about it anywhere. Browsers only allow sound after the visitor has clicked, tapped or
+pressed a key (a mouse-wheel scroll alone does not count; on phones a swipe on the held intro
+counts as a tap); from then on it joins the film where it is.
 
 **Brand tiles:** each shows the brand's logo (`logo` in `lib/data/brands.ts`, ivory on
 transparent PNGs in `public/assets/images/brands/`). The section rises into the blend (`--overlap` in `BrandReels.module.css`), so its title sits
@@ -82,10 +82,12 @@ files (same names) or update `ASSETS.intro.film`.
 
 ## Brand pages: film opening, 3D showcase, gold theme
 
-Set on the brand in `lib/data/brands.ts` (Freelook has all three):
+Set on the brand in `lib/data/brands.ts` (Freelook has the film and the gold theme; the 3D
+showcase is ready but not used on any brand for now):
 
 - `film` — loops silently, full screen, behind the logo (`components/brand/BrandFilmHero`);
-  pauses once scrolled fully out of view.
+  pauses once scrolled fully out of view. The watches follow it directly (the story block is
+  only shown on brand pages without a film).
 - `showcase` — after the film the watch flies in and makes four turns, each with its line
   (`components/brand/BrandShowcase` + `three/ShowcaseWatchScene`, timeline in
   `lib/scene/showcase.ts`). `model` is a meshopt-compressed `.glb` in `public/assets/models/`,

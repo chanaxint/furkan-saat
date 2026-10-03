@@ -33,14 +33,14 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   if (!brand) notFound();
   const [products, brands, articles] = await Promise.all([getProductsByBrand(brand.slug), getBrands(), getArticlesByBrand(brand.slug)]);
   const others = brands.filter((b) => b.slug !== brand.slug);
+  // With a film, the opening carries the name (as the logo), the signature
+  // and the facts, so the watches follow it directly.
   const film = brand.film;
-  // With a film, the opening carries the name (as the logo) and the page heading.
-  const Name = film ? "p" : "h1";
 
   return (
     <>
       <main>
-        {film && <BrandFilmHero brand={{ ...brand, film }} next={brand.showcase ? "#yakindan" : "#hikaye"} />}
+        {film && <BrandFilmHero brand={{ ...brand, film }} next={brand.showcase ? "#yakindan" : "#saatler"} />}
         {brand.showcase && (
           <div id="yakindan" className={brand.theme === "gold" ? styles.gold : undefined}>
             <BrandShowcase showcase={brand.showcase} label={`${brand.name} — yakından`} />
@@ -51,30 +51,36 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           className={["page", film ? styles.afterFilm : "", brand.theme === "gold" ? styles.gold : ""].join(" ")}
           data-nav-theme="light"
         >
-          <header className={`container ${styles.intro}`}>
-            <div className={`rise ${styles.facts}`}>
-              <SectionMarker label="Saat evi" />
-              <dl>
-                <div>
-                  <dt>Kuruluş</dt>
-                  <dd>{brand.founded}</dd>
-                </div>
-                <div>
-                  <dt>Köken</dt>
-                  <dd>{brand.origin}</dd>
-                </div>
-              </dl>
-            </div>
-            <Name className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
-              {brand.name}
-            </Name>
-            <div className={`rise ${styles.story}`} style={{ "--i": 2 } as React.CSSProperties}>
-              <p className={styles.signature}>{brand.signature}</p>
-              <p className="t-lead">{brand.description}</p>
-            </div>
-          </header>
+          {!film && (
+            <header className={`container ${styles.intro}`}>
+              <div className={`rise ${styles.facts}`}>
+                <SectionMarker label="Saat evi" />
+                <dl>
+                  <div>
+                    <dt>Kuruluş</dt>
+                    <dd>{brand.founded}</dd>
+                  </div>
+                  <div>
+                    <dt>Köken</dt>
+                    <dd>{brand.origin}</dd>
+                  </div>
+                </dl>
+              </div>
+              <h1 className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
+                {brand.name}
+              </h1>
+              <div className={`rise ${styles.story}`} style={{ "--i": 2 } as React.CSSProperties}>
+                <p className={styles.signature}>{brand.signature}</p>
+                <p className="t-lead">{brand.description}</p>
+              </div>
+            </header>
+          )}
 
-          <section className={`container ${styles.watches}`} aria-label={`${brand.name} saatleri`}>
+          <section
+            id="saatler"
+            className={`container ${styles.watches} ${film ? styles.first : ""}`}
+            aria-label={`${brand.name} saatleri`}
+          >
             <p className={styles.label}>
               {products.length > 0 ? `Koleksiyonda · ${products.length} saat` : "Koleksiyonda"}
             </p>

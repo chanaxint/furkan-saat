@@ -1,11 +1,11 @@
-import { pose } from "@/lib/scene/pose";
 import type { Brand } from "./types";
 
 /**
  * The houses the boutique carries. Brand pages live at /markalar/[slug].
  * `logo` is the ivory-on-transparent mark shown on the home page brand tiles
  * (public/assets/images/brands/). `film` (public/assets/video/brands/) loops
- * behind the logo at the top of the brand page; `showcase` performs a 3D model
+ * behind the logo at the top of the brand page, and the watches follow it; an
+ * optional `showcase` performs a 3D model
  * after it (public/assets/models/).
  */
 export const BRANDS: Brand[] = [
@@ -58,43 +58,5 @@ export const BRANDS: Brand[] = [
       poster: "/assets/video/brands/freelook.webp",
     },
     theme: "gold",
-    showcase: {
-      model: "/assets/models/freelook-watch.glb",
-      pivot: [0, 0, 0.6],
-      beats: [
-        {
-          id: "case",
-          side: "left",
-          title: "Altın kasa",
-          accent: "kasa",
-          text: "Altın tonlarında, yumuşak hatlarla şekillenen bir kasa; kurma kolu bile özenle işlenmiş.",
-          pose: pose(0.5, 0, -3.5, -52, 16, -5),
-        },
-        {
-          id: "bezel",
-          side: "right",
-          title: "Taşlı çerçeve",
-          accent: "çerçeve",
-          text: "Çift sıra kristal taşla çevrili çerçeve, her açıdan ışığı yakalar.",
-          pose: pose(-0.36, -0.06, -2.15, -372, 34, -4),
-        },
-        {
-          id: "dial",
-          side: "left",
-          title: "Desenli kadran",
-          accent: "kadran",
-          text: "Altın desenli kadranın üzerinde üç siyah alt kadran; her biri ince altın bir halkayla çevrili.",
-          pose: pose(0.5, 0.02, -2.6, -352, -8, -6),
-        },
-        {
-          id: "bracelet",
-          side: "right",
-          title: "Altın bilezik",
-          accent: "bilezik",
-          text: "Geniş halkalı altın bilezik, bileğe ağırlığını hissettirmeden oturur.",
-          pose: pose(-0.6, 0.25, -3.1, -385, 62, 0),
-        },
-      ],
-    },
   },
 ];

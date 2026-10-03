@@ -26,7 +26,11 @@
 /* After a film opening the bar is already accounted for: a plain section gap instead. */
 .afterFilm {
   min-height: 0;
-  padding-top: var(--space-xl);
+  padding-top: clamp(36px, 4.5vw, 64px);
+}
+/* Straight after the film: the watches open the page, no gap above them. */
+.watches.first {
+  margin-top: 0;
 }
 
 .intro {

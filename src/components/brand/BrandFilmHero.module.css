@@ -1,4 +1,8 @@
 .hero {
+  /* Ground of the page below — the film dissolves into it. */
+  --after: var(--ivory);
+  /* Height of that dissolve, at the foot of the film. */
+  --fade: 32svh;
   position: relative;
   height: 100svh;
   min-height: 520px;
@@ -23,7 +27,43 @@
   background:
     radial-gradient(48% 42% at 50% 48%, rgba(3, 8, 7, 0.5), transparent 75%),
     radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
-    linear-gradient(to bottom, rgba(7, 26, 22, 0.45), transparent 22%, transparent 66%, rgba(5, 8, 7, 0.75));
+    linear-gradient(to bottom, rgba(7, 26, 22, 0.45), transparent 22%);
+}
+
+/*
+ * The dissolve: a blur that grows towards the foot (backdrop-filter, faded in
+ * by a mask) under a wash of the page colour, so the film turns soft and
+ * transparent and the page simply continues.
+ */
+.fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: var(--fade);
+  pointer-events: none;
+}
+.fade::before,
+.fade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.fade::before {
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  backdrop-filter: blur(16px) saturate(1.1);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%);
+  mask-image: linear-gradient(to bottom, transparent, #000 55%);
+}
+.fade::after {
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--after) 12%, transparent) 25%,
+    color-mix(in srgb, var(--after) 45%, transparent) 55%,
+    color-mix(in srgb, var(--after) 85%, transparent) 80%,
+    var(--after) 100%
+  );
 }
 
 .content {
@@ -33,7 +73,8 @@
   place-content: center;
   justify-items: center;
   gap: clamp(18px, 2.6vh, 30px);
-  padding: 0 var(--gutter);
+  /* Centred in the clear part of the film, above the dissolve and the cue. */
+  padding: 0 var(--gutter) calc(var(--fade) * 0.7);
   text-align: center;
   animation: rise 2s var(--ease-lux) 0.3s both;
 }
@@ -60,7 +101,7 @@
 .facts {
   position: absolute;
   left: var(--gutter);
-  bottom: clamp(28px, 6vh, 64px);
+  bottom: calc(var(--fade) + 8px);
   display: flex;
   gap: 40px;
   margin: 0;
@@ -81,7 +122,7 @@
 .cue {
   position: absolute;
   left: 50%;
-  bottom: clamp(28px, 6vh, 64px);
+  bottom: calc(var(--fade) - 24px);
   display: grid;
   justify-items: center;
   gap: 16px;
@@ -117,7 +158,10 @@
   animation: cue 2.8s var(--ease-soft) infinite;
 }
 
-/* Gold theme: the signature and the cue in gold, a warmer grade. */
+/* Gold theme: the signature and the cue in gold, a warmer grade; the page below is warm white. */
+.hero[data-theme="gold"] {
+  --after: #fbf8f2;
+}
 .hero[data-theme="gold"] .signature {
   background: linear-gradient(100deg, #c9a45c 0%, #f0dca8 45%, #d4b06a 70%, #b8913f 100%);
   -webkit-background-clip: text;
@@ -132,7 +176,7 @@
   background:
     radial-gradient(48% 42% at 50% 48%, rgba(12, 8, 2, 0.5), transparent 75%),
     radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
-    linear-gradient(to bottom, rgba(20, 14, 4, 0.4), transparent 22%, transparent 66%, rgba(10, 7, 2, 0.78));
+    linear-gradient(to bottom, rgba(20, 14, 4, 0.4), transparent 22%);
 }
 
 @keyframes rise {
@@ -162,6 +206,9 @@
 }
 
 @media (max-width: 767px) {
+  .content {
+    padding-bottom: var(--fade);
+  }
   /* Phones: the facts would crowd the cue, so they leave the opening (they are repeated below). */
   .facts {
     display: none;

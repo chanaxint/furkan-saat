@@ -56,6 +56,8 @@ export function BrandFilmHero({ brand, next }: { brand: Brand & { film: NonNulla
         <source src={film.mp4} type="video/mp4" />
       </video>
       <div className={styles.grade} aria-hidden />
+      {/* The foot of the film goes out of focus and dissolves into the page below. */}
+      <div className={styles.fade} aria-hidden />
 
       <div className={styles.content}>
         <h1 className={styles.logo}>

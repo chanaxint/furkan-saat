@@ -1,0 +1,151 @@
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 520px;
+  overflow: hidden;
+  background: #050605;
+  color: var(--ivory);
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A quiet grade so the logo always reads: darker at the centre and the foot. */
+.grade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(48% 42% at 50% 48%, rgba(3, 8, 7, 0.5), transparent 75%),
+    radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(to bottom, rgba(7, 26, 22, 0.45), transparent 22%, transparent 66%, rgba(5, 8, 7, 0.75));
+}
+
+.content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: clamp(18px, 2.6vh, 30px);
+  padding: 0 var(--gutter);
+  text-align: center;
+  animation: rise 2s var(--ease-lux) 0.3s both;
+}
+/* Any logo shape fits this box. */
+.logo {
+  position: relative;
+  width: min(360px, 64vw);
+  height: min(300px, 30svh);
+  margin: 0;
+  filter: drop-shadow(0 4px 30px rgba(0, 0, 0, 0.45));
+}
+.logo img {
+  object-fit: contain;
+}
+.signature {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.3rem, 2vw, 1.9rem);
+  color: var(--champagne);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.facts {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(28px, 6vh, 64px);
+  display: flex;
+  gap: 40px;
+  margin: 0;
+  animation: rise 2s var(--ease-lux) 0.7s both;
+}
+.facts dt {
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-faint);
+}
+.facts dd {
+  margin: 6px 0 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+}
+
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(28px, 6vh, 64px);
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 8px 12px;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-muted);
+  cursor: pointer;
+  transform: translateX(-50%);
+  animation: fade 1.6s var(--ease-soft) 1s both;
+}
+.cue:hover,
+.cue:focus-visible {
+  color: var(--ivory);
+}
+.cueLine {
+  position: relative;
+  width: 1px;
+  height: 56px;
+  overflow: hidden;
+  background: rgba(242, 237, 227, 0.2);
+}
+.cueLine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--champagne);
+  animation: cue 2.8s var(--ease-soft) infinite;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes cue {
+  0% { transform: translateY(-100%); }
+  60% { transform: translateY(100%); }
+  100% { transform: translateY(100%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .facts,
+  .cue,
+  .cueLine::after {
+    animation: none;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Phones: the facts would crowd the cue, so they leave the opening (they are repeated below). */
+  .facts {
+    display: none;
+  }
+}

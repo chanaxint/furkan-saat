@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
+import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
 import { ArticleCard } from "@/components/journal/ArticleCard";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
@@ -22,17 +23,21 @@ export async function generateMetadata({ params }: PageProps<"/markalar/[slug]">
   return { title: `${b.name} Saatleri — Furkan Saat`, description: b.description };
 }
 
-/** A house: its story in brief, then its watches. */
+/** A house: its film (when it has one), its story in brief, then its watches. */
 export default async function BrandPage({ params }: PageProps<"/markalar/[slug]">) {
   const brand = await getBrand((await params).slug);
   if (!brand) notFound();
   const [products, brands, articles] = await Promise.all([getProductsByBrand(brand.slug), getBrands(), getArticlesByBrand(brand.slug)]);
   const others = brands.filter((b) => b.slug !== brand.slug);
+  const film = brand.film;
+  // With a film, the opening carries the name (as the logo) and the page heading.
+  const Name = film ? "p" : "h1";
 
   return (
     <>
       <main>
-        <div className="page" data-nav-theme="light">
+        {film && <BrandFilmHero brand={{ ...brand, film }} next="#hikaye" />}
+        <div id="hikaye" className={`page ${film ? styles.afterFilm : ""}`} data-nav-theme="light">
           <header className={`container ${styles.intro}`}>
             <div className={`rise ${styles.facts}`}>
               <SectionMarker label="Saat evi" />
@@ -47,9 +52,9 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
                 </div>
               </dl>
             </div>
-            <h1 className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
+            <Name className={`t-display rise ${styles.name}`} style={{ "--i": 1 } as React.CSSProperties}>
               {brand.name}
-            </h1>
+            </Name>
             <div className={`rise ${styles.story}`} style={{ "--i": 2 } as React.CSSProperties}>
               <p className={styles.signature}>{brand.signature}</p>
               <p className="t-lead">{brand.description}</p>

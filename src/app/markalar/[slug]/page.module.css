@@ -1,3 +1,9 @@
+/* After a film opening the bar is already accounted for: a plain section gap instead. */
+.afterFilm {
+  min-height: 0;
+  padding-top: var(--space-xl);
+}
+
 .intro {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));

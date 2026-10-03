@@ -3,7 +3,8 @@ import type { Brand } from "./types";
 /**
  * The houses the boutique carries. Brand pages live at /markalar/[slug].
  * `logo` is the ivory-on-transparent mark shown on the home page brand tiles
- * (public/assets/images/brands/).
+ * (public/assets/images/brands/). `film` (public/assets/video/brands/) loops
+ * behind the logo at the top of the brand page.
  */
 export const BRANDS: Brand[] = [
   {
@@ -49,5 +50,10 @@ export const BRANDS: Brand[] = [
       "1999'da Paris'te kurulan Freelook, Parisli kadının zahmetsiz zarafetinden ilham alır. Kristal taşlar ve altın detaylar, günlük şıklık için tasarlanmış modellerde buluşur.",
     cover: "/assets/images/watches/freelook-baget-tasli-yesil.webp",
     logo: "/assets/images/brands/freelook.png",
+    film: {
+      mp4: "/assets/video/brands/freelook.mp4",
+      webm: "/assets/video/brands/freelook.webm",
+      poster: "/assets/video/brands/freelook.webp",
+    },
   },
 ];

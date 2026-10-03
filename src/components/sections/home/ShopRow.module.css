@@ -70,8 +70,13 @@
 .card {
   position: relative;
 }
+/* The card measures its own width, so the cart bar can sit on the foot of the 4:5 photo. */
+.card {
+  container-type: inline-size;
+}
 .link {
   display: grid;
+  grid-template-rows: auto 1fr auto;
   gap: 12px;
 }
 .media {
@@ -89,28 +94,74 @@
 .alt {
   opacity: 0;
 }
-/* Hover: the second photograph, and a quiet bar to open the watch. */
-.view {
+/*
+ * "Sepete ekle": a frosted bar over the foot of the photograph, shown on hover
+ * (on touch screens a small bag button, always there). The photo is 4:5, so
+ * its foot is at 125cqw from the top of the card.
+ */
+.add {
   position: absolute;
   left: 14px;
   right: 14px;
-  bottom: 14px;
+  top: calc(125cqw - 14px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   padding: 14px;
   border: 1px solid rgba(255, 255, 255, 0.55);
-  background: rgba(242, 237, 227, 0.72);
+  background: rgba(242, 237, 227, 0.78);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   color: var(--green-900);
   font-size: var(--fs-micro);
   font-weight: 600;
   letter-spacing: 0.2em;
-  text-align: center;
   text-transform: uppercase;
+  cursor: pointer;
   opacity: 0;
-  transform: translateY(10px);
+  transform: translateY(calc(-100% + 10px));
   transition:
     opacity 0.5s var(--ease-soft),
-    transform 0.6s var(--ease-lux);
+    transform 0.6s var(--ease-lux),
+    background-color 0.4s var(--ease-soft),
+    color 0.4s var(--ease-soft);
+}
+.add svg {
+  width: 15px;
+  height: 15px;
+}
+.add:hover,
+.add:focus-visible,
+.add[data-in-cart] {
+  background: var(--green-900);
+  border-color: var(--green-900);
+  color: var(--ivory);
+}
+.card:hover .add,
+.add:focus-visible {
+  opacity: 1;
+  transform: translateY(-100%);
+}
+@media (hover: none) {
+  .add {
+    left: auto;
+    right: 10px;
+    top: calc(125cqw - 10px);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+  .add span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
 }
 @media (hover: hover) {
   .link:hover .image {
@@ -118,11 +169,6 @@
   }
   .link:hover .alt {
     opacity: 1;
-  }
-  .link:hover .view,
-  .link:focus-visible .view {
-    opacity: 1;
-    transform: none;
   }
 }
 .name {

@@ -3,13 +3,15 @@ import Link from "next/link";
 import type { Product } from "@/lib/data/types";
 import { brandName } from "@/lib/services/catalog";
 import { refLabel } from "@/lib/format";
+import { AddToCartButton } from "./AddToCartButton";
 import { PriceDisplay } from "./PriceDisplay";
 import { WishlistButton } from "./WishlistButton";
 import styles from "./ProductCard.module.css";
 
 /**
  * A watch in a grid: a large photograph and four quiet lines of type.
- * On hover the second photograph fades in and the image eases closer.
+ * On hover the second photograph fades in, the image eases closer and a
+ * "Sepete ekle" bar rises over its foot; the heart saves it to favourites.
  */
 export function ProductCard({ product, priority = false, sizes }: { product: Product; priority?: boolean; sizes?: string }) {
   const [cover, alt] = product.images;
@@ -34,6 +36,7 @@ export function ProductCard({ product, priority = false, sizes }: { product: Pro
         </div>
       </Link>
       <WishlistButton slug={product.slug} className={styles.wish} />
+      <AddToCartButton product={product} className={styles.add} />
     </article>
   );
 }

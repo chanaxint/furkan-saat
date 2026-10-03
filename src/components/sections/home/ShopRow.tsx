@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { AddToCartButton } from "@/components/product/AddToCartButton";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { WishlistButton } from "@/components/product/WishlistButton";
 import type { Product } from "@/lib/data/types";
@@ -10,7 +11,8 @@ import styles from "./ShopRow.module.css";
  * A row of watches, shop-window style.
  *  - `edge`: title on the left, five tiles edge to edge across the page
  *  - `centred`: a centred collection title, four tiles within the margins
- * On phones the row scrolls sideways.
+ * Each tile: second photograph on hover, "Sepete ekle" over the photo, a
+ * heart for favourites. On phones the row scrolls sideways.
  */
 export function ShopRow({
   title,
@@ -57,9 +59,6 @@ function ShopCard({ product }: { product: Product }) {
         <div className={styles.media}>
           {cover && <Image src={cover} alt={`${brand} ${product.model}`} fill sizes={sizes} className={styles.image} />}
           {alt && <Image src={alt} alt="" fill sizes={sizes} className={`${styles.image} ${styles.alt}`} />}
-          <span className={styles.view} aria-hidden>
-            Hemen incele
-          </span>
         </div>
         <p className={styles.name}>
           {brand} {product.model}
@@ -67,6 +66,7 @@ function ShopCard({ product }: { product: Product }) {
         <PriceDisplay price={product.price} currency={product.currency} className={styles.price} />
       </Link>
       <WishlistButton slug={product.slug} className={styles.wish} />
+      <AddToCartButton product={product} className={styles.add} />
     </article>
   );
 }

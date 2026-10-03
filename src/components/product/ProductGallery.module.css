@@ -21,10 +21,64 @@
   object-fit: cover;
   transition: transform 1.8s var(--ease-lux);
 }
-@media (hover: hover) {
-  .open:hover .image {
-    transform: scale(1.02);
-  }
+/* ------------------------------------------------------------ close look */
+.gallery[data-looking] .open {
+  cursor: crosshair;
+}
+/* The frame on the photograph: what the pane beside it magnifies. */
+.lens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 0 1px rgba(10, 12, 10, 0.12), 0 8px 30px rgba(10, 12, 10, 0.18);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-soft);
+}
+.lens[data-on] {
+  opacity: 1;
+}
+/* The magnified view, over the information column. */
+.pane {
+  position: fixed;
+  z-index: 40;
+  overflow: hidden;
+  background: #e9e4da;
+  border: 1px solid var(--line-on-light);
+  box-shadow: 0 30px 80px rgba(7, 26, 22, 0.18);
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.985);
+  transition:
+    opacity 0.35s var(--ease-soft),
+    transform 0.5s var(--ease-lux);
+}
+.pane[data-on] {
+  opacity: 1;
+  transform: none;
+}
+.paneImg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  object-fit: cover;
+  will-change: transform;
+}
+.paneLabel {
+  position: absolute;
+  left: 18px;
+  top: 16px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--green-900);
+  background: rgba(242, 237, 227, 0.8);
+  padding: 6px 10px;
 }
 .counter {
   display: none;

@@ -4,7 +4,7 @@
     "brand": "casio",
     "model": "Edifice Sapphire Kronograf",
     "reference": "EFB-730D-3AV",
-    "price": null,
+    "price": 14950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-edifice-efb-730d-3av.webp"
@@ -35,7 +35,7 @@
     "brand": "casio",
     "model": "Edifice Slim Sapphire",
     "reference": "EFR-S108DE-3AV",
-    "price": null,
+    "price": 12450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-edifice-efr-s108de-3av.webp"
@@ -65,7 +65,7 @@
     "brand": "casio",
     "model": "Kronograf — Yeşil Kadran",
     "reference": "MTP-E515D-2A2",
-    "price": null,
+    "price": 4850,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-mtp-e515d-2a2.webp"
@@ -94,7 +94,7 @@
     "brand": "casio",
     "model": "Multifonksiyon — Kırmızı Çerçeve",
     "reference": "MTP-1374D-5AV",
-    "price": null,
+    "price": 6250,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-mtp-1374d-5av.webp"
@@ -122,7 +122,7 @@
     "brand": "casio",
     "model": "Vintage Mini — Altın, Çiçek Desenli",
     "reference": "LA680WGA-4C",
-    "price": null,
+    "price": 3650,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-la680wga-4c.webp"
@@ -152,7 +152,7 @@
     "brand": "casio",
     "model": "Vintage İnce Dijital",
     "reference": "A700W-1A",
-    "price": null,
+    "price": 2950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-a700w-1a.webp"
@@ -179,7 +179,7 @@
     "brand": "casio",
     "model": "F-91W — Gümüş Metal",
     "reference": "F-91W",
-    "price": null,
+    "price": 1950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-f-91w-gumus-metal.webp"
@@ -206,7 +206,7 @@
     "brand": "casio",
     "model": "F-91W — Şeffaf Mavi",
     "reference": "F-91WS-2",
-    "price": null,
+    "price": 1750,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-f-91ws-2.webp"
@@ -233,7 +233,7 @@
     "brand": "casio",
     "model": "Dikdörtgen — Altın, Beyaz Kadran",
     "reference": "LTP-V009G-7E",
-    "price": null,
+    "price": 2450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-ltp-v009g-7e.webp"
@@ -259,7 +259,7 @@
     "brand": "casio",
     "model": "Klasik — Bicolor, Beyaz Kadran",
     "reference": "LTP-1275SG-7B",
-    "price": null,
+    "price": 2950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/casio-ltp-1275sg-7b.webp"
@@ -288,7 +288,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Siyah, Deri Kayış",
     "reference": "",
-    "price": null,
+    "price": 3450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-siyah-deri.webp"
@@ -313,7 +313,7 @@
     "brand": "daniel-klein",
     "model": "Klasik — Yeşil Kadran, Bicolor",
     "reference": "",
-    "price": null,
+    "price": 3950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-yesil-kadran-bicolor.webp"
@@ -338,7 +338,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Yeşil Kadran, Altın Kasa",
     "reference": "",
-    "price": null,
+    "price": 4950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-yesil-altin.webp"
@@ -363,7 +363,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Pudra Kadran, Siyah Alt Kadranlar",
     "reference": "",
-    "price": null,
+    "price": 4650,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-pembe-kadran.webp"
@@ -390,7 +390,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Siyah Çelik",
     "reference": "",
-    "price": null,
+    "price": 4450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-siyah-celik.webp"
@@ -415,7 +415,7 @@
     "brand": "daniel-klein",
     "model": "Gün-Tarih — Tırtıklı Çerçeve",
     "reference": "",
-    "price": null,
+    "price": 3750,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-gun-tarih-tirtikli.webp"
@@ -440,7 +440,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Siyah Kasa, Yeşil Kadran",
     "reference": "",
-    "price": null,
+    "price": 4850,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-yesil-siyah.webp"
@@ -465,7 +465,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Gümüş Kadran, Köşeli Kasa",
     "reference": "",
-    "price": null,
+    "price": 4350,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-gumus-kadran.webp"
@@ -490,7 +490,7 @@
     "brand": "daniel-klein",
     "model": "Exclusive — Beyaz Yatay Çizgili Kadran",
     "reference": "",
-    "price": null,
+    "price": 5250,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/daniel-klein-exclusive-beyaz-cizgili.webp"
@@ -516,7 +516,7 @@
     "brand": "essence",
     "model": "Kare — Yeşil Kadran, Roma Rakamları",
     "reference": "",
-    "price": null,
+    "price": 4250,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-kare-yesil-roma.webp"
@@ -543,7 +543,7 @@
     "brand": "essence",
     "model": "Kare — Sedef Kadran, Taşlı Bilezik",
     "reference": "",
-    "price": null,
+    "price": 4650,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-kare-sedef-tasli-bilezik.webp"
@@ -569,7 +569,7 @@
     "brand": "essence",
     "model": "Sekizgen — Sedef Kadran, Zincir Bilezik",
     "reference": "",
-    "price": null,
+    "price": 3950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-sekizgen-sedef-zincir.webp"
@@ -595,7 +595,7 @@
     "brand": "essence",
     "model": "Sedef Kadran — Taşlı Çerçeve, Rose Bicolor",
     "reference": "",
-    "price": null,
+    "price": 4450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-sedef-tasli-bicolor-rose.webp"
@@ -621,7 +621,7 @@
     "brand": "essence",
     "model": "Multifonksiyon — Altın, Tırtıklı Çerçeve",
     "reference": "",
-    "price": null,
+    "price": 5450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-multifonksiyon-altin.webp"
@@ -647,7 +647,7 @@
     "brand": "essence",
     "model": "Yeşil Kadran — Taşlı Çerçeve",
     "reference": "",
-    "price": null,
+    "price": 4250,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-yesil-kadran-tasli.webp"
@@ -673,7 +673,7 @@
     "brand": "essence",
     "model": "Dikdörtgen — Sedef Kadran, Bicolor",
     "reference": "",
-    "price": null,
+    "price": 3850,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-dikdortgen-sedef-bicolor.webp"
@@ -699,7 +699,7 @@
     "brand": "essence",
     "model": "Mini — Sedef Kadran, Rose Bicolor",
     "reference": "",
-    "price": null,
+    "price": 3450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/essence-mini-sedef-rose.webp"
@@ -725,7 +725,7 @@
     "brand": "freelook",
     "model": "Baget Taşlı — Yeşil Kadran, Bicolor",
     "reference": "",
-    "price": null,
+    "price": 7950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-baget-tasli-yesil.webp"
@@ -753,7 +753,7 @@
     "brand": "freelook",
     "model": "Yeşil Kadran — Taşlı Çerçeve",
     "reference": "",
-    "price": null,
+    "price": 6950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-yesil-kadran-tasli.webp"
@@ -779,7 +779,7 @@
     "brand": "freelook",
     "model": "Diamond — Sedef Kadran, Taşlı Bilezik",
     "reference": "",
-    "price": null,
+    "price": 7450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-diamond-sedef.webp"
@@ -805,7 +805,7 @@
     "brand": "freelook",
     "model": "Multifonksiyon — Altın, Desenli Kadran",
     "reference": "",
-    "price": null,
+    "price": 8950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-multifonksiyon-leopar.webp"
@@ -831,7 +831,7 @@
     "brand": "freelook",
     "model": "Roma Rakamları — Taş İndeksli, Bicolor",
     "reference": "",
-    "price": null,
+    "price": 6450,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-roma-rakamli-bicolor.webp"
@@ -857,7 +857,7 @@
     "brand": "freelook",
     "model": "Kare — Gümüş Kadran, Taşlı Çerçeve",
     "reference": "",
-    "price": null,
+    "price": 6250,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-kare-gumus-tasli.webp"
@@ -883,7 +883,7 @@
     "brand": "freelook",
     "model": "Dikdörtgen — Beyaz Kadran, Altın",
     "reference": "",
-    "price": null,
+    "price": 6750,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-dikdortgen-beyaz-altin.webp"
@@ -909,7 +909,7 @@
     "brand": "freelook",
     "model": "Klasik — Desenli Beyaz Kadran, Altın",
     "reference": "",
-    "price": null,
+    "price": 5950,
     "currency": "TRY",
     "images": [
       "/assets/images/watches/freelook-klasik-beyaz-altin.webp"

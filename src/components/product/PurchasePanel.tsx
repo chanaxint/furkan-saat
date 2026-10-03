@@ -32,7 +32,7 @@ export function PurchasePanel({ product }: { product: Product }) {
             drawer.setOpen(true);
           }}
         >
-          {inCart ? "Sepette — görüntüle" : "Satın al"}
+          {inCart ? "Sepette — görüntüle" : "Sepete ekle"}
         </Button>
       )}
       <ButtonLink href={enquiry.email} variant={purchasable ? "frame" : "solid"} className={styles.wide}>

@@ -1,5 +1,7 @@
+/* The card measures its own width, so the cart bar can sit on the foot of the 4:5 photo. */
 .card {
   position: relative;
+  container-type: inline-size;
 }
 
 .link {
@@ -71,4 +73,70 @@
   top: 18px;
   right: 18px;
   color: var(--ivory);
+}
+
+/* "Sepete ekle": over the foot of the photograph on hover; a small bag button on touch screens. */
+.add {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  top: calc(125cqw - 18px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(242, 237, 227, 0.8);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--text-on-light);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(calc(-100% + 10px));
+  transition:
+    opacity 0.5s var(--ease-soft),
+    transform 0.6s var(--ease-lux),
+    background-color 0.4s var(--ease-soft),
+    color 0.4s var(--ease-soft);
+}
+.add svg {
+  width: 15px;
+  height: 15px;
+}
+.add:hover,
+.add:focus-visible,
+.add[data-in-cart] {
+  background: var(--green-900);
+  border-color: var(--green-900);
+  color: var(--ivory);
+}
+.card:hover .add,
+.add:focus-visible {
+  opacity: 1;
+  transform: translateY(-100%);
+}
+@media (hover: none) {
+  .add {
+    left: auto;
+    right: 12px;
+    top: calc(125cqw - 12px);
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 50%;
+    opacity: 1;
+    transform: translateY(-100%);
+  }
+  .add span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
 }

@@ -23,6 +23,11 @@
   color: #8c6a2f;
 }
 
+/* Over a 3D stage: no ground of its own — the stage's grey veil shows the watch behind. */
+.overStage {
+  background: transparent;
+}
+
 /* After a film opening the bar is already accounted for: a plain section gap instead. */
 .afterFilm {
   min-height: 0;

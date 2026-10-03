@@ -1,4 +1,4 @@
-import type { ShowcaseBeat } from "@/lib/scene/pose";
+import type { Pose, ShowcaseBeat } from "@/lib/scene/pose";
 
 /** Allowed values — the admin panel offers exactly these. */
 export const TONES = ["green", "deep", "ivory", "stone", "champagne", "wine"] as const;
@@ -76,12 +76,28 @@ export type Brand = {
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**
+   * Optional 3D opening instead of a film: the watch from the side under the
+   * brand's name, turning onto the name on its dial and onto its bracelet,
+   * then swaying behind the collection.
+   */
+  stage?: BrandStageDef;
+  /**
    * Palette. `gold`: the brand page has a warm white ground with gold accents,
    * and its home page tile name is set in gold (use a gold `logo` with it).
    */
   theme?: "gold";
   /** Logo used on the brand page itself, when it differs from `logo`. */
   pageLogo?: string;
+};
+
+export type BrandStageDef = {
+  /** .glb path. */
+  model: string;
+  /** Centre of the watch head in model units. */
+  pivot: [number, number, number];
+  poses: { intro: Pose; logo: Pose; bracelet: Pose; rest: Pose };
+  /** Small line above the name, e.g. "1946'dan beri · Tokyo". */
+  eyebrow: string;
 };
 
 export type BrandShowcaseDef = {

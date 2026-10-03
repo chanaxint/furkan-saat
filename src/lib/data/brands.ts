@@ -1,3 +1,4 @@
+import { pose } from "@/lib/scene/pose";
 import type { Brand } from "./types";
 
 /**
@@ -6,7 +7,7 @@ import type { Brand } from "./types";
  * (public/assets/images/brands/). `film` (public/assets/video/brands/) loops
  * behind the logo at the top of the brand page, and the watches follow it; an
  * optional `showcase` performs a 3D model
- * after it (public/assets/models/).
+ * after it (public/assets/models/). `stage` opens the page on a 3D watch instead.
  */
 export const BRANDS: Brand[] = [
   {
@@ -19,6 +20,21 @@ export const BRANDS: Brand[] = [
       "1974'te ilk saati Casiotron'u tanıtan Japon üretici; efsanevi F-91W'dan safir camlı Edifice serisine kadar dayanıklılığı ve erişilebilir teknolojisiyle dünyanın en çok takılan saatlerinden bazılarını üretir.",
     cover: "/assets/images/watches/casio-edifice-efb-730d-3av.webp",
     logo: "/assets/images/brands/casio.png",
+    stage: {
+      model: "/assets/models/casio-watch.glb",
+      pivot: [0, 0, 0.62],
+      eyebrow: "1946'dan beri · Tokyo",
+      poses: {
+        // From the side, crown to the lens, the bracelet falling away on both sides.
+        intro: pose(0, -0.18, -2.45, -90, 86, 0),
+        // Close on the name printed on the dial.
+        logo: pose(-0.12, -0.04, -0.8, -360, 0, 0),
+        // Over the bracelet's links.
+        bracelet: pose(-0.5, 0.22, -2.1, -385, 64, 0),
+        // At rest to the right, behind the collection.
+        rest: pose(0.55, -0.05, -4.6, -410, 16, -6),
+      },
+    },
   },
   {
     slug: "daniel-klein",

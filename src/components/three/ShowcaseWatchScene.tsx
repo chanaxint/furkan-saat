@@ -17,13 +17,35 @@ type Props = {
   /** Receives a function that renders one new frame (called on every timeline update). */
   onWake: (wake: () => void) => void;
   onReady?: () => void;
+  /** Metal the light is tuned for: polished gold, or steel. */
+  tone?: "gold" | "steel";
+  /**
+   * Phones (portrait): how much higher the watch sits, how much further back
+   * it goes, and whether sideways shifts are kept (otherwise dropped).
+   */
+  portrait?: Portrait;
 };
 
+type Portrait = { lift: number; pull: number; keepX?: boolean };
+
+/** Extra state for an idle sway (0 = still, 1 = full sway); optional. */
+type IdleState = { idle?: number };
+
 /**
- * The WebGL layer of a brand showcase: one watch, lit for gold on a light
- * ground. Renders on demand — the scrubbed timeline wakes it on each update.
+ * The WebGL layer of a brand showcase: one watch on a light ground, lit for
+ * gold or steel. Renders on demand — the scrubbed timeline wakes it on each
+ * update; while `state.idle` is above zero it keeps rendering for the sway.
  */
-export default function ShowcaseWatchScene({ state, model, pivot, active, onWake, onReady }: Props) {
+export default function ShowcaseWatchScene({
+  state,
+  model,
+  pivot,
+  active,
+  onWake,
+  onReady,
+  tone = "gold",
+  portrait = { lift: 0.55, pull: 1.7 },
+}: Props) {
   return (
     <Canvas
       frameloop={active ? "demand" : "never"}
@@ -41,9 +63,9 @@ export default function ShowcaseWatchScene({ state, model, pivot, active, onWake
       }}
       style={{ position: "absolute", inset: 0 }}
     >
-      <GoldLighting />
+      {tone === "gold" ? <GoldLighting /> : <SteelLighting />}
       <Suspense fallback={null}>
-        <Rig state={state} model={model} pivot={pivot} onWake={onWake} onReady={onReady} />
+        <Rig state={state} model={model} pivot={pivot} onWake={onWake} onReady={onReady} portrait={portrait} />
       </Suspense>
     </Canvas>
   );
@@ -81,6 +103,31 @@ function GoldLighting() {
   );
 }
 
+/**
+ * Studio light for polished steel on a pale grey ground: a cool dark surround
+ * so the steel has something to reflect, broad white softboxes for long
+ * highlights on the case and links, and strips to draw the bezel's edge.
+ */
+function SteelLighting() {
+  return (
+    <>
+      <ambientLight intensity={0.08} color="#f4f6f8" />
+      <directionalLight position={[3, 4, 5]} intensity={1} color="#ffffff" />
+      <directionalLight position={[-4, 2, -2]} intensity={0.35} color="#eef2f5" />
+      <Environment resolution={512} frames={1} environmentIntensity={1}>
+        <color attach="background" args={["#2b2e31"]} />
+        <Lightformer form="rect" intensity={2.6} color="#ffffff" position={[0, 5, 0.5]} rotation-x={Math.PI / 2} scale={[7, 3, 1]} />
+        <Lightformer form="rect" intensity={3.2} color="#f7f9fb" position={[4.2, 0.6, 2.6]} rotation-y={-Math.PI / 3} scale={[1.2, 7, 1]} />
+        <Lightformer form="rect" intensity={1.8} color="#ffffff" position={[-4.4, 0.2, 2]} rotation-y={Math.PI / 3} scale={[1, 7, 1]} />
+        <Lightformer form="rect" intensity={1} color="#ffffff" position={[0.8, 1.6, 6]} scale={[3, 1.5, 1]} />
+        <Lightformer form="rect" intensity={1.2} color="#e9eef2" position={[5, 1, -3]} rotation-y={-Math.PI / 1.6} scale={[2.5, 6, 1]} />
+        <Lightformer form="rect" intensity={0.9} color="#e9eef2" position={[-5, 1, -3]} rotation-y={Math.PI / 1.6} scale={[2.5, 6, 1]} />
+        <Lightformer form="rect" intensity={0.5} color="#9aa1a6" position={[0, -5, 0]} rotation-x={-Math.PI / 2} scale={[10, 10, 1]} />
+      </Environment>
+    </>
+  );
+}
+
 const AXIS_A = new Vector3(...SPIN_AXIS_A).normalize();
 const AXIS_B = new Vector3(...SPIN_AXIS_B).normalize();
 
@@ -90,7 +137,8 @@ function Rig({
   pivot,
   onWake,
   onReady,
-}: Pick<Props, "state" | "model" | "pivot" | "onWake" | "onReady">) {
+  portrait: lift,
+}: Pick<Props, "state" | "model" | "pivot" | "onWake" | "onReady"> & { portrait: Portrait }) {
   const gltf = useGLTF(model);
   const watch = useRef<Group>(null);
   const size = useThree((s) => s.size);
@@ -117,27 +165,36 @@ function Rig({
     invalidate();
   }, [onWake, onReady, invalidate]);
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     if (camera.fov !== SHOWCASE_FOV) {
       camera.fov = SHOWCASE_FOV;
       camera.updateProjectionMatrix();
     }
     const w = watch.current;
     if (!w) return;
-    // Portrait screens: no sideways shift (the line sits below).
+    // Portrait screens: the watch sits higher and further back (and, unless kept, without sideways shifts).
     const aspect = size.width / size.height;
     const portrait = aspect < 1 ? 1 - aspect : 0;
-    const xFactor = Math.max(0, 1 - portrait * 2);
-    // The line takes the lower part of a phone screen, so the watch sits higher and further back.
-    w.position.set(state.x * xFactor, state.y + portrait * 0.55, state.z * (1 + portrait * 1.7));
+    const xFactor = lift.keepX ? 1 : Math.max(0, 1 - portrait * 2);
+    // Idle sway: slow, diagonal, never the same twice (two incommensurate periods).
+    const idle = (state as ShowcaseState & IdleState).idle ?? 0;
+    const t = clock.getElapsedTime();
+    const bob = idle * Math.sin(t * 0.7) * 0.035;
+    w.position.set(state.x * xFactor, state.y + portrait * lift.lift + bob, state.z * (1 + portrait * lift.pull));
     tmp.e.set(-state.pitch, state.yaw, state.roll, "YXZ");
     tmp.q.setFromEuler(tmp.e);
     tmp.spin.setFromAxisAngle(AXIS_B, state.spinB);
     tmp.q.premultiply(tmp.spin);
-    tmp.spin.setFromAxisAngle(AXIS_A, state.spinA);
+    tmp.spin.setFromAxisAngle(AXIS_A, state.spinA + idle * Math.sin(t * 0.55) * 0.13);
     tmp.q.premultiply(tmp.spin);
+    if (idle > 0.001) {
+      tmp.spin.setFromAxisAngle(AXIS_B, idle * Math.sin(t * 0.37 + 1.3) * 0.1);
+      tmp.q.premultiply(tmp.spin);
+    }
     w.quaternion.copy(tmp.q);
     w.scale.setScalar(state.scale);
+    // Keep drawing while it sways (the timeline only wakes it while scrolling).
+    if (idle > 0.001) invalidate();
   });
 
   return (

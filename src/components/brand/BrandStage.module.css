@@ -1,0 +1,93 @@
+/* The region: a pale studio grey, the watch fixed behind everything in it. */
+.region {
+  position: relative;
+  isolation: isolate;
+}
+
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: #ececea;
+}
+/* Soft daylight sweeping across the grey, like light on a studio wall. */
+.light {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(70% 55% at 50% 58%, rgba(255, 255, 255, 0.9), transparent 70%),
+    linear-gradient(168deg, transparent 30%, rgba(255, 255, 255, 0.55) 42%, transparent 52%),
+    linear-gradient(176deg, transparent 52%, rgba(255, 255, 255, 0.35) 60%, transparent 68%),
+    radial-gradient(120% 90% at 50% 40%, transparent 55%, rgba(170, 170, 168, 0.35) 100%);
+}
+
+.hero {
+  position: relative;
+}
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  pointer-events: none;
+}
+
+/* The name above the watch, like a headline. */
+.title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--nav-h) + clamp(16px, 4vh, 48px));
+  display: grid;
+  justify-items: center;
+  gap: clamp(14px, 2.2vh, 24px);
+  padding: 0 var(--gutter);
+  text-align: center;
+  pointer-events: auto;
+}
+.eyebrow {
+  margin: 0;
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #2b2d2f;
+}
+.logo {
+  position: relative;
+  width: min(560px, 70vw);
+  aspect-ratio: 1176 / 290;
+  margin: 0;
+  /* The ivory logo, set in near-black for the pale ground. */
+  filter: brightness(0.14);
+}
+.logo img {
+  object-fit: contain;
+}
+.button {
+  padding: 14px 34px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #1d1f21;
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  transition:
+    background-color 0.4s var(--ease-soft),
+    color 0.4s var(--ease-soft);
+}
+.button:hover,
+.button:focus-visible {
+  background: #1d1f21;
+  color: #fff;
+}
+
+/* What follows (the collection) scrolls over the watch on a veil of the grey. */
+.over {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(236, 236, 234, 0) 0, rgba(236, 236, 234, 0.62) 22vh);
+}

@@ -107,6 +107,12 @@ showcase is ready but not used on any brand for now):
   `pivot` the centre of the watch head, `beats` the four poses (`pose(x, y, z, yaw°, pitch°, roll°)`)
   and their lines. The 3D layer loads a screen ahead and only renders while on screen.
 - `theme: "gold"` + `pageLogo` — white and gold page, gold logo.
+- `stage` — the page opens on the watch in 3D instead of a film (Casio): seen from the side under
+  the brand's logo, one full diagonal turn onto the name on the dial, another onto the bracelet,
+  then it settles to one side and sways by itself behind the collection, which scrolls over it
+  (`components/brand/BrandStage`, timeline in `lib/scene/stage.ts`, poses in `stage.poses`).
+  The 3D layer is fixed behind the opening and the collection and renders only while they are
+  on screen.
 
 Models are compressed with gltf-transform:
 `gltf-transform optimize in.glb out.glb --compress meshopt --texture-compress webp --texture-size 2048 --simplify-ratio 0.5 --simplify-error 0.0004`

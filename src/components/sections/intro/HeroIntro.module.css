@@ -195,6 +195,58 @@
   from { opacity: 0; }
 }
 
+/* ------------------------------------------------------------ sound */
+.sound {
+  position: absolute;
+  z-index: 2;
+  right: var(--gutter);
+  bottom: clamp(28px, 6vh, 64px);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-on-dark-faint);
+  cursor: pointer;
+  transition: color 0.6s var(--ease-soft);
+  animation: cue-in 1.6s var(--ease-soft) 0.9s both;
+}
+.sound:hover,
+.sound:focus-visible,
+.sound[aria-pressed="true"] {
+  color: var(--text-on-dark-muted);
+}
+/* Four hairline bars: still when off, gently moving when on. */
+.bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.bars span {
+  width: 1px;
+  height: 3px;
+  background: currentColor;
+  transition: height 0.4s var(--ease-soft);
+}
+.sound[aria-pressed="true"] .bars span {
+  background: var(--champagne);
+  animation: bar 1.1s ease-in-out infinite alternate;
+}
+.sound[aria-pressed="true"] .bars span:nth-child(2) { animation-delay: -0.35s; }
+.sound[aria-pressed="true"] .bars span:nth-child(3) { animation-delay: -0.7s; }
+.sound[aria-pressed="true"] .bars span:nth-child(4) { animation-delay: -0.2s; }
+@keyframes bar {
+  from { height: 3px; }
+  to { height: 12px; }
+}
+
 /* ------------------------------------------------------------ blend */
 /*
  * Black into the house green. Clouds of green rise into the black and black
@@ -274,7 +326,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mist,
-  .cueLine::after {
+  .cueLine::after,
+  .sound[aria-pressed="true"] .bars span {
     animation: none;
   }
 }

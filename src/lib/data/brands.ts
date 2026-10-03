@@ -1,6 +1,12 @@
 import type { Brand } from "./types";
 
-/** The houses the boutique carries. Brand pages live at /markalar/[slug]. */
+/**
+ * The houses the boutique carries. Brand pages live at /markalar/[slug].
+ *
+ * Home page tile videos: put the clip in public/assets/video/brands/ and add
+ *   reel: { mp4: "/assets/video/brands/casio.mp4", poster: "/assets/video/brands/casio.webp" }
+ * to the brand. Until then the tile shows the `cover` photograph.
+ */
 export const BRANDS: Brand[] = [
   {
     slug: "casio",

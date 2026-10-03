@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { introSound } from "@/lib/sound/introSound";
 import styles from "./HeroIntro.module.css";
 
 /**
@@ -15,6 +16,9 @@ import styles from "./HeroIntro.module.css";
  * done       the page is released; scrolling continues into the black → green blend
  * rewinding  scrolling back up at the top: the titles go and the film runs
  *            backwards to its first frame, then it is idle again
+ *
+ * Sound (lib/sound/introSound): ticks that accelerate with the film, a deep
+ * hit on the cut, a chime with the name, slowing ticks on the rewind.
  */
 type Phase = "idle" | "playing" | "line" | "mark" | "done" | "rewinding";
 
@@ -49,6 +53,19 @@ export function HeroIntro() {
   const phaseRef = useRef<Phase>("idle");
   const timers = useRef<number[]>([]);
   const { lenis, scrollTo } = useSmoothScroll();
+  const sound = useSyncExternalStore(
+    (fn) => introSound.subscribe(fn),
+    () => introSound.snapshot,
+    () => "10",
+  );
+  const soundOn = sound === "11";
+
+  /** Start the accelerating ticks in step with the film, from wherever it is. */
+  const rise = useCallback(() => {
+    const v = video.current;
+    if (phaseRef.current !== "playing" || !v || !introSound.ready) return;
+    introSound.rise(Number.isFinite(v.duration) ? v.duration : 5, v.currentTime);
+  }, []);
 
   const go = useCallback((next: Phase) => {
     phaseRef.current = next;
@@ -68,13 +85,18 @@ export function HeroIntro() {
     if (phaseRef.current !== "playing") return;
     clearTimers();
     go("line");
-    later(() => go("mark"), LINE_MS);
+    introSound.impact();
+    later(() => {
+      go("mark");
+      introSound.chime();
+    }, LINE_MS);
     later(() => go("done"), LINE_MS + MARK_MS);
   }, [go, later, clearTimers]);
 
   const start = useCallback(() => {
     if (phaseRef.current !== "idle") return;
     go("playing");
+    introSound.stop();
     const v = video.current;
     later(titles, SAFETY_MS);
     if (!v) return titles();
@@ -101,6 +123,7 @@ export function HeroIntro() {
       v.currentTime = 0;
     }
     const r = reverse.current;
+    introSound.rewind((Number.isFinite(r?.duration) ? r!.duration : 5) / REWIND_RATE);
     later(rewound, SAFETY_MS);
     if (!r) return rewound();
     r.currentTime = 0;
@@ -169,13 +192,19 @@ export function HeroIntro() {
       if (held() && window.scrollY > 0) window.scrollTo(0, 0);
     };
 
+    // Sound may only start after a click, tap or key press; the ticks then join the film where it is.
+    const onActivate = () => void introSound.unlock().then((ok) => ok && rise());
+
     const opts = { capture: true, passive: false } as const;
+    const activation = ["pointerdown", "keydown", "touchend"] as const;
+    activation.forEach((t) => window.addEventListener(t, onActivate, { capture: true, passive: true }));
     window.addEventListener("wheel", onWheel, opts);
     window.addEventListener("touchstart", onTouchStart, { capture: true, passive: true });
     window.addEventListener("touchmove", onTouchMove, opts);
     window.addEventListener("keydown", onKey, opts);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
+      activation.forEach((t) => window.removeEventListener(t, onActivate, { capture: true }));
       window.removeEventListener("wheel", onWheel, opts);
       window.removeEventListener("touchstart", onTouchStart, { capture: true });
       window.removeEventListener("touchmove", onTouchMove, opts);
@@ -184,7 +213,7 @@ export function HeroIntro() {
       clearTimers();
       delete document.documentElement.dataset.intro;
     };
-  }, [go, start, rewind, clearTimers]);
+  }, [go, start, rewind, clearTimers, rise]);
 
   // Smooth scrolling only runs once released. The navigation stays away while
   // the opening plays and the name fills the screen, and returns once the page
@@ -218,7 +247,18 @@ export function HeroIntro() {
     });
   }, root);
 
-  const onCue = () => (phase === "done" ? scrollTo("#koleksiyon") : start());
+  const onCue = () => (phase === "done" ? scrollTo("#markalar") : start());
+
+  // Off → on also asks the browser for permission (this click allows it).
+  const onSound = async () => {
+    if (soundOn) {
+      introSound.stop(0.2);
+      introSound.setOn(false);
+      return;
+    }
+    introSound.setOn(true);
+    if (await introSound.unlock()) rise();
+  };
 
   return (
     <section ref={root} id="top" className={styles.intro} data-nav-theme="dark" aria-label="Açılış">
@@ -231,6 +271,7 @@ export function HeroIntro() {
           playsInline
           preload="auto"
           onEnded={titles}
+          onPlaying={rise}
           aria-hidden
         >
           <source src={film.mobile} type="video/mp4" media="(max-width: 767px)" />
@@ -266,6 +307,22 @@ export function HeroIntro() {
         <button type="button" className={styles.cue} onClick={onCue}>
           Aşağı kaydırın
           <span className={styles.cueLine} aria-hidden />
+        </button>
+
+        <button
+          type="button"
+          className={styles.sound}
+          aria-pressed={soundOn}
+          aria-label={soundOn ? "Sesi kapat" : "Sesi aç"}
+          onClick={onSound}
+        >
+          <span className={styles.bars} aria-hidden>
+            <span />
+            <span />
+            <span />
+            <span />
+          </span>
+          {soundOn ? "Ses açık" : "Ses kapalı"}
         </button>
       </div>
 

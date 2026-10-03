@@ -1,17 +1,7 @@
-/*
- * Green ground: the opening's black-to-green blend ends on exactly this
- * colour, so the site continues from it without a seam. The light-ground
- * text tokens are flipped here so the product cards read on green.
- */
 .section {
-  --text-on-light: var(--ivory);
-  --text-on-light-muted: var(--text-on-dark-muted);
-  --text-on-light-faint: var(--text-on-dark-faint);
-  --line-on-light: var(--line-on-dark);
-  background: var(--green-900);
-  color: var(--ivory);
-  padding-top: clamp(40px, 6vw, 96px);
-  padding-bottom: var(--section-y);
+  background: var(--ivory);
+  color: var(--green-900);
+  padding-block: var(--section-y);
 }
 .header {
   display: grid;
@@ -29,7 +19,7 @@
   font-size: var(--fs-display-l);
 }
 .heading em {
-  color: var(--champagne);
+  color: var(--champagne-600);
 }
 .lede {
   grid-column: 9 / span 4;

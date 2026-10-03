@@ -12,15 +12,15 @@ import { HeroIntro } from "@/components/sections/intro/HeroIntro";
  * FURKAN SAAT — Homepage
  * Opening film (plays on the first scroll → "İstediğiniz her saat" → "Furkan Saat"
  * → black-to-green blend)
- * · 01 Selected watches · 02 Brands · 03 Collections · 04 Trust · 05 Private viewing
+ * · 01 Featured brands · 02 Selected watches · 03 Collections · 04 Trust · 05 Private viewing
  * · 06 Journal · Final CTA · Footer
  */
 export default function Home() {
   return (
     <main>
       <HeroIntro />
-      <FeaturedWatches />
       <BrandReels />
+      <FeaturedWatches />
       <CollectionsSection />
       <TrustSection />
       <Boutique />

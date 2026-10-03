@@ -63,7 +63,9 @@ export function BrandStage({
     };
     draw();
     const tl = gsap.to(clock, { t: sceneTimes(motion).total, ease: "none", onUpdate: draw });
-    ScrollTrigger.create({ trigger: hero.current, start: "top top", end: "bottom bottom", scrub: 1.2, animation: tl });
+    // The timeline ends once the collection has risen well into view, so the
+    // watch's last turn carries it down beneath the watches as they arrive.
+    ScrollTrigger.create({ trigger: hero.current, start: "top top", end: "bottom 40%", scrub: 1.2, animation: tl });
   }, region);
 
   const onWake = useCallback((fn: () => void) => {

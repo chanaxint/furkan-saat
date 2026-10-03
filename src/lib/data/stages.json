@@ -1,0 +1,18 @@
+{
+  "casio": {
+    "speed": 60,
+    "poses": {
+      "intro": { "x": 0, "y": -0.18, "z": -2.45, "yaw": -90, "pitch": 86, "roll": 0 },
+      "logo": { "x": 0.42, "y": -0.04, "z": -1.75, "yaw": -360, "pitch": 0, "roll": 0 },
+      "bracelet": { "x": -0.5, "y": 0.22, "z": -2.3, "yaw": -385, "pitch": 64, "roll": 0 },
+      "exit": { "x": 0, "y": -0.5, "z": -7, "yaw": -420, "pitch": 20, "roll": -6 }
+    },
+    "times": {
+      "logo": { "at": 0.4, "dur": 3.2 },
+      "bracelet": { "at": 5.6, "dur": 3.2 },
+      "exit": { "at": 10.6, "dur": 1.4 },
+      "end": 12.2
+    },
+    "spins": { "logo": 1, "bracelet": 1 }
+  }
+}

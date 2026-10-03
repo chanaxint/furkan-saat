@@ -1,4 +1,3 @@
-import { pose } from "@/lib/scene/pose";
 import type { Brand } from "./types";
 
 /**
@@ -24,16 +23,6 @@ export const BRANDS: Brand[] = [
       model: "/assets/models/casio-watch.glb",
       pivot: [0, 0, 0.62],
       eyebrow: "1946'dan beri · Tokyo",
-      poses: {
-        // From the side, crown to the lens, the bracelet falling away on both sides.
-        intro: pose(0, -0.18, -2.45, -90, 86, 0),
-        // The name on the dial, the watch to the right of its line.
-        logo: pose(0.42, -0.04, -1.75, -360, 0, 0),
-        // Over the bracelet's links, the watch to the left of its line.
-        bracelet: pose(-0.5, 0.22, -2.3, -385, 64, 0),
-        // Back and away as the collection arrives.
-        exit: pose(0, -0.5, -7, -420, 20, -6),
-      },
       lines: [
         {
           side: "left",

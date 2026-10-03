@@ -111,7 +111,11 @@ showcase is ready but not used on any brand for now):
   the brand's logo, a slow full diagonal turn onto the name on the dial, another onto the
   bracelet, each with its line beside it (`stage.lines`), then the watch drifts back and fades as
   the collection arrives (`components/brand/BrandStage`, timeline in `lib/scene/stage.ts`, poses
-  in `stage.poses`). It renders only while on screen and visible.
+  in `lib/data/stages.json`). It renders only while on screen and visible.
+  **Editing the turns:** `npm run dev -- -p 4321`, then http://localhost:4321/yonetim/donusler —
+  pick a pose (Açılış, Yazı, Kordon, Çıkış), place the watch with the sliders, play or scrub the
+  preview (desktop or phone frame, with the page's own title and lines), set timings, turns and
+  scroll length, and save; this writes `src/lib/data/stages.json`. Commit that file to publish.
 
 Models are compressed with gltf-transform, without simplifying (close-ups need every facet)
 and with 12-bit normals (8-bit ones show as a faceted, foil-like surface):

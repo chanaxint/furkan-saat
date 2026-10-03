@@ -7,13 +7,11 @@ import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useGsap } from "@/hooks/useGsap";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
 import { ScrollTrigger } from "@/lib/gsap";
-import { buildStageTimeline, createStageState, STAGE_TIMES } from "@/lib/scene/stage";
+import { STAGES } from "@/lib/data/stages";
+import { buildStageTimeline, createStageState } from "@/lib/scene/stage";
 import styles from "./BrandStage.module.css";
 
 const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatchScene"), { ssr: false });
-
-/** Scroll length per timeline second (a full turn ≈ two screens of scrolling). */
-const SVH_PER_SECOND = 60;
 
 /**
  * BRAND STAGE — the opening of a brand page on its watch in 3D (lib/scene/stage.ts).
@@ -21,6 +19,8 @@ const SVH_PER_SECOND = 60;
  * children); after its turns the watch fades as the collection arrives. It
  * renders only while the region is on screen and the watch is visible.
  */
+const timelineEnd = (m: (typeof STAGES)[string]) => Math.max(m.times.end, m.times.exit.at + m.times.exit.dur);
+
 export function BrandStage({
   brand,
   stage,
@@ -39,7 +39,8 @@ export function BrandStage({
   const scene = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
-  const state = useMemo(() => createStageState(stage.poses), [stage.poses]);
+  const motion = STAGES[brand.slug];
+  const state = useMemo(() => createStageState(motion), [motion]);
   const [active, setActive] = useState(true);
   const { scrollTo } = useSmoothScroll();
 
@@ -52,7 +53,7 @@ export function BrandStage({
   }, []);
 
   useGsap(() => {
-    const tl = buildStageTimeline(state, stage.poses, { title: title.current, lines: lines.current });
+    const tl = buildStageTimeline(state, motion, { title: title.current, lines: lines.current });
     tl.eventCallback("onUpdate", () => {
       scene.current?.style.setProperty("--show", state.show.toFixed(3));
       // Once it has faded there is nothing to draw.
@@ -86,7 +87,7 @@ export function BrandStage({
       <section
         ref={hero}
         className={styles.hero}
-        style={{ height: `${Math.round(STAGE_TIMES.end * SVH_PER_SECOND)}svh` }}
+        style={{ height: `${Math.round(timelineEnd(motion) * motion.speed)}svh` }}
         data-nav-theme="light"
         aria-label={brand.name}
       >

@@ -1,0 +1,204 @@
+.editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+/* ----------------------------------------------------------- preview */
+.previewCol {
+  position: sticky;
+  top: 20px;
+  display: grid;
+  gap: 12px;
+}
+.previewBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.link {
+  font-size: var(--fs-small);
+  border-bottom: 1px solid currentColor;
+}
+.frame {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #ececea;
+  border: 1px solid var(--line-on-light);
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  container-type: inline-size;
+}
+.frame[data-device="phone"] {
+  aspect-ratio: 390 / 844;
+  width: min(100%, 340px);
+  justify-self: center;
+}
+/* The page's title and lines, scaled to the preview. */
+.previewTitle {
+  top: 6%;
+  transform-origin: top center;
+}
+.previewTitle > div {
+  width: min(300px, 50%);
+}
+/* Sized to the preview frame (as the page sizes them to the screen). */
+.previewLine {
+  width: 32cqw;
+  left: 4.4cqw;
+}
+.previewLine[data-side="right"] {
+  left: auto;
+  right: 4.4cqw;
+}
+.previewLine h2 {
+  font-size: clamp(1.2rem, 4.2cqw, 2.6rem);
+}
+.previewLine p:last-child {
+  font-size: clamp(0.72rem, 1.4cqw, 1rem);
+}
+
+.scrub {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+.scrub input[type="range"] {
+  width: 100%;
+  accent-color: var(--green-900);
+}
+.play,
+.save,
+.secondary,
+.segment button,
+.tabs button {
+  padding: 10px 18px;
+  border: 1px solid var(--green-900);
+  background: transparent;
+  color: var(--green-900);
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  cursor: pointer;
+}
+.play,
+.save {
+  background: var(--green-900);
+  color: var(--ivory);
+}
+.time {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-small);
+  min-width: 96px;
+  text-align: right;
+}
+.note,
+.hint {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+
+.segment,
+.tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.segment button[aria-pressed="true"],
+.tabs button[aria-pressed="true"] {
+  background: var(--green-900);
+  color: var(--ivory);
+}
+
+/* ---------------------------------------------------------- controls */
+.controls {
+  display: grid;
+  gap: 18px;
+}
+.block {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line-on-light);
+  background: rgba(255, 255, 255, 0.45);
+}
+.blockTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.axis {
+  display: grid;
+  gap: 4px;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  grid-template-areas: "label label" "range num";
+  align-items: center;
+  column-gap: 12px;
+}
+.axisLabel {
+  grid-area: label;
+  font-size: var(--fs-small);
+}
+.axis input[type="range"] {
+  grid-area: range;
+  width: 100%;
+  accent-color: var(--green-900);
+}
+.number {
+  grid-area: num;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-small);
+}
+.number input,
+.grid input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--line-on-light);
+  background: #fff;
+  font: inherit;
+  font-size: var(--fs-small);
+  font-variant-numeric: tabular-nums;
+}
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px 96px;
+  gap: 8px 10px;
+  align-items: center;
+}
+.colHead {
+  font-size: var(--fs-micro);
+  color: var(--text-on-light-muted);
+}
+.rowLabel {
+  font-size: var(--fs-small);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.save:disabled,
+.secondary:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (max-width: 1000px) {
+  .editor {
+    grid-template-columns: 1fr;
+  }
+  .previewCol {
+    position: static;
+  }
+}

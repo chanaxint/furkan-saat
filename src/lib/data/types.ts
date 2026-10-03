@@ -1,4 +1,4 @@
-import type { Pose, ShowcaseBeat } from "@/lib/scene/pose";
+import type { ShowcaseBeat } from "@/lib/scene/pose";
 
 /** Allowed values — the admin panel offers exactly these. */
 export const TONES = ["green", "deep", "ivory", "stone", "champagne", "wine"] as const;
@@ -95,7 +95,7 @@ export type BrandStageDef = {
   model: string;
   /** Centre of the watch head in model units. */
   pivot: [number, number, number];
-  poses: { intro: Pose; logo: Pose; bracelet: Pose; exit: Pose };
+  /** Poses, timings and turns live in stages.json under the brand's slug (edited at /yonetim/donusler). */
   /** Small line above the name, e.g. "1946'dan beri · Tokyo". */
   eyebrow: string;
   /** What is said beside the close-ups: the name on the dial, then the bracelet. */

@@ -4,6 +4,7 @@ import path from "path";
 import { BRANDS } from "@/lib/data/brands";
 import { COLLECTIONS } from "@/lib/data/collections";
 import type { Settings } from "@/lib/data/site";
+import type { StageMotion } from "@/lib/data/stages";
 import {
   AVAILABILITY,
   CONDITIONS,
@@ -37,6 +38,7 @@ async function writeJson(name: string, value: unknown) {
 export const readProducts = () => readJson<Product[]>("products.json");
 export const readArticles = () => readJson<Article[]>("journal.json");
 export const readSettings = () => readJson<Settings>("settings.json");
+export const readStages = () => readJson<Record<string, StageMotion>>("stages.json");
 
 /* ------------------------------------------------------------- validation */
 
@@ -191,4 +193,55 @@ export async function saveImage(fileIn: File, name: string) {
   await fs.mkdir(IMAGE_DIR, { recursive: true });
   await fs.writeFile(path.join(IMAGE_DIR, filename), Buffer.from(await fileIn.arrayBuffer()));
   return `/assets/images/watches/${filename}`;
+}
+
+/* ------------------------------------------------------------- 3D stages */
+
+const num = (v: unknown, label: string, min: number, max: number) => {
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n) || n < min || n > max) throw new InvalidInput(`${label}: ${min} ile ${max} arasında bir sayı olmalı.`);
+  return Math.round(n * 1000) / 1000;
+};
+
+/** Checks one brand's poses, timings and turns before they are written. */
+export function validateStage(input: Record<string, unknown>): StageMotion {
+  const o = (v: unknown) => (v && typeof v === "object" ? (v as Record<string, unknown>) : {});
+  const poseOf = (v: unknown, name: string) => {
+    const p = o(v);
+    return {
+      x: num(p.x, `${name} · sağ-sol`, -10, 10),
+      y: num(p.y, `${name} · yukarı-aşağı`, -10, 10),
+      z: num(p.z, `${name} · uzaklık`, -30, -0.2),
+      yaw: num(p.yaw, `${name} · dönüş`, -3600, 3600),
+      pitch: num(p.pitch, `${name} · eğim`, -3600, 3600),
+      roll: num(p.roll, `${name} · yatış`, -3600, 3600),
+    };
+  };
+  const stepOf = (v: unknown, name: string) => ({ at: num(o(v).at, `${name} · başlangıç`, 0, 120), dur: num(o(v).dur, `${name} · süre`, 0.1, 60) });
+  const poses = o(input.poses);
+  const times = o(input.times);
+  const spins = o(input.spins);
+  return {
+    speed: num(input.speed, "Kaydırma hızı", 10, 400),
+    poses: {
+      intro: poseOf(poses.intro, "Açılış"),
+      logo: poseOf(poses.logo, "Yazı"),
+      bracelet: poseOf(poses.bracelet, "Kordon"),
+      exit: poseOf(poses.exit, "Çıkış"),
+    },
+    times: {
+      logo: stepOf(times.logo, "Yazıya dönüş"),
+      bracelet: stepOf(times.bracelet, "Kordona dönüş"),
+      exit: stepOf(times.exit, "Çıkış"),
+      end: num(times.end, "Bitiş", 0.5, 200),
+    },
+    spins: { logo: num(spins.logo, "Yazıya tur sayısı", 0, 6), bracelet: num(spins.bracelet, "Kordona tur sayısı", 0, 6) },
+  };
+}
+
+export async function saveStage(slug: string, motion: StageMotion) {
+  const all = await readStages();
+  if (!all[slug]) throw new InvalidInput("Bu markanın 3D açılışı yok.");
+  all[slug] = motion;
+  await writeJson("stages.json", all);
 }

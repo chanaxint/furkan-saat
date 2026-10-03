@@ -1,7 +1,7 @@
 # Furkan Saat — Homepage (v1)
 
 Multi-house luxury watch retailer. Cinematic editorial homepage built with
-**Next.js 16 · React 19 · GSAP ScrollTrigger · Lenis**.
+**Next.js 16 · React 19 · Three.js / React Three Fiber · GSAP ScrollTrigger · Lenis**.
 
 ```bash
 npm install
@@ -69,6 +69,22 @@ keep their own. Dragging it during the intro hold starts the film.
 Timings are `LINE_MS` / `MARK_MS` / `REWIND_RATE` in the component. Arriving mid-page
 (back button) or with reduced motion skips the hold. To change the film, replace the
 files (same names) or update `ASSETS.intro.film`.
+
+## Brand pages: film opening, 3D showcase, gold theme
+
+Set on the brand in `lib/data/brands.ts` (Freelook has all three):
+
+- `film` — loops silently, full screen, behind the logo (`components/brand/BrandFilmHero`);
+  pauses once scrolled fully out of view.
+- `showcase` — after the film the watch flies in and makes four turns, each with its line
+  (`components/brand/BrandShowcase` + `three/ShowcaseWatchScene`, timeline in
+  `lib/scene/showcase.ts`). `model` is a meshopt-compressed `.glb` in `public/assets/models/`,
+  `pivot` the centre of the watch head, `beats` the four poses (`pose(x, y, z, yaw°, pitch°, roll°)`)
+  and their lines. The 3D layer loads a screen ahead and only renders while on screen.
+- `theme: "gold"` + `pageLogo` — white and gold page, gold logo.
+
+Models are compressed with gltf-transform:
+`gltf-transform optimize in.glb out.glb --compress meshopt --texture-compress webp --texture-size 2048 --simplify-ratio 0.5 --simplify-error 0.0004`
 
 ## Adding real assets
 

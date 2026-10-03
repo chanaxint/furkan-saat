@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
+import { BrandShowcase } from "@/components/brand/BrandShowcase";
 import { ArticleCard } from "@/components/journal/ArticleCard";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
@@ -23,7 +24,10 @@ export async function generateMetadata({ params }: PageProps<"/markalar/[slug]">
   return { title: `${b.name} Saatleri — Furkan Saat`, description: b.description };
 }
 
-/** A house: its film (when it has one), its story in brief, then its watches. */
+/**
+ * A house: its film and 3D showcase (when it has them), its story in brief,
+ * then its watches. `theme: "gold"` dresses the page in white and gold.
+ */
 export default async function BrandPage({ params }: PageProps<"/markalar/[slug]">) {
   const brand = await getBrand((await params).slug);
   if (!brand) notFound();
@@ -36,8 +40,17 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   return (
     <>
       <main>
-        {film && <BrandFilmHero brand={{ ...brand, film }} next="#hikaye" />}
-        <div id="hikaye" className={`page ${film ? styles.afterFilm : ""}`} data-nav-theme="light">
+        {film && <BrandFilmHero brand={{ ...brand, film }} next={brand.showcase ? "#yakindan" : "#hikaye"} />}
+        {brand.showcase && (
+          <div id="yakindan" className={brand.theme === "gold" ? styles.gold : undefined}>
+            <BrandShowcase showcase={brand.showcase} label={`${brand.name} — yakından`} />
+          </div>
+        )}
+        <div
+          id="hikaye"
+          className={["page", film ? styles.afterFilm : "", brand.theme === "gold" ? styles.gold : ""].join(" ")}
+          data-nav-theme="light"
+        >
           <header className={`container ${styles.intro}`}>
             <div className={`rise ${styles.facts}`}>
               <SectionMarker label="Saat evi" />

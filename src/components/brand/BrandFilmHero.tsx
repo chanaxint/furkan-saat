@@ -40,7 +40,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand & { film: NonNulla
 
   const { film } = brand;
   return (
-    <section ref={root} className={styles.hero} data-nav-theme="dark" aria-label={brand.name}>
+    <section ref={root} className={styles.hero} data-theme={brand.theme} data-nav-theme="dark" aria-label={brand.name}>
       <video
         ref={video}
         className={styles.video}
@@ -59,7 +59,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand & { film: NonNulla
 
       <div className={styles.content}>
         <h1 className={styles.logo}>
-          <Image src={brand.logo} alt={brand.name} fill priority sizes="(max-width: 767px) 60vw, 340px" />
+          <Image src={brand.pageLogo ?? brand.logo} alt={brand.name} fill priority sizes="(max-width: 767px) 60vw, 340px" />
         </h1>
         <p className={styles.signature}>{brand.signature}</p>
       </div>

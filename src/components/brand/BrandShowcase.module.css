@@ -1,0 +1,118 @@
+/*
+ * White and gold: a warm white ground with a soft gold light behind the watch.
+ * The section scrolls in under the film opening; its stage is pinned while the
+ * watch performs.
+ */
+.section {
+  --show: 0;
+  --gold: #b08a45;
+  --gold-deep: #8c6a2f;
+  position: relative;
+  background: #fbf8f2;
+  color: #2a2318;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* Soft gold light behind the watch and a whisper of warmth at the edges. */
+.glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 46% at 50% 50%, rgba(232, 205, 150, 0.42), transparent 72%),
+    radial-gradient(120% 100% at 50% 50%, transparent 60%, rgba(214, 190, 146, 0.28) 100%);
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  opacity: var(--show);
+}
+
+/* ------------------------------------------------------------ lines */
+.lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.line {
+  position: absolute;
+  top: 50%;
+  width: min(420px, 34vw);
+  display: grid;
+  gap: 14px;
+  transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+}
+.line[data-side="left"] {
+  left: var(--gutter);
+}
+.line[data-side="right"] {
+  right: var(--gutter);
+  text-align: right;
+}
+.index {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.lineTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.6rem, 4.6vw, 5.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+/* The accent word in polished gold. */
+.lineTitle em {
+  background: linear-gradient(100deg, #8c6a2f 0%, #c9a45c 38%, #e9d29a 52%, #b8913f 70%, #8c6a2f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.06em;
+}
+.lineText {
+  font-family: var(--font-display);
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+  color: rgba(42, 35, 24, 0.66);
+}
+
+@media (max-width: 767px) {
+  /* Phones: the line sits at the foot of the screen, on a soft fade of the ground. */
+  .lines::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40%;
+    background: linear-gradient(to top, rgba(251, 248, 242, 0.95), rgba(251, 248, 242, 0.7) 55%, transparent);
+  }
+  .line,
+  .line[data-side="left"],
+  .line[data-side="right"] {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    top: auto;
+    bottom: 7vh;
+    transform: none;
+    text-align: left;
+  }
+  .lineTitle {
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+  }
+  .lineText {
+    font-size: 1rem;
+  }
+}

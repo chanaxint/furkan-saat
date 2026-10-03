@@ -1,3 +1,28 @@
+/*
+ * White and gold (brand theme "gold"): warm white ground, deep brown ink and
+ * gold accents. The light-ground tokens are redefined so every component on
+ * the page (cards, labels, lines) follows.
+ */
+.gold {
+  --text-on-light: #2a2318;
+  --text-on-light-muted: rgba(42, 35, 24, 0.64);
+  --text-on-light-faint: rgba(42, 35, 24, 0.42);
+  --line-on-light: rgba(176, 138, 69, 0.3);
+  --champagne-600: #b08a45;
+  --green-900: #2a2318;
+  background: #fbf8f2;
+  color: var(--text-on-light);
+}
+.gold .name {
+  background: linear-gradient(100deg, #8c6a2f 0%, #c9a45c 38%, #e9d29a 52%, #b8913f 70%, #8c6a2f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.gold .signature {
+  color: #8c6a2f;
+}
+
 /* After a film opening the bar is already accounted for: a plain section gap instead. */
 .afterFilm {
   min-height: 0;

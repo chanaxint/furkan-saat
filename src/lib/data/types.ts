@@ -1,3 +1,5 @@
+import type { ShowcaseBeat } from "@/lib/scene/pose";
+
 /** Allowed values — the admin panel offers exactly these. */
 export const TONES = ["green", "deep", "ivory", "stone", "champagne", "wine"] as const;
 export const MOVEMENTS = ["Otomatik", "Manuel", "Kuvars"] as const;
@@ -71,6 +73,24 @@ export type Brand = {
    * logo, full screen (16:9 or wider, a few seconds, no sound needed).
    */
   film?: { mp4: string; webm?: string; poster?: string };
+  /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
+  showcase?: BrandShowcaseDef;
+  /**
+   * Page palette. `gold`: warm white ground with gold accents (and `pageLogo`,
+   * a gold version of the logo, on the page).
+   */
+  theme?: "gold";
+  /** Logo used on the brand page itself, when it differs from `logo`. */
+  pageLogo?: string;
+};
+
+export type BrandShowcaseDef = {
+  /** .glb path. */
+  model: string;
+  /** Centre of the watch head in model units. */
+  pivot: [number, number, number];
+  /** Four feature turns, in order. */
+  beats: ShowcaseBeat[];
 };
 
 export type CollectionDef = {

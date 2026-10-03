@@ -43,6 +43,7 @@
 }
 
 .tile {
+  isolation: isolate;
   display: grid;
   gap: 18px;
   outline-offset: 4px;
@@ -53,7 +54,6 @@
   display: grid;
   place-items: center;
   aspect-ratio: 4 / 5;
-  overflow: hidden;
   background:
     radial-gradient(70% 60% at 50% 45%, rgba(29, 70, 61, 0.55), transparent 75%),
     var(--green-850);
@@ -62,6 +62,81 @@
     border-color 0.8s var(--ease-lux),
     background-color 0.8s var(--ease-lux);
 }
+
+/*
+ * Hover: a glint of light travels round the edge of the tile. One conic
+ * gradient, rotated through --glow, drawn twice: a sharp ring on the border
+ * (masked to 1.5px) and a blurred copy behind the tile as its halo.
+ */
+@property --glow {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.frame::before,
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--glow),
+    transparent 0deg,
+    transparent 200deg,
+    rgba(200, 185, 154, 0.35) 270deg,
+    #f4e6c6 330deg,
+    #fffaf0 350deg,
+    transparent 360deg
+  );
+  opacity: 0;
+  animation: glow-spin 3.4s linear infinite;
+  animation-play-state: paused;
+  transition: opacity 0.7s var(--ease-soft);
+}
+/* The ring. */
+.frame::before {
+  z-index: 2;
+  padding: 2px;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+/* The halo: behind the tile's own ground (the tile is the stacking context), so it only shows outside it. */
+.frame::after {
+  z-index: -1;
+  inset: -4px;
+  filter: blur(12px);
+}
+.tile:hover .frame::before,
+.tile:hover .frame::after,
+.tile:focus-visible .frame::before,
+.tile:focus-visible .frame::after {
+  animation-play-state: running;
+}
+.tile:hover .frame::before,
+.tile:focus-visible .frame::before {
+  opacity: 1;
+}
+.tile:hover .frame::after,
+.tile:focus-visible .frame::after {
+  opacity: 0.85;
+}
+@keyframes glow-spin {
+  to {
+    --glow: 360deg;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .frame::before,
+  .frame::after {
+    animation: none;
+  }
+}
+
 /* The logos differ in shape; each fits the same box, so none outweighs the others. */
 .logo {
   position: relative;

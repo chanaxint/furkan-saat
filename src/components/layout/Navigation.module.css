@@ -68,11 +68,6 @@
   display: flex;
   align-items: center;
 }
-.links {
-  display: flex;
-  gap: clamp(22px, 2.6vw, 44px);
-}
-.link,
 .menuLabel {
   position: relative;
   font-size: var(--fs-micro);
@@ -81,7 +76,7 @@
   text-transform: uppercase;
   padding-block: 8px;
 }
-.link::after {
+.menuLabel::after {
   content: "";
   position: absolute;
   left: 0;
@@ -93,8 +88,8 @@
   transform-origin: right;
   transition: transform 0.8s var(--ease-lux);
 }
-.link:hover::after,
-.link[aria-current="page"]::after {
+.menuButton:hover .menuLabel::after,
+.menuButton:focus-visible .menuLabel::after {
   transform: scaleX(1);
   transform-origin: left;
 }
@@ -123,8 +118,9 @@
   letter-spacing: 0;
 }
 
+/* The hamburger at the top left opens the half-page menu (components/layout/SiteMenu). */
 .menuButton {
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 14px;
 }
@@ -145,15 +141,19 @@
 }
 .menuIcon span:last-child {
   top: 7px;
+  width: 70%;
+  transition: width 0.5s var(--ease-lux);
+}
+.menuButton:hover .menuIcon span:last-child,
+.menuButton:focus-visible .menuIcon span:last-child {
+  width: 100%;
 }
 
 /* ------------------------------------------------------------ modes */
-.links,
 .end,
 .menuButton {
   transition: opacity 1.2s var(--ease-lux), transform 1.2s var(--ease-lux);
 }
-.nav[data-mode="immersive"] .links,
 .nav[data-mode="immersive"] .end,
 .nav[data-mode="immersive"] .menuButton {
   opacity: 0;
@@ -169,15 +169,6 @@
 }
 
 /* ------------------------------------------------------ responsive */
-@media (max-width: 1080px) {
-  .links {
-    display: none;
-  }
-  .menuButton {
-    display: inline-flex;
-  }
-}
-
 @media (max-width: 560px) {
   /* Phones: the account lives in the menu drawer. */
   .account {

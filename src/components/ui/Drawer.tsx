@@ -15,6 +15,8 @@ export function Drawer({
   label,
   title,
   side = "right",
+  size = "default",
+  tone = "light",
   children,
   footer,
 }: {
@@ -23,6 +25,10 @@ export function Drawer({
   label: string;
   title?: ReactNode;
   side?: "right" | "left";
+  /** `half`: the panel takes half the page (full width on phones). */
+  size?: "default" | "half";
+  /** `green`: house green with ivory text instead of ivory. */
+  tone?: "light" | "green";
   children: ReactNode;
   footer?: ReactNode;
 }) {
@@ -42,7 +48,7 @@ export function Drawer({
   }, [open, onClose, lenis]);
 
   return (
-    <div className={styles.root} data-open={open || undefined} data-side={side} aria-hidden={!open} inert={!open}>
+    <div className={styles.root} data-open={open || undefined} data-side={side} data-size={size} data-tone={tone} aria-hidden={!open} inert={!open}>
       <div className={styles.scrim} onClick={onClose} />
       <aside className={styles.panel} role="dialog" aria-modal="true" aria-label={label}>
         <header className={styles.head}>

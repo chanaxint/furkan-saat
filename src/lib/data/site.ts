@@ -28,15 +28,6 @@ export const BANK: Settings["bank"] = settings.bank;
 
 export type NavLink = { label: string; href: string };
 
-/** Main navigation (desktop bar and menu drawer). */
-export const NAV_LINKS: NavLink[] = [
-  { label: "Koleksiyon", href: "/koleksiyon" },
-  { label: "Markalar", href: "/markalar" },
-  { label: "Dergi", href: "/dergi" },
-  { label: "Hakkımızda", href: "/hakkimizda" },
-  { label: "İletişim", href: "/iletisim" },
-];
-
 export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   {
     title: "Mağaza",

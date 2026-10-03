@@ -5,12 +5,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { BagIcon, HeartIcon, PersonIcon, SearchIcon } from "@/components/product/icons";
-import { NAV_LINKS } from "@/lib/data/site";
 import { ScrollTrigger } from "@/lib/gsap";
 import { useCart, useCartDrawer } from "@/lib/services/cart";
 import { useWishlist } from "@/lib/services/wishlist";
 import { CartDrawer } from "./CartDrawer";
-import { MobileMenu } from "./MobileMenu";
+import { SiteMenu } from "./SiteMenu";
 import { SearchOverlay } from "./SearchOverlay";
 import styles from "./Navigation.module.css";
 
@@ -83,13 +82,6 @@ export function Navigation() {
               </span>
               <span className={styles.menuLabel}>Menü</span>
             </button>
-            <nav className={styles.links} aria-label="Ana menü">
-              {NAV_LINKS.map((l) => (
-                <Link key={l.href} href={l.href} className={styles.link} aria-current={pathname?.startsWith(l.href) ? "page" : undefined}>
-                  {l.label}
-                </Link>
-              ))}
-            </nav>
           </div>
 
           <Link href="/#markalar" className={styles.wordmark} aria-label="Furkan Saat — markalar" onClick={onWordmark}>
@@ -114,7 +106,7 @@ export function Navigation() {
           </div>
         </div>
       </header>
-      <MobileMenu open={menu} onClose={() => setMenu(false)} />
+      <SiteMenu open={menu} onClose={() => setMenu(false)} />
       <SearchOverlay open={searching} onClose={() => setSearching(false)} />
       <CartDrawer />
     </>

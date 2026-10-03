@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "preview": "next build && next start -p 4321"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",

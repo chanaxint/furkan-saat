@@ -7,6 +7,7 @@ Multi-house luxury watch retailer. Cinematic editorial homepage built with
 npm install
 npm run dev        # http://localhost:3000
 npm run build && npm start
+npm run preview    # production build on http://localhost:4321 — judge smoothness here, not in dev
 npm run typecheck
 ```
 
@@ -34,7 +35,9 @@ the model. To change the photo, replace both files (or drop the cut-out to keep 
 
 - Tokens, type scale, spacing, motion curves: `src/app/globals.css`
 - Palette: `#071A16` green · `#F2EDE3` ivory · `#C8B99A` champagne · `#5A1018` wine
-- Type: Cormorant Garamond (display) + Inter Tight (UI), self-hosted in `public/fonts`
+- Type: Playfair Display (display, italic for accents) + Jost (UI, body, prices), self-hosted in
+  `public/fonts`; the ₺ sign comes from a one-glyph subset (`lira-sign.woff2`), as neither face
+  draws it. Lining figures throughout.
 - Reusable UI: `ArrowLink`, `SplitText`, `Reveal`, `SectionMarker`, `MediaSlot`
 
 ## Motion architecture
@@ -42,6 +45,9 @@ the model. To change the photo, replace both files (or drop the cut-out to keep 
 - `providers/SmoothScroll` — Lenis on GSAP's ticker (wheel only; touch stays native)
 - `lib/gsap.ts` — single plugin registration
 - `prefers-reduced-motion` disables Lenis, scroll choreography and the opening hold
+- Performance rules: no blur filters or blend modes on large or moving layers (soft shapes are
+  drawn with gradients); backdrop blurs only while an element is visible; ambient motion is
+  transform-only. Lenis uses `lerp` so the wheel is answered at once.
 
 ## Site loader
 

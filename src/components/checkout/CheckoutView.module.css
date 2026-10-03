@@ -131,8 +131,11 @@
   color: var(--text-on-light-muted);
 }
 .price {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.02em;
+  font-size: 1rem;
   white-space: nowrap;
 }
 .totals {
@@ -158,8 +161,11 @@
   font-weight: 500;
 }
 .total dd {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.02em;
+  font-size: 1.35rem;
 }
 .back {
   justify-self: start;

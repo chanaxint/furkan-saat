@@ -226,17 +226,17 @@
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.07;
-  mix-blend-mode: overlay;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   /* No grain on the last stretch, which must match the next section exactly. */
   -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 80%);
   mask-image: linear-gradient(to bottom, #000 60%, transparent 80%);
 }
+/* Soft by their own gradients (no blur filter), moved on the compositor only. */
 .mist {
   position: absolute;
   border-radius: 50%;
-  filter: blur(40px);
+  will-change: transform;
   animation: drift 20s ease-in-out infinite alternate;
 }
 /* Green rising into the black. */
@@ -245,14 +245,14 @@
   top: 14%;
   width: 72%;
   height: 40%;
-  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.95), rgba(19, 52, 45, 0.5) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.85), rgba(19, 52, 45, 0.45) 45%, rgba(19, 52, 45, 0.12) 75%, transparent);
 }
 .mist:nth-child(3) {
   right: -10%;
   top: 4%;
   width: 52%;
   height: 30%;
-  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.75), transparent);
+  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.65), rgba(29, 70, 61, 0.2) 60%, transparent);
   animation-duration: 26s;
   animation-direction: alternate-reverse;
 }
@@ -262,7 +262,7 @@
   top: 34%;
   width: 62%;
   height: 34%;
-  background: radial-gradient(closest-side, rgba(7, 8, 10, 0.95), rgba(7, 8, 10, 0.5) 55%, transparent);
+  background: radial-gradient(closest-side, rgba(7, 8, 10, 0.9), rgba(7, 8, 10, 0.45) 45%, rgba(7, 8, 10, 0.12) 75%, transparent);
   animation-duration: 24s;
 }
 .mist:nth-child(4) {
@@ -270,7 +270,7 @@
   top: 46%;
   width: 46%;
   height: 22%;
-  background: radial-gradient(closest-side, rgba(7, 8, 10, 0.8), transparent);
+  background: radial-gradient(closest-side, rgba(7, 8, 10, 0.7), rgba(7, 8, 10, 0.2) 60%, transparent);
   animation-duration: 30s;
   animation-direction: alternate-reverse;
 }

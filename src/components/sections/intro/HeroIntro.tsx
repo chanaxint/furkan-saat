@@ -23,7 +23,7 @@ import styles from "./HeroIntro.module.css";
 type Phase = "idle" | "playing" | "line" | "mark" | "done" | "rewinding";
 
 /** How long each title holds (ms). */
-const LINE_MS = 2600;
+const LINE_MS = 1500;
 const MARK_MS = 1200;
 /** Rewind speed (the reversed film is played faster than real time). */
 const REWIND_RATE = 2;

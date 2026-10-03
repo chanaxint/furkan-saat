@@ -34,18 +34,19 @@
   --line-on-light: rgba(7, 26, 22, 0.14);
 
   /* — Typography — */
-  --font-display: "Cormorant Garamond Variable", "Cormorant Garamond", "Times New Roman", serif;
-  --font-sans: "Inter Tight Variable", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Lira Sign", "Playfair Display Variable", "Playfair Display", Georgia, serif;
+  --font-sans: "Lira Sign", "Jost Variable", "Jost", "Helvetica Neue", Arial, sans-serif;
 
-  --fs-display-xxl: clamp(4.25rem, 14vw, 15rem);
-  --fs-display-xl: clamp(3.25rem, 9vw, 9.5rem);
-  --fs-display-l: clamp(2.75rem, 6.4vw, 6.5rem);
-  --fs-display-m: clamp(2.1rem, 4.2vw, 4.25rem);
-  --fs-display-s: clamp(1.6rem, 2.6vw, 2.5rem);
-  --fs-lead: clamp(1.125rem, 1.35vw, 1.375rem);
-  --fs-body: clamp(0.95rem, 1vw, 1.0625rem);
-  --fs-small: 0.8125rem;
-  --fs-micro: 0.6875rem;
+  /* Playfair sets larger and firmer than a hairline serif: the display steps are restrained. */
+  --fs-display-xxl: clamp(3.75rem, 12.5vw, 13rem);
+  --fs-display-xl: clamp(2.9rem, 8vw, 8.25rem);
+  --fs-display-l: clamp(2.4rem, 5.6vw, 5.6rem);
+  --fs-display-m: clamp(1.9rem, 3.7vw, 3.75rem);
+  --fs-display-s: clamp(1.45rem, 2.3vw, 2.2rem);
+  --fs-lead: clamp(1.1rem, 1.3vw, 1.3rem);
+  --fs-body: clamp(0.98rem, 1.02vw, 1.08rem);
+  --fs-small: 0.84rem;
+  --fs-micro: 0.72rem;
 
   --tracking-caps: 0.26em;
   --tracking-caps-wide: 0.38em;
@@ -123,7 +124,9 @@ body {
   font-family: var(--font-sans);
   font-size: var(--fs-body);
   line-height: 1.6;
-  font-weight: 380;
+  font-weight: 400;
+  /* Lining figures everywhere: prices and references read level and even. */
+  font-variant-numeric: lining-nums;
   overflow-x: hidden;
 }
 
@@ -316,8 +319,8 @@ ol {
   width: 90vmax;
   height: 90vmax;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05) 55%, transparent);
-  filter: blur(20px);
+  /* Soft by its own gradient: no blur filter (a blurred layer this size is costly to move). */
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06) 40%, rgba(255, 255, 255, 0.02) 70%, transparent);
   will-change: transform;
 }
 .green-sheen::before {

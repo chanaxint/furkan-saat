@@ -26,12 +26,13 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (prefersReducedMotion()) return;
 
+    // lerp (not a fixed duration): each frame closes a share of the distance,
+    // so scrolling answers the wheel at once and settles without lag.
     const instance = new Lenis({
-      duration: 1.25,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.11,
       smoothWheel: true,
       syncTouch: false,
-      wheelMultiplier: 0.9,
+      wheelMultiplier: 1,
     });
     lenisRef.current = instance;
     setLenis(instance);

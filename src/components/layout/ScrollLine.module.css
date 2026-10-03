@@ -1,7 +1,7 @@
 /*
  * A hairline scrollbar. The strip is wider than the line so it is easy to
- * grab; only the line is drawn. `difference` keeps it visible on green,
- * black and ivory alike.
+ * grab; only the line is drawn. Champagne reads on green, black and ivory
+ * alike (no blend mode: that would cost on every scrolled frame).
  */
 .track {
   position: fixed;
@@ -11,7 +11,6 @@
   bottom: 0;
   width: 14px;
   cursor: pointer;
-  mix-blend-mode: difference;
 }
 /* The faint rail. */
 .track::before {
@@ -21,7 +20,7 @@
   bottom: 0;
   right: 6px;
   width: 1px;
-  background: rgba(242, 237, 227, 0.1);
+  background: rgba(168, 153, 123, 0.22);
   transition: background-color 0.6s var(--ease-soft);
 }
 .track[data-hidden] {
@@ -44,8 +43,8 @@
   left: auto;
   right: 6px;
   width: 1px;
-  background: #c8b99a;
-  opacity: 0.55;
+  background: #a8997b;
+  opacity: 0.7;
   transition:
     width 0.4s var(--ease-lux),
     right 0.4s var(--ease-lux),
@@ -57,7 +56,7 @@
   opacity: 0.95;
 }
 .track:hover::before {
-  background: rgba(242, 237, 227, 0.18);
+  background: rgba(168, 153, 123, 0.35);
 }
 .track:hover .thumb::before,
 .track[data-dragging] .thumb::before {

@@ -108,14 +108,15 @@ showcase is ready but not used on any brand for now):
   and their lines. The 3D layer loads a screen ahead and only renders while on screen.
 - `theme: "gold"` + `pageLogo` — white and gold page, gold logo.
 - `stage` — the page opens on the watch in 3D instead of a film (Casio): seen from the side under
-  the brand's logo, one full diagonal turn onto the name on the dial, another onto the bracelet,
-  then it settles to one side and sways by itself behind the collection, which scrolls over it
-  (`components/brand/BrandStage`, timeline in `lib/scene/stage.ts`, poses in `stage.poses`).
-  The 3D layer is fixed behind the opening and the collection and renders only while they are
-  on screen.
+  the brand's logo, a slow full diagonal turn onto the name on the dial, another onto the
+  bracelet, each with its line beside it (`stage.lines`), then the watch drifts back and fades as
+  the collection arrives (`components/brand/BrandStage`, timeline in `lib/scene/stage.ts`, poses
+  in `stage.poses`). It renders only while on screen and visible.
 
-Models are compressed with gltf-transform:
-`gltf-transform optimize in.glb out.glb --compress meshopt --texture-compress webp --texture-size 2048 --simplify-ratio 0.5 --simplify-error 0.0004`
+Models are compressed with gltf-transform, without simplifying (close-ups need every facet)
+and with 12-bit normals (8-bit ones show as a faceted, foil-like surface):
+`gltf-transform optimize in.glb tmp.glb --compress false --simplify false --texture-compress webp --texture-size 2048`
+then `gltf-transform meshopt tmp.glb out.glb --level medium --quantize-position 16 --quantize-normal 12 --quantize-texcoord 14`
 
 ## Adding real assets
 

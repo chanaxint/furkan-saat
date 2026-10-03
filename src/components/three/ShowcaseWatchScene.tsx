@@ -28,13 +28,10 @@ type Props = {
 
 type Portrait = { lift: number; pull: number; keepX?: boolean };
 
-/** Extra state for an idle sway (0 = still, 1 = full sway); optional. */
-type IdleState = { idle?: number };
-
 /**
  * The WebGL layer of a brand showcase: one watch on a light ground, lit for
  * gold or steel. Renders on demand — the scrubbed timeline wakes it on each
- * update; while `state.idle` is above zero it keeps rendering for the sway.
+ * update.
  */
 export default function ShowcaseWatchScene({
   state,
@@ -49,7 +46,7 @@ export default function ShowcaseWatchScene({
   return (
     <Canvas
       frameloop={active ? "demand" : "never"}
-      dpr={[1, 1.6]}
+      dpr={[1, 2]}
       camera={{ position: [0, 0, 0], fov: SHOWCASE_FOV, near: 0.05, far: 60 }}
       gl={{
         antialias: true,
@@ -165,7 +162,7 @@ function Rig({
     invalidate();
   }, [onWake, onReady, invalidate]);
 
-  useFrame(({ clock }) => {
+  useFrame(() => {
     if (camera.fov !== SHOWCASE_FOV) {
       camera.fov = SHOWCASE_FOV;
       camera.updateProjectionMatrix();
@@ -176,25 +173,15 @@ function Rig({
     const aspect = size.width / size.height;
     const portrait = aspect < 1 ? 1 - aspect : 0;
     const xFactor = lift.keepX ? 1 : Math.max(0, 1 - portrait * 2);
-    // Idle sway: slow, diagonal, never the same twice (two incommensurate periods).
-    const idle = (state as ShowcaseState & IdleState).idle ?? 0;
-    const t = clock.getElapsedTime();
-    const bob = idle * Math.sin(t * 0.7) * 0.035;
-    w.position.set(state.x * xFactor, state.y + portrait * lift.lift + bob, state.z * (1 + portrait * lift.pull));
+    w.position.set(state.x * xFactor, state.y + portrait * lift.lift, state.z * (1 + portrait * lift.pull));
     tmp.e.set(-state.pitch, state.yaw, state.roll, "YXZ");
     tmp.q.setFromEuler(tmp.e);
     tmp.spin.setFromAxisAngle(AXIS_B, state.spinB);
     tmp.q.premultiply(tmp.spin);
-    tmp.spin.setFromAxisAngle(AXIS_A, state.spinA + idle * Math.sin(t * 0.55) * 0.13);
+    tmp.spin.setFromAxisAngle(AXIS_A, state.spinA);
     tmp.q.premultiply(tmp.spin);
-    if (idle > 0.001) {
-      tmp.spin.setFromAxisAngle(AXIS_B, idle * Math.sin(t * 0.37 + 1.3) * 0.1);
-      tmp.q.premultiply(tmp.spin);
-    }
     w.quaternion.copy(tmp.q);
     w.scale.setScalar(state.scale);
-    // Keep drawing while it sways (the timeline only wakes it while scrolling).
-    if (idle > 0.001) invalidate();
   });
 
   return (

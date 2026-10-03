@@ -95,9 +95,20 @@ export type BrandStageDef = {
   model: string;
   /** Centre of the watch head in model units. */
   pivot: [number, number, number];
-  poses: { intro: Pose; logo: Pose; bracelet: Pose; rest: Pose };
+  poses: { intro: Pose; logo: Pose; bracelet: Pose; exit: Pose };
   /** Small line above the name, e.g. "1946'dan beri · Tokyo". */
   eyebrow: string;
+  /** What is said beside the close-ups: the name on the dial, then the bracelet. */
+  lines: [StageLineDef, StageLineDef];
+};
+
+export type StageLineDef = {
+  /** Side of the screen the line sits on (the watch is on the other side). */
+  side: "left" | "right";
+  title: string;
+  /** The word of the title set in the accent colour. */
+  accent: string;
+  text: string;
 };
 
 export type BrandShowcaseDef = {

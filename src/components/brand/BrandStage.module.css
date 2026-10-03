@@ -11,6 +11,13 @@
   pointer-events: none;
   background: #ececea;
 }
+/* The watch layer fades away as the collection arrives (--show from the timeline). */
+.canvas {
+  position: absolute;
+  inset: 0;
+  opacity: var(--show, 1);
+}
+
 /* Soft daylight sweeping across the grey, like light on a studio wall. */
 .light {
   position: absolute;
@@ -86,8 +93,76 @@
   color: #fff;
 }
 
-/* What follows (the collection) scrolls over the watch on a veil of the grey. */
+/* What follows (the collection) sits on the same studio grey; the watch has gone. */
 .over {
   position: relative;
-  background: linear-gradient(to bottom, rgba(236, 236, 234, 0) 0, rgba(236, 236, 234, 0.62) 22vh);
+}
+
+/* ------------------------------------------------------------ lines */
+.line {
+  position: absolute;
+  top: 50%;
+  width: min(420px, 32vw);
+  display: grid;
+  gap: 14px;
+  color: #1d1f21;
+  transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.line[data-side="left"] {
+  left: var(--gutter);
+}
+.line[data-side="right"] {
+  right: var(--gutter);
+  text-align: right;
+}
+.index {
+  margin: 0;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  color: #2f5d4f;
+  font-variant-numeric: tabular-nums;
+}
+.lineTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 3.8vw, 4.2rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+.lineTitle em {
+  font-style: italic;
+  color: #2f5d4f;
+}
+.lineText {
+  margin: 0;
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: rgba(29, 31, 33, 0.7);
+}
+
+@media (max-width: 767px) {
+  /* Phones: the line at the foot of the screen, on a soft fade of the grey. */
+  .line,
+  .line[data-side="left"],
+  .line[data-side="right"] {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    top: auto;
+    bottom: 6vh;
+    transform: none;
+    text-align: left;
+    padding-top: 40px;
+    background: linear-gradient(to top, rgba(236, 236, 234, 0.96) 60%, transparent);
+  }
+  .lineTitle {
+    font-size: clamp(1.9rem, 8.5vw, 2.6rem);
+  }
+  .lineText {
+    font-size: 1rem;
+  }
 }

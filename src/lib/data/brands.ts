@@ -27,13 +27,27 @@ export const BRANDS: Brand[] = [
       poses: {
         // From the side, crown to the lens, the bracelet falling away on both sides.
         intro: pose(0, -0.18, -2.45, -90, 86, 0),
-        // Close on the name printed on the dial.
-        logo: pose(-0.12, -0.04, -0.8, -360, 0, 0),
-        // Over the bracelet's links.
-        bracelet: pose(-0.5, 0.22, -2.1, -385, 64, 0),
-        // At rest to the right, behind the collection.
-        rest: pose(0.55, -0.05, -4.6, -410, 16, -6),
+        // The name on the dial, the watch to the right of its line.
+        logo: pose(0.42, -0.04, -1.75, -360, 0, 0),
+        // Over the bracelet's links, the watch to the left of its line.
+        bracelet: pose(-0.5, 0.22, -2.3, -385, 64, 0),
+        // Back and away as the collection arrives.
+        exit: pose(0, -0.5, -7, -420, 20, -6),
       },
+      lines: [
+        {
+          side: "left",
+          title: "Yeşil kronograf kadran",
+          accent: "kadran",
+          text: "Üç alt kadran, tarih penceresi ve 50 metre su geçirmezlik; derin yeşil kadranın üzerinde Casio imzası.",
+        },
+        {
+          side: "right",
+          title: "Paslanmaz çelik bilezik",
+          accent: "bilezik",
+          text: "Üç sıra halkalı paslanmaz çelik bilezik; katlanır kilidiyle bileğe tam oturur.",
+        },
+      ],
     },
   },
   {

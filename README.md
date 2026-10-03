@@ -39,19 +39,22 @@ npm run typecheck
 ## Opening film
 
 `sections/intro/HeroIntro` — the film is `public/assets/video/intro/`
-(`intro-1080.mp4` + `intro-1080.webm`, `intro-720.mp4` for phones, `intro-poster.webp` = first frame),
-registered in `ASSETS.intro.film`.
+(`intro-1080.mp4` + `.webm`, `intro-720.mp4` for phones, `intro-poster.webp` = first frame,
+and the same film reversed: `intro-*-reverse.*`), registered in `ASSETS.intro.film`.
 
 1. **idle** — the first frame, "Aşağı kaydırın" at the bottom. The page is held at the top.
 2. **playing** — the first scroll (wheel, swipe, ↓/Space or a tap on the cue) plays the film once.
-3. **line** — as it ends the film dims and *İstediğiniz her saat* fades in (blur → sharp).
-4. **mark** — the line leaves and *Furkan Saat* arrives, with a hairline beneath.
-5. **done** — the page is released; the navigation returns once it scrolls on. Scrolling continues through
-   the blend band, where drifting mists of black and green mix before the green site.
+3. **line** — on the last frame the film cuts to black and *İstediğiniz her saat* is there at once.
+4. **mark** — the line gives way to *Furkan Saat*, with a hairline beneath.
+5. **done** — the page is released; the navigation returns once it scrolls on. Scrolling continues
+   through the blend band (black clouds and green clouds mixing) which ends on exactly
+   `--green-900`, the ground of the first section, so the site continues in the same green.
+6. **rewinding** — scrolling back up at the top removes the titles and plays the reversed film
+   (2× speed) back to the first frame; the next scroll down plays it again.
 
-Timings are `LINE_MS` / `MARK_MS` in the component. Arriving mid-page (back button)
-or with reduced motion skips the hold. To change the film, replace the three files
-(same names) or update `ASSETS.intro.film`.
+Timings are `LINE_MS` / `MARK_MS` / `REWIND_RATE` in the component. Arriving mid-page
+(back button) or with reduced motion skips the hold. To change the film, replace the
+files (same names) or update `ASSETS.intro.film`.
 
 ## Adding real assets
 

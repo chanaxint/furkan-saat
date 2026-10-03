@@ -32,6 +32,12 @@ export const ASSETS = {
       webm: "/assets/video/intro/intro-1080.webm",
       mobile: "/assets/video/intro/intro-720.mp4",
       poster: "/assets/video/intro/intro-poster.webp",
+      /** The same film reversed (30 fps), played when scrolling back up rewinds the opening. */
+      reverse: {
+        mp4: "/assets/video/intro/intro-1080-reverse.mp4",
+        webm: "/assets/video/intro/intro-1080-reverse.webm",
+        mobile: "/assets/video/intro/intro-720-reverse.mp4",
+      },
     },
   },
   boutique: {

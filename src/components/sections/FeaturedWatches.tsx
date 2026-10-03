@@ -9,7 +9,7 @@ import styles from "./FeaturedWatches.module.css";
 export async function FeaturedWatches() {
   const products = (await getFeatured()).slice(0, 6);
   return (
-    <section className={styles.section} id="koleksiyon" data-nav-theme="light" aria-label="Koleksiyon">
+    <section className={styles.section} id="koleksiyon" data-nav-theme="dark" aria-label="Koleksiyon">
       <header className={`container ${styles.header}`}>
         <SectionMarker index="01" label="Koleksiyon" />
         <SplitText text={"Seçilmiş\n*saatler*"} className={`t-display ${styles.heading}`} />

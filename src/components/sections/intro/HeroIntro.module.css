@@ -13,32 +13,28 @@
   overflow: hidden;
 }
 
-.media {
+.video,
+.reverse {
   position: absolute;
   inset: 0;
-  will-change: transform;
-}
-.video {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition:
-    opacity 2.4s var(--ease-soft),
-    filter 2.4s var(--ease-soft),
-    transform 6s var(--ease-soft);
 }
-/* The film steps back into the dark for the titles. */
-.stage[data-phase="line"] .video {
-  opacity: 0.32;
-  filter: blur(3px) saturate(0.8);
-  transform: scale(1.04);
-}
+/* The film closes the moment it ends: a hard cut to black, no fade. */
+.stage[data-phase="line"] .video,
 .stage[data-phase="mark"] .video,
-.stage[data-phase="done"] .video {
-  opacity: 0.14;
-  filter: blur(6px) saturate(0.7);
-  transform: scale(1.07);
+.stage[data-phase="done"] .video,
+.stage[data-phase="rewinding"] .video {
+  visibility: hidden;
+}
+/* The reversed film only shows while rewinding. */
+.reverse {
+  visibility: hidden;
+}
+.stage[data-phase="rewinding"] .reverse {
+  visibility: visible;
 }
 
 /* Vignette, and a fade to the film's black at the foot of the frame. */
@@ -65,6 +61,7 @@
   grid-area: 1 / 1;
 }
 
+/* Titles cut in and out — no blur, no drift. */
 .line {
   margin: 0;
   padding: 0 var(--gutter);
@@ -72,54 +69,33 @@
   font-weight: 300;
   font-size: clamp(2.6rem, 6.4vw, 7rem);
   line-height: 1;
-  letter-spacing: 0.1em;
+  letter-spacing: -0.01em;
   text-align: center;
   opacity: 0;
-  filter: blur(16px);
-  transform: scale(1.05);
-  transition:
-    opacity 1.8s var(--ease-soft),
-    filter 2.2s var(--ease-lux),
-    letter-spacing 3.4s var(--ease-lux),
-    transform 3.4s var(--ease-lux);
 }
 .line em {
   color: var(--champagne);
 }
 .stage[data-phase="line"] .line {
   opacity: 1;
-  filter: blur(0);
-  letter-spacing: -0.01em;
-  transform: none;
 }
-/* Leaving: it rises into a blur, faster than it came. */
-.stage[data-phase="mark"] .line,
-.stage[data-phase="done"] .line {
-  opacity: 0;
-  filter: blur(14px);
-  letter-spacing: 0.04em;
-  transform: translateY(-3%) scale(0.98);
-  transition-duration: 1.1s, 1.2s, 1.6s, 1.6s;
+/* It gives way quickly to the name. */
+.stage[data-phase="mark"] .line {
+  transition: opacity 0.45s var(--ease-soft);
 }
 
 .mark {
   margin: 0;
+  /* Letter-spacing trails after the last letter; pull it back to keep the word centred. */
+  margin-right: -0.3em;
   font-family: var(--font-display);
   font-weight: 400;
   font-size: clamp(2.4rem, 7.6vw, 8.4rem);
   line-height: 1;
-  letter-spacing: 0.6em;
-  /* Letter-spacing trails after the last letter; pull it back to keep the word centred. */
-  margin-right: -0.6em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   white-space: nowrap;
   opacity: 0;
-  filter: blur(18px);
-  transition:
-    opacity 2s var(--ease-soft) 0.5s,
-    filter 2.4s var(--ease-lux) 0.5s,
-    letter-spacing 4s var(--ease-lux) 0.5s,
-    margin 4s var(--ease-lux) 0.5s;
 }
 .mark > span:first-of-type {
   font-style: italic;
@@ -131,9 +107,9 @@
 .stage[data-phase="mark"] .mark,
 .stage[data-phase="done"] .mark {
   opacity: 1;
-  filter: blur(0);
-  letter-spacing: 0.3em;
-  margin-right: -0.3em;
+}
+.stage[data-phase="mark"] .mark {
+  transition: opacity 0.6s var(--ease-soft) 0.3s;
 }
 
 /* A hairline that opens beneath the name. */
@@ -145,14 +121,16 @@
   background: linear-gradient(to right, transparent, var(--champagne), transparent);
   transform: scaleX(0);
   opacity: 0;
-  transition:
-    transform 2.6s var(--ease-lux) 1.4s,
-    opacity 1.6s var(--ease-soft) 1.4s;
 }
 .stage[data-phase="mark"] .rule,
 .stage[data-phase="done"] .rule {
   transform: scaleX(1);
   opacity: 0.8;
+}
+.stage[data-phase="mark"] .rule {
+  transition:
+    transform 1.8s var(--ease-lux) 0.6s,
+    opacity 1s var(--ease-soft) 0.6s;
 }
 
 /* -------------------------------------------------------------- cue */
@@ -185,7 +163,8 @@
 }
 .stage[data-phase="playing"] .cue,
 .stage[data-phase="line"] .cue,
-.stage[data-phase="mark"] .cue {
+.stage[data-phase="mark"] .cue,
+.stage[data-phase="rewinding"] .cue {
   opacity: 0;
   pointer-events: none;
 }
@@ -218,21 +197,21 @@
 
 /* ------------------------------------------------------------ blend */
 /*
- * Black into the house green. Drifting mists of both tones overlap through
- * the band so the mixing itself is visible, not just a gradient; a fine grain
- * keeps the dark tones from banding.
+ * Black into the house green. Clouds of green rise into the black and black
+ * reaches down into the green, so the mixing itself is visible; the band ends
+ * on exactly the green the site continues in (--green-900), with no seam.
  */
 .blend {
   position: relative;
-  height: 110svh;
+  height: 100svh;
   overflow: hidden;
   background: linear-gradient(
     to bottom,
     var(--black) 0%,
-    #060a09 18%,
-    #050f0c 38%,
-    var(--green-950) 58%,
-    var(--green-900) 82%,
+    var(--black) 8%,
+    #06100d 34%,
+    #071713 56%,
+    var(--green-900) 76%,
     var(--green-900) 100%
   );
 }
@@ -240,45 +219,57 @@
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.09;
+  opacity: 0.07;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  /* No grain on the last stretch, which must match the next section exactly. */
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 80%);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent 80%);
 }
 .mist {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  animation: drift 22s ease-in-out infinite alternate;
+  filter: blur(40px);
+  animation: drift 20s ease-in-out infinite alternate;
 }
 /* Green rising into the black. */
 .mist:nth-child(1) {
-  left: -10%;
-  top: 22%;
-  width: 70%;
-  height: 46%;
-  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.55), transparent);
+  left: -14%;
+  top: 14%;
+  width: 72%;
+  height: 40%;
+  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.95), rgba(19, 52, 45, 0.5) 55%, transparent);
+}
+.mist:nth-child(3) {
+  right: -10%;
+  top: 4%;
+  width: 52%;
+  height: 30%;
+  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.75), transparent);
+  animation-duration: 26s;
+  animation-direction: alternate-reverse;
 }
 /* Black reaching down into the green. */
 .mist:nth-child(2) {
-  right: -12%;
-  top: 40%;
-  width: 64%;
-  height: 40%;
-  background: radial-gradient(closest-side, rgba(4, 5, 6, 0.85), transparent);
-  animation-duration: 28s;
+  right: -8%;
+  top: 34%;
+  width: 62%;
+  height: 34%;
+  background: radial-gradient(closest-side, rgba(7, 8, 10, 0.95), rgba(7, 8, 10, 0.5) 55%, transparent);
+  animation-duration: 24s;
+}
+.mist:nth-child(4) {
+  left: 6%;
+  top: 46%;
+  width: 46%;
+  height: 22%;
+  background: radial-gradient(closest-side, rgba(7, 8, 10, 0.8), transparent);
+  animation-duration: 30s;
   animation-direction: alternate-reverse;
 }
-.mist:nth-child(3) {
-  left: 20%;
-  top: 8%;
-  width: 60%;
-  height: 34%;
-  background: radial-gradient(closest-side, rgba(19, 52, 45, 0.4), transparent);
-  animation-duration: 34s;
-}
 @keyframes drift {
-  from { transform: translate3d(-4%, 3%, 0) scale(1); }
-  to { transform: translate3d(6%, -5%, 0) scale(1.12); }
+  from { transform: translate3d(-5%, 4%, 0) scale(1); }
+  to { transform: translate3d(7%, -6%, 0) scale(1.14); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -289,16 +280,8 @@
 }
 
 @media (max-width: 767px) {
-  .blend {
-    height: 90svh;
-  }
   .mark {
     font-size: 8.4vw;
-    letter-spacing: 0.4em;
-    margin-right: -0.4em;
-  }
-  .stage[data-phase="mark"] .mark,
-  .stage[data-phase="done"] .mark {
     letter-spacing: 0.2em;
     margin-right: -0.2em;
   }

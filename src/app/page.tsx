@@ -6,18 +6,19 @@ import { FeaturedWatches } from "@/components/sections/FeaturedWatches";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { JournalSection } from "@/components/sections/JournalSection";
 import { TrustSection } from "@/components/sections/TrustSection";
-import { HeroFilm } from "@/components/sections/hero/HeroFilm";
+import { HeroIntro } from "@/components/sections/intro/HeroIntro";
 
 /**
  * FURKAN SAAT — Homepage
- * Opening film (box → watch → second watch)
+ * Opening film (plays on the first scroll → "İstediğiniz her saat" → "Furkan Saat"
+ * → black-to-green blend)
  * · 01 Selected watches · 02 Brands · 03 Collections · 04 Trust · 05 Private viewing
  * · 06 Journal · Final CTA · Footer
  */
 export default function Home() {
   return (
     <main>
-      <HeroFilm />
+      <HeroIntro />
       <FeaturedWatches />
       <BrandReels />
       <CollectionsSection />

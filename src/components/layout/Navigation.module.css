@@ -8,7 +8,13 @@
   color: var(--ink);
   transition:
     transform 1s var(--ease-lux),
-    color 0.8s var(--ease-lux);
+    color 0.8s var(--ease-lux),
+    opacity 1.6s var(--ease-soft);
+}
+/* Home page opening: the bar steps aside until the film and its titles have played. */
+:global(html[data-intro]) .nav {
+  opacity: 0;
+  pointer-events: none;
 }
 .nav[data-theme="light"] {
   --ink: var(--green-900);

@@ -18,7 +18,7 @@ type Mode = "immersive" | "visible" | "hidden";
 
 /**
  * Navigation
- * - `immersive`: during the home page's opening film only a faint wordmark remains
+ * - `immersive`: while the home page opening scrolls away only a faint wordmark remains
  * - `visible`:   full bar; it takes a ground once the page has scrolled
  * - `hidden`:    tucks away while scrolling down deep in the page, returns on scroll up
  * Ink colour follows the section under the bar via [data-nav-theme].
@@ -68,8 +68,8 @@ export function Navigation() {
     ScrollTrigger.refresh();
   };
 
-  // Internal tools (/kontrol, /yonetim) run without the site navigation.
-  if (pathname?.startsWith("/kontrol") || pathname?.startsWith("/yonetim")) return null;
+  // The management panel (/yonetim) runs without the site navigation.
+  if (pathname?.startsWith("/yonetim")) return null;
 
   return (
     <>

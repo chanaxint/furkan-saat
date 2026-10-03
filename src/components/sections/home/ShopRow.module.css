@@ -1,0 +1,175 @@
+.section {
+  background: var(--ivory);
+  color: var(--green-900);
+  padding: clamp(56px, 7vw, 110px) 0 clamp(40px, 5vw, 80px);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 var(--gutter);
+  margin-bottom: clamp(24px, 3vw, 40px);
+}
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+  line-height: 1.05;
+}
+.all {
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 3px;
+}
+
+/* Centred: a collection title in the middle, tiles within the margins. */
+.section[data-variant="centred"] .head {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.section[data-variant="centred"] .title {
+  font-size: clamp(1.6rem, 2.4vw, 2.3rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 4 * 4px) / 5);
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.row::-webkit-scrollbar {
+  display: none;
+}
+.row > li {
+  scroll-snap-align: start;
+}
+.section[data-variant="centred"] .row {
+  grid-auto-columns: calc((100% - 3 * 16px) / 4);
+  gap: 16px;
+  padding: 0 var(--gutter);
+  scroll-padding: 0 var(--gutter);
+}
+
+/* ------------------------------------------------------------ card */
+.card {
+  position: relative;
+}
+.link {
+  display: grid;
+  gap: 12px;
+}
+.media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #e4dfd5;
+}
+.image {
+  object-fit: cover;
+  transition:
+    transform 1.6s var(--ease-lux),
+    opacity 0.9s var(--ease-lux);
+}
+.alt {
+  opacity: 0;
+}
+/* Hover: the second photograph, and a quiet bar to open the watch. */
+.view {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(242, 237, 227, 0.72);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--green-900);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.5s var(--ease-soft),
+    transform 0.6s var(--ease-lux);
+}
+@media (hover: hover) {
+  .link:hover .image {
+    transform: scale(1.03);
+  }
+  .link:hover .alt {
+    opacity: 1;
+  }
+  .link:hover .view,
+  .link:focus-visible .view {
+    opacity: 1;
+    transform: none;
+  }
+}
+.name {
+  margin: 0;
+  padding: 0 4px;
+  font-size: var(--fs-body);
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.price {
+  padding: 0 4px;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+.price[data-request] {
+  font-weight: 400;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--text-on-light-muted);
+}
+.wish {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  color: var(--green-900);
+}
+
+@media (max-width: 1100px) {
+  .row {
+    grid-auto-columns: calc((100% - 2 * 4px) / 3);
+  }
+  .section[data-variant="centred"] .row {
+    grid-auto-columns: calc((100% - 2 * 16px) / 3);
+  }
+}
+@media (max-width: 767px) {
+  .row,
+  .section[data-variant="centred"] .row {
+    grid-auto-columns: 72%;
+    gap: 10px;
+    padding: 0 var(--gutter);
+    scroll-padding: 0 var(--gutter);
+  }
+  .head {
+    flex-wrap: wrap;
+  }
+}

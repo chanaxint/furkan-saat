@@ -2,7 +2,7 @@
   /* Ground of the page below — the film dissolves into it. */
   --after: var(--ivory);
   /* Height of that dissolve, at the foot of the film. */
-  --fade: 32svh;
+  --fade: 26svh;
   position: relative;
   height: 100svh;
   min-height: 520px;
@@ -50,18 +50,19 @@
   inset: 0;
 }
 .fade::before {
-  -webkit-backdrop-filter: blur(16px) saturate(1.1);
-  backdrop-filter: blur(16px) saturate(1.1);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 55%);
-  mask-image: linear-gradient(to bottom, transparent, #000 55%);
+  /* Only a light softening: the film stays in front until the very end. */
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 20%, #000 85%);
+  mask-image: linear-gradient(to bottom, transparent 20%, #000 85%);
 }
 .fade::after {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    color-mix(in srgb, var(--after) 12%, transparent) 25%,
-    color-mix(in srgb, var(--after) 45%, transparent) 55%,
-    color-mix(in srgb, var(--after) 85%, transparent) 80%,
+    transparent 30%,
+    color-mix(in srgb, var(--after) 22%, transparent) 55%,
+    color-mix(in srgb, var(--after) 62%, transparent) 80%,
     var(--after) 100%
   );
 }

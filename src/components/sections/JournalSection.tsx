@@ -12,7 +12,7 @@ export async function JournalSection() {
     <section className={styles.section} id="dergi" data-nav-theme="light" aria-label="Dergi">
       <div className="container">
         <header className={styles.header}>
-          <SectionMarker index="06" label="Dergi" />
+          <SectionMarker index="05" label="Dergi" />
           <SplitText text={"Saatçiliğin\n*dünyası*"} className={`t-display ${styles.heading}`} />
         </header>
         <div className={styles.layout}>

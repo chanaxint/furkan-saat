@@ -9,7 +9,7 @@ export function TrustSection() {
     <section className={styles.section} data-nav-theme="light" aria-label="Güvence">
       <div className="container">
         <header className={styles.header}>
-          <SectionMarker index="04" label="Güvence" />
+          <SectionMarker index="03" label="Güvence" />
           <SplitText text={"Her saat,\n*bir* *söz.*"} className={`t-display ${styles.heading}`} />
         </header>
         <Assurances />

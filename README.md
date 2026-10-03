@@ -16,12 +16,19 @@ npm run typecheck
 |----|--------------------|--------------------------------------------|
 | —  | Opening film       | `sections/intro/HeroIntro`                 |
 | 01 | Featured brands    | `sections/BrandReels` + `BrandTile` (4 logo tiles) |
-| 02 | Selected watches   | `sections/FeaturedWatches`                 |
-| 03 | Collections        | `sections/CollectionsSection`              |
-| 04 | Trust              | `sections/TrustSection`                    |
-| 05 | Private viewing    | `sections/Boutique`                        |
-| 06 | Journal            | `sections/JournalSection`                  |
+| —  | Campaign           | `sections/home/CampaignHero` (photo, "FURKAN" behind the model via a cut-out) |
+| —  | Name band          | `sections/home/Marquee`                    |
+| —  | Haftanın Saatleri  | `sections/home/ShopRow` (featured, 5 edge to edge) |
+| —  | Yeni Gelenler      | `sections/home/ShopRow variant="centred"` (collection) |
+| 02 | Collections        | `sections/CollectionsSection`              |
+| 03 | Trust              | `sections/TrustSection`                    |
+| —  | Private viewing    | `sections/Boutique`                        |
+| 05 | Journal            | `sections/JournalSection`                  |
 | —  | Final CTA · Footer | `sections/FinalCTA` · `layout/Footer`      |
+
+The campaign photo is `public/assets/images/campaign/zamansiz.webp`; `zamansiz-model.webp` is the
+same photo with the wall made transparent (GrabCut), laid on top so the giant name passes behind
+the model. To change the photo, replace both files (or drop the cut-out to keep the name in front).
 
 ## Design system
 

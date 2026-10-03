@@ -13,7 +13,7 @@ export async function CollectionsSection() {
     <section className={styles.section} data-nav-theme="light" aria-label="Koleksiyonlar">
       <div className="container">
         <header className={styles.header}>
-          <SectionMarker index="03" label="Koleksiyonlar" />
+          <SectionMarker index="02" label="Koleksiyonlar" />
           <SplitText text={"Karakterine göre\n*seçilmiş*"} className={`t-display ${styles.heading}`} />
         </header>
         <CollectionList collections={shown} products={products} />

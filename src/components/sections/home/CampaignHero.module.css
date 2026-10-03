@@ -1,0 +1,119 @@
+/* The copy is laid over the photograph on wide screens, beneath it on phones. */
+.hero {
+  position: relative;
+  background: var(--ivory);
+}
+
+/* The photograph's own proportions, never taller than the screen. */
+.frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1376 / 768;
+  max-height: 100svh;
+  overflow: hidden;
+  background: #b9ab9a;
+}
+.photo {
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+/* The house name, huge, in gold: on the wall, behind the model. */
+.giant {
+  position: absolute;
+  left: 50%;
+  top: 3%;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22vw;
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  background: linear-gradient(100deg, #9c7a3a 0%, #c9a45c 35%, #e2c787 50%, #b8913f 68%, #8c6a2f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+.copy {
+  position: absolute;
+  left: var(--gutter);
+  bottom: clamp(28px, 8%, 80px);
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  color: #fff;
+  text-shadow: 0 1px 18px rgba(0, 0, 0, 0.35);
+}
+.line {
+  margin: 0;
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.button {
+  margin-top: 14px;
+  padding: 16px 40px;
+  border-radius: 999px;
+  background: var(--ivory);
+  color: var(--green-900);
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-shadow: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  transition:
+    background-color 0.5s var(--ease-soft),
+    color 0.5s var(--ease-soft),
+    transform 0.6s var(--ease-lux);
+}
+.button:hover,
+.button:focus-visible {
+  background: var(--green-900);
+  color: var(--ivory);
+  transform: translateY(-2px);
+}
+
+.slogan {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(28px, 9%, 90px);
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.6vw, 2.6rem);
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 767px) {
+  /* Phones: the full photograph, the line and the button beneath it. */
+  .frame {
+    max-height: none;
+  }
+  .copy {
+    position: static;
+    padding: 28px var(--gutter) 8px;
+    color: var(--green-900);
+    text-shadow: none;
+  }
+  .button {
+    background: var(--green-900);
+    color: var(--ivory);
+  }
+  .slogan {
+    position: static;
+    padding: 12px var(--gutter) 36px;
+    color: var(--green-900);
+    text-shadow: none;
+  }
+}

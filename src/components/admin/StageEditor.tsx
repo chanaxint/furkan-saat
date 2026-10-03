@@ -67,6 +67,10 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const timeRef = useRef(time);
   timeRef.current = time;
+  const poseRef = useRef(pose);
+  poseRef.current = pose;
+  const motionRef = useRef(motion);
+  motionRef.current = motion;
 
   const end = endOf(motion);
   const dirty = JSON.stringify(motion) !== JSON.stringify(saved);
@@ -125,12 +129,70 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
     seek(poseTime(motion, k));
   };
 
-  const setAxis = (k: keyof StagePoseDeg, v: number) => {
-    if (!Number.isFinite(v)) return;
-    setMotion((m) => ({ ...m, poses: { ...m.poses, [pose]: { ...m.poses[pose], [k]: v } } }));
-    // Keep the preview on the pose being edited.
+  /** Change the pose being edited, and keep the preview on it. */
+  const editPose = (fn: (p: StagePoseDeg) => StagePoseDeg) => {
+    setPlaying(false);
+    setMotion((m) => ({ ...m, poses: { ...m.poses, [pose]: fn(m.poses[pose]) } }));
     setTime(poseTime(motion, pose));
   };
+  const setAxis = (k: keyof StagePoseDeg, v: number) => {
+    if (!Number.isFinite(v)) return;
+    editPose((p) => ({ ...p, [k]: v }));
+  };
+
+  /* -------------------------------------------------- mouse on the preview */
+  const drag = useRef<{ x: number; y: number; mode: "turn" | "move" | "roll" } | null>(null);
+  const round = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d;
+  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    const mode = e.button === 2 || e.shiftKey ? "move" : e.altKey ? "roll" : "turn";
+    drag.current = { x: e.clientX, y: e.clientY, mode };
+    e.currentTarget.dataset.mode = mode;
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current;
+    if (!d) return;
+    const dx = e.clientX - d.x;
+    const dy = e.clientY - d.y;
+    d.x = e.clientX;
+    d.y = e.clientY;
+    const fine = e.ctrlKey || e.metaKey ? 0.25 : 1;
+    if (d.mode === "turn") {
+      editPose((p) => ({ ...p, yaw: round(p.yaw + dx * 0.45 * fine, 1), pitch: round(p.pitch + dy * 0.45 * fine, 1) }));
+    } else if (d.mode === "roll") {
+      editPose((p) => ({ ...p, roll: round(p.roll + dx * 0.45 * fine, 1) }));
+    } else {
+      // Move with the pointer: one pixel is this much of the scene at the watch's distance.
+      const h = frame.current?.clientHeight ?? 600;
+      editPose((p) => {
+        const perPx = (2 * Math.abs(p.z) * Math.tan((30 * Math.PI) / 360)) / h;
+        return { ...p, x: round(p.x + dx * perPx * fine, 3), y: round(p.y - dy * perPx * fine, 3) };
+      });
+    }
+  };
+  const onPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    drag.current = null;
+    delete e.currentTarget.dataset.mode;
+  };
+  // The wheel brings the watch closer or sends it further away.
+  useEffect(() => {
+    const el = frame.current?.querySelector<HTMLElement>("[data-drag]");
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const k = Math.exp(e.deltaY * 0.0012 * (e.ctrlKey || e.metaKey ? 0.25 : 1));
+      setPlaying(false);
+      setMotion((m) => {
+        const p = m.poses[poseRef.current];
+        const z = Math.min(-0.3, Math.max(-30, round(p.z * k, 3)));
+        return { ...m, poses: { ...m.poses, [poseRef.current]: { ...p, z } } };
+      });
+      setTime(poseTime(motionRef.current, poseRef.current));
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
   const setStep = (k: StepKey, field: "at" | "dur", v: number) =>
     Number.isFinite(v) && setMotion((m) => ({ ...m, times: { ...m.times, [k]: { ...m.times[k], [field]: Math.max(0, v) } } }));
 
@@ -204,6 +266,23 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
               </div>
             );
           })}
+          {/* Mouse control of the pose being edited. */}
+          <div
+            data-drag
+            data-lenis-prevent
+            className={styles.drag}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            onContextMenu={(e) => e.preventDefault()}
+          >
+            <span className={styles.dragPose}>Düzenlenen: {POSES.find((p) => p.key === pose)?.label}</span>
+            <span className={styles.dragHelp}>
+              Sürükle: döndür · Sağ tık veya Shift + sürükle: taşı · Tekerlek: yaklaş / uzaklaş · Alt + sürükle: yatır · Ctrl:
+              hassas
+            </span>
+          </div>
         </div>
 
         <div className={styles.scrub}>

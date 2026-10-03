@@ -60,6 +60,46 @@
   font-size: clamp(0.72rem, 1.4cqw, 1rem);
 }
 
+/* Mouse layer over the whole preview. */
+.drag {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.drag[data-mode="turn"],
+.drag[data-mode="roll"] {
+  cursor: grabbing;
+}
+.drag[data-mode="move"] {
+  cursor: move;
+}
+.dragPose,
+.dragHelp {
+  position: absolute;
+  padding: 6px 10px;
+  background: rgba(7, 26, 22, 0.78);
+  color: var(--ivory);
+  font-size: 11px;
+  line-height: 1.4;
+  pointer-events: none;
+}
+.dragPose {
+  top: 10px;
+  left: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.dragHelp {
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  text-align: center;
+  opacity: 0.85;
+}
+
 .scrub {
   display: grid;
   grid-template-columns: auto 1fr auto;

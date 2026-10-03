@@ -113,7 +113,8 @@ showcase is ready but not used on any brand for now):
   the collection arrives (`components/brand/BrandStage`, timeline in `lib/scene/stage.ts`, poses
   in `lib/data/stages.json`). It renders only while on screen and visible.
   **Editing the turns:** `npm run dev -- -p 4321`, then http://localhost:4321/yonetim/donusler —
-  pick a pose (Açılış, Yazı, Kordon, Çıkış), place the watch with the sliders, play or scrub the
+  pick a pose (Açılış, Yazı, Kordon, Çıkış), place the watch with the mouse on the preview (drag:
+  turn · right-drag or Shift: move · wheel: closer/further · Alt: roll · Ctrl: fine) or the sliders, play or scrub the
   preview (desktop or phone frame, with the page's own title and lines), set timings, turns and
   scroll length, and save; this writes `src/lib/data/stages.json`. Commit that file to publish.
 

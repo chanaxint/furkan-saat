@@ -203,40 +203,33 @@ const num = (v: unknown, label: string, min: number, max: number) => {
   return Math.round(n * 1000) / 1000;
 };
 
-/** Checks one brand's poses, timings and turns before they are written. */
+/** Checks one brand's scenes before they are written. */
 export function validateStage(input: Record<string, unknown>): StageMotion {
   const o = (v: unknown) => (v && typeof v === "object" ? (v as Record<string, unknown>) : {});
-  const poseOf = (v: unknown, name: string) => {
-    const p = o(v);
+  const list = Array.isArray(input.scenes) ? input.scenes : [];
+  if (list.length < 2 || list.length > 40) throw new InvalidInput("En az 2, en çok 40 sahne olmalı.");
+  const scenes = list.map((raw, i) => {
+    const sc = o(raw);
+    const label = `Sahne ${i + 1}`;
+    const q = Array.isArray(sc.q) ? sc.q.map((v, k) => num(v, `${label} · yön ${k + 1}`, -1.0001, 1.0001)) : [];
+    if (q.length !== 4 || Math.hypot(...q) < 0.5) throw new InvalidInput(`${label}: yön bilgisi geçersiz.`);
+    const len = Math.hypot(...q);
+    const line = sc.line === null || sc.line === undefined || sc.line === "" ? null : num(sc.line, `${label} · yazı`, 0, 9);
     return {
-      x: num(p.x, `${name} · sağ-sol`, -10, 10),
-      y: num(p.y, `${name} · yukarı-aşağı`, -10, 10),
-      z: num(p.z, `${name} · uzaklık`, -30, -0.2),
-      yaw: num(p.yaw, `${name} · dönüş`, -3600, 3600),
-      pitch: num(p.pitch, `${name} · eğim`, -3600, 3600),
-      roll: num(p.roll, `${name} · yatış`, -3600, 3600),
+      name: String(sc.name ?? label).trim().slice(0, 40) || label,
+      x: num(sc.x, `${label} · sağ-sol`, -10, 10),
+      y: num(sc.y, `${label} · yukarı-aşağı`, -10, 10),
+      z: num(sc.z, `${label} · uzaklık`, -30, -0.2),
+      q: q.map((v) => Math.round((v / len) * 1e5) / 1e5) as [number, number, number, number],
+      move: i === 0 ? 0 : num(sc.move, `${label} · dönüş süresi`, 0.1, 60),
+      hold: num(sc.hold, `${label} · bekleme`, 0, 60),
+      spins: Math.round(num(sc.spins, `${label} · tam tur`, -6, 6)),
+      axis: sc.axis === "b" ? ("b" as const) : ("a" as const),
+      line: line === null ? null : Math.round(line),
+      fade: sc.fade === true,
     };
-  };
-  const stepOf = (v: unknown, name: string) => ({ at: num(o(v).at, `${name} · başlangıç`, 0, 120), dur: num(o(v).dur, `${name} · süre`, 0.1, 60) });
-  const poses = o(input.poses);
-  const times = o(input.times);
-  const spins = o(input.spins);
-  return {
-    speed: num(input.speed, "Kaydırma hızı", 10, 400),
-    poses: {
-      intro: poseOf(poses.intro, "Açılış"),
-      logo: poseOf(poses.logo, "Yazı"),
-      bracelet: poseOf(poses.bracelet, "Kordon"),
-      exit: poseOf(poses.exit, "Çıkış"),
-    },
-    times: {
-      logo: stepOf(times.logo, "Yazıya dönüş"),
-      bracelet: stepOf(times.bracelet, "Kordona dönüş"),
-      exit: stepOf(times.exit, "Çıkış"),
-      end: num(times.end, "Bitiş", 0.5, 200),
-    },
-    spins: { logo: num(spins.logo, "Yazıya tur sayısı", 0, 6), bracelet: num(spins.bracelet, "Kordona tur sayısı", 0, 6) },
-  };
+  });
+  return { speed: num(input.speed, "Kaydırma uzunluğu", 10, 400), scenes };
 }
 
 export async function saveStage(slug: string, motion: StageMotion) {

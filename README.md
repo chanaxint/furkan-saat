@@ -112,11 +112,13 @@ showcase is ready but not used on any brand for now):
   bracelet, each with its line beside it (`stage.lines`), then the watch drifts back and fades as
   the collection arrives (`components/brand/BrandStage`, timeline in `lib/scene/stage.ts`, poses
   in `lib/data/stages.json`). It renders only while on screen and visible.
-  **Editing the turns:** `npm run dev -- -p 4321`, then http://localhost:4321/yonetim/donusler —
-  pick a pose (Açılış, Yazı, Kordon, Çıkış), place the watch with the mouse on the preview (drag:
-  turn · right-drag or Shift: move · wheel: closer/further · Alt: roll · Ctrl: fine) or the sliders, play or scrub the
-  preview (desktop or phone frame, with the page's own title and lines), set timings, turns and
-  scroll length, and save; this writes `src/lib/data/stages.json`. Commit that file to publish.
+  **Editing the turns:** `npm run dev -- -p 4321`, then http://localhost:4321/yonetim/donusler.
+  The opening is a list of scenes; add scenes in between for more turns, reorder or remove them.
+  For each scene place the watch with the mouse on the preview (drag: turn at any angle ·
+  right-drag or Shift: move · wheel: closer/further · Alt: roll · Ctrl: fine) or the ±° buttons,
+  set the turn into it (seconds, full turns, diagonal axis, fade) and its hold and line, then
+  "Sahneyi kaydet" (kept as a draft in the browser). "Tümünü kaydet" writes
+  `src/lib/data/stages.json`; commit that file to publish.
 
 Models are compressed with gltf-transform, without simplifying (close-ups need every facet)
 and with 12-bit normals (8-bit ones show as a faceted, foil-like surface):

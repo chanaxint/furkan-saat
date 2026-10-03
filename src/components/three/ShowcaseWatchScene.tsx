@@ -174,12 +174,18 @@ function Rig({
     const portrait = aspect < 1 ? 1 - aspect : 0;
     const xFactor = lift.keepX ? 1 : Math.max(0, 1 - portrait * 2);
     w.position.set(state.x * xFactor, state.y + portrait * lift.lift, state.z * (1 + portrait * lift.pull));
-    tmp.e.set(-state.pitch, state.yaw, state.roll, "YXZ");
-    tmp.q.setFromEuler(tmp.e);
-    tmp.spin.setFromAxisAngle(AXIS_B, state.spinB);
-    tmp.q.premultiply(tmp.spin);
-    tmp.spin.setFromAxisAngle(AXIS_A, state.spinA);
-    tmp.q.premultiply(tmp.spin);
+    // A quaternion, when the state carries one (brand stages), else angles + diagonal spins.
+    const q = (state as ShowcaseState & { q?: [number, number, number, number] }).q;
+    if (q) {
+      tmp.q.fromArray(q);
+    } else {
+      tmp.e.set(-state.pitch, state.yaw, state.roll, "YXZ");
+      tmp.q.setFromEuler(tmp.e);
+      tmp.spin.setFromAxisAngle(AXIS_B, state.spinB);
+      tmp.q.premultiply(tmp.spin);
+      tmp.spin.setFromAxisAngle(AXIS_A, state.spinA);
+      tmp.q.premultiply(tmp.spin);
+    }
     w.quaternion.copy(tmp.q);
     w.scale.setScalar(state.scale);
   });

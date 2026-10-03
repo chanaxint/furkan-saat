@@ -4,145 +4,222 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import stageStyles from "@/components/brand/BrandStage.module.css";
-import type { StageMotion, StagePoseDeg } from "@/lib/data/stages";
+import type { StageMotion, StageScene } from "@/lib/data/stages";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
-import type { gsap } from "@/lib/gsap";
-import { buildStageTimeline, createStageState } from "@/lib/scene/stage";
+import {
+  applyOverlay,
+  blankScene,
+  createStageState,
+  degFromQuat,
+  quatFromDeg,
+  sampleStage,
+  sceneTimes,
+  turnOnScreen,
+} from "@/lib/scene/stage";
 import { putJson } from "./api";
 import { useStatus } from "./useStatus";
 import styles from "./StageEditor.module.css";
 
 const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatchScene"), { ssr: false });
 
-type PoseKey = keyof StageMotion["poses"];
-type StepKey = "logo" | "bracelet" | "exit";
+/** A scene in the editor carries a local id, so it can be tracked while scenes move around. */
+type Scene = StageScene & { id: number };
+type Draft = { speed: number; scenes: Scene[] };
 
-const POSES: { key: PoseKey; label: string; hint: string }[] = [
-  { key: "intro", label: "Açılış", hint: "Sayfa açıldığında, logonun altında" },
-  { key: "logo", label: "Yazı", hint: "Kadrandaki marka yazısına yakın plan" },
-  { key: "bracelet", label: "Kordon", hint: "Bilezik yakın planı" },
-  { key: "exit", label: "Çıkış", hint: "Ürünler gelirken uzaklaştığı yer" },
-];
-
-const AXES: { key: keyof StagePoseDeg; label: string; min: number; max: number; step: number; unit?: string }[] = [
-  { key: "x", label: "Sağ — sol", min: -3, max: 3, step: 0.01 },
-  { key: "y", label: "Yukarı — aşağı", min: -3, max: 3, step: 0.01 },
-  { key: "z", label: "Uzaklık (küçük = yakın)", min: -12, max: -0.3, step: 0.01 },
-  { key: "yaw", label: "Dönüş (sağa-sola)", min: -720, max: 360, step: 1, unit: "°" },
-  { key: "pitch", label: "Eğim (öne-arkaya)", min: -180, max: 180, step: 1, unit: "°" },
-  { key: "roll", label: "Yatış (kendi ekseninde)", min: -180, max: 180, step: 1, unit: "°" },
-];
-
-const STEPS: { key: StepKey; label: string }[] = [
-  { key: "logo", label: "Yazıya dönüş" },
-  { key: "bracelet", label: "Kordona dönüş" },
-  { key: "exit", label: "Çıkış" },
-];
-
-/** When each pose is fully reached on the timeline (where the preview jumps to). */
-const poseTime = (m: StageMotion, k: PoseKey) =>
-  k === "intro" ? 0 : m.times[k].at + m.times[k].dur;
-
-const endOf = (m: StageMotion) => Math.max(m.times.end, m.times.exit.at + m.times.exit.dur);
+let nextId = 1;
+const withIds = (m: StageMotion): Draft => ({ speed: m.speed, scenes: m.scenes.map((s) => ({ ...s, id: nextId++ })) });
+const strip = (d: Draft): StageMotion => ({ speed: d.speed, scenes: d.scenes.map(({ id: _id, ...s }) => s as StageScene) });
+const plain = ({ id: _id, ...s }: Scene) => JSON.stringify(s);
+const same = (a?: Scene, b?: Scene) => !!a && !!b && plain(a) === plain(b);
+const draftKey = (slug: string) => `furkan-saat:sahne-taslak:${slug}`;
+const round = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d;
 
 /**
- * Turn editor for a brand's 3D opening. Everything is previewed live with the
- * real timeline and the real page layout (title and lines); "Kaydedin" writes
- * lib/data/stages.json, and the page picks it up on its next load.
+ * Scene-by-scene editor for a brand's 3D opening.
+ *  - Pick a scene, place the watch with the mouse (any angle) or the controls,
+ *    set how it turns into that scene, and "Sahneyi kaydet" — kept in this
+ *    browser as a draft, so nothing is lost on reload.
+ *  - Add scenes in between for more turns, reorder or remove them.
+ *  - "Tümünü kaydet" writes every scene to lib/data/stages.json; the page
+ *    uses it from its next load.
  */
 export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: BrandStageDef; initial: StageMotion }) {
-  const [motion, setMotion] = useState<StageMotion>(initial);
-  const [saved, setSaved] = useState<StageMotion>(initial);
-  const [pose, setPose] = useState<PoseKey>("intro");
-  const [time, setTime] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [device, setDevice] = useState<"desktop" | "phone">("desktop");
   const status = useStatus();
+  const [file, setFile] = useState<Draft>(() => withIds(initial));
+  const [work, setWork] = useState<Draft>(file);
+  const [kept, setKept] = useState<Draft>(file);
+  const [fromDraft, setFromDraft] = useState(false);
+  const [sel, setSel] = useState(0);
+  const [time, setTime] = useState(0);
+  const [playing, setPlaying] = useState<null | { to: number }>(null);
+  const [device, setDevice] = useState<"desktop" | "phone">("desktop");
 
+  // A draft of scenes saved one by one in an earlier visit.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(draftKey(brand.slug));
+      if (!raw) return;
+      const d = withIds(JSON.parse(raw) as StageMotion);
+      if (JSON.stringify(strip(d)) === JSON.stringify(initial)) return;
+      setWork(d);
+      setKept(d);
+      setFromDraft(true);
+    } catch {
+      /* no draft */
+    }
+  }, [brand.slug, initial]);
+
+  const motion = useMemo(() => strip(work), [work]);
+  const { times, total } = useMemo(() => sceneTimes(motion), [motion]);
+  const scene = work.scenes[Math.min(sel, work.scenes.length - 1)];
+  const keptScene = kept.scenes.find((s) => s.id === scene.id);
+  const unsaved = (s: Scene) => !same(s, kept.scenes.find((k) => k.id === s.id));
+  const unsavedCount = work.scenes.filter(unsaved).length;
+  const fileDirty = JSON.stringify(motion) !== JSON.stringify(strip(file));
+
+  /* ------------------------------------------------------------ preview */
   const state = useMemo(() => createStageState(initial), [initial]);
-  const tl = useRef<gsap.core.Timeline | null>(null);
   const wake = useRef<() => void>(() => {});
   const frame = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
-  const timeRef = useRef(time);
-  timeRef.current = time;
-  const poseRef = useRef(pose);
-  poseRef.current = pose;
-  const motionRef = useRef(motion);
-  motionRef.current = motion;
+  const refs = useRef({ motion, time, sel, work });
+  refs.current = { motion, time, sel, work };
 
-  const end = endOf(motion);
-  const dirty = JSON.stringify(motion) !== JSON.stringify(saved);
-
-  // Rebuild the real timeline whenever the motion changes, and hold it where the preview is.
-  useEffect(() => {
-    tl.current?.kill();
-    Object.assign(state, createStageState(motion));
-    const t = buildStageTimeline(state, motion, { title: title.current, lines: lines.current });
-    t.pause();
-    t.eventCallback("onUpdate", () => {
-      frame.current?.style.setProperty("--show", state.show.toFixed(3));
-      wake.current();
-    });
-    t.seek(Math.min(timeRef.current, t.duration()), false);
+  const draw = useCallback(() => {
+    const { motion: m, time: t } = refs.current;
+    const o = sampleStage(m, t, state, stage.lines.length);
+    applyOverlay(o, title.current, lines.current, stage.lines.map((l) => l.side));
     frame.current?.style.setProperty("--show", state.show.toFixed(3));
     wake.current();
-    tl.current = t;
-    return () => {
-      t.kill();
-    };
-  }, [motion, state]);
+  }, [state, stage.lines]);
+  useEffect(draw, [motion, time, draw]);
 
-  // Scrubbing the preview.
-  const seek = useCallback((t: number) => {
-    setTime(t);
-    tl.current?.seek(t, false);
-    wake.current();
-  }, []);
+  const onWake = useCallback(
+    (fn: () => void) => {
+      wake.current = fn;
+      draw();
+    },
+    [draw],
+  );
 
-  // Play the whole timeline, at the speed it has on the page with a steady scroll.
+  // Play (a scene, or everything): one timeline second per second.
   useEffect(() => {
     if (!playing) return;
     let raf = 0;
     let last = performance.now();
     const step = (now: number) => {
-      const t = Math.min(end, timeRef.current + (now - last) / 1000);
+      const t = Math.min(playing.to, refs.current.time + (now - last) / 1000);
       last = now;
-      seek(t);
-      if (t >= end) setPlaying(false);
+      setTime(t);
+      if (t >= playing.to) setPlaying(null);
       else raf = requestAnimationFrame(step);
     };
-    if (timeRef.current >= end - 0.01) seek(0);
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [playing, end, seek]);
+  }, [playing]);
 
-  const onWake = useCallback((fn: () => void) => {
-    wake.current = fn;
-    fn();
-  }, []);
-
-  const choosePose = (k: PoseKey) => {
-    setPlaying(false);
-    setPose(k);
-    seek(poseTime(motion, k));
+  const select = (i: number) => {
+    setPlaying(null);
+    setSel(i);
+    setTime(sceneTimes(refs.current.motion).times[i]?.arrive ?? 0);
   };
 
-  /** Change the pose being edited, and keep the preview on it. */
-  const editPose = (fn: (p: StagePoseDeg) => StagePoseDeg) => {
-    setPlaying(false);
-    setMotion((m) => ({ ...m, poses: { ...m.poses, [pose]: fn(m.poses[pose]) } }));
-    setTime(poseTime(motion, pose));
+  /* ------------------------------------------------------------ editing */
+  const edit = (fn: (s: Scene) => Scene) => {
+    setPlaying(null);
+    setWork((w) => ({ ...w, scenes: w.scenes.map((s, i) => (i === refs.current.sel ? fn(s) : s)) }));
   };
-  const setAxis = (k: keyof StagePoseDeg, v: number) => {
-    if (!Number.isFinite(v)) return;
-    editPose((p) => ({ ...p, [k]: v }));
+  // While a pose is being set, the preview shows the scene as reached.
+  const editPose = (fn: (s: Scene) => Scene) => {
+    edit(fn);
+    setTime(times[sel]?.arrive ?? 0);
   };
 
-  /* -------------------------------------------------- mouse on the preview */
+  const persistDraft = (d: Draft) => {
+    try {
+      localStorage.setItem(draftKey(brand.slug), JSON.stringify(strip(d)));
+    } catch {
+      /* storage blocked */
+    }
+  };
+
+  const saveScene = () => {
+    const at = kept.scenes.findIndex((s) => s.id === scene.id);
+    const order = work.scenes.map((s) => s.id);
+    // Keep the saved list in the working order, with this scene's new version.
+    const next = { speed: kept.speed, scenes: order.flatMap((id) => (id === scene.id ? [scene] : kept.scenes.filter((s) => s.id === id))) };
+    setKept(next);
+    persistDraft(next);
+    status.show(at < 0 ? `"${scene.name}" eklendi ve kaydedildi.` : `"${scene.name}" kaydedildi.`);
+  };
+  const revertScene = () => keptScene && edit(() => ({ ...keptScene }));
+
+  const addAfter = () => {
+    const i = sel;
+    const from = work.scenes[i];
+    const fresh: Scene = { ...blankScene(from, work.scenes.filter((s) => s.name.startsWith("Ara sahne")).length + 1), id: nextId++ };
+    const scenes = [...work.scenes.slice(0, i + 1), fresh, ...work.scenes.slice(i + 1)];
+    setWork({ ...work, scenes });
+    setSel(i + 1);
+    setTime(sceneTimes(strip({ ...work, scenes })).times[i + 1].arrive);
+  };
+  const remove = () => {
+    if (work.scenes.length <= 2) return status.show("En az iki sahne kalmalı.", true);
+    if (!window.confirm(`"${scene.name}" silinsin mi?`)) return;
+    const scenes = work.scenes.filter((s) => s.id !== scene.id);
+    setWork({ ...work, scenes });
+    const k = { ...kept, scenes: kept.scenes.filter((s) => s.id !== scene.id) };
+    setKept(k);
+    persistDraft(k);
+    setSel(Math.max(0, sel - 1));
+  };
+  const move = (d: -1 | 1) => {
+    const j = sel + d;
+    if (j < 0 || j >= work.scenes.length) return;
+    const scenes = [...work.scenes];
+    [scenes[sel], scenes[j]] = [scenes[j], scenes[sel]];
+    setWork({ ...work, scenes });
+    const order = scenes.map((s) => s.id);
+    const k = { ...kept, scenes: order.flatMap((id) => kept.scenes.filter((s) => s.id === id)) };
+    setKept(k);
+    persistDraft(k);
+    setSel(j);
+  };
+
+  const saveAll = async () => {
+    if (unsavedCount > 0 && !window.confirm(`${unsavedCount} sahnede kaydedilmemiş değişiklik var. Onlar da yazılsın mı?`)) return;
+    try {
+      await putJson("/api/yonetim/donusler", { slug: brand.slug, motion });
+      setFile(work);
+      setKept(work);
+      setFromDraft(false);
+      try {
+        localStorage.removeItem(draftKey(brand.slug));
+      } catch {
+        /* ignore */
+      }
+      status.show("Tümü kaydedildi. Marka sayfasını yenileyince yeni dönüşler görünür.");
+    } catch (e) {
+      status.show((e as Error).message, true);
+    }
+  };
+  const backToFile = () => {
+    if (!window.confirm("Taslak silinsin ve dosyadaki ayarlara dönülsün mü?")) return;
+    setWork(file);
+    setKept(file);
+    setFromDraft(false);
+    setSel(0);
+    setTime(0);
+    try {
+      localStorage.removeItem(draftKey(brand.slug));
+    } catch {
+      /* ignore */
+    }
+  };
+
+  /* ------------------------------------------------- mouse on the preview */
   const drag = useRef<{ x: number; y: number; mode: "turn" | "move" | "roll" } | null>(null);
-  const round = (v: number, d: number) => Math.round(v * 10 ** d) / 10 ** d;
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -159,15 +236,15 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
     d.y = e.clientY;
     const fine = e.ctrlKey || e.metaKey ? 0.25 : 1;
     if (d.mode === "turn") {
-      editPose((p) => ({ ...p, yaw: round(p.yaw + dx * 0.45 * fine, 1), pitch: round(p.pitch + dy * 0.45 * fine, 1) }));
+      // Like turning a ball under your hand: about the screen's axes, at any angle.
+      editPose((s) => ({ ...s, q: turnOnScreen(turnOnScreen(s.q, "y", dx * 0.45 * fine), "x", dy * 0.45 * fine) }));
     } else if (d.mode === "roll") {
-      editPose((p) => ({ ...p, roll: round(p.roll + dx * 0.45 * fine, 1) }));
+      editPose((s) => ({ ...s, q: turnOnScreen(s.q, "z", -dx * 0.45 * fine) }));
     } else {
-      // Move with the pointer: one pixel is this much of the scene at the watch's distance.
       const h = frame.current?.clientHeight ?? 600;
-      editPose((p) => {
-        const perPx = (2 * Math.abs(p.z) * Math.tan((30 * Math.PI) / 360)) / h;
-        return { ...p, x: round(p.x + dx * perPx * fine, 3), y: round(p.y - dy * perPx * fine, 3) };
+      editPose((s) => {
+        const perPx = (2 * Math.abs(s.z) * Math.tan((30 * Math.PI) / 360)) / h;
+        return { ...s, x: round(s.x + dx * perPx * fine, 3), y: round(s.y - dy * perPx * fine, 3) };
       });
     }
   };
@@ -175,44 +252,37 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
     drag.current = null;
     delete e.currentTarget.dataset.mode;
   };
-  // The wheel brings the watch closer or sends it further away.
   useEffect(() => {
     const el = frame.current?.querySelector<HTMLElement>("[data-drag]");
     if (!el) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
       const k = Math.exp(e.deltaY * 0.0012 * (e.ctrlKey || e.metaKey ? 0.25 : 1));
-      setPlaying(false);
-      setMotion((m) => {
-        const p = m.poses[poseRef.current];
-        const z = Math.min(-0.3, Math.max(-30, round(p.z * k, 3)));
-        return { ...m, poses: { ...m.poses, [poseRef.current]: { ...p, z } } };
-      });
-      setTime(poseTime(motionRef.current, poseRef.current));
+      const { sel: i } = refs.current;
+      setPlaying(null);
+      setWork((w) => ({
+        ...w,
+        scenes: w.scenes.map((s, n) => (n === i ? { ...s, z: Math.min(-0.3, Math.max(-30, round(s.z * k, 3))) } : s)),
+      }));
+      setTime(sceneTimes(refs.current.motion).times[i]?.arrive ?? 0);
     };
     el.addEventListener("wheel", onWheel, { passive: false });
     return () => el.removeEventListener("wheel", onWheel);
   }, []);
-  const setStep = (k: StepKey, field: "at" | "dur", v: number) =>
-    Number.isFinite(v) && setMotion((m) => ({ ...m, times: { ...m.times, [k]: { ...m.times[k], [field]: Math.max(0, v) } } }));
 
-  const save = async () => {
-    try {
-      await putJson("/api/yonetim/donusler", { slug: brand.slug, motion });
-      setSaved(motion);
-      status.show("Kaydedildi. Sayfayı yenileyince yeni dönüşler görünür.");
-    } catch (e) {
-      status.show((e as Error).message, true);
-    }
+  const deg = degFromQuat(scene.q);
+  const setDeg = (k: "yaw" | "pitch" | "roll", v: number) => {
+    if (!Number.isFinite(v)) return;
+    const d = { ...deg, [k]: v };
+    editPose((s) => ({ ...s, q: quatFromDeg(d.yaw, d.pitch, d.roll) }));
   };
-
-  const copy = async () => {
-    await navigator.clipboard.writeText(JSON.stringify(motion, null, 2));
-    status.show("Değerler panoya kopyalandı.");
+  const turn = (axis: "x" | "y" | "z", by: number) => editPose((s) => ({ ...s, q: turnOnScreen(s.q, axis, by) }));
+  const first = sel === 0;
+  const playScene = () => {
+    if (first) return;
+    setTime(times[sel - 1].leave);
+    setPlaying({ to: times[sel].leave });
   };
-
-  const current = motion.poses[pose];
-  const scrollScreens = (end * motion.speed) / 100;
 
   return (
     <div className={styles.editor}>
@@ -245,7 +315,6 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
               portrait={{ lift: 0.32, pull: 2.2 }}
             />
           </div>
-          {/* The page's own title and lines, so their room around the watch can be judged. */}
           <div ref={title} className={`${stageStyles.title} ${styles.previewTitle}`}>
             <p className={stageStyles.eyebrow}>{stage.eyebrow}</p>
             <div className={stageStyles.logo}>
@@ -266,7 +335,6 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
               </div>
             );
           })}
-          {/* Mouse control of the pose being edited. */}
           <div
             data-drag
             data-lenis-prevent
@@ -277,135 +345,241 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
             onPointerCancel={onPointerUp}
             onContextMenu={(e) => e.preventDefault()}
           >
-            <span className={styles.dragPose}>Düzenlenen: {POSES.find((p) => p.key === pose)?.label}</span>
+            <span className={styles.dragPose}>
+              Düzenlenen: {sel + 1} · {scene.name}
+            </span>
             <span className={styles.dragHelp}>
-              Sürükle: döndür · Sağ tık veya Shift + sürükle: taşı · Tekerlek: yaklaş / uzaklaş · Alt + sürükle: yatır · Ctrl:
-              hassas
+              Sürükle: her yöne döndür · Sağ tık veya Shift + sürükle: taşı · Tekerlek: yaklaş / uzaklaş · Alt + sürükle: yatır · Ctrl: hassas
             </span>
           </div>
         </div>
 
         <div className={styles.scrub}>
-          <button type="button" className={styles.play} onClick={() => setPlaying((p) => !p)}>
-            {playing ? "Durdur" : "Oynat"}
+          <button type="button" className={styles.play} onClick={() => (playing ? setPlaying(null) : (setTime(time >= total - 0.01 ? 0 : time), setPlaying({ to: total })))}>
+            {playing ? "Durdur" : "Tümünü oynat"}
           </button>
-          <input
-            type="range"
-            min={0}
-            max={end}
-            step={0.01}
-            value={Math.min(time, end)}
-            onChange={(e) => {
-              setPlaying(false);
-              seek(Number(e.target.value));
-            }}
-            aria-label="Zaman"
-          />
+          <div className={styles.track}>
+            <input
+              type="range"
+              min={0}
+              max={total}
+              step={0.01}
+              value={Math.min(time, total)}
+              onChange={(e) => {
+                setPlaying(null);
+                setTime(Number(e.target.value));
+              }}
+              aria-label="Zaman"
+            />
+            {times.map((t, i) => (
+              <button
+                key={work.scenes[i].id}
+                type="button"
+                className={styles.marker}
+                data-on={i === sel || undefined}
+                style={{ left: `${(t.arrive / total) * 100}%` }}
+                onClick={() => select(i)}
+                title={work.scenes[i].name}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
           <span className={styles.time}>
-            {time.toFixed(1)} / {end.toFixed(1)} sn
+            {time.toFixed(1)} / {total.toFixed(1)} sn
           </span>
         </div>
         <p className={styles.note}>
-          Kaydırıcı, sayfayı aşağı kaydırmak gibidir. Tüm hareket sayfada yaklaşık {scrollScreens.toFixed(1)} ekran boyu kaydırmaya
-          yayılır.
+          Kaydırıcı, sayfayı aşağı kaydırmak gibidir; numaralar sahnelerin tam oturduğu anlardır. Tüm hareket sayfada yaklaşık{" "}
+          {((total * work.speed) / 100).toFixed(1)} ekran boyu kaydırmaya yayılır.
         </p>
       </div>
 
       {/* ---------------------------------------------------------- controls */}
       <div className={styles.controls}>
+        {fromDraft && (
+          <p className={styles.banner}>
+            Önceki çalışmanızda tek tek kaydettiğiniz sahneler yüklendi; henüz dosyaya yazılmadı.{" "}
+            <button type="button" onClick={backToFile}>
+              Dosyadakine dön
+            </button>
+          </p>
+        )}
+
         <section className={styles.block}>
-          <h2 className={styles.blockTitle}>1 · Duruş seçin</h2>
-          <div className={styles.tabs}>
-            {POSES.map((p) => (
-              <button key={p.key} type="button" aria-pressed={pose === p.key} onClick={() => choosePose(p.key)}>
-                {p.label}
-              </button>
+          <h2 className={styles.blockTitle}>Sahneler</h2>
+          <ol className={styles.scenes}>
+            {work.scenes.map((s, i) => (
+              <li key={s.id}>
+                <button type="button" className={styles.sceneRow} aria-pressed={i === sel} onClick={() => select(i)}>
+                  <span className={styles.sceneNo}>{i + 1}</span>
+                  <span className={styles.sceneName}>{s.name}</span>
+                  <span className={styles.sceneMeta}>
+                    {i === 0 ? "açılış" : `${s.move}s${s.spins ? ` · ${Math.abs(s.spins)} tur` : ""}${s.fade ? " · kaybolur" : ""}`}
+                  </span>
+                  <span className={styles.sceneState} data-unsaved={unsaved(s) || undefined}>
+                    {unsaved(s) ? "kaydedilmedi" : "✓"}
+                  </span>
+                </button>
+              </li>
             ))}
+          </ol>
+          <div className={styles.rowActions}>
+            <button type="button" className={styles.secondary} onClick={addAfter}>
+              + Bu sahneden sonra ekle
+            </button>
+            <button type="button" className={styles.secondary} onClick={() => move(-1)} disabled={sel === 0}>
+              ↑
+            </button>
+            <button type="button" className={styles.secondary} onClick={() => move(1)} disabled={sel === work.scenes.length - 1}>
+              ↓
+            </button>
+            <button type="button" className={styles.danger} onClick={remove}>
+              Sil
+            </button>
           </div>
-          <p className={styles.hint}>{POSES.find((p) => p.key === pose)?.hint}. Önizleme bu duruşu gösteriyor.</p>
         </section>
 
         <section className={styles.block}>
-          <h2 className={styles.blockTitle}>2 · Saati yerleştirin</h2>
-          {AXES.map((a) => (
-            <label key={a.key} className={styles.axis}>
-              <span className={styles.axisLabel}>{a.label}</span>
-              <input
-                type="range"
-                min={a.min}
-                max={a.max}
-                step={a.step}
-                value={current[a.key]}
-                onChange={(e) => setAxis(a.key, Number(e.target.value))}
-              />
+          <h2 className={styles.blockTitle}>
+            Sahne {sel + 1}
+            <input className={styles.nameInput} value={scene.name} onChange={(e) => edit((s) => ({ ...s, name: e.target.value }))} aria-label="Sahne adı" />
+          </h2>
+
+          <p className={styles.sub}>Saatin açısı</p>
+          <div className={styles.turns}>
+            {(
+              [
+                ["y", "Sağa-sola"],
+                ["x", "Öne-arkaya"],
+                ["z", "Kendi ekseni"],
+              ] as const
+            ).map(([axis, label]) => (
+              <div key={axis} className={styles.turnRow}>
+                <span>{label}</span>
+                {[-45, -5, 5, 45].map((by) => (
+                  <button key={by} type="button" onClick={() => turn(axis, by)}>
+                    {by > 0 ? `+${by}°` : `${by}°`}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div className={styles.degs}>
+            {(
+              [
+                ["yaw", "Dönüş"],
+                ["pitch", "Eğim"],
+                ["roll", "Yatış"],
+              ] as const
+            ).map(([k, label]) => (
+              <label key={k}>
+                <span>{label} °</span>
+                <input type="number" step={1} value={deg[k]} onChange={(e) => setDeg(k, Number(e.target.value))} />
+              </label>
+            ))}
+          </div>
+
+          <p className={styles.sub}>Konum</p>
+          {(
+            [
+              ["x", "Sağ — sol", -3, 3, 0.01],
+              ["y", "Yukarı — aşağı", -3, 3, 0.01],
+              ["z", "Uzaklık (küçük = yakın)", -12, -0.3, 0.01],
+            ] as const
+          ).map(([k, label, min, max, step]) => (
+            <label key={k} className={styles.axis}>
+              <span className={styles.axisLabel}>{label}</span>
+              <input type="range" min={min} max={max} step={step} value={scene[k]} onChange={(e) => editPose((s) => ({ ...s, [k]: Number(e.target.value) }))} />
               <span className={styles.number}>
-                <input
-                  type="number"
-                  step={a.step}
-                  value={current[a.key]}
-                  onChange={(e) => setAxis(a.key, Number(e.target.value))}
-                />
-                {a.unit}
+                <input type="number" step={step} value={scene[k]} onChange={(e) => Number.isFinite(Number(e.target.value)) && editPose((s) => ({ ...s, [k]: Number(e.target.value) }))} />
               </span>
             </label>
           ))}
+
+          {!first && (
+            <>
+              <p className={styles.sub}>Bu sahneye geçiş</p>
+              <div className={styles.grid2}>
+                <label>
+                  <span>Dönüş süresi (sn)</span>
+                  <input type="number" min={0.1} step={0.1} value={scene.move} onChange={(e) => edit((s) => ({ ...s, move: Math.max(0.1, Number(e.target.value) || 0.1) }))} />
+                </label>
+                <label>
+                  <span>Tam tur (− ters yön)</span>
+                  <input type="number" min={-6} max={6} step={1} value={scene.spins} onChange={(e) => edit((s) => ({ ...s, spins: Math.round(Number(e.target.value) || 0) }))} />
+                </label>
+                <label>
+                  <span>Tur ekseni</span>
+                  <select value={scene.axis} onChange={(e) => edit((s) => ({ ...s, axis: e.target.value as "a" | "b" }))}>
+                    <option value="a">Çapraz A (sağ üst)</option>
+                    <option value="b">Çapraz B (sol üst)</option>
+                  </select>
+                </label>
+                <label className={styles.check}>
+                  <input type="checkbox" checked={scene.fade} onChange={(e) => edit((s) => ({ ...s, fade: e.target.checked }))} />
+                  <span>Bu sahneye giderken kaybolsun</span>
+                </label>
+              </div>
+            </>
+          )}
+
+          <p className={styles.sub}>Bu sahnede</p>
+          <div className={styles.grid2}>
+            <label>
+              <span>Bekleme (sn)</span>
+              <input type="number" min={0} step={0.1} value={scene.hold} onChange={(e) => edit((s) => ({ ...s, hold: Math.max(0, Number(e.target.value) || 0) }))} />
+            </label>
+            {!first && (
+              <label>
+                <span>Yanında yazı</span>
+                <select value={scene.line ?? ""} onChange={(e) => edit((s) => ({ ...s, line: e.target.value === "" ? null : Number(e.target.value) }))}>
+                  <option value="">Yok</option>
+                  {stage.lines.map((l, i) => (
+                    <option key={l.title} value={i}>
+                      {String(i + 1).padStart(2, "0")} · {l.title}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+          </div>
+
+          <div className={styles.rowActions}>
+            <button type="button" className={styles.save} onClick={saveScene} disabled={!unsaved(scene)}>
+              {unsaved(scene) ? "Sahneyi kaydet" : "Sahne kaydedildi ✓"}
+            </button>
+            {!first && (
+              <button type="button" className={styles.secondary} onClick={playScene}>
+                Bu geçişi oynat
+              </button>
+            )}
+            <button type="button" className={styles.secondary} onClick={revertScene} disabled={!keptScene || !unsaved(scene)}>
+              Geri al
+            </button>
+          </div>
+        </section>
+
+        <section className={`${styles.block} ${styles.final}`}>
+          <h2 className={styles.blockTitle}>Hepsi</h2>
+          <label className={styles.axis}>
+            <span className={styles.axisLabel}>Kaydırma uzunluğu (büyük = sayfada daha yavaş)</span>
+            <input type="range" min={20} max={200} step={1} value={work.speed} onChange={(e) => setWork((w) => ({ ...w, speed: Number(e.target.value) }))} />
+            <span className={styles.number}>{work.speed}</span>
+          </label>
+          <button type="button" className={styles.saveAll} onClick={saveAll} disabled={!fileDirty}>
+            {fileDirty ? "Tümünü kaydet" : "Tümü kaydedildi"}
+          </button>
           <p className={styles.hint}>
-            Dönüş açıları birikir: bir sonraki duruş aynı yönde devam etsin diye −360° gibi değerler normaldir.
+            {unsavedCount > 0
+              ? `${unsavedCount} sahnede kaydedilmemiş değişiklik var.`
+              : fileDirty
+                ? "Sahneler kaydedildi; siteye yansıması için Tümünü kaydet'e basın."
+                : "Site bu ayarlarla açılıyor."}
           </p>
         </section>
-
-        <section className={styles.block}>
-          <h2 className={styles.blockTitle}>3 · Zamanlama ve hız</h2>
-          <div className={styles.grid}>
-            <span />
-            <span className={styles.colHead}>Başlangıç (sn)</span>
-            <span className={styles.colHead}>Süre (sn)</span>
-            {STEPS.map((s) => (
-              <FragmentRow key={s.key} label={s.label}>
-                <input type="number" step={0.1} min={0} value={motion.times[s.key].at} onChange={(e) => setStep(s.key, "at", Number(e.target.value))} />
-                <input type="number" step={0.1} min={0.1} value={motion.times[s.key].dur} onChange={(e) => setStep(s.key, "dur", Number(e.target.value))} />
-              </FragmentRow>
-            ))}
-          </div>
-          <label className={styles.axis}>
-            <span className={styles.axisLabel}>Yazıya giderken tam tur</span>
-            <input type="range" min={0} max={3} step={1} value={motion.spins.logo} onChange={(e) => setMotion((m) => ({ ...m, spins: { ...m.spins, logo: Number(e.target.value) } }))} />
-            <span className={styles.number}>{motion.spins.logo}</span>
-          </label>
-          <label className={styles.axis}>
-            <span className={styles.axisLabel}>Kordona giderken tam tur</span>
-            <input type="range" min={0} max={3} step={1} value={motion.spins.bracelet} onChange={(e) => setMotion((m) => ({ ...m, spins: { ...m.spins, bracelet: Number(e.target.value) } }))} />
-            <span className={styles.number}>{motion.spins.bracelet}</span>
-          </label>
-          <label className={styles.axis}>
-            <span className={styles.axisLabel}>Kaydırma uzunluğu (büyük = daha yavaş)</span>
-            <input type="range" min={20} max={200} step={1} value={motion.speed} onChange={(e) => setMotion((m) => ({ ...m, speed: Number(e.target.value) }))} />
-            <span className={styles.number}>{motion.speed}</span>
-          </label>
-        </section>
-
-        <div className={styles.actions}>
-          <button type="button" className={styles.save} onClick={save} disabled={!dirty}>
-            {dirty ? "Kaydedin" : "Kaydedildi"}
-          </button>
-          <button type="button" className={styles.secondary} onClick={() => setMotion(saved)} disabled={!dirty}>
-            Geri al
-          </button>
-          <button type="button" className={styles.secondary} onClick={copy}>
-            Kopyala
-          </button>
-        </div>
       </div>
       {status.node}
     </div>
-  );
-}
-
-function FragmentRow({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <>
-      <span className={styles.rowLabel}>{label}</span>
-      {children}
-    </>
   );
 }

@@ -6,9 +6,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useGsap } from "@/hooks/useGsap";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
-import { ScrollTrigger } from "@/lib/gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { STAGES } from "@/lib/data/stages";
-import { buildStageTimeline, createStageState } from "@/lib/scene/stage";
+import { applyOverlay, createStageState, sampleStage, sceneTimes } from "@/lib/scene/stage";
 import styles from "./BrandStage.module.css";
 
 const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatchScene"), { ssr: false });
@@ -19,8 +19,6 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
  * children); after its turns the watch fades as the collection arrives. It
  * renders only while the region is on screen and the watch is visible.
  */
-const timelineEnd = (m: (typeof STAGES)[string]) => Math.max(m.times.end, m.times.exit.at + m.times.exit.dur);
-
 export function BrandStage({
   brand,
   stage,
@@ -53,12 +51,18 @@ export function BrandStage({
   }, []);
 
   useGsap(() => {
-    const tl = buildStageTimeline(state, motion, { title: title.current, lines: lines.current });
-    tl.eventCallback("onUpdate", () => {
+    // The scroll position is a time on the stage's timeline; every frame is sampled from it.
+    const sides = stage.lines.map((l) => l.side);
+    const clock = { t: 0 };
+    const draw = () => {
+      const o = sampleStage(motion, clock.t, state, stage.lines.length);
+      applyOverlay(o, title.current, lines.current, sides);
       scene.current?.style.setProperty("--show", state.show.toFixed(3));
       // Once it has faded there is nothing to draw.
       if (state.show > 0.005) wake.current();
-    });
+    };
+    draw();
+    const tl = gsap.to(clock, { t: sceneTimes(motion).total, ease: "none", onUpdate: draw });
     ScrollTrigger.create({ trigger: hero.current, start: "top top", end: "bottom bottom", scrub: 1.2, animation: tl });
   }, region);
 
@@ -87,7 +91,7 @@ export function BrandStage({
       <section
         ref={hero}
         className={styles.hero}
-        style={{ height: `${Math.round(timelineEnd(motion) * motion.speed)}svh` }}
+        style={{ height: `${Math.round(sceneTimes(motion).total * motion.speed) + 100}svh` }}
         data-nav-theme="light"
         aria-label={brand.name}
       >

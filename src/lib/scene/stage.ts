@@ -1,69 +1,167 @@
 "use client";
 
-import { gsap } from "@/lib/gsap";
-import type { StageMotion, StagePoseDeg } from "@/lib/data/stages";
-import { type Pose, pose } from "./pose";
-import type { ShowcaseState } from "./showcase";
+import { Euler, MathUtils, Quaternion, Vector3 } from "three";
+import type { StageMotion, StageQuat, StageScene } from "@/lib/data/stages";
+import { SPIN_AXIS_A, SPIN_AXIS_B, type ShowcaseState } from "./showcase";
 
 /**
- * BRAND STAGE — a brand page that opens on its watch in 3D (Casio)
+ * BRAND STAGE — a brand page that opens on its watch in 3D, scene by scene
  * ----------------------------------------------------------------------------
- *   OPENING   the watch seen from the side, crown to the lens, the brand's
- *             name above it
- *   LOGO      full diagonal turn(s) into the name on the dial; its line arrives
- *   BRACELET  full diagonal turn(s) onto the bracelet, with its line
- *   EXIT      the watch drifts back and fades as the collection arrives
+ * The scroll position is a time on the stage's timeline; `sampleStage` turns
+ * that time into the watch's pose, its visibility, and the opacity of the
+ * page's title and lines. The same function drives the page and the editor
+ * (/yonetim/donusler), so what is set there is exactly what the page shows.
  *
- * Poses, timings and turns come from lib/data/stages.json (/yonetim/donusler).
+ * Between two scenes the orientation is interpolated along the shortest arc
+ * (slerp) and any full turns are added about a diagonal axis, so the watch
+ * can be set at any angle at all.
  */
 
-export type StageState = ShowcaseState;
-export const toPose = (p: StagePoseDeg): Pose => pose(p.x, p.y, p.z, p.yaw, p.pitch, p.roll);
+export type StageState = ShowcaseState & { q: StageQuat };
+export type StageOverlay = {
+  /** 0–1: the brand's name above the watch (first scene only). */
+  title: number;
+  /** Per line of the page: opacity 0–1 and sideways shift in px. */
+  lines: { opacity: number; shift: number }[];
+};
 
-export const createStageState = (m: StageMotion): StageState => ({
-  ...toPose(m.poses.intro),
-  spinA: 0,
-  spinB: 0,
-  scale: 1,
-  show: 1,
-});
+const AXES = { a: new Vector3(...SPIN_AXIS_A).normalize(), b: new Vector3(...SPIN_AXIS_B).normalize() };
+const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+const smooth = (v: number) => {
+  const t = clamp01(v);
+  return t * t * (3 - 2 * t);
+};
 
-export function buildStageTimeline(
-  s: StageState,
-  m: StageMotion,
-  dom: { title?: HTMLElement | null; lines?: (HTMLElement | null)[] } = {},
-) {
-  const T = m.times;
-  const P = { logo: toPose(m.poses.logo), bracelet: toPose(m.poses.bracelet), exit: toPose(m.poses.exit) };
-  const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
-  const turn = Math.PI * 2;
-
-  // The name above the watch lifts away as the first turn begins.
-  if (dom.title) tl.to(dom.title, { autoAlpha: 0, y: -70, duration: 1, ease: "power2.in" }, Math.max(0, T.logo.at - 0.3));
-
-  // A line slides in from its side as its turn settles, and leaves before the next.
-  const line = (el: HTMLElement | null | undefined, side: "left" | "right", inAt: number, outAt: number) => {
-    if (!el) return;
-    const from = side === "left" ? -50 : 50;
-    tl.fromTo(el, { autoAlpha: 0, x: from }, { autoAlpha: 1, x: 0, duration: 0.8, ease: "power3.out" }, inAt);
-    tl.to(el, { autoAlpha: 0, x: -from / 2, duration: 0.6, ease: "power2.in" }, Math.max(inAt + 0.9, outAt));
-  };
-
-  // 1 Turn(s) into the name on the dial.
-  tl.to(s, { ...P.logo, duration: T.logo.dur }, T.logo.at).to(s, { spinA: `+=${turn * m.spins.logo}`, duration: T.logo.dur }, T.logo.at);
-  line(dom.lines?.[0], "left", T.logo.at + T.logo.dur - 0.6, T.bracelet.at - 0.3);
-
-  // 2 Turn(s) onto the bracelet.
-  tl.to(s, { ...P.bracelet, duration: T.bracelet.dur }, T.bracelet.at).to(
-    s,
-    { spinB: `+=${turn * m.spins.bracelet}`, duration: T.bracelet.dur },
-    T.bracelet.at,
-  );
-  line(dom.lines?.[1], "right", T.bracelet.at + T.bracelet.dur - 0.6, T.exit.at - 0.2);
-
-  // 3 Back and away, fading as the collection arrives.
-  tl.to(s, { ...P.exit, duration: T.exit.dur }, T.exit.at).to(s, { show: 0, duration: T.exit.dur * 0.8, ease: "power1.in" }, T.exit.at + 0.2);
-
-  tl.set({}, {}, Math.max(T.end, T.exit.at + T.exit.dur));
-  return tl;
+/** When each scene's turn starts, when it arrives, and when it leaves. */
+export function sceneTimes(m: StageMotion) {
+  let t = 0;
+  const times = m.scenes.map((s, i) => {
+    const start = t;
+    const arrive = i === 0 ? 0 : start + s.move;
+    const leave = arrive + s.hold;
+    t = leave;
+    return { start, arrive, leave };
+  });
+  return { times, total: Math.max(0.5, t) };
 }
+
+export const createStageState = (m: StageMotion): StageState => {
+  const s = m.scenes[0];
+  return { x: s.x, y: s.y, z: s.z, yaw: 0, pitch: 0, roll: 0, spinA: 0, spinB: 0, scale: 1, show: 1, q: [...s.q] as StageQuat };
+};
+
+const qa = new Quaternion();
+const qb = new Quaternion();
+const qs = new Quaternion();
+
+/** Pose of the watch and the page's overlay at time `t` (seconds). */
+export function sampleStage(m: StageMotion, t: number, out: StageState, lineCount = 0): StageOverlay {
+  const { times } = sceneTimes(m);
+  const scenes = m.scenes;
+  const overlay: StageOverlay = { title: 1, lines: Array.from({ length: lineCount }, () => ({ opacity: 0, shift: 0 })) };
+
+  // Which scene are we in (or turning into)?
+  let i = scenes.length - 1;
+  for (let k = 1; k < scenes.length; k++) {
+    if (t < times[k].arrive) {
+      i = k;
+      break;
+    }
+  }
+  const to = scenes[i];
+  const from = scenes[Math.max(0, i - 1)];
+  const span = times[i].arrive - times[i].start;
+  const raw = i === 0 || span <= 0 ? 1 : clamp01((t - times[i].start) / span);
+  const k = ease(raw);
+
+  out.x = MathUtils.lerp(from.x, to.x, k);
+  out.y = MathUtils.lerp(from.y, to.y, k);
+  out.z = MathUtils.lerp(from.z, to.z, k);
+  qa.fromArray(from.q).normalize();
+  qb.fromArray(to.q).normalize();
+  qa.slerp(qb, k);
+  if (to.spins && raw < 1) {
+    qs.setFromAxisAngle(AXES[to.axis], Math.PI * 2 * to.spins * k);
+    qa.premultiply(qs);
+  }
+  out.q = qa.toArray() as StageQuat;
+
+  // Visibility: a fading scene takes the watch away on its way in, and keeps it away.
+  let show = 1;
+  scenes.forEach((s, n) => {
+    if (n === 0 || !s.fade) return;
+    const d = Math.max(0.1, times[n].arrive - times[n].start);
+    show = Math.min(show, 1 - smooth((t - times[n].start - d * 0.15) / (d * 0.8)));
+  });
+  out.show = show;
+
+  // The title leaves as the first turn begins.
+  if (scenes.length > 1) overlay.title = 1 - smooth((t - times[1].start + 0.3) / 1);
+
+  // A scene's line slides in as its turn settles and leaves as the next turn begins.
+  scenes.forEach((s, n) => {
+    if (s.line === null || s.line >= lineCount || n === 0) return;
+    const inAt = times[n].arrive - 0.6;
+    const outAt = Math.max(inAt + 0.9, times[n].leave - 0.3);
+    const a = smooth((t - inAt) / 0.8);
+    const b = smooth((t - outAt) / 0.6);
+    const opacity = a * (1 - b);
+    const l = overlay.lines[s.line];
+    if (opacity > l.opacity) overlay.lines[s.line] = { opacity, shift: (1 - a) * -50 + b * 25 };
+  });
+
+  return overlay;
+}
+
+/** Put the overlay onto the page's elements. */
+export function applyOverlay(o: StageOverlay, title: HTMLElement | null, lines: (HTMLElement | null)[], sides: ("left" | "right")[]) {
+  if (title) {
+    title.style.opacity = String(o.title);
+    title.style.visibility = o.title < 0.01 ? "hidden" : "visible";
+    title.style.translate = `0 ${(1 - o.title) * -70}px`;
+  }
+  o.lines.forEach((l, i) => {
+    const el = lines[i];
+    if (!el) return;
+    el.style.opacity = String(l.opacity);
+    el.style.visibility = l.opacity < 0.01 ? "hidden" : "visible";
+    el.style.translate = `${sides[i] === "right" ? -l.shift : l.shift}px 0`;
+  });
+}
+
+/* ------------------------------------------------- angles for the editor */
+
+const e = new Euler();
+const q = new Quaternion();
+
+/** Degrees (yaw, pitch, roll as the earlier openings used them) → quaternion. */
+export function quatFromDeg(yaw: number, pitch: number, roll: number): StageQuat {
+  e.set(MathUtils.degToRad(-pitch), MathUtils.degToRad(yaw), MathUtils.degToRad(roll), "YXZ");
+  return q.setFromEuler(e).toArray() as StageQuat;
+}
+
+/** Quaternion → readable degrees (yaw, pitch, roll). */
+export function degFromQuat(v: StageQuat) {
+  e.setFromQuaternion(q.fromArray(v).normalize(), "YXZ");
+  const r = (x: number) => Math.round(MathUtils.radToDeg(x) * 10) / 10;
+  return { yaw: r(e.y), pitch: r(-e.x), roll: r(e.z) };
+}
+
+/** Turn a quaternion by `deg` about a screen axis ("x" across, "y" up, "z" toward you). */
+export function turnOnScreen(v: StageQuat, axis: "x" | "y" | "z", deg: number): StageQuat {
+  const ax = axis === "x" ? new Vector3(1, 0, 0) : axis === "y" ? new Vector3(0, 1, 0) : new Vector3(0, 0, 1);
+  qs.setFromAxisAngle(ax, MathUtils.degToRad(deg));
+  return q.fromArray(v).premultiply(qs).normalize().toArray() as StageQuat;
+}
+
+export const blankScene = (from: StageScene, n: number): StageScene => ({
+  ...from,
+  name: n > 0 ? `Ara sahne ${n}` : "Ara sahne",
+  q: [...from.q] as StageQuat,
+  move: 2.5,
+  hold: 1,
+  spins: 0,
+  line: null,
+  fade: false,
+});

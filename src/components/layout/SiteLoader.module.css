@@ -51,10 +51,11 @@
     filter 0.7s var(--ease-soft);
 }
 .mark span {
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: 0.14em;
-  text-transform: none;
+  /* "Saat" is set exactly like "Furkan": same face, upright, capitals, same spacing. */
+  font-style: normal;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
   color: var(--champagne);
 }
 /* It steps back as the ring arrives. */

@@ -66,7 +66,9 @@
   white-space: nowrap;
   text-align: center;
 }
+/* "Saat" set exactly like "Furkan" (upright, same face); only its colour differs. */
 .wordmark em {
+  font-style: normal;
   color: var(--champagne-600);
 }
 

@@ -5,7 +5,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { ASSETS } from "@/lib/assets";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
-import { introSound } from "@/lib/sound/introSound";
 import styles from "./SiteLoader.module.css";
 
 /**
@@ -14,15 +13,11 @@ import styles from "./SiteLoader.module.css";
  *   mark   "Furkan Saat" fades in, holds, and steps back
  *   ring   a hairline ring draws its progress around "Loading" while the
  *          fonts, the opening film's first frame and the film itself load
- *   ready  home page: the ring reads "Giriş". Browsers only allow sound
- *          after a click, tap or key press (never on scroll alone), so this
- *          one gesture switches the opening's sound on — then the first
- *          scroll plays the film with sound
  *   land   home page: the ring travels and resizes onto the bezel of the
  *          watch in the film's first frame as the black lifts, so the ring
  *          becomes the watch; other pages: it simply fades
  */
-type Phase = "mark" | "ring" | "ready" | "land" | "done";
+type Phase = "mark" | "ring" | "land" | "done";
 
 /** Shortest and longest time on screen (ms). */
 const MIN_MS = 2800;
@@ -108,8 +103,7 @@ function Loader() {
       if (arc.current) arc.current.style.strokeDashoffset = String(1 - shown);
       if (shown > 0.995 && elapsed >= MIN_MS && !finished) {
         finished = true;
-        if (home) setPhase("ready");
-        else land(false);
+        land(home && !reduced);
         return;
       }
       raf = requestAnimationFrame(tick);
@@ -122,7 +116,7 @@ function Loader() {
       const r = ring.current;
       if (!el || !r) return setPhase("done");
       const tl = gsap.timeline({ onComplete: () => setPhase("done") });
-      tl.set([r, `.${styles.label}`, `.${styles.hint}`], { transition: "none", animation: "none" }, 0);
+      tl.set([r, `.${styles.label}`], { transition: "none", animation: "none" }, 0);
       if (toWatch && video) {
         // Where the bezel sits on screen: the film is cover-fitted to its box.
         const box = video.getBoundingClientRect();
@@ -132,7 +126,7 @@ function Loader() {
         const x = box.left + box.width / 2 + (dial.cx - 0.5) * fw;
         const y = box.top + box.height / 2 + (dial.cy - 0.5) * fh;
         const d = dial.r * 2 * fh;
-        tl.to([`.${styles.label}`, `.${styles.hint}`], { autoAlpha: 0, duration: 0.35, ease: "power1.in" }, 0)
+        tl.to(`.${styles.label}`, { autoAlpha: 0, duration: 0.35, ease: "power1.in" }, 0)
           .to(r, { x: x - window.innerWidth / 2, y: y - window.innerHeight / 2, scale: d / RING, duration: 1.15, ease: "power3.inOut" }, 0.2)
           .to(`.${styles.track}`, { opacity: 0, duration: 0.6 }, 0.2)
           .to(el, { "--veil": 0, duration: 0.9, ease: "power2.inOut" }, 0.55)
@@ -144,32 +138,9 @@ function Loader() {
       }
     };
 
-    // Home page: the visitor's click, tap or key press enters — and allows sound.
-    const enter = (e: Event) => {
-      if (!finished || entered) return;
-      if (e instanceof KeyboardEvent && !["Enter", " ", "Spacebar", "ArrowDown", "PageDown"].includes(e.key)) return;
-      e.preventDefault();
-      entered = true;
-      void introSound.unlock();
-      land(!reduced);
-    };
-    // Scrolling instead: a nudge towards the ring.
-    const nudge = () => {
-      if (!finished || entered || !ring.current) return;
-      gsap.fromTo(ring.current, { scale: 1 }, { scale: 1.06, duration: 0.18, yoyo: true, repeat: 1, ease: "power1.out" });
-    };
-    let entered = false;
-    const el = root.current;
-    el?.addEventListener("pointerdown", enter);
-    window.addEventListener("keydown", enter, true);
-    window.addEventListener("wheel", nudge, { passive: true });
-
     return () => {
       cancelAnimationFrame(raf);
       timers.forEach(clearTimeout);
-      el?.removeEventListener("pointerdown", enter);
-      window.removeEventListener("keydown", enter, true);
-      window.removeEventListener("wheel", nudge);
     };
   }, []);
 
@@ -185,7 +156,7 @@ function Loader() {
       className={styles.loader}
       data-phase={phase}
       role="status"
-      aria-label={phase === "ready" ? "Giriş: sesle girmek için tıklayın veya Enter tuşuna basın" : "Yükleniyor"}
+      aria-label="Yükleniyor"
     >
       <p className={styles.mark} aria-hidden>
         Furkan <span>Saat</span>
@@ -196,21 +167,10 @@ function Loader() {
           <circle ref={arc} className={styles.arc} cx="100" cy="100" r="99" pathLength={1} />
         </svg>
         {/* lang="en": English capitals (LOADING, not LOADİNG). */}
-        <span className={`${styles.label} ${styles.loading}`} lang="en">
+        <span className={styles.label} lang="en">
           Loading
         </span>
-        <span className={`${styles.label} ${styles.enter}`}>Giriş</span>
       </div>
-      <p className={styles.hint} aria-hidden>
-        <span className={styles.bars}>
-          <span />
-          <span />
-          <span />
-          <span />
-        </span>
-        <span className={styles.click}>Sesle girmek için tıklayın</span>
-        <span className={styles.tap}>Sesle girmek için dokunun</span>
-      </p>
     </div>
   );
 }

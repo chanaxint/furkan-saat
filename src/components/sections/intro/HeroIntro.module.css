@@ -12,6 +12,13 @@
   height: 100svh;
   overflow: hidden;
 }
+/*
+ * While the page is held, a swipe on the film is not a browser scroll: it then
+ * counts as a tap, the one gesture after which a phone allows sound.
+ */
+.stage:not([data-phase="done"]) {
+  touch-action: none;
+}
 
 .video,
 .reverse {

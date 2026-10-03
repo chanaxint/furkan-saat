@@ -17,8 +17,8 @@ import styles from "./HeroIntro.module.css";
  * rewinding  scrolling back up at the top: the titles go and the film runs
  *            backwards to its first frame, then it is idle again
  *
- * Sound (lib/sound/introSound): ticks that accelerate with the film, a deep
- * hit on the cut, a chime with the name, slowing ticks on the rewind.
+ * Sound (lib/sound/introSound): wind that gathers speed with the film, cut
+ * dead on the cut to black, and falling away on the rewind.
  */
 type Phase = "idle" | "playing" | "line" | "mark" | "done" | "rewinding";
 
@@ -79,11 +79,8 @@ export function HeroIntro() {
     if (phaseRef.current !== "playing") return;
     clearTimers();
     go("line");
-    introSound.impact();
-    later(() => {
-      go("mark");
-      introSound.chime();
-    }, LINE_MS);
+    introSound.cut();
+    later(() => go("mark"), LINE_MS);
     later(() => go("done"), LINE_MS + MARK_MS);
   }, [go, later, clearTimers]);
 
@@ -104,6 +101,7 @@ export function HeroIntro() {
     if (phaseRef.current !== "rewinding") return;
     clearTimers();
     reverse.current?.pause();
+    introSound.stop(0.3);
     go("idle");
   }, [go, clearTimers]);
 
@@ -195,7 +193,7 @@ export function HeroIntro() {
     const onActivate = () => void introSound.unlock().then((ok) => ok && rise());
 
     const opts = { capture: true, passive: false } as const;
-    const activation = ["pointerdown", "keydown", "touchend"] as const;
+    const activation = ["pointerdown", "pointerup", "keydown", "touchend"] as const;
     activation.forEach((t) => window.addEventListener(t, onActivate, { capture: true, passive: true }));
     window.addEventListener("wheel", onWheel, opts);
     window.addEventListener("touchstart", onTouchStart, { capture: true, passive: true });

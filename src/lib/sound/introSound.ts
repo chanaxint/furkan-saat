@@ -3,27 +3,28 @@
 /**
  * INTRO SOUND — synthesised with the Web Audio API (no audio files).
  *
- *   rise(T)    watch ticks that keep accelerating over T seconds, over a
- *              swell of air and a low drone that climb with them
- *   impact()   the cut to black: a deep hit with a soft chime above it
- *   chime()    a quiet chime when the name arrives
- *   rewind(T)  the same ticks slowing down, under a falling whoosh
+ *   rise(T)    wind that gathers speed over T seconds: it brightens and swells,
+ *              and its gusts come faster and faster
+ *   cut()      silence, at once (with the film's cut to black)
+ *   rewind(T)  the same wind falling away, for the rewind
  *
- * Sound is always on. Browsers only allow it after the visitor clicks, taps
- * or presses a key (a mouse-wheel scroll does not count), so `unlock()` is
- * called from those events; until then everything here is silent.
+ * Sound is always on and has no controls. Browsers only allow it after the
+ * visitor has clicked, tapped or pressed a key (a mouse-wheel scroll alone
+ * does not count), so `unlock()` runs on those events; until then this stays
+ * silent, and the wind joins the film where it is once allowed.
  */
 
-/** Tick interval at the start and at the end of the rise (seconds). */
-const TICK_FIRST = 0.44;
-const TICK_LAST = 0.04;
-
 type Run = { gain: GainNode; sources: AudioScheduledSourceNode[] };
+
+/** Gust rate at the start and the end of the rise (Hz): the sense of speed. */
+const GUST_SLOW = 0.6;
+const GUST_FAST = 9;
 
 class IntroSound {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  private noise: AudioBuffer | null = null;
+  private pink: AudioBuffer | null = null;
+  private white: AudioBuffer | null = null;
   private run: Run | null = null;
 
   /** Whether the browser is actually letting us play. */
@@ -39,18 +40,15 @@ class IntroSound {
       if (!Ctx) return false;
       const ctx = new Ctx();
       const comp = ctx.createDynamicsCompressor();
-      comp.threshold.value = -14;
-      comp.ratio.value = 4;
+      comp.threshold.value = -16;
+      comp.ratio.value = 3;
       const master = ctx.createGain();
       master.gain.value = 0.9;
       master.connect(comp).connect(ctx.destination);
-      // One second of white noise, reused by every tick and swell.
-      const noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
-      const data = noise.getChannelData(0);
-      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
       this.ctx = ctx;
       this.master = master;
-      this.noise = noise;
+      this.white = noiseBuffer(ctx, false);
+      this.pink = noiseBuffer(ctx, true);
     }
     if (this.ctx.state !== "running") {
       try {
@@ -63,7 +61,7 @@ class IntroSound {
   }
 
   /** Stop whatever is playing, with a click-free fade of `fade` seconds. */
-  stop(fade = 0.03) {
+  stop(fade = 0.05) {
     const run = this.run;
     const ctx = this.ctx;
     this.run = null;
@@ -79,198 +77,133 @@ class IntroSound {
         /* already stopped */
       }
     }
-    window.setTimeout(() => run.gain.disconnect(), (fade + 0.2) * 1000);
+    window.setTimeout(() => run.gain.disconnect(), (fade + 0.3) * 1000);
+  }
+
+  /** With the film's hard cut: the wind stops dead. */
+  cut() {
+    this.stop(0.04);
   }
 
   /**
-   * Accelerating ticks over `duration` seconds. `from` skips the part that has
-   * already passed (sound unlocked after the film started).
+   * Wind gathering speed over `duration` seconds. `from` skips the part that
+   * has already passed (sound allowed only after the film started).
    */
   rise(duration: number, from = 0) {
     const run = this.begin();
     if (!run) return;
-    const ctx = this.ctx!;
-    const now = ctx.currentTime;
     const T = Math.max(0.5, duration);
-
-    tickTimes(T).forEach((t, i) => {
-      if (t < from) return;
-      const k = t / T;
-      this.tick(run, now + t - from, 0.22 + 0.5 * k, k, i);
-    });
-
-    const left = T - from;
-    // Air: filtered noise that opens up and swells.
-    const air = this.noiseSource(run, true);
-    const lp = ctx.createBiquadFilter();
-    lp.type = "bandpass";
-    lp.Q.value = 0.8;
-    lp.frequency.setValueAtTime(lerpExp(220, 3200, from / T), now);
-    lp.frequency.exponentialRampToValueAtTime(3200, now + left);
-    const airGain = ctx.createGain();
-    airGain.gain.setValueAtTime(0.0001 + 0.12 * (from / T) ** 2, now);
-    airGain.gain.exponentialRampToValueAtTime(0.16, now + left);
-    air.connect(lp).connect(airGain).connect(run.gain);
-    air.start(now);
-
-    // A low drone climbing an octave.
-    const drone = ctx.createOscillator();
-    drone.type = "sine";
-    drone.frequency.setValueAtTime(lerpExp(48, 96, from / T), now);
-    drone.frequency.exponentialRampToValueAtTime(96, now + left);
-    const droneGain = ctx.createGain();
-    droneGain.gain.setValueAtTime(0.0001 + 0.14 * (from / T), now);
-    droneGain.gain.linearRampToValueAtTime(0.16, now + left);
-    drone.connect(droneGain).connect(run.gain);
-    drone.start(now);
-    run.sources.push(drone);
+    const k0 = Math.min(0.95, Math.max(0, from / T));
+    this.wind(run, T - from, k0, 1);
   }
 
-  /** The cut to black: everything stops dead and one deep hit rings out. */
-  impact() {
-    this.stop(0.012);
-    const run = this.begin();
-    if (!run) return;
-    const ctx = this.ctx!;
-    const t = ctx.currentTime + 0.01;
-
-    // Body: a sine that falls in pitch.
-    const body = ctx.createOscillator();
-    body.type = "sine";
-    body.frequency.setValueAtTime(82, t);
-    body.frequency.exponentialRampToValueAtTime(34, t + 1.4);
-    const bodyGain = ctx.createGain();
-    bodyGain.gain.setValueAtTime(0.0001, t);
-    bodyGain.gain.exponentialRampToValueAtTime(0.85, t + 0.012);
-    bodyGain.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
-    body.connect(bodyGain).connect(run.gain);
-    body.start(t);
-    body.stop(t + 2.3);
-    run.sources.push(body);
-
-    // Attack: a short dark burst of noise.
-    const hit = this.noiseSource(run, false);
-    const lp = ctx.createBiquadFilter();
-    lp.type = "lowpass";
-    lp.frequency.setValueAtTime(1400, t);
-    lp.frequency.exponentialRampToValueAtTime(120, t + 0.5);
-    const hitGain = ctx.createGain();
-    hitGain.gain.setValueAtTime(0.5, t);
-    hitGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-    hit.connect(lp).connect(hitGain).connect(run.gain);
-    hit.start(t);
-    hit.stop(t + 0.7);
-
-    this.bell(run, t + 0.02, 0.07, 3.2);
-  }
-
-  /** A quiet chime for the name. */
-  chime() {
-    const run = this.begin(false);
-    if (!run) return;
-    this.bell(run, this.ctx!.currentTime + 0.02, 0.05, 2.6, 1.5);
-  }
-
-  /** Ticks slowing down under a falling whoosh, over `duration` seconds. */
+  /** The wind falling away over `duration` seconds. */
   rewind(duration: number) {
     const run = this.begin();
     if (!run) return;
-    const ctx = this.ctx!;
-    const now = ctx.currentTime;
-    const T = Math.max(0.5, duration);
-    // The rise, mirrored: fast at first, slowing to a stop.
-    tickTimes(T).forEach((t, i) => {
-      const k = t / T;
-      this.tick(run, now + (T - t), 0.16 + 0.34 * k, k, i);
-    });
-    const air = this.noiseSource(run, true);
-    const bp = ctx.createBiquadFilter();
-    bp.type = "bandpass";
-    bp.Q.value = 1.2;
-    bp.frequency.setValueAtTime(3000, now);
-    bp.frequency.exponentialRampToValueAtTime(180, now + T);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, now);
-    g.gain.exponentialRampToValueAtTime(0.14, now + 0.12);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + T);
-    air.connect(bp).connect(g).connect(run.gain);
-    air.start(now);
-    air.stop(now + T + 0.1);
+    this.wind(run, Math.max(0.4, duration), 1, 0);
   }
 
   /* ------------------------------------------------------------------ */
 
-  /** A fresh output for one sound; by default it replaces the previous one. */
-  private begin(replace = true): Run | null {
+  /**
+   * Wind moving from intensity k0 to k1 (0 = a breath, 1 = full speed) over
+   * `dur` seconds: a broad body of pink noise (two layers, left and right),
+   * a thinner airflow band above it, and gusts whose rate follows the speed.
+   */
+  private wind(run: Run, dur: number, k0: number, k1: number) {
+    const ctx = this.ctx!;
+    const now = ctx.currentTime;
+    const end = now + dur;
+    const exp = (a: number, b: number, k: number) => a * (b / a) ** k;
+    const set = (p: AudioParam, a: number, b: number, curve: "exp" | "lin" = "exp") => {
+      p.setValueAtTime(a, now);
+      if (curve === "exp") p.exponentialRampToValueAtTime(b, end);
+      else p.linearRampToValueAtTime(b, end);
+    };
+
+    // Gusts: one LFO shared by every layer, its rate rising with the speed.
+    const gust = ctx.createOscillator();
+    gust.type = "sine";
+    set(gust.frequency, exp(GUST_SLOW, GUST_FAST, k0), exp(GUST_SLOW, GUST_FAST, k1));
+    const gustDepth = ctx.createGain();
+    gustDepth.gain.value = 0.32;
+    gust.connect(gustDepth);
+    gust.start(now);
+    run.sources.push(gust);
+
+    const layer = (opts: {
+      buffer: AudioBuffer;
+      type: BiquadFilterType;
+      q: number;
+      freq: [number, number];
+      level: [number, number];
+      pan: number;
+      offset: number;
+    }) => {
+      const src = ctx.createBufferSource();
+      src.buffer = opts.buffer;
+      src.loop = true;
+      const filter = ctx.createBiquadFilter();
+      filter.type = opts.type;
+      filter.Q.value = opts.q;
+      set(filter.frequency, exp(opts.freq[0], opts.freq[1], k0), exp(opts.freq[0], opts.freq[1], k1));
+      const level = ctx.createGain();
+      // A short fade-in so the wind never starts with a click.
+      level.gain.setValueAtTime(0.0001, now);
+      level.gain.linearRampToValueAtTime(exp(opts.level[0], opts.level[1], k0), now + 0.12);
+      level.gain.exponentialRampToValueAtTime(exp(opts.level[0], opts.level[1], k1), end);
+      const gusting = ctx.createGain();
+      gusting.gain.value = 1;
+      gustDepth.connect(gusting.gain);
+      const pan = ctx.createStereoPanner();
+      pan.pan.value = opts.pan;
+      src.connect(filter).connect(level).connect(gusting).connect(pan).connect(run.gain);
+      src.start(now, opts.offset);
+      run.sources.push(src);
+    };
+
+    // Body, left and right (different stretches of the noise, so it feels wide).
+    layer({ buffer: this.pink!, type: "lowpass", q: 0.6, freq: [260, 2600], level: [0.07, 0.65], pan: -0.55, offset: 0 });
+    layer({ buffer: this.pink!, type: "lowpass", q: 0.6, freq: [240, 2400], level: [0.07, 0.65], pan: 0.55, offset: 0.9 });
+    // Airflow: a narrower band that climbs into a high rush.
+    layer({ buffer: this.white!, type: "bandpass", q: 2.8, freq: [520, 4600], level: [0.012, 0.26], pan: 0, offset: 0.4 });
+  }
+
+  /** A fresh output for one sound; it replaces the previous one. */
+  private begin(): Run | null {
     if (!this.ready || !this.ctx || !this.master) return null;
-    if (replace) this.stop();
+    this.stop();
     const gain = this.ctx.createGain();
     gain.connect(this.master);
     const run: Run = { gain, sources: [] };
-    if (replace) this.run = run;
+    this.run = run;
     return run;
   }
+}
 
-  private noiseSource(run: Run, loop: boolean) {
-    const src = this.ctx!.createBufferSource();
-    src.buffer = this.noise;
-    src.loop = loop;
-    run.sources.push(src);
-    return src;
-  }
-
-  /** One mechanical tick: a filtered click, alternating tick / tock. */
-  private tick(run: Run, at: number, level: number, k: number, i: number) {
-    const ctx = this.ctx!;
-    const src = this.noiseSource(run, false);
-    const bp = ctx.createBiquadFilter();
-    bp.type = "bandpass";
-    bp.Q.value = 9;
-    // Alternate pitch like a balance wheel; it tightens as it speeds up.
-    bp.frequency.value = (i % 2 ? 2500 : 3500) * (1 + 0.25 * k);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, at);
-    g.gain.exponentialRampToValueAtTime(level, at + 0.0015);
-    g.gain.exponentialRampToValueAtTime(0.0001, at + 0.045);
-    src.connect(bp).connect(g).connect(run.gain);
-    src.start(at, Math.random() * 0.9, 0.06);
-  }
-
-  /** A soft bell: a few inharmonic partials that ring out. */
-  private bell(run: Run, at: number, level: number, ring: number, pitch = 1) {
-    const ctx = this.ctx!;
-    for (const [ratio, amp] of [
-      [1, 1],
-      [2.76, 0.45],
-      [5.4, 0.2],
-    ] as const) {
-      const o = ctx.createOscillator();
-      o.type = "sine";
-      o.frequency.value = 659.25 * pitch * ratio;
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.0001, at);
-      g.gain.exponentialRampToValueAtTime(level * amp, at + 0.008);
-      g.gain.exponentialRampToValueAtTime(0.0001, at + ring / ratio);
-      o.connect(g).connect(run.gain);
-      o.start(at);
-      o.stop(at + ring + 0.1);
-      run.sources.push(o);
+/** Two seconds of white or pink noise (pink: Paul Kellet's filter — softer, more like air). */
+function noiseBuffer(ctx: AudioContext, pink: boolean) {
+  const buffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+  for (let i = 0; i < data.length; i++) {
+    const w = Math.random() * 2 - 1;
+    if (!pink) {
+      data[i] = w;
+      continue;
     }
+    b0 = 0.99886 * b0 + w * 0.0555179;
+    b1 = 0.99332 * b1 + w * 0.0750759;
+    b2 = 0.969 * b2 + w * 0.153852;
+    b3 = 0.8665 * b3 + w * 0.3104856;
+    b4 = 0.55 * b4 + w * 0.5329522;
+    b5 = -0.7616 * b5 - w * 0.016898;
+    data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11;
+    b6 = w * 0.115926;
   }
+  return buffer;
 }
-
-/** Times (s) of ticks whose interval shrinks exponentially from TICK_FIRST to TICK_LAST over T. */
-function tickTimes(T: number) {
-  const times: number[] = [];
-  let t = 0;
-  while (t < T - 0.02) {
-    times.push(t);
-    t += TICK_FIRST * (TICK_LAST / TICK_FIRST) ** (t / T);
-  }
-  return times;
-}
-
-const lerpExp = (a: number, b: number, k: number) => a * (b / a) ** Math.min(1, Math.max(0, k));
 
 /** One shared engine for the page. */
 export const introSound = new IntroSound();

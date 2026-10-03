@@ -123,98 +123,6 @@
   animation: breathe 2.4s ease-in-out infinite;
 }
 
-/* ----------------------------------------------------------- ready */
-/* Loaded: "Loading" gives way to "Giriş"; the whole screen is the button. */
-.enter {
-  opacity: 0;
-  animation: none;
-  color: var(--ivory);
-  transition: opacity 0.7s var(--ease-soft);
-}
-.loading {
-  transition: opacity 0.5s var(--ease-soft);
-}
-.loader[data-phase="ready"] {
-  cursor: pointer;
-  /* Waiting for the visitor: the failsafe must not hide it. */
-  animation: none;
-}
-.loader[data-phase="ready"] .loading {
-  opacity: 0;
-  animation: none;
-}
-.loader[data-phase="ready"] .enter {
-  opacity: 1;
-  animation: breathe 2.4s ease-in-out 0.7s infinite;
-}
-.loader[data-phase="ready"] .arc {
-  animation: glow 2.4s ease-in-out infinite;
-}
-.loader[data-phase="ready"]:hover .arc {
-  stroke: #f4e6c6;
-}
-
-.hint {
-  position: absolute;
-  left: 50%;
-  top: calc(50% + 84px + 34px);
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  color: var(--text-on-dark-faint);
-  opacity: 0;
-  transform: translate(-50%, 6px);
-  transition:
-    opacity 0.8s var(--ease-soft) 0.3s,
-    transform 0.8s var(--ease-lux) 0.3s;
-}
-.loader[data-phase="ready"] .hint {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-.tap {
-  display: none;
-}
-@media (hover: none) {
-  .click {
-    display: none;
-  }
-  .tap {
-    display: inline;
-  }
-}
-/* Four hairline bars: the sound that is waiting. */
-.bars {
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 11px;
-}
-.bars span {
-  width: 1px;
-  height: 3px;
-  background: var(--champagne);
-  animation: bar 1.1s ease-in-out infinite alternate;
-}
-.bars span:nth-child(2) { animation-delay: -0.35s; }
-.bars span:nth-child(3) { animation-delay: -0.7s; }
-.bars span:nth-child(4) { animation-delay: -0.2s; }
-@keyframes bar {
-  from { height: 3px; }
-  to { height: 11px; }
-}
-@keyframes glow {
-  50% {
-    filter: drop-shadow(0 0 12px rgba(220, 200, 160, 0.75));
-  }
-}
-
 @keyframes mark-in {
   from {
     opacity: 0;
@@ -236,10 +144,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .mark,
-  .label,
-  .bars span,
-  .loader[data-phase="ready"] .arc,
-  .loader[data-phase="ready"] .enter {
+  .label {
     animation: none;
   }
 }

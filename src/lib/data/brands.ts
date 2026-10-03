@@ -51,14 +51,13 @@ export const BRANDS: Brand[] = [
     description:
       "1999'da Paris'te kurulan Freelook, Parisli kadının zahmetsiz zarafetinden ilham alır. Kristal taşlar ve altın detaylar, günlük şıklık için tasarlanmış modellerde buluşur.",
     cover: "/assets/images/watches/freelook-baget-tasli-yesil.webp",
-    logo: "/assets/images/brands/freelook.png",
+    logo: "/assets/images/brands/freelook-gold.webp",
     film: {
       mp4: "/assets/video/brands/freelook.mp4",
       webm: "/assets/video/brands/freelook.webm",
       poster: "/assets/video/brands/freelook.webp",
     },
     theme: "gold",
-    pageLogo: "/assets/images/brands/freelook-gold.webp",
     showcase: {
       model: "/assets/models/freelook-watch.glb",
       pivot: [0, 0, 0.6],

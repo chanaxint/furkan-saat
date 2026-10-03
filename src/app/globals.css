@@ -99,6 +99,11 @@ html {
   }
 }
 
+/* While the site loader is up the page stays still. */
+html[data-loading] {
+  overflow: hidden;
+}
+
 html.lenis,
 html.lenis body {
   height: auto;

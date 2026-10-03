@@ -76,8 +76,8 @@ export type Brand = {
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**
-   * Page palette. `gold`: warm white ground with gold accents (and `pageLogo`,
-   * a gold version of the logo, on the page).
+   * Palette. `gold`: the brand page has a warm white ground with gold accents,
+   * and its home page tile name is set in gold (use a gold `logo` with it).
    */
   theme?: "gold";
   /** Logo used on the brand page itself, when it differs from `logo`. */

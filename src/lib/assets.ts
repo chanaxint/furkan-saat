@@ -32,6 +32,14 @@ export const ASSETS = {
       webm: "/assets/video/intro/intro-1080.webm",
       mobile: "/assets/video/intro/intro-720.mp4",
       poster: "/assets/video/intro/intro-poster.webp",
+      /**
+       * The first watch's bezel in the first frame, as fractions of the frame:
+       * centre x / y and radius (of the frame height). The site loader's ring
+       * lands exactly on it. Measured on the 1920×1080 poster: (944, 547), r 131.
+       */
+      dial: { cx: 944 / 1920, cy: 547 / 1080, r: 131 / 1080 },
+      /** Frame aspect of the film (all versions share the framing). */
+      aspect: 16 / 9,
       /** The same film reversed (30 fps), played when scrolling back up rewinds the opening. */
       reverse: {
         mp4: "/assets/video/intro/intro-1080-reverse.mp4",

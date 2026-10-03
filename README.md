@@ -36,6 +36,15 @@ npm run typecheck
 - `lib/gsap.ts` — single plugin registration
 - `prefers-reduced-motion` disables Lenis, scroll choreography and the opening hold
 
+## Site loader
+
+`layout/SiteLoader`, on the first load of every page (not /yonetim): "Furkan Saat", then a
+hairline ring with "Loading" that fills as the fonts, the opening film's first frame and the
+film itself load (at least 2.8 s, at most 9 s). On the home page the ring then travels onto
+the bezel of the watch in the film's first frame as the black lifts
+(`ASSETS.intro.film.dial`, measured on the poster); elsewhere it fades. The intro cannot be
+started while it is up.
+
 ## Opening film
 
 `sections/intro/HeroIntro` — the film is `public/assets/video/intro/`

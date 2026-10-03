@@ -88,7 +88,8 @@ export function HeroIntro() {
   }, [go, later, clearTimers]);
 
   const start = useCallback(() => {
-    if (phaseRef.current !== "idle") return;
+    // Not while the site loader is still on screen.
+    if (phaseRef.current !== "idle" || document.documentElement.hasAttribute("data-loading")) return;
     go("playing");
     introSound.stop();
     const v = video.current;
@@ -253,6 +254,7 @@ export function HeroIntro() {
         <video
           ref={video}
           className={styles.video}
+          data-intro-video
           poster={film.poster}
           muted
           playsInline

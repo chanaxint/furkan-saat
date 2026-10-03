@@ -3,6 +3,7 @@ import "./fonts.css";
 import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { ScrollLine } from "@/components/layout/ScrollLine";
+import { SiteLoader } from "@/components/layout/SiteLoader";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Navigation />
           {children}
           <ScrollLine />
+          <SiteLoader />
         </SmoothScroll>
       </body>
     </html>

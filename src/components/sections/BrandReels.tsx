@@ -6,8 +6,7 @@ import styles from "./BrandReels.module.css";
 
 /**
  * 01 — FEATURED BRANDS, straight after the opening: four equal tiles side by
- * side. Each takes a short clip (`reel` in lib/data/brands.ts) that plays on
- * hover; until a clip is added the tile shows the brand's photograph.
+ * side, each with the brand's logo (`logo` in lib/data/brands.ts).
  */
 export function BrandReels() {
   return (

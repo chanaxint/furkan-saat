@@ -15,7 +15,7 @@ npm run typecheck
 | #  | Section            | Component                                  |
 |----|--------------------|--------------------------------------------|
 | —  | Opening film       | `sections/intro/HeroIntro`                 |
-| 01 | Featured brands    | `sections/BrandReels` + `BrandTile` (4 tiles; clip per brand) |
+| 01 | Featured brands    | `sections/BrandReels` + `BrandTile` (4 logo tiles) |
 | 02 | Selected watches   | `sections/FeaturedWatches`                 |
 | 03 | Collections        | `sections/CollectionsSection`              |
 | 04 | Trust              | `sections/TrustSection`                    |
@@ -58,9 +58,8 @@ a soft chime with the name, and the ticks slowing down on the rewind. Browsers o
 sound after a click, tap or key press (a mouse-wheel scroll does not count); from then on it
 joins the film where it is. Sound is always on (no toggle).
 
-**Brand clips:** put a 4:5 clip in `public/assets/video/brands/` and set `reel` on the brand
-in `lib/data/brands.ts`; hovering the tile plays it. Without one the tile shows the photo.
-The section rises into the blend (`--overlap` in `BrandReels.module.css`), so its title sits
+**Brand tiles:** each shows the brand's logo (`logo` in `lib/data/brands.ts`, ivory on
+transparent PNGs in `public/assets/images/brands/`). The section rises into the blend (`--overlap` in `BrandReels.module.css`), so its title sits
 among the clouds.
 
 **Scrollbar:** on mouse/trackpad screens the browser's bar is hidden and `layout/ScrollLine`

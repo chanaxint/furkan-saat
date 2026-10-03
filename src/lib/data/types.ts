@@ -62,13 +62,10 @@ export type Brand = {
   /** One quiet line under the name. */
   signature: string;
   description: string;
-  /** Photograph for the brand tile and the brand page. */
+  /** Photograph for the brand page. */
   cover: string;
-  /**
-   * Optional clip for the home page brand tile (4:5, muted, a few seconds).
-   * Hovering a tile plays it; without one the tile shows `cover`.
-   */
-  reel?: { mp4: string; webm?: string; poster?: string };
+  /** Logo (ivory on transparent) for the home page brand tile. */
+  logo: string;
 };
 
 export type CollectionDef = {

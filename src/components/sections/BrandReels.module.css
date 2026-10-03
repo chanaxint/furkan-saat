@@ -47,31 +47,43 @@
   gap: 18px;
   outline-offset: 4px;
 }
-/* Every tile the same 4:5 frame. */
+/* Every tile the same 4:5 frame: a quiet green field with the logo at its centre. */
 .frame {
   position: relative;
-  display: block;
+  display: grid;
+  place-items: center;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: #000;
+  background:
+    radial-gradient(70% 60% at 50% 45%, rgba(29, 70, 61, 0.55), transparent 75%),
+    var(--green-850);
+  border: 1px solid var(--line-on-dark);
+  transition:
+    border-color 0.8s var(--ease-lux),
+    background-color 0.8s var(--ease-lux);
 }
-
-.video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* The logos differ in shape; each fits the same box, so none outweighs the others. */
+.logo {
+  position: relative;
+  width: 62%;
+  height: 34%;
+  opacity: 0.88;
+  transition:
+    transform 1.4s var(--ease-lux),
+    opacity 0.8s var(--ease-lux);
 }
-
-.image {
-  object-fit: cover;
-  transform: scale(1.001);
-  transition: transform 1.4s var(--ease-lux);
+.logo img {
+  object-fit: contain;
 }
-.tile:hover .image,
-.tile:focus-visible .image {
-  transform: scale(1.04);
+.tile:hover .frame,
+.tile:focus-visible .frame {
+  border-color: var(--champagne-soft);
+  background-color: var(--green-800);
+}
+.tile:hover .logo,
+.tile:focus-visible .logo {
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 .caption {

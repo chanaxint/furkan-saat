@@ -40,7 +40,9 @@ npm run typecheck
 
 `layout/SiteLoader`, on the first load of every page (not /yonetim): "Furkan Saat", then a
 hairline ring with "Loading" that fills as the fonts, the opening film's first frame and the
-film itself load (at least 2.8 s, at most 9 s). On the home page the ring then travels onto
+film itself load (at least 2.8 s, at most 9 s). On the home page it then reads *Giriş* and
+waits for a click, tap or key press: browsers only allow sound after such a gesture (never on
+scroll alone), so this is what lets the first scroll play the film with sound. The ring then travels onto
 the bezel of the watch in the film's first frame as the black lifts
 (`ASSETS.intro.film.dial`, measured on the poster); elsewhere it fades. The intro cannot be
 started while it is up.
@@ -64,8 +66,9 @@ and the same film reversed: `intro-*-reverse.*`), registered in `ASSETS.intro.fi
 **Sound** (`lib/sound/introSound.ts`, synthesised with Web Audio, no files): watch ticks
 that keep accelerating with the film over a rising swell, a deep hit on the cut to black,
 a soft chime with the name, and the ticks slowing down on the rewind. Browsers only allow
-sound after a click, tap or key press (a mouse-wheel scroll does not count); from then on it
-joins the film where it is. Sound is always on (no toggle).
+sound after a click, tap or key press (a mouse-wheel scroll does not count), which is why the
+site loader ends on a *Giriş* click; from then on it joins the film where it is. Sound is always
+on (no toggle).
 
 **Brand tiles:** each shows the brand's logo (`logo` in `lib/data/brands.ts`, ivory on
 transparent PNGs in `public/assets/images/brands/`). The section rises into the blend (`--overlap` in `BrandReels.module.css`), so its title sits

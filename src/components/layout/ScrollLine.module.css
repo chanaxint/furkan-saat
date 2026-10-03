@@ -1,0 +1,77 @@
+/*
+ * A hairline scrollbar. The strip is wider than the line so it is easy to
+ * grab; only the line is drawn. `difference` keeps it visible on green,
+ * black and ivory alike.
+ */
+.track {
+  position: fixed;
+  z-index: 60;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 14px;
+  cursor: pointer;
+  mix-blend-mode: difference;
+}
+/* The faint rail. */
+.track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 6px;
+  width: 1px;
+  background: rgba(242, 237, 227, 0.1);
+  transition: background-color 0.6s var(--ease-soft);
+}
+.track[data-hidden] {
+  display: none;
+}
+
+.thumb {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 14px;
+  cursor: grab;
+  touch-action: none;
+  will-change: transform;
+}
+.thumb::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: auto;
+  right: 6px;
+  width: 1px;
+  background: #c8b99a;
+  opacity: 0.55;
+  transition:
+    width 0.4s var(--ease-lux),
+    right 0.4s var(--ease-lux),
+    opacity 0.4s var(--ease-soft);
+}
+
+.track[data-active] .thumb::before,
+.track:hover .thumb::before {
+  opacity: 0.95;
+}
+.track:hover::before {
+  background: rgba(242, 237, 227, 0.18);
+}
+.track:hover .thumb::before,
+.track[data-dragging] .thumb::before {
+  right: 5px;
+  width: 3px;
+  opacity: 1;
+}
+.track[data-dragging] .thumb {
+  cursor: grabbing;
+}
+
+/* Touch screens keep their own (overlay) scrollbar. */
+@media (pointer: coarse) {
+  .track {
+    display: none;
+  }
+}

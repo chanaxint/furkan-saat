@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./fonts.css";
 import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
+import { ScrollLine } from "@/components/layout/ScrollLine";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SmoothScroll>
           <Navigation />
           {children}
+          <ScrollLine />
         </SmoothScroll>
       </body>
     </html>

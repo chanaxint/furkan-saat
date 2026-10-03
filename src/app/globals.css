@@ -86,6 +86,19 @@ html {
   background: var(--green-900);
 }
 
+/*
+ * Mouse / trackpad screens: the browser's scrollbar and its track are hidden;
+ * layout/ScrollLine draws a hairline in their place. Touch screens keep theirs.
+ */
+@media (pointer: fine) {
+  html {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 html.lenis,
 html.lenis body {
   height: auto;

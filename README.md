@@ -56,11 +56,16 @@ and the same film reversed: `intro-*-reverse.*`), registered in `ASSETS.intro.fi
 that keep accelerating with the film over a rising swell, a deep hit on the cut to black,
 a soft chime with the name, and the ticks slowing down on the rewind. Browsers only allow
 sound after a click, tap or key press (a mouse-wheel scroll does not count); from then on it
-joins the film where it is. The *Ses* toggle at the bottom right turns it on or off and the
-choice is remembered.
+joins the film where it is. Sound is always on (no toggle).
 
 **Brand clips:** put a 4:5 clip in `public/assets/video/brands/` and set `reel` on the brand
 in `lib/data/brands.ts`; hovering the tile plays it. Without one the tile shows the photo.
+The section rises into the blend (`--overlap` in `BrandReels.module.css`), so its title sits
+among the clouds.
+
+**Scrollbar:** on mouse/trackpad screens the browser's bar is hidden and `layout/ScrollLine`
+draws a hairline on the right (drag the thumb, or click the line to jump). Touch screens
+keep their own. Dragging it during the intro hold starts the film.
 
 Timings are `LINE_MS` / `MARK_MS` / `REWIND_RATE` in the component. Arriving mid-page
 (back button) or with reduced motion skips the hold. To change the film, replace the

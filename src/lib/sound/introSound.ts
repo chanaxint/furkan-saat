@@ -9,13 +9,10 @@
  *   chime()    a quiet chime when the name arrives
  *   rewind(T)  the same ticks slowing down, under a falling whoosh
  *
- * Browsers only allow sound after the visitor clicks, taps or presses a key
- * (a mouse-wheel scroll does not count), so `unlock()` is called from those
- * events; until then everything here is silent. The visitor's on/off choice
- * is remembered.
+ * Sound is always on. Browsers only allow it after the visitor clicks, taps
+ * or presses a key (a mouse-wheel scroll does not count), so `unlock()` is
+ * called from those events; until then everything here is silent.
  */
-
-const STORAGE_KEY = "furkan-saat:ses";
 
 /** Tick interval at the start and at the end of the rise (seconds). */
 const TICK_FIRST = 0.44;
@@ -28,46 +25,10 @@ class IntroSound {
   private master: GainNode | null = null;
   private noise: AudioBuffer | null = null;
   private run: Run | null = null;
-  private listeners = new Set<() => void>();
-  private enabled = true;
-
-  constructor() {
-    try {
-      if (typeof window !== "undefined") this.enabled = localStorage.getItem(STORAGE_KEY) !== "0";
-    } catch {
-      /* storage blocked: keep the default */
-    }
-  }
-
-  /** Whether sound is switched on (the visitor's choice). */
-  get on() {
-    return this.enabled;
-  }
-
-  /** Snapshot for useSyncExternalStore: on/off and whether the browser allows playing. */
-  get snapshot() {
-    return `${this.enabled ? 1 : 0}${this.ready ? 1 : 0}`;
-  }
 
   /** Whether the browser is actually letting us play. */
   get ready() {
     return this.ctx?.state === "running";
-  }
-
-  subscribe(fn: () => void) {
-    this.listeners.add(fn);
-    return () => void this.listeners.delete(fn);
-  }
-
-  setOn(on: boolean) {
-    this.enabled = on;
-    try {
-      localStorage.setItem(STORAGE_KEY, on ? "1" : "0");
-    } catch {
-      /* ignore */
-    }
-    if (this.master && this.ctx) this.master.gain.setTargetAtTime(on ? 0.9 : 0, this.ctx.currentTime, 0.05);
-    this.listeners.forEach((fn) => fn());
   }
 
   /** Call from a click, tap or key press. Resolves true once audio can play. */
@@ -81,7 +42,7 @@ class IntroSound {
       comp.threshold.value = -14;
       comp.ratio.value = 4;
       const master = ctx.createGain();
-      master.gain.value = this.enabled ? 0.9 : 0;
+      master.gain.value = 0.9;
       master.connect(comp).connect(ctx.destination);
       // One second of white noise, reused by every tick and swell.
       const noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
@@ -98,7 +59,6 @@ class IntroSound {
         /* not allowed yet */
       }
     }
-    this.listeners.forEach((fn) => fn());
     return this.ready;
   }
 
@@ -242,7 +202,7 @@ class IntroSound {
 
   /** A fresh output for one sound; by default it replaces the previous one. */
   private begin(replace = true): Run | null {
-    if (!this.ready || !this.enabled || !this.ctx || !this.master) return null;
+    if (!this.ready || !this.ctx || !this.master) return null;
     if (replace) this.stop();
     const gain = this.ctx.createGain();
     gain.connect(this.master);

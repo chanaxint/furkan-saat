@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
@@ -53,12 +53,6 @@ export function HeroIntro() {
   const phaseRef = useRef<Phase>("idle");
   const timers = useRef<number[]>([]);
   const { lenis, scrollTo } = useSmoothScroll();
-  const sound = useSyncExternalStore(
-    (fn) => introSound.subscribe(fn),
-    () => introSound.snapshot,
-    () => "10",
-  );
-  const soundOn = sound === "11";
 
   /** Start the accelerating ticks in step with the film, from wherever it is. */
   const rise = useCallback(() => {
@@ -188,8 +182,12 @@ export function HeroIntro() {
     const onScroll = () => {
       if (!atTop()) topSince = Infinity;
       else if (topSince === Infinity) topSince = performance.now();
-      // Backstop for the scrollbar and anything else that moves a held page.
-      if (held() && window.scrollY > 0) window.scrollTo(0, 0);
+      // The scrollbar (or anything else) moving a held page: back to the top,
+      // and on the first frame it counts as the scroll that starts the film.
+      if (held() && window.scrollY > 0) {
+        window.scrollTo(0, 0);
+        start();
+      }
     };
 
     // Sound may only start after a click, tap or key press; the ticks then join the film where it is.
@@ -249,17 +247,6 @@ export function HeroIntro() {
 
   const onCue = () => (phase === "done" ? scrollTo("#markalar") : start());
 
-  // Off → on also asks the browser for permission (this click allows it).
-  const onSound = async () => {
-    if (soundOn) {
-      introSound.stop(0.2);
-      introSound.setOn(false);
-      return;
-    }
-    introSound.setOn(true);
-    if (await introSound.unlock()) rise();
-  };
-
   return (
     <section ref={root} id="top" className={styles.intro} data-nav-theme="dark" aria-label="Açılış">
       <div className={styles.stage} data-phase={phase}>
@@ -307,22 +294,6 @@ export function HeroIntro() {
         <button type="button" className={styles.cue} onClick={onCue}>
           Aşağı kaydırın
           <span className={styles.cueLine} aria-hidden />
-        </button>
-
-        <button
-          type="button"
-          className={styles.sound}
-          aria-pressed={soundOn}
-          aria-label={soundOn ? "Sesi kapat" : "Sesi aç"}
-          onClick={onSound}
-        >
-          <span className={styles.bars} aria-hidden>
-            <span />
-            <span />
-            <span />
-            <span />
-          </span>
-          {soundOn ? "Ses açık" : "Ses kapalı"}
         </button>
       </div>
 

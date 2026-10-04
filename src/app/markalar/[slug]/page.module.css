@@ -28,12 +28,6 @@
   background: transparent;
 }
 
-/* The part after the watch's return: no tall page minimum, a plain gap above. */
-.restOverStage {
-  min-height: 0;
-  padding-top: var(--space-l, 64px);
-}
-
 /* After a film opening the bar is already accounted for: a plain section gap instead. */
 .afterFilm {
   min-height: 0;

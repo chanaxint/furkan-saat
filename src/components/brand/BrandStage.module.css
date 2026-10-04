@@ -287,8 +287,8 @@
   transform: translate(0, -50%);
 }
 .waterText {
-  left: calc(50% + 36svh);
-  width: min(340px, calc(50% - 36svh - var(--gutter)));
+  left: calc(50% + 47svh);
+  width: min(340px, calc(50% - 47svh - var(--gutter)));
   display: grid;
   gap: 12px;
   transform: translate(30px, -50%);

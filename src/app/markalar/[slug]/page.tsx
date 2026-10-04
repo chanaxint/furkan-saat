@@ -137,11 +137,6 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
             brand={brand}
             stage={stage}
             next="#saatler"
-            rest={
-              <div className={`${pageClass} ${styles.restOverStage}`} data-nav-theme="light">
-                {rest}
-              </div>
-            }
           >
             <div id="hikaye" className={pageClass} data-nav-theme="light">
               {watches}
@@ -151,7 +146,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           body
         )}
       </main>
-      <Footer />
+      {/* A 3D stage page ends on its water film. */}
+      {!stage && <Footer />}
     </>
   );
 }

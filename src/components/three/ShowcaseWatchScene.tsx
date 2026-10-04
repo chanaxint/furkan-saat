@@ -26,7 +26,8 @@ type Props = {
   portrait?: Portrait;
 };
 
-type Portrait = { lift: number; pull: number; keepX?: boolean };
+/** `mix` (0–1, read every frame) lets a caller ease the phone placement off. */
+type Portrait = { lift: number; pull: number; keepX?: boolean; mix?: number };
 
 /**
  * The WebGL layer of a brand showcase: one watch on a light ground, lit for
@@ -173,7 +174,7 @@ function Rig({
     if (!w) return;
     // Portrait screens: the watch sits higher and further back (and, unless kept, without sideways shifts).
     const aspect = size.width / size.height;
-    const portrait = aspect < 1 ? 1 - aspect : 0;
+    const portrait = (aspect < 1 ? 1 - aspect : 0) * (lift.mix ?? 1);
     const xFactor = lift.keepX ? 1 : Math.max(0, 1 - portrait * 2);
     w.position.set(state.x * xFactor, state.y + portrait * lift.lift, state.z * (1 + portrait * lift.pull));
     // A quaternion, when the state carries one (brand stages), else angles + diagonal spins.

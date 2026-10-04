@@ -100,7 +100,12 @@ export type BrandStageDef = {
   eyebrow: string;
   /** What is said beside the close-ups: the name on the dial, then the bracelet. */
   lines: [StageLineDef, StageLineDef];
-  /** Said while the watch is in the water (the return after the collection, see stages.json outro.water). */
+  /**
+   * A film that takes over once the watch's return (stages.json outro) has
+   * settled: its first frame shows the watch where the return leaves it.
+   */
+  film?: { mp4: string; webm: string; poster: string };
+  /** Said in the water at the end of the film. */
   water?: { eyebrow: string; title: string; accent: string; text: string };
 };
 

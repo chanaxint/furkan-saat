@@ -81,7 +81,6 @@
     ],
     "outro": {
       "speed": 70,
-      "water": 2,
       "scenes": [
         {
           "name": "Alttan",
@@ -103,58 +102,20 @@
           "ease": "inOut"
         },
         {
-          "name": "Dönerek çıkış",
-          "x": 0,
-          "y": 0.7,
-          "z": -6.5,
+          "name": "Su filminin ilk karesi",
+          "x": 0.03,
+          "y": 0.57,
+          "z": -4.8,
           "q": [
-            -0.10613,
-            -0.19727,
-            -0.09116,
-            0.97031
+            -0.16614,
+            -0.2663,
+            -0.11541,
+            0.94242
           ],
           "move": 2.6,
-          "hold": 0.6,
+          "hold": 2.4,
           "spins": 1,
           "axis": "b",
-          "line": null,
-          "fade": false,
-          "ease": "out"
-        },
-        {
-          "name": "Suya düşüş",
-          "x": 0.05,
-          "y": -0.78,
-          "z": -6.8,
-          "q": [
-            -0.38459,
-            0.15759,
-            0.18412,
-            0.8907
-          ],
-          "move": 1.8,
-          "hold": 0,
-          "spins": 1,
-          "axis": "a",
-          "line": null,
-          "fade": false,
-          "ease": "in"
-        },
-        {
-          "name": "Su altında",
-          "x": 0,
-          "y": -0.86,
-          "z": -7.0,
-          "q": [
-            -0.29667,
-            -0.13961,
-            -0.11161,
-            0.9381
-          ],
-          "move": 2,
-          "hold": 2.4,
-          "spins": 0,
-          "axis": "a",
           "line": null,
           "fade": false,
           "ease": "out"

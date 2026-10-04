@@ -46,8 +46,6 @@ export type StageMotion = {
   scenes: StageScene[];
   /** After the collection: the watch comes back, scene by scene, on its own stretch of scroll. */
   outro?: StageMotion;
-  /** Outro only: the scene in which the watch drops into the water (see BrandStage). */
-  water?: number;
 };
 
 export const STAGES = data as unknown as Record<string, StageMotion>;

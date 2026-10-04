@@ -4,7 +4,7 @@ import path from "path";
 import { BRANDS } from "@/lib/data/brands";
 import { COLLECTIONS } from "@/lib/data/collections";
 import type { Settings } from "@/lib/data/site";
-import type { StageMotion } from "@/lib/data/stages";
+import type { StageEase, StageMotion } from "@/lib/data/stages";
 import {
   AVAILABILITY,
   CONDITIONS,
@@ -227,6 +227,7 @@ export function validateStage(input: Record<string, unknown>): StageMotion {
       axis: sc.axis === "b" ? ("b" as const) : ("a" as const),
       line: line === null ? null : Math.round(line),
       fade: sc.fade === true,
+      ease: (sc.ease === "in" || sc.ease === "out" ? sc.ease : "inOut") as StageEase,
     };
   });
   return { speed: num(input.speed, "Kaydırma uzunluğu", 10, 400), scenes };

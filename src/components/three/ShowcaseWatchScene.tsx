@@ -3,7 +3,7 @@
 import { Environment, Lightformer, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef } from "react";
-import { ACESFilmicToneMapping, Euler, type Group, type Mesh, type PerspectiveCamera, Quaternion, SRGBColorSpace, Vector3 } from "three";
+import { ACESFilmicToneMapping, Euler, FrontSide, type Group, type Mesh, type PerspectiveCamera, Quaternion, SRGBColorSpace, Vector3 } from "three";
 import { SHOWCASE_FOV, SPIN_AXIS_A, SPIN_AXIS_B, type ShowcaseState } from "@/lib/scene/showcase";
 
 type Props = {
@@ -46,7 +46,7 @@ export default function ShowcaseWatchScene({
   return (
     <Canvas
       frameloop={active ? "demand" : "never"}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 0], fov: SHOWCASE_FOV, near: 0.05, far: 60 }}
       gl={{
         antialias: true,
@@ -149,9 +149,11 @@ function Rig({
     clone.traverse((o) => {
       const m = o as Mesh;
       if (!m.isMesh) return;
-      const mat = m.material as { map?: { anisotropy: number }; envMapIntensity?: number };
+      const mat = m.material as { map?: { anisotropy: number }; envMapIntensity?: number; side: number };
       if (mat.map) mat.map.anisotropy = 8;
       mat.envMapIntensity = 1.1;
+      // The model is closed: its back faces never show, so skip drawing them.
+      mat.side = FrontSide;
     });
     return clone;
   }, [gltf.scene]);

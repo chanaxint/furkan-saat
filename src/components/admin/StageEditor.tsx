@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import stageStyles from "@/components/brand/BrandStage.module.css";
-import type { StageMotion, StageScene } from "@/lib/data/stages";
+import type { StageEase, StageMotion, StageScene } from "@/lib/data/stages";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
 import {
   applyOverlay,
@@ -514,6 +514,14 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
                   <select value={scene.axis} onChange={(e) => edit((s) => ({ ...s, axis: e.target.value as "a" | "b" }))}>
                     <option value="a">Çapraz A (sağ üst)</option>
                     <option value="b">Çapraz B (sol üst)</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Hız eğrisi</span>
+                  <select value={scene.ease ?? "inOut"} onChange={(e) => edit((s) => ({ ...s, ease: e.target.value as StageEase }))}>
+                    <option value="inOut">Yumuşak başla, yumuşak dur</option>
+                    <option value="in">Yavaş başla, hızla çık</option>
+                    <option value="out">Dönerek gel, yumuşak dur</option>
                   </select>
                 </label>
                 <label className={styles.check}>

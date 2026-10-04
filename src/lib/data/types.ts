@@ -100,6 +100,8 @@ export type BrandStageDef = {
   eyebrow: string;
   /** What is said beside the close-ups: the name on the dial, then the bracelet. */
   lines: [StageLineDef, StageLineDef];
+  /** Said while the watch is in the water (the return after the collection, see stages.json outro.water). */
+  water?: { eyebrow: string; title: string; accent: string; text: string };
 };
 
 export type StageLineDef = {

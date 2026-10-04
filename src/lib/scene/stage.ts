@@ -28,7 +28,14 @@ export type StageOverlay = {
 // Diagonal axes lying in the screen plane, so a full turn reads as one clean
 // 360° flip (an axis tilted toward the camera mixes in a roll and blurs it).
 const AXES = { a: new Vector3(1, 1, 0).normalize(), b: new Vector3(-1, 1, 0).normalize() };
-const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
+// Sine curves: softer than power2, so a turn never peaks at a whip.
+// "in" leaves at speed (a scene that turns away out of sight), "out" arrives
+// already turning (a scene that comes in from out of sight).
+const EASES = {
+  inOut: (t: number) => 0.5 - 0.5 * Math.cos(Math.PI * t),
+  in: (t: number) => 1 - Math.cos((Math.PI * t) / 2),
+  out: (t: number) => Math.sin((Math.PI * t) / 2),
+};
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (v: number) => {
   const t = clamp01(v);
@@ -78,7 +85,7 @@ export function sampleStage(m: StageMotion, t: number, out: StageState, lineCoun
   const from = scenes[Math.max(0, i - 1)];
   const span = times[i].arrive - times[i].start;
   const raw = i === 0 || span <= 0 ? 1 : clamp01((t - times[i].start) / span);
-  const k = ease(raw);
+  const k = EASES[to.ease ?? "inOut"](raw);
 
   out.x = MathUtils.lerp(from.x, to.x, k);
   out.y = MathUtils.lerp(from.y, to.y, k);
@@ -169,4 +176,5 @@ export const blankScene = (from: StageScene, n: number): StageScene => ({
   spins: 0,
   line: null,
   fade: false,
+  ease: "inOut",
 });

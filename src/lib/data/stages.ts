@@ -30,7 +30,15 @@ export type StageScene = {
   line: number | null;
   /** The watch fades away on the way into this scene (use on the last). */
   fade: boolean;
+  /**
+   * How the turn into this scene runs: "inOut" starts and settles softly,
+   * "in" leaves at speed (into a scene out of sight), "out" arrives already
+   * turning (from a scene out of sight). Default "inOut".
+   */
+  ease?: StageEase;
 };
+
+export type StageEase = "inOut" | "in" | "out";
 
 export type StageMotion = {
   /** Scroll length per timeline second (svh); higher = slower on scroll. */
@@ -38,6 +46,8 @@ export type StageMotion = {
   scenes: StageScene[];
   /** After the collection: the watch comes back, scene by scene, on its own stretch of scroll. */
   outro?: StageMotion;
+  /** Outro only: the scene in which the watch drops into the water (see BrandStage). */
+  water?: number;
 };
 
 export const STAGES = data as unknown as Record<string, StageMotion>;

@@ -37,6 +37,12 @@ export const BRANDS: Brand[] = [
           text: "Üç sıra halkalı paslanmaz çelik bilezik; katlanır kilidiyle bileğe tam oturur.",
         },
       ],
+      water: {
+        eyebrow: "50 metre · 5 bar",
+        title: "Su geçirmez",
+        accent: "geçirmez",
+        text: "Yağmurda, el yıkarken, denizde ve havuzda kısa süreli yüzmede gönül rahatlığıyla takın.",
+      },
     },
   },
   {

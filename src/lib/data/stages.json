@@ -18,7 +18,8 @@
         "spins": 0,
         "axis": "a",
         "line": null,
-        "fade": false
+        "fade": false,
+        "ease": "inOut"
       },
       {
         "name": "Yazı",
@@ -31,12 +32,13 @@
           0.0,
           1.0
         ],
-        "move": 3.4,
+        "move": 3.2,
         "hold": 1.8,
         "spins": 1,
         "axis": "a",
         "line": 0,
-        "fade": false
+        "fade": false,
+        "ease": "inOut"
       },
       {
         "name": "Kordon",
@@ -49,12 +51,13 @@
           -0.1147,
           0.82795
         ],
-        "move": 3.4,
+        "move": 3.2,
         "hold": 1.6,
         "spins": 1,
         "axis": "b",
         "line": 1,
-        "fade": false
+        "fade": false,
+        "ease": "inOut"
       },
       {
         "name": "Ürünlerin arkasına",
@@ -67,22 +70,24 @@
           -0.13134,
           0.84716
         ],
-        "move": 2,
+        "move": 2.4,
         "hold": 0,
-        "spins": 2,
+        "spins": 1,
         "axis": "a",
         "line": null,
-        "fade": false
+        "fade": false,
+        "ease": "in"
       }
     ],
     "outro": {
       "speed": 70,
+      "water": 2,
       "scenes": [
         {
-          "name": "Geri geliş",
-          "x": 0.0,
-          "y": -1.2,
-          "z": -9.5,
+          "name": "Alttan",
+          "x": 0.1,
+          "y": -2.4,
+          "z": -7.5,
           "q": [
             -0.46557,
             0.39018,
@@ -94,25 +99,65 @@
           "spins": 0,
           "axis": "a",
           "line": null,
-          "fade": false
+          "fade": false,
+          "ease": "inOut"
         },
         {
-          "name": "Arka · mekanizma",
-          "x": 0.0,
-          "y": 0.05,
-          "z": -4.7,
+          "name": "Dönerek çıkış",
+          "x": 0,
+          "y": 0.7,
+          "z": -6.5,
           "q": [
-            0.12348,
-            0.94687,
-            -0.12825,
-            0.26783
+            -0.10613,
+            -0.19727,
+            -0.09116,
+            0.97031
           ],
-          "move": 3,
-          "hold": 1.5,
-          "spins": 2,
+          "move": 2.6,
+          "hold": 0.6,
+          "spins": 1,
           "axis": "b",
           "line": null,
-          "fade": false
+          "fade": false,
+          "ease": "out"
+        },
+        {
+          "name": "Suya düşüş",
+          "x": 0.05,
+          "y": -0.78,
+          "z": -6.8,
+          "q": [
+            -0.38459,
+            0.15759,
+            0.18412,
+            0.8907
+          ],
+          "move": 1.8,
+          "hold": 0,
+          "spins": 1,
+          "axis": "a",
+          "line": null,
+          "fade": false,
+          "ease": "in"
+        },
+        {
+          "name": "Su altında",
+          "x": 0,
+          "y": -0.86,
+          "z": -7.0,
+          "q": [
+            -0.29667,
+            -0.13961,
+            -0.11161,
+            0.9381
+          ],
+          "move": 2,
+          "hold": 2.4,
+          "spins": 0,
+          "axis": "a",
+          "line": null,
+          "fade": false,
+          "ease": "out"
         }
       ]
     }

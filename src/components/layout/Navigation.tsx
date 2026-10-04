@@ -59,11 +59,11 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [pathname]);
 
-  // The wordmark leads to the brand tiles on the home page.
+  // The wordmark leads to the campaign on the home page (past the opening film).
   const onWordmark = (e: React.MouseEvent) => {
     if (pathname !== "/") return;
     e.preventDefault();
-    scrollTo("#markalar");
+    scrollTo("#kampanya");
     ScrollTrigger.refresh();
   };
 
@@ -84,7 +84,7 @@ export function Navigation() {
             </button>
           </div>
 
-          <Link href="/#markalar" className={styles.wordmark} aria-label="Furkan Saat — markalar" onClick={onWordmark}>
+          <Link href="/#kampanya" className={styles.wordmark} aria-label="Furkan Saat — ana sayfa" onClick={onWordmark}>
             Furkan <span>Saat</span>
           </Link>
 

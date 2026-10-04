@@ -5,6 +5,7 @@ import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { WishlistButton } from "@/components/product/WishlistButton";
 import type { Product } from "@/lib/data/types";
 import { brandName } from "@/lib/services/catalog";
+import { RowScroller } from "./RowScroller";
 import styles from "./ShopRow.module.css";
 
 /**
@@ -12,7 +13,7 @@ import styles from "./ShopRow.module.css";
  *  - `edge`: title on the left, five tiles edge to edge across the page
  *  - `centred`: a centred collection title, four tiles within the margins
  * Each tile: second photograph on hover, "Sepete ekle" over the photo, a
- * heart for favourites. On phones the row scrolls sideways.
+ * heart for favourites. The row scrolls sideways, with arrows either side.
  */
 export function ShopRow({
   title,
@@ -38,13 +39,13 @@ export function ShopRow({
           </Link>
         )}
       </header>
-      <ul className={styles.row}>
+      <RowScroller label={title}>
         {products.map((p) => (
           <li key={p.slug}>
             <ShopCard product={p} />
           </li>
         ))}
-      </ul>
+      </RowScroller>
     </section>
   );
 }

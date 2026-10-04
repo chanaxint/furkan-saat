@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useGsap } from "@/hooks/useGsap";
 import { ASSETS } from "@/lib/assets";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import { introSound } from "@/lib/sound/introSound";
 import styles from "./HeroIntro.module.css";
 
@@ -38,6 +38,27 @@ const FORWARD_KEYS = new Set(["ArrowDown", "PageDown", "End", " ", "Spacebar"]);
 const BACK_KEYS = new Set(["ArrowUp", "PageUp", "Home"]);
 
 const { film } = ASSETS.intro;
+
+/** Where a reload of the home page lands: the campaign, past the opening. */
+const RELOAD_TARGET = "#kampanya";
+let reloadUsed = false;
+
+/**
+ * Where to land instead of the opening: the campaign after a reload of the
+ * home page (once per page load), or the section a link's #hash names.
+ */
+function landing(): HTMLElement | null {
+  const nav = performance.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined;
+  const reloaded = nav?.type === "reload" && new URL(nav.name).pathname === "/" && !reloadUsed;
+  reloadUsed = true;
+  const target = reloaded ? RELOAD_TARGET : window.location.hash;
+  if (!target || target === "#top") return null;
+  try {
+    return document.querySelector<HTMLElement>(target);
+  } catch {
+    return null;
+  }
+}
 
 /**
  * HERO INTRO — the opening of the home page. The visitor's first scroll plays
@@ -129,11 +150,36 @@ export function HeroIntro() {
 
   // Hold the page at the top while the opening plays; at the top, scrolling back rewinds it.
   useEffect(() => {
-    // Arriving mid-page (back button, reload) or with reduced motion: no hold.
-    if (window.scrollY > 40 || prefersReducedMotion()) {
+    // The browser does not put a reloaded page back where it was: a reload lands on the campaign.
+    history.scrollRestoration = "manual";
+    const land = landing();
+    let unland = () => {};
+    if (land) {
+      // The site loader is not to fly onto the film's watch: the page opens elsewhere.
+      document.documentElement.dataset.landing = "";
+      const jump = () => window.scrollTo(0, land.getBoundingClientRect().top + window.scrollY);
+      jump();
+      // Layout settles (images, fonts) and ScrollTrigger measures (scrolling to 0 and back)
+      // after this; until the visitor scrolls, keep putting the page on its target.
+      const onRefresh = () => requestAnimationFrame(jump);
+      const onLoad = () => requestAnimationFrame(jump);
+      const stop = () => unland();
+      ScrollTrigger.addEventListener("refresh", onRefresh);
+      window.addEventListener("load", onLoad);
+      ["wheel", "touchstart", "keydown", "pointerdown"].forEach((t) => window.addEventListener(t, stop, { passive: true }));
+      const timer = window.setTimeout(stop, 2500);
+      unland = () => {
+        ScrollTrigger.removeEventListener("refresh", onRefresh);
+        window.removeEventListener("load", onLoad);
+        ["wheel", "touchstart", "keydown", "pointerdown"].forEach((t) => window.removeEventListener(t, stop));
+        clearTimeout(timer);
+      };
+    }
+    // Arriving mid-page (back button, a link to a section, a reload) or with reduced motion: no hold.
+    if (land || window.scrollY > 40 || prefersReducedMotion()) {
       go("done");
       delete document.documentElement.dataset.intro;
-      return;
+      return unland;
     }
     let touchY = 0;
     let lastWheel = 0;

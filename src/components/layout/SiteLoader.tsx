@@ -68,7 +68,7 @@ function Loader() {
     // What there is to wait for.
     document.fonts?.ready.then(() => ((parts.fonts = 1), update()));
     const video = document.querySelector<HTMLVideoElement>("[data-intro-video]");
-    const home = !!video && window.scrollY < 10;
+    const home = !!video && window.scrollY < 10 && !document.documentElement.hasAttribute("data-landing");
     if (home && video) {
       const img = new Image();
       img.src = ASSETS.intro.film.poster;

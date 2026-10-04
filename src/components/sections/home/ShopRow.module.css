@@ -66,6 +66,64 @@
   scroll-padding: 0 var(--gutter);
 }
 
+/* Arrows either side of the row, level with the photographs (4:5 of a tile). */
+.scroller {
+  position: relative;
+  container-type: inline-size;
+}
+.arrow {
+  --tile: calc((100cqw - 4 * 4px) / 5);
+}
+.section[data-variant="centred"] .arrow {
+  --tile: calc((100cqw - 2 * var(--gutter) - 3 * 16px) / 4);
+}
+.arrow {
+  position: absolute;
+  top: calc(var(--tile) * 1.25 / 2);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-top: -27px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(242, 237, 227, 0.92);
+  color: var(--green-900);
+  box-shadow: 0 6px 24px rgba(7, 26, 22, 0.16);
+  cursor: pointer;
+  transition:
+    opacity 0.35s var(--ease-soft),
+    transform 0.35s var(--ease-soft),
+    background-color 0.3s var(--ease-soft),
+    color 0.3s var(--ease-soft);
+}
+.arrow[data-side="prev"] {
+  left: clamp(12px, 2vw, 28px);
+}
+.arrow[data-side="next"] {
+  right: clamp(12px, 2vw, 28px);
+}
+.arrow svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.arrow:hover,
+.arrow:focus-visible {
+  background: var(--green-900);
+  color: var(--ivory);
+}
+.arrow:disabled {
+  opacity: 0;
+  transform: scale(0.85);
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------ card */
 .card {
   position: relative;
@@ -204,6 +262,12 @@
 }
 
 @media (max-width: 1100px) {
+  .arrow {
+    --tile: calc((100cqw - 2 * 4px) / 3);
+  }
+  .section[data-variant="centred"] .arrow {
+    --tile: calc((100cqw - 2 * var(--gutter) - 2 * 16px) / 3);
+  }
   .row {
     grid-auto-columns: calc((100% - 2 * 4px) / 3);
   }
@@ -212,6 +276,15 @@
   }
 }
 @media (max-width: 767px) {
+  .arrow,
+  .section[data-variant="centred"] .arrow {
+    --tile: calc((100cqw - 2 * var(--gutter)) * 0.72);
+  }
+  .arrow {
+    width: 42px;
+    height: 42px;
+    margin-top: -21px;
+  }
   .row,
   .section[data-variant="centred"] .row {
     grid-auto-columns: 72%;

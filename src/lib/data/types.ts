@@ -104,7 +104,7 @@ export type BrandStageDef = {
    * A film that takes over once the watch's return (stages.json outro) has
    * settled: its first frame shows the watch where the return leaves it.
    */
-  film?: { mp4: string; webm: string; poster: string };
+  film?: { mp4: string; mobile: string; webm: string; poster: string };
   /** Said in the water at the end of the film. */
   water?: { eyebrow: string; title: string; accent: string; text: string };
 };

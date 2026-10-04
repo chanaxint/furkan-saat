@@ -26,10 +26,11 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
 const EXIT_END = -0.5;
 
 /**
- * The water film after the collection: it starts slightly faster while the
- * watch only hovers, then runs at real speed from just before it drops in.
+ * The water film after the collection: the hover before the drop runs fast,
+ * then the drop itself a little faster than real time (a brisk fall).
  */
-const FILM_HOVER_RATE = 1.6;
+const FILM_HOVER_RATE = 2.2;
+const FILM_DROP_RATE = 1.35;
 const FILM_DROP_AT = 2.2;
 
 const smooth = (v: number) => {
@@ -153,7 +154,7 @@ export function BrandStage({
 
     if (v) {
       const onTime = () => {
-        if (v.currentTime >= FILM_DROP_AT && v.playbackRate !== 1) v.playbackRate = 1;
+        if (v.currentTime >= FILM_DROP_AT && v.playbackRate !== FILM_DROP_RATE) v.playbackRate = FILM_DROP_RATE;
       };
       const onEnd = () => void (sc.dataset.said = "");
       v.addEventListener("timeupdate", onTime);
@@ -188,8 +189,9 @@ export function BrandStage({
         {stage.film && (
           <div className={styles.film}>
             <video ref={film} muted playsInline preload="auto" poster={stage.film.poster}>
-              <source src={stage.film.webm} type="video/webm" />
+              <source src={stage.film.mobile} type="video/mp4" media="(max-width: 767px)" />
               <source src={stage.film.mp4} type="video/mp4" />
+              <source src={stage.film.webm} type="video/webm" />
             </video>
             {stage.water && (
               <div className={styles.waterText}>

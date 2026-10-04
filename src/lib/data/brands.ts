@@ -39,6 +39,7 @@ export const BRANDS: Brand[] = [
       ],
       film: {
         mp4: "/assets/video/brands/casio-water.mp4",
+        mobile: "/assets/video/brands/casio-water-mobile.mp4",
         webm: "/assets/video/brands/casio-water.webm",
         poster: "/assets/video/brands/casio-water.jpg",
       },

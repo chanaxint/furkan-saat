@@ -39,19 +39,12 @@ const BACK_KEYS = new Set(["ArrowUp", "PageUp", "Home"]);
 
 const { film } = ASSETS.intro;
 
-/** Where a reload of the home page lands: the campaign, past the opening. */
-const RELOAD_TARGET = "#kampanya";
-let reloadUsed = false;
-
 /**
- * Where to land instead of the opening: the campaign after a reload of the
- * home page (once per page load), or the section a link's #hash names.
+ * Where to land instead of the opening: the section a link's #hash names
+ * (the wordmark leads to the campaign).
  */
 function landing(): HTMLElement | null {
-  const nav = performance.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined;
-  const reloaded = nav?.type === "reload" && new URL(nav.name).pathname === "/" && !reloadUsed;
-  reloadUsed = true;
-  const target = reloaded ? RELOAD_TARGET : window.location.hash;
+  const target = window.location.hash;
   if (!target || target === "#top") return null;
   try {
     return document.querySelector<HTMLElement>(target);
@@ -150,8 +143,11 @@ export function HeroIntro() {
 
   // Hold the page at the top while the opening plays; at the top, scrolling back rewinds it.
   useEffect(() => {
-    // The browser does not put a reloaded page back where it was: a reload lands on the campaign.
+    // The browser does not put a reloaded page back where it was: a reload starts at the opening.
     history.scrollRestoration = "manual";
+    if ((performance.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined)?.type === "reload" && window.location.hash) {
+      history.replaceState(history.state, "", window.location.pathname + window.location.search);
+    }
     const land = landing();
     let unland = () => {};
     if (land) {

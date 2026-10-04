@@ -1,7 +1,6 @@
 import { Footer } from "@/components/layout/Footer";
 import { BrandReels } from "@/components/sections/BrandReels";
 import { FinalCTA } from "@/components/sections/FinalCTA";
-import { JournalSection } from "@/components/sections/JournalSection";
 import { CampaignHero } from "@/components/sections/home/CampaignHero";
 import { Marquee } from "@/components/sections/home/Marquee";
 import { ShopRow } from "@/components/sections/home/ShopRow";
@@ -12,7 +11,7 @@ import { getFeatured, getProducts, getProductsInCollection } from "@/lib/service
  * FURKAN SAAT — Homepage
  * Opening film (plays on the first scroll → "İstediğiniz her saat" → "Furkan Saat"
  * → black-to-green blend) · 01 Featured brands · campaign photograph · name band
- * · Haftanın Saatleri · Yeni Gelenler · Journal · Final CTA · Footer
+ * · Haftanın Saatleri · Yeni Gelenler · Final CTA · Footer
  */
 export default async function Home() {
   const [featured, arrivals, all] = await Promise.all([getFeatured(), getProductsInCollection("yeni-gelenler"), getProducts()]);
@@ -31,7 +30,6 @@ export default async function Home() {
         variant="centred"
         href="/koleksiyonlar/yeni-gelenler"
       />
-      <JournalSection />
       <FinalCTA />
       <Footer />
     </main>

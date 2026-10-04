@@ -25,14 +25,6 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
  */
 const EXIT_END = -0.5;
 
-/**
- * The water film after the collection: the hover before the drop runs fast,
- * then the drop itself a little faster than real time (a brisk fall).
- */
-const FILM_HOVER_RATE = 2.2;
-const FILM_DROP_RATE = 1.35;
-const FILM_DROP_AT = 2.2;
-
 const smooth = (v: number) => {
   const t = Math.min(1, Math.max(0, v));
   return t * t * (3 - 2 * t);
@@ -126,7 +118,6 @@ export function BrandStage({
         rolling = on;
         if (on) {
           v.currentTime = 0;
-          v.playbackRate = FILM_HOVER_RATE;
           sc.dataset.film = "";
           v.play().catch(() => {});
         } else {
@@ -153,14 +144,9 @@ export function BrandStage({
     }
 
     if (v) {
-      const onTime = () => {
-        if (v.currentTime >= FILM_DROP_AT && v.playbackRate !== FILM_DROP_RATE) v.playbackRate = FILM_DROP_RATE;
-      };
       const onEnd = () => void (sc.dataset.said = "");
-      v.addEventListener("timeupdate", onTime);
       v.addEventListener("ended", onEnd);
       return () => {
-        v.removeEventListener("timeupdate", onTime);
         v.removeEventListener("ended", onEnd);
       };
     }

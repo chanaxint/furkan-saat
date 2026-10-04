@@ -36,6 +36,8 @@ export type StageMotion = {
   /** Scroll length per timeline second (svh); higher = slower on scroll. */
   speed: number;
   scenes: StageScene[];
+  /** After the collection: the watch comes back, scene by scene, on its own stretch of scroll. */
+  outro?: StageMotion;
 };
 
 export const STAGES = data as unknown as Record<string, StageMotion>;

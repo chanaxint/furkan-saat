@@ -173,3 +173,9 @@
     font-size: 1rem;
   }
 }
+
+/* The watch's return after the collection: open space over the studio grey. */
+.back {
+  position: relative;
+  pointer-events: none;
+}

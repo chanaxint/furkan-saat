@@ -40,12 +40,59 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   const stage = brand.stage;
   const opening = !!(film || stage);
 
-  const body = (
-    <div
-      id="hikaye"
-      className={["page", opening ? styles.afterFilm : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ")}
-      data-nav-theme="light"
+  const pageClass = ["page", opening ? styles.afterFilm : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ");
+  const watches = (
+    <section
+      id="saatler"
+      className={`container ${styles.watches} ${opening ? styles.first : ""}`}
+      aria-label={`${brand.name} saatleri`}
     >
+      <p className={styles.label}>
+        {products.length > 0 ? `Koleksiyonda · ${products.length} saat` : "Koleksiyonda"}
+      </p>
+      {products.length > 0 ? (
+        <ProductGrid products={products} priorityCount={3} />
+      ) : (
+        <div className={styles.empty}>
+          <p className={styles.emptyText}>
+            Şu anda vitrinde {brand.name} saati yok. Aradığınız referansı danışmanlarımız sizin için bulabilir.
+          </p>
+          <ButtonLink href={whatsappUrl(`Merhaba, ${brand.name} saatleri hakkında bilgi almak istiyorum.`)} external>
+            Danışmana yazın
+          </ButtonLink>
+        </div>
+      )}
+    </section>
+  );
+  const rest = (
+    <>
+      {articles.length > 0 && (
+        <section className={`container ${styles.watches}`} aria-label="Dergiden">
+          <p className={styles.label}>Dergiden</p>
+          <ul className={styles.articles}>
+            {articles.map((a) => (
+              <li key={a.slug}>
+                <ArticleCard article={a} feature />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      <nav className={`container ${styles.others}`} aria-label="Diğer markalar">
+        <p className={styles.label}>Diğer saat evleri</p>
+        <ul>
+          {others.map((b) => (
+            <li key={b.slug}>
+              <Link href={`/markalar/${b.slug}`}>{b.name}</Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </>
+  );
+
+  const body = (
+    <div id="hikaye" className={pageClass} data-nav-theme="light">
       {!opening && (
         <header className={`container ${styles.intro}`}>
           <div className={`rise ${styles.facts}`}>
@@ -71,51 +118,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
         </header>
       )}
 
-      <section
-        id="saatler"
-        className={`container ${styles.watches} ${opening ? styles.first : ""}`}
-        aria-label={`${brand.name} saatleri`}
-      >
-        <p className={styles.label}>
-          {products.length > 0 ? `Koleksiyonda · ${products.length} saat` : "Koleksiyonda"}
-        </p>
-        {products.length > 0 ? (
-          <ProductGrid products={products} priorityCount={3} />
-        ) : (
-          <div className={styles.empty}>
-            <p className={styles.emptyText}>
-              Şu anda vitrinde {brand.name} saati yok. Aradığınız referansı danışmanlarımız sizin için bulabilir.
-            </p>
-            <ButtonLink href={whatsappUrl(`Merhaba, ${brand.name} saatleri hakkında bilgi almak istiyorum.`)} external>
-              Danışmana yazın
-            </ButtonLink>
-          </div>
-        )}
-      </section>
-
-      {articles.length > 0 && (
-        <section className={`container ${styles.watches}`} aria-label="Dergiden">
-          <p className={styles.label}>Dergiden</p>
-          <ul className={styles.articles}>
-            {articles.map((a) => (
-              <li key={a.slug}>
-                <ArticleCard article={a} feature />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      <nav className={`container ${styles.others}`} aria-label="Diğer markalar">
-        <p className={styles.label}>Diğer saat evleri</p>
-        <ul>
-          {others.map((b) => (
-            <li key={b.slug}>
-              <Link href={`/markalar/${b.slug}`}>{b.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {watches}
+      {rest}
     </div>
   );
 
@@ -129,8 +133,19 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           </div>
         )}
         {stage ? (
-          <BrandStage brand={brand} stage={stage} next="#saatler">
-            {body}
+          <BrandStage
+            brand={brand}
+            stage={stage}
+            next="#saatler"
+            rest={
+              <div className={`${pageClass} ${styles.restOverStage}`} data-nav-theme="light">
+                {rest}
+              </div>
+            }
+          >
+            <div id="hikaye" className={pageClass} data-nav-theme="light">
+              {watches}
+            </div>
           </BrandStage>
         ) : (
           body

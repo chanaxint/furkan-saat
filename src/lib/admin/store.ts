@@ -235,6 +235,7 @@ export function validateStage(input: Record<string, unknown>): StageMotion {
 export async function saveStage(slug: string, motion: StageMotion) {
   const all = await readStages();
   if (!all[slug]) throw new InvalidInput("Bu markanın 3D açılışı yok.");
-  all[slug] = motion;
+  // The editor sets the opening; the return after the collection is kept as it is.
+  all[slug] = all[slug].outro ? { ...motion, outro: all[slug].outro } : motion;
   await writeJson("stages.json", all);
 }

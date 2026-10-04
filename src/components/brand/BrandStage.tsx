@@ -19,25 +19,33 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
  * children); after its turns the watch fades as the collection arrives. It
  * renders only while the region is on screen and the watch is visible.
  */
-/** The watch's last turn ends when the collection's top edge is this far down the screen. */
-const EXIT_END = 0.25;
+/**
+ * The watch's last turn ends when the collection's top edge is this far down
+ * the screen (negative: above the top, i.e. a longer stretch of scroll).
+ */
+const EXIT_END = -0.2;
 
 export function BrandStage({
   brand,
   stage,
   next,
   children,
+  rest,
 }: {
   brand: Brand;
   stage: BrandStageDef;
   /** Where the button scrolls to (the collection). */
   next: string;
+  /** The collection: a layer the watch turns in beneath. */
   children: React.ReactNode;
+  /** What follows the watch's return (scrolls over it like the collection). */
+  rest?: React.ReactNode;
 }) {
   const region = useRef<HTMLDivElement>(null);
   const hero = useRef<HTMLElement>(null);
   const title = useRef<HTMLDivElement>(null);
   const scene = useRef<HTMLDivElement>(null);
+  const back = useRef<HTMLElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
   const motion = STAGES[brand.slug];
@@ -85,6 +93,20 @@ export function BrandStage({
       scrub: 1,
       animation: tl,
     });
+
+    // After the collection: the watch comes back, small and far, growing as it
+    // turns, and settles; this stretch starts as the collection begins to leave.
+    const outro = motion.outro;
+    if (outro && back.current) {
+      const oclock = { t: 0 };
+      const odraw = () => {
+        sampleStage(outro, oclock.t, state, 0);
+        scene.current?.style.setProperty("--show", "1");
+        wake.current();
+      };
+      const otl = gsap.to(oclock, { t: sceneTimes(outro).total, ease: "none", onUpdate: odraw, paused: true });
+      ScrollTrigger.create({ trigger: back.current, start: "top bottom", end: "bottom bottom", scrub: 1, animation: otl });
+    }
   }, region);
 
   const onWake = useCallback((fn: () => void) => {
@@ -146,6 +168,15 @@ export function BrandStage({
       </section>
 
       <div className={styles.over}>{children}</div>
+      {motion.outro && (
+        <section
+          ref={back}
+          className={styles.back}
+          style={{ height: `${Math.round(sceneTimes(motion.outro).total * motion.outro.speed) + 100}svh` }}
+          aria-hidden
+        />
+      )}
+      {rest && <div className={styles.over}>{rest}</div>}
     </div>
   );
 }

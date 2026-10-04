@@ -78,49 +78,6 @@
         "fade": false,
         "ease": "in"
       }
-    ],
-    "outro": {
-      "speed": 70,
-      "scenes": [
-        {
-          "name": "Alttan",
-          "x": 0.1,
-          "y": -2.4,
-          "z": -7.5,
-          "q": [
-            -0.46557,
-            0.39018,
-            0.35813,
-            0.70904
-          ],
-          "move": 0,
-          "hold": 0,
-          "spins": 0,
-          "axis": "a",
-          "line": null,
-          "fade": false,
-          "ease": "inOut"
-        },
-        {
-          "name": "Su filminin ilk karesi",
-          "x": 0.079,
-          "y": 0.485,
-          "z": -4.58,
-          "q": [
-            -0.21886,
-            -0.20772,
-            -0.19463,
-            0.93331
-          ],
-          "move": 2.6,
-          "hold": 2.4,
-          "spins": 1,
-          "axis": "b",
-          "line": null,
-          "fade": false,
-          "ease": "out"
-        }
-      ]
-    }
+    ]
   }
 }

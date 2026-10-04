@@ -178,30 +178,23 @@
   }
 }
 
-/* The watch's return after the collection: open space over the studio grey. */
+/*
+ * After the collection: the stretch of scroll over the water film (fixed in
+ * the scene, revealed as the collection rises off it; shown with data-film).
+ */
 .back {
   position: relative;
+  height: 190svh;
   pointer-events: none;
 }
-/* ------------------------------------------------------------- film */
-/*
- * The water film over the 3D layer: it fades in once the watch has settled on
- * its first frame (data-film), and "Su geçirmez" rises in the water once it
- * has played (data-said).
- */
 .film {
   position: absolute;
   inset: 0;
-  opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.45s var(--ease-soft),
-    visibility 0s linear 0.45s;
+  background: #c9d6d8;
 }
 .scene[data-film] .film {
-  opacity: 1;
   visibility: visible;
-  transition: opacity 0.45s var(--ease-soft);
 }
 .film video {
   position: absolute;
@@ -210,44 +203,147 @@
   height: 100%;
   object-fit: cover;
 }
+/*
+ * Bubbles rising beside the watch once it rests, up to the surface. Placed
+ * like the film (cover, centred, sized by the screen height; the frame is
+ * 2.59 wide): --x is an offset from the centre in hundredths of the height,
+ * --rise how far (in the same unit) the bubble climbs to the surface.
+ */
+.bubbles {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-soft);
+}
+.scene[data-said] .bubbles {
+  opacity: 1;
+}
+.bubbles i {
+  position: absolute;
+  left: calc(50% + var(--x) * 1svh);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  margin-left: calc(var(--size) / -2);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, 0.95) 0 14%, rgba(255, 255, 255, 0.12) 32%, transparent 60%);
+  box-shadow:
+    inset 0 0 3px rgba(255, 255, 255, 0.45),
+    0 0 2px rgba(40, 70, 78, 0.25);
+  opacity: 0;
+  animation: rise 3.5s cubic-bezier(0.45, 0, 0.7, 1) infinite;
+  will-change: transform, opacity;
+}
+@keyframes rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  35% {
+    transform: translate3d(0.6svh, calc(var(--rise) * -0.35svh), 0) scale(0.9);
+  }
+  65% {
+    transform: translate3d(-0.5svh, calc(var(--rise) * -0.68svh), 0) scale(1);
+  }
+  88% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate3d(0.4svh, calc(var(--rise) * -1svh), 0) scale(1.05);
+    opacity: 0;
+  }
+}
 
-/* "Su geçirmez", in the water below the waterline. */
+/*
+ * In the water, beside the watch (whose width follows the screen height):
+ * "Su geçirmez" on its left as it goes in, the words on its right once it rests.
+ */
+.waterTitle,
 .waterText {
   position: absolute;
+  top: 62%;
+  opacity: 0;
+  color: #10282d;
+  transition:
+    opacity 0.7s var(--ease-soft),
+    transform 0.9s var(--ease-lux);
+}
+.waterTitle {
+  right: calc(50% + 33svh);
   left: var(--gutter);
-  bottom: clamp(32px, 9vh, 110px);
-  width: min(400px, 30vw);
+  text-align: right;
+  font-size: clamp(2.4rem, 4.6vw, 5rem);
+  transform: translate(-30px, -50%);
+}
+.waterTitle em {
+  color: #1f4a52;
+}
+.scene[data-splash] .waterTitle {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+.waterText {
+  left: calc(50% + 36svh);
+  width: min(340px, calc(50% - 36svh - var(--gutter)));
   display: grid;
   gap: 12px;
-  color: #10282d;
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.9s var(--ease-soft),
-    transform 1.1s var(--ease-lux);
+  transform: translate(30px, -50%);
 }
 .scene[data-said] .waterText {
   opacity: 1;
-  transform: none;
+  transform: translate(0, -50%);
 }
 .waterText .eyebrow {
   color: #1f4a52;
 }
-.waterText .lineTitle em {
-  color: #1f4a52;
-}
 .waterText .lineText {
-  color: rgba(16, 40, 45, 0.78);
+  color: rgba(16, 40, 45, 0.8);
 }
 
 @media (max-width: 767px) {
-  /* Phones: across the foot of the screen, on a soft fade of the water. */
-  .waterText {
+  /* Phones: the watch fills the width; title and words at the foot, on a soft fade of the water. */
+  .film::after {
+    content: "";
+    position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
+    height: 46%;
+    background: linear-gradient(to top, rgba(178, 203, 207, 0.95) 45%, transparent);
+    opacity: 0;
+    transition: opacity 0.7s var(--ease-soft);
+  }
+  .scene[data-splash] .film::after {
+    opacity: 1;
+  }
+  .waterTitle {
+    z-index: 2;
+    left: var(--gutter);
+    right: var(--gutter);
+    top: auto;
+    bottom: calc(max(28px, 5vh) + 120px);
+    text-align: left;
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    transform: translateY(20px);
+  }
+  .scene[data-splash] .waterTitle {
+    transform: none;
+  }
+  .waterText {
+    z-index: 2;
+    left: 0;
+    right: 0;
+    top: auto;
+    bottom: 0;
     width: auto;
     padding: 56px var(--gutter) max(28px, 5vh);
-    background: linear-gradient(to top, rgba(178, 203, 207, 0.95) 55%, transparent);
+    transform: translateY(24px);
+  }
+  .scene[data-said] .waterText {
+    transform: none;
   }
 }

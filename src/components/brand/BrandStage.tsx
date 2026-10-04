@@ -24,11 +24,29 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
  * the screen (negative: above the top, i.e. a longer stretch of scroll).
  */
 const EXIT_END = -0.5;
+/** Phones: the watch sits higher and further back. */
+const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
-const smooth = (v: number) => {
-  const t = Math.min(1, Math.max(0, v));
-  return t * t * (3 - 2 * t);
-};
+/** Seconds of the drop film: the watch goes into the water ("Su geçirmez"), and has settled (the words). */
+const SPLASH_AT = 0.33;
+const SAID_AT = 2;
+/** Where the water's surface is at the end of the film (percent of the height). */
+const SURFACE = 38;
+/** Bubbles rising beside the watch once it rests: [x offset from centre, start height, size (px), seconds, delay]. */
+const BUBBLES: [number, number, number, number, number][] = [
+  [27, 62, 9, 3.4, 0],
+  [31, 58, 6, 2.9, 0.9],
+  [25, 66, 12, 4.1, 1.7],
+  [33, 61, 5, 2.6, 2.4],
+  [29, 70, 7, 3.6, 3.1],
+  [-27, 56, 8, 3.8, 0.5],
+  [-24, 63, 5, 3.0, 1.4],
+  [-30, 60, 10, 4.4, 2.6],
+  [3, 92, 6, 4.8, 1.1],
+  [-6, 95, 4, 4.2, 3.3],
+];
+/** The drop starts when the collection's lower edge has risen this far up the screen. */
+const DROP_START = "top 88%";
 
 export function BrandStage({
   brand,
@@ -52,8 +70,6 @@ export function BrandStage({
   const scene = useRef<HTMLDivElement>(null);
   const back = useRef<HTMLElement>(null);
   const film = useRef<HTMLVideoElement>(null);
-  /** Phones: how much higher and further back the watch sits (mix eases it off before the film). */
-  const portrait = useMemo(() => ({ lift: 0.32, pull: 2.2, mix: 1 }), []);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
   const motion = STAGES[brand.slug];
@@ -78,6 +94,7 @@ export function BrandStage({
     const { total } = sceneTimes(motion);
     const exit = exitStart(motion);
     const clock = { p: 0 };
+    let gone = false;
     const time = () => {
       const h = hero.current!;
       const vh = window.innerHeight;
@@ -87,11 +104,10 @@ export function BrandStage({
     };
     const draw = () => {
       const o = sampleStage(motion, time(), state, stage.lines.length);
-      portrait.mix = 1;
       applyOverlay(o, title.current, lines.current, sides);
-      scene.current?.style.setProperty("--show", state.show.toFixed(3));
-      // Once it has faded there is nothing to draw.
-      if (state.show > 0.005) wake.current();
+      scene.current?.style.setProperty("--show", gone ? "0" : state.show.toFixed(3));
+      // Once it has faded, or the collection covers it, there is nothing to draw.
+      if (!gone && state.show > 0.005) wake.current();
     };
     draw();
     const tl = gsap.to(clock, { p: 1, ease: "none", onUpdate: draw });
@@ -103,53 +119,58 @@ export function BrandStage({
       animation: tl,
     });
 
-    // After the collection: the watch comes back from below already turning
-    // and settles on the first frame of the water film, which then takes over
-    // and plays at its own (real) speed; "Su geçirmez" comes up in the water.
-    const outro = motion.outro;
+    // The watch is done once the collection covers it.
+    ScrollTrigger.create({
+      trigger: hero.current,
+      start: `bottom ${EXIT_END * 100}%`,
+      onEnter: () => {
+        gone = true;
+        draw();
+      },
+      onLeaveBack: () => {
+        gone = false;
+        draw();
+      },
+    });
+
+    // After the collection: the water film. As the collection's lower edge
+    // rises, the watch drops out from under it into the water ("Su geçirmez"
+    // as it goes in); then it rests there, bubbles rising, the words beside it.
     const sc = scene.current!;
-    const v = film.current;
-    if (outro && back.current) {
-      const { times } = sceneTimes(outro);
-      const last = times[times.length - 1];
-      let rolling = false;
-      const roll = (on: boolean) => {
-        if (on === rolling || !v) return;
-        rolling = on;
-        if (on) {
-          v.currentTime = 0;
-          sc.dataset.film = "";
-          v.play().catch(() => {});
-        } else {
-          v.pause();
-          delete sc.dataset.film;
-          delete sc.dataset.said;
-          wake.current();
-        }
-      };
-
-      const oclock = { t: 0 };
-      const odraw = () => {
-        const t = oclock.t;
-        sampleStage(outro, t, state, 0);
-        // Phones place the watch higher and further back; on the way to the
-        // film's first frame that gives way, so it lands where the film's watch is.
-        portrait.mix = 1 - smooth((t - last.start) / Math.max(0.1, last.arrive - last.start));
-        sc.style.setProperty("--show", "1");
-        roll(stage.film !== undefined && t >= last.arrive - 0.02);
-        if (!rolling) wake.current();
-      };
-      const otl = gsap.to(oclock, { t: sceneTimes(outro).total, ease: "none", onUpdate: odraw, paused: true });
-      ScrollTrigger.create({ trigger: back.current, start: "top bottom", end: "bottom bottom", scrub: 1, animation: otl });
-    }
-
-    if (v) {
-      const onEnd = () => void (sc.dataset.said = "");
-      v.addEventListener("ended", onEnd);
-      return () => {
-        v.removeEventListener("ended", onEnd);
-      };
-    }
+    const drop = film.current;
+    const water = back.current;
+    if (!drop || !water) return;
+    const set = (key: "film" | "splash" | "said", on: boolean) => {
+      if (on) sc.dataset[key] = "";
+      else delete sc.dataset[key];
+    };
+    const reset = () => {
+      drop.pause();
+      drop.currentTime = 0;
+      set("splash", false);
+      set("said", false);
+    };
+    ScrollTrigger.create({ trigger: water, start: "top bottom", end: "bottom top", onToggle: (self) => set("film", self.isActive) });
+    ScrollTrigger.create({
+      trigger: water,
+      start: DROP_START,
+      onEnter: () => {
+        reset();
+        drop.play().catch(() => {});
+      },
+      onLeaveBack: reset,
+    });
+    // The film ends on the watch at rest; it stays on that frame, with the bubbles going on over it.
+    const onTime = () => {
+      set("splash", drop.currentTime >= SPLASH_AT);
+      set("said", drop.currentTime >= SAID_AT);
+    };
+    drop.addEventListener("timeupdate", onTime);
+    drop.addEventListener("ended", onTime);
+    return () => {
+      drop.removeEventListener("timeupdate", onTime);
+      drop.removeEventListener("ended", onTime);
+    };
   }, region);
 
   const onWake = useCallback((fn: () => void) => {
@@ -169,26 +190,45 @@ export function BrandStage({
             active={active}
             onWake={onWake}
             tone="steel"
-            portrait={portrait}
+            portrait={PORTRAIT}
           />
         </div>
         {stage.film && (
           <div className={styles.film}>
-            <video ref={film} muted playsInline preload="auto" poster={stage.film.poster}>
-              <source src={stage.film.mobile} type="video/mp4" media="(max-width: 767px)" />
-              <source src={stage.film.mp4} type="video/mp4" />
-              <source src={stage.film.webm} type="video/webm" />
+            <video ref={film} className={styles.drop} muted playsInline preload="auto" poster={stage.film.drop.poster}>
+              <source src={stage.film.drop.mobile} type="video/mp4" media="(max-width: 767px)" />
+              <source src={stage.film.drop.mp4} type="video/mp4" />
+              <source src={stage.film.drop.webm} type="video/webm" />
             </video>
+            <div className={styles.bubbles}>
+              {BUBBLES.map(([x, y, size, dur, delay], i) => (
+                <i
+                  key={i}
+                  style={
+                    {
+                      "--x": x,
+                      "--y": `${y}%`,
+                      "--rise": y - SURFACE,
+                      "--size": `${size}px`,
+                      animationDuration: `${dur}s`,
+                      animationDelay: `${delay}s`,
+                    } as React.CSSProperties
+                  }
+                />
+              ))}
+            </div>
             {stage.water && (
-              <div className={styles.waterText}>
-                <p className={styles.eyebrow}>{stage.water.eyebrow}</p>
-                <h2 className={styles.lineTitle}>
+              <>
+                <h2 className={`${styles.lineTitle} ${styles.waterTitle}`}>
                   {stage.water.title.split(stage.water.accent)[0]}
                   <em>{stage.water.accent}</em>
                   {stage.water.title.split(stage.water.accent)[1]}
                 </h2>
-                <p className={styles.lineText}>{stage.water.text}</p>
-              </div>
+                <div className={styles.waterText}>
+                  <p className={styles.eyebrow}>{stage.water.eyebrow}</p>
+                  <p className={styles.lineText}>{stage.water.text}</p>
+                </div>
+              </>
             )}
           </div>
         )}
@@ -231,14 +271,7 @@ export function BrandStage({
       </section>
 
       <div className={styles.over}>{children}</div>
-      {motion.outro && (
-        <section
-          ref={back}
-          className={styles.back}
-          style={{ height: `${Math.round(sceneTimes(motion.outro).total * motion.outro.speed) + 100}svh` }}
-          aria-hidden
-        />
-      )}
+      {stage.film && <section ref={back} className={styles.back} aria-hidden />}
       {rest && <div className={styles.over}>{rest}</div>}
     </div>
   );

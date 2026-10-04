@@ -38,10 +38,12 @@ export const BRANDS: Brand[] = [
         },
       ],
       film: {
-        mp4: "/assets/video/brands/casio-water.mp4",
-        mobile: "/assets/video/brands/casio-water-mobile.mp4",
-        webm: "/assets/video/brands/casio-water.webm",
-        poster: "/assets/video/brands/casio-water.jpg",
+        drop: {
+          mp4: "/assets/video/brands/casio-water-drop.mp4",
+          mobile: "/assets/video/brands/casio-water-drop-mobile.mp4",
+          webm: "/assets/video/brands/casio-water-drop.webm",
+          poster: "/assets/video/brands/casio-water-drop.jpg",
+        },
       },
       water: {
         eyebrow: "50 metre · 5 bar",

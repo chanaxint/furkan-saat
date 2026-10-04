@@ -93,9 +93,16 @@
   color: #fff;
 }
 
-/* What follows (the collection) sits on the same studio grey; the watch has gone. */
+/*
+ * What follows (the collection) is a layer of its own: opaque, with a soft
+ * edge, it rises over the fixed watch, which turns and goes in beneath it.
+ */
 .over {
   position: relative;
+  background: #ececea;
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.06),
+    0 -24px 60px rgba(30, 32, 34, 0.12);
 }
 
 /* ------------------------------------------------------------ lines */

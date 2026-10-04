@@ -2,7 +2,7 @@
 
 import { Euler, MathUtils, Quaternion, Vector3 } from "three";
 import type { StageMotion, StageQuat, StageScene } from "@/lib/data/stages";
-import { SPIN_AXIS_A, SPIN_AXIS_B, type ShowcaseState } from "./showcase";
+import type { ShowcaseState } from "./showcase";
 
 /**
  * BRAND STAGE — a brand page that opens on its watch in 3D, scene by scene
@@ -25,7 +25,9 @@ export type StageOverlay = {
   lines: { opacity: number; shift: number }[];
 };
 
-const AXES = { a: new Vector3(...SPIN_AXIS_A).normalize(), b: new Vector3(...SPIN_AXIS_B).normalize() };
+// Diagonal axes lying in the screen plane, so a full turn reads as one clean
+// 360° flip (an axis tilted toward the camera mixes in a roll and blurs it).
+const AXES = { a: new Vector3(1, 1, 0).normalize(), b: new Vector3(-1, 1, 0).normalize() };
 const ease = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 const smooth = (v: number) => {
@@ -45,6 +47,9 @@ export function sceneTimes(m: StageMotion) {
   });
   return { times, total: Math.max(0.5, t) };
 }
+
+/** Start of the last scene's turn: on the page this is when the collection starts rising over the watch. */
+export const exitStart = (m: StageMotion) => sceneTimes(m).times[m.scenes.length - 1].start;
 
 export const createStageState = (m: StageMotion): StageState => {
   const s = m.scenes[0];

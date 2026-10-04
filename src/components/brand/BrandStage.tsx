@@ -8,7 +8,7 @@ import { useGsap } from "@/hooks/useGsap";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { STAGES } from "@/lib/data/stages";
-import { applyOverlay, createStageState, sampleStage, sceneTimes } from "@/lib/scene/stage";
+import { applyOverlay, createStageState, exitStart, sampleStage, sceneTimes } from "@/lib/scene/stage";
 import styles from "./BrandStage.module.css";
 
 const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatchScene"), { ssr: false });
@@ -19,6 +19,9 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
  * children); after its turns the watch fades as the collection arrives. It
  * renders only while the region is on screen and the watch is visible.
  */
+/** The watch's last turn ends when the collection's top edge is this far down the screen. */
+const EXIT_END = 0.25;
+
 export function BrandStage({
   brand,
   stage,
@@ -53,19 +56,35 @@ export function BrandStage({
   useGsap(() => {
     // The scroll position is a time on the stage's timeline; every frame is sampled from it.
     const sides = stage.lines.map((l) => l.side);
-    const clock = { t: 0 };
+    // Two stretches of scroll: the scenes while the opening is pinned, then the
+    // last turn while the collection rises over the watch like a layer of its
+    // own — the watch spins down and goes in beneath it.
+    const { total } = sceneTimes(motion);
+    const exit = exitStart(motion);
+    const clock = { p: 0 };
+    const time = () => {
+      const h = hero.current!;
+      const vh = window.innerHeight;
+      const pinned = Math.max(1, h.offsetHeight - vh);
+      const p0 = pinned / (pinned + vh * (1 - EXIT_END));
+      return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
+    };
     const draw = () => {
-      const o = sampleStage(motion, clock.t, state, stage.lines.length);
+      const o = sampleStage(motion, time(), state, stage.lines.length);
       applyOverlay(o, title.current, lines.current, sides);
       scene.current?.style.setProperty("--show", state.show.toFixed(3));
       // Once it has faded there is nothing to draw.
       if (state.show > 0.005) wake.current();
     };
     draw();
-    const tl = gsap.to(clock, { t: sceneTimes(motion).total, ease: "none", onUpdate: draw });
-    // The timeline ends once the collection has risen well into view, so the
-    // watch's last turn carries it down beneath the watches as they arrive.
-    ScrollTrigger.create({ trigger: hero.current, start: "top top", end: "bottom 40%", scrub: 1.2, animation: tl });
+    const tl = gsap.to(clock, { p: 1, ease: "none", onUpdate: draw });
+    ScrollTrigger.create({
+      trigger: hero.current,
+      start: "top top",
+      end: `bottom ${EXIT_END * 100}%`,
+      scrub: 1,
+      animation: tl,
+    });
   }, region);
 
   const onWake = useCallback((fn: () => void) => {
@@ -93,7 +112,7 @@ export function BrandStage({
       <section
         ref={hero}
         className={styles.hero}
-        style={{ height: `${Math.round(sceneTimes(motion).total * motion.speed) + 100}svh` }}
+        style={{ height: `${Math.round(exitStart(motion) * motion.speed) + 100}svh` }}
         data-nav-theme="light"
         aria-label={brand.name}
       >

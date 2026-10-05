@@ -44,13 +44,15 @@ export function Navigation() {
       // The opening film on the home page keeps the bar to a wordmark.
       const hero = document.getElementById("top");
       const heroEnd = hero ? hero.offsetTop + hero.offsetHeight - vh * 1.2 : -1;
+      // Sample the section beneath the bar.
+      const probe = document.elementsFromPoint(window.innerWidth / 2, 40);
+      // Some sections (the campaign) always show the bar, even scrolling down.
+      const keep = probe.some((el) => el.closest("[data-nav-keep]"));
       if (y < heroEnd) setMode("immersive");
-      else if (down && y > vh * 1.5) setMode("hidden");
+      else if (down && y > vh * 1.5 && !keep) setMode("hidden");
       else setMode("visible");
       setSolid(y > 24 && y >= heroEnd);
 
-      // Sample the section beneath the bar.
-      const probe = document.elementsFromPoint(window.innerWidth / 2, 40);
       const themed = probe.map((el) => el.closest<HTMLElement>("[data-nav-theme]")).find(Boolean);
       setTheme((themed?.dataset.navTheme as "dark" | "light") ?? "dark");
     };

@@ -10,7 +10,7 @@ import styles from "./CampaignHero.module.css";
  */
 export function CampaignHero() {
   return (
-    <section id="kampanya" className={styles.hero} data-nav-theme="light" aria-label="Yeni sezon">
+    <section id="kampanya" className={styles.hero} data-nav-theme="light" data-nav-keep aria-label="Yeni sezon">
       <div className={styles.frame}>
         <Image
           src="/assets/images/campaign/zamansiz.webp"

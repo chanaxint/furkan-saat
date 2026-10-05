@@ -3,8 +3,32 @@
 .filters {
   display: grid;
   gap: 14px;
-  padding-block: 22px;
-  border-top: 1px solid var(--line-on-light);
+  padding: 24px 0 26px;
+  border-bottom: 1px solid var(--line-on-light);
+}
+
+/* The filters open under the bar (a height transition on a grid row). */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.6s var(--ease-lux),
+    opacity 0.4s var(--ease-soft),
+    visibility 0s linear 0.6s;
+}
+.panel[data-open] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition:
+    grid-template-rows 0.6s var(--ease-lux),
+    opacity 0.5s var(--ease-soft) 0.1s;
+}
+.panelInner {
+  min-height: 0;
+  overflow: hidden;
 }
 .facet {
   display: grid;
@@ -85,18 +109,58 @@
 .bar {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding-block: 16px;
-  margin-bottom: clamp(28px, 3vw, 44px);
+  gap: 22px;
+  padding-block: 14px;
   border-block: 1px solid var(--line-on-light);
 }
+.filterButton,
 .count,
 .clear,
-.sort select {
+.sortButton {
+  font-family: var(--font-sans);
   font-size: var(--fs-micro);
   font-weight: 500;
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
+}
+.filterButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 20px;
+  border: 1px solid var(--green-900);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--green-900);
+  cursor: pointer;
+  transition:
+    background-color 0.35s var(--ease-soft),
+    color 0.35s var(--ease-soft);
+}
+.filterButton svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+.filterButton:hover,
+.filterButton[aria-expanded="true"] {
+  background: var(--green-900);
+  color: var(--ivory);
+}
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f1dfa6, #c4a052);
+  color: #2a1f08;
+  font-size: 10px;
+  letter-spacing: 0;
 }
 .count {
   margin: 0;
@@ -111,19 +175,97 @@
   text-underline-offset: 5px;
   cursor: pointer;
 }
+
+/* Sort: a line that opens a small ivory card. */
 .sort {
+  position: relative;
   margin-left: auto;
 }
-.sort select {
-  appearance: none;
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
   border: 0;
-  background: transparent
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6'%3E%3Cpath d='M.5.5 4.5 4.5 8.5.5' fill='none' stroke='%23071a16'/%3E%3C/svg%3E")
-    no-repeat right center;
-  padding: 8px 20px 8px 0;
-  color: inherit;
+  background: none;
+  color: var(--green-900);
   cursor: pointer;
-  text-align: right;
+}
+.sortLabel {
+  color: var(--text-on-light-muted);
+}
+.sortButton svg {
+  width: 10px;
+  height: 6px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  transition: transform 0.35s var(--ease-soft);
+}
+.sortButton[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+.sortList {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  min-width: 260px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: #f7f3ea;
+  border: 1px solid rgba(200, 185, 154, 0.55);
+  box-shadow: 0 18px 50px rgba(7, 26, 22, 0.16);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.3s var(--ease-soft),
+    transform 0.4s var(--ease-lux),
+    visibility 0s linear 0.4s;
+}
+.sortList[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition:
+    opacity 0.3s var(--ease-soft),
+    transform 0.4s var(--ease-lux);
+}
+.sortList li {
+  position: relative;
+  padding: 12px 16px 12px 30px;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--green-900);
+  cursor: pointer;
+  transition: background-color 0.25s var(--ease-soft);
+}
+.sortList li:hover,
+.sortList li:focus-visible {
+  background: rgba(200, 185, 154, 0.22);
+  outline: none;
+}
+/* The chosen one: a small gold dot. */
+.sortList li[aria-selected="true"]::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f1dfa6, #b8913f);
+}
+.sortList li[aria-selected="true"] {
+  font-style: italic;
+}
+
+/* Space before the grid. */
+.panel + * {
+  margin-top: clamp(28px, 3vw, 44px);
 }
 
 .empty {
@@ -138,6 +280,13 @@
 }
 
 @media (max-width: 767px) {
+  .bar {
+    flex-wrap: wrap;
+    gap: 12px 18px;
+  }
+  .sortList {
+    min-width: 230px;
+  }
   /* Phones: each row of chips scrolls sideways under its label. */
   .facet {
     grid-template-columns: 1fr;

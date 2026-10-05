@@ -25,7 +25,7 @@ export default async function Home() {
       <BrandReels />
       <CampaignHero />
       <Marquee />
-      <ShopRow title="Yeni Gelenler" products={arrivals} href="/#koleksiyon" />
+      <ShopRow title="Yeni Gelenler" products={arrivals.slice(0, 4)} variant="centred" href="/#koleksiyon" />
       <CollectionSection products={collection} weekly={weekly.map((p) => p.slug)} />
       <FinalCTA />
       <Footer />

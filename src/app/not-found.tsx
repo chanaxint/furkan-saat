@@ -10,7 +10,7 @@ export default function NotFound() {
           marker="404"
           title="Bu sayfa *bulunamadı*"
           lede="Aradığınız sayfa taşınmış ya da artık mevcut değil."
-          aside={<ButtonLink href="/koleksiyon">Koleksiyona dönün</ButtonLink>}
+          aside={<ButtonLink href="/#koleksiyon">Koleksiyona dönün</ButtonLink>}
         />
       </main>
       <Footer />

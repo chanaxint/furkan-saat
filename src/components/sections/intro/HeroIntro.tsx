@@ -153,7 +153,9 @@ export function HeroIntro() {
     if (land) {
       // The site loader is not to fly onto the film's watch: the page opens elsewhere.
       document.documentElement.dataset.landing = "";
-      const jump = () => window.scrollTo(0, land.getBoundingClientRect().top + window.scrollY);
+      // (clear of the bar when the section asks for it with scroll-margin-top)
+      const margin = parseFloat(getComputedStyle(land).scrollMarginTop) || 0;
+      const jump = () => window.scrollTo(0, land.getBoundingClientRect().top + window.scrollY - margin);
       jump();
       // Layout settles (images, fonts) and ScrollTrigger measures (scrolling to 0 and back)
       // after this; until the visitor scrolls, keep putting the page on its target.

@@ -39,7 +39,7 @@ export const findProduct = (slug: string) => PRODUCTS.find((p) => p.slug === slu
 
 /* ---------------------------------------------------------------- filters */
 
-export type FacetKey = "brand" | "collection" | "price" | "movement" | "material" | "size" | "condition" | "availability";
+export type FacetKey = "brand" | "gender" | "color" | "type";
 export type Filters = Partial<Record<FacetKey, string[]>>;
 export type SortKey = "featured" | "newest" | "price-asc" | "price-desc";
 
@@ -50,55 +50,48 @@ export const SORTS: { key: SortKey; label: string }[] = [
   { key: "price-desc", label: "Fiyat: yüksekten düşüğe" },
 ];
 
-const PRICE_BANDS = [
-  { value: "under-20", label: "20.000 € altı", test: (p: number | null) => p !== null && p < 20000 },
-  { value: "20-50", label: "20.000 – 50.000 €", test: (p: number | null) => p !== null && p >= 20000 && p < 50000 },
-  { value: "50-plus", label: "50.000 € üzeri", test: (p: number | null) => p !== null && p >= 50000 },
-  { value: "request", label: "Fiyat sorunuz", test: (p: number | null) => p === null },
+/** Who a watch is for: the women's collection; digital classics for anyone; the rest men's. */
+const gender = (p: Product) => (p.collections.includes("kadin") ? "kadin" : p.collections.includes("dijital") ? "unisex" : "erkek");
+const GENDERS = [
+  { value: "kadin", label: "Kadın" },
+  { value: "erkek", label: "Erkek" },
+  { value: "unisex", label: "Unisex" },
 ];
 
-const SIZE_BANDS = [
-  { value: "small", label: "40 mm'ye kadar", test: (mm: number) => mm <= 40 },
-  { value: "medium", label: "41 – 42 mm", test: (mm: number) => mm > 40 && mm <= 42 },
-  { value: "large", label: "43 mm ve üzeri", test: (mm: number) => mm > 42 },
+/** Colour of the watch (its dial / case tone). */
+const COLORS = [
+  { value: "champagne", label: "Altın" },
+  { value: "stone", label: "Gümüş" },
+  { value: "green", label: "Yeşil" },
+  { value: "ivory", label: "Beyaz · Sedef" },
+  { value: "deep", label: "Siyah" },
+  { value: "wine", label: "Kırmızı" },
 ];
 
-const mm = (p: Product) => parseFloat((p.specs.caseDiameter ?? "").replace(",", "."));
+/** Kind of watch, from its collections. */
+const TYPES = [
+  { value: "klasik", label: "Klasik" },
+  { value: "spor", label: "Spor" },
+  { value: "kronograf", label: "Kronograf" },
+  { value: "dijital", label: "Dijital" },
+  { value: "tasli", label: "Taşlı" },
+];
 
 type Facet = {
   key: FacetKey;
   label: string;
   /** The values a product has for this facet. */
   values: (p: Product) => string[];
-  /** Fixed options (bands); otherwise derived from the products. */
+  /** Fixed options, in this order; otherwise derived from the products. */
   options?: { value: string; label: string }[];
   optionLabel?: (value: string) => string;
 };
 
 export const FACETS: Facet[] = [
   { key: "brand", label: "Marka", values: (p) => [p.brand], optionLabel: brandName },
-  {
-    key: "collection",
-    label: "Koleksiyon",
-    values: (p) => p.collections,
-    optionLabel: (v) => COLLECTIONS.find((c) => c.slug === v)?.name ?? v,
-  },
-  {
-    key: "price",
-    label: "Fiyat",
-    values: (p) => PRICE_BANDS.filter((b) => b.test(p.price)).map((b) => b.value),
-    options: PRICE_BANDS,
-  },
-  { key: "movement", label: "Mekanizma", values: (p) => [p.specs.movement] },
-  { key: "material", label: "Kasa malzemesi", values: (p) => [p.specs.caseMaterial] },
-  {
-    key: "size",
-    label: "Kasa çapı",
-    values: (p) => SIZE_BANDS.filter((b) => b.test(mm(p))).map((b) => b.value),
-    options: SIZE_BANDS,
-  },
-  { key: "condition", label: "Durum", values: (p) => [p.condition] },
-  { key: "availability", label: "Bulunabilirlik", values: (p) => [p.availability] },
+  { key: "gender", label: "Cinsiyet", values: (p) => [gender(p)], options: GENDERS },
+  { key: "color", label: "Renk", values: (p) => [p.tone], options: COLORS },
+  { key: "type", label: "Tür", values: (p) => p.collections, options: TYPES },
 ];
 
 /** Options per facet, limited to values that occur in the given products. */

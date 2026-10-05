@@ -8,10 +8,8 @@ import styles from "./SiteMenu.module.css";
 
 const MAIN = [
   { label: "Ana Sayfa", href: "/" },
-  { label: "Koleksiyon", href: "/koleksiyon" },
   { label: "Markalar", href: "/markalar" },
-  { label: "Koleksiyonlar", href: "/koleksiyonlar" },
-  { label: "Dergi", href: "/dergi" },
+  { label: "Koleksiyon", href: "/#koleksiyon" },
   { label: "Hakkımızda", href: "/hakkimizda" },
   { label: "İletişim", href: "/iletisim" },
 ];

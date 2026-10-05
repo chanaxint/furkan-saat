@@ -43,7 +43,7 @@ export function CompareView() {
       <div className={`container ${styles.empty}`}>
         <p className={styles.emptyTitle}>Karşılaştırmak için en fazla {MAX_COMPARE} saat seçin.</p>
         {picker}
-        <ButtonLink href="/koleksiyon" variant="line">
+        <ButtonLink href="/#koleksiyon" variant="line">
           Koleksiyona göz atın
         </ButtonLink>
       </div>

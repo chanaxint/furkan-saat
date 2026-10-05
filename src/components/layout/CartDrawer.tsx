@@ -41,7 +41,7 @@ export function CartDrawer() {
       {cart.items.length === 0 ? (
         <div className={styles.empty}>
           <p className={styles.emptyTitle}>Sepetiniz boş.</p>
-          <Link href="/koleksiyon" onClick={close} className={styles.view}>
+          <Link href="/#koleksiyon" onClick={close} className={styles.view}>
             Koleksiyonu keşfedin
           </Link>
         </div>

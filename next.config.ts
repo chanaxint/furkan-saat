@@ -10,7 +10,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/collection/mercedes-benz", destination: "/markalar/mercedes-benz", permanent: true },
-      { source: "/collection", destination: "/koleksiyon", permanent: true },
+      { source: "/collection", destination: "/#koleksiyon", permanent: true },
+      // The collection lives on the home page now.
+      { source: "/koleksiyon", destination: "/#koleksiyon", permanent: false },
+      { source: "/koleksiyonlar", destination: "/#koleksiyon", permanent: false },
+      { source: "/koleksiyonlar/:slug", destination: "/#koleksiyon", permanent: false },
     ];
   },
   images: {

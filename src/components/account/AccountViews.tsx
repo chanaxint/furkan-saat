@@ -22,7 +22,7 @@ function Empty({ title, text, href, cta }: { title: string; text?: string; href:
 
 export function OrdersView() {
   const { orders } = useAccount();
-  if (!orders.length) return <Empty title="Henüz siparişiniz yok." href="/koleksiyon" cta="Koleksiyonu keşfedin" />;
+  if (!orders.length) return <Empty title="Henüz siparişiniz yok." href="/#koleksiyon" cta="Koleksiyonu keşfedin" />;
   return (
     <ul className={styles.records}>
       {orders.map((o) => (

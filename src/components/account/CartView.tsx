@@ -19,7 +19,7 @@ export function CartView() {
     return (
       <div className={`container ${styles.empty}`}>
         <p className={styles.emptyTitle}>Sepetiniz boş.</p>
-        <ButtonLink href="/koleksiyon">Koleksiyonu keşfedin</ButtonLink>
+        <ButtonLink href="/#koleksiyon">Koleksiyonu keşfedin</ButtonLink>
       </div>
     );
 

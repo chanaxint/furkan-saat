@@ -80,7 +80,7 @@ export function OrderConfirmation() {
 
       <div className={styles.links}>
         <ButtonLink href="/hesap">Siparişlerim</ButtonLink>
-        <ButtonLink href="/koleksiyon" variant="line">
+        <ButtonLink href="/#koleksiyon" variant="line">
           Koleksiyona dönün
         </ButtonLink>
       </div>

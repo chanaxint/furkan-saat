@@ -1,33 +1,118 @@
-.bar {
+/* ---------------------------------------------------------- filters */
+/* Four rows of chips: a small caps label, then the options. */
+.filters {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  padding-block: 22px;
+  border-top: 1px solid var(--line-on-light);
+}
+.facet {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
   align-items: center;
-  gap: 20px;
-  padding-block: 18px;
-  margin-bottom: var(--space-l);
+  gap: 16px;
+}
+.facetLabel {
+  margin: 0;
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--text-on-light-muted);
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--line-on-light);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--green-900);
+  font: inherit;
+  font-size: var(--fs-small);
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease-soft),
+    border-color 0.3s var(--ease-soft),
+    color 0.3s var(--ease-soft);
+}
+.chip:hover {
+  border-color: var(--green-900);
+}
+.chip[aria-pressed="true"] {
+  background: var(--green-900);
+  border-color: var(--green-900);
+  color: var(--ivory);
+}
+/* Colours carry a swatch. */
+.chip[data-color]::before {
+  content: "";
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid rgba(7, 26, 22, 0.25);
+  background: var(--swatch);
+}
+.chip[data-color="champagne"] {
+  --swatch: linear-gradient(135deg, #f1dfa6, #b8913f);
+}
+.chip[data-color="stone"] {
+  --swatch: linear-gradient(135deg, #f2f3f4, #9ea3a7);
+}
+.chip[data-color="green"] {
+  --swatch: #1f5a45;
+}
+.chip[data-color="ivory"] {
+  --swatch: linear-gradient(135deg, #ffffff, #e8e2d6);
+}
+.chip[data-color="deep"] {
+  --swatch: #16181a;
+}
+.chip[data-color="wine"] {
+  --swatch: #8e1f24;
+}
+
+/* -------------------------------------------------------------- bar */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-block: 16px;
+  margin-bottom: clamp(28px, 3vw, 44px);
   border-block: 1px solid var(--line-on-light);
 }
-.filterButton,
 .count,
+.clear,
 .sort select {
   font-size: var(--fs-micro);
   font-weight: 500;
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
 }
-.filterButton {
-  justify-self: start;
-  padding-block: 8px;
-}
-.filterButton sup {
-  margin-left: 4px;
-  font-size: 9px;
-}
 .count {
+  margin: 0;
   color: var(--text-on-light-muted);
 }
+.clear {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--green-900);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  cursor: pointer;
+}
 .sort {
-  justify-self: end;
+  margin-left: auto;
 }
 .sort select {
   appearance: none;
@@ -41,26 +126,6 @@
   text-align: right;
 }
 
-.active {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px 26px;
-  margin: calc(var(--space-l) * -0.6) 0 var(--space-l);
-  font-size: var(--fs-small);
-}
-.active button {
-  display: inline-flex;
-  gap: 8px;
-}
-.active button span {
-  opacity: 0.5;
-}
-.clear {
-  text-decoration: underline;
-  text-underline-offset: 5px;
-  color: var(--text-on-light-muted);
-}
-
 .empty {
   display: grid;
   gap: 18px;
@@ -72,62 +137,23 @@
   color: var(--text-on-light-muted);
 }
 
-/* ------------------------------------------------------------ drawer */
-.facet {
-  border: 0;
-  margin: 0 0 36px;
-  padding: 0;
-  display: grid;
-  gap: 4px;
-}
-.facet legend {
-  padding: 0;
-  margin-bottom: 14px;
-  font-size: var(--fs-micro);
-  font-weight: 500;
-  letter-spacing: var(--tracking-caps);
-  text-transform: uppercase;
-}
-.option {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding-block: 7px;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-.option input {
-  position: absolute;
-  opacity: 0;
-}
-.box {
-  width: 12px;
-  height: 12px;
-  border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
-  transition: background-color 0.4s var(--ease-lux);
-}
-.option input:checked + .box {
-  background: var(--green-900);
-  border-color: var(--green-900);
-}
-.option input:focus-visible + .box {
-  outline: 1px solid var(--champagne);
-  outline-offset: 3px;
-}
-.drawerActions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-@media (max-width: 560px) {
-  .bar {
-    grid-template-columns: 1fr 1fr;
+@media (max-width: 767px) {
+  /* Phones: each row of chips scrolls sideways under its label. */
+  .facet {
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
-  .count {
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar {
     display: none;
+  }
+  .chip {
+    white-space: nowrap;
   }
 }

@@ -32,8 +32,7 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
   {
     title: "Mağaza",
     links: [
-      { label: "Koleksiyon", href: "/koleksiyon" },
-      { label: "Koleksiyonlar", href: "/koleksiyonlar" },
+      { label: "Koleksiyon", href: "/#koleksiyon" },
       { label: "Markalar", href: "/markalar" },
       { label: "Dergi", href: "/dergi" },
       { label: "Karşılaştır", href: "/karsilastir" },

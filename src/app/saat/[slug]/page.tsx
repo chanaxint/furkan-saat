@@ -67,7 +67,7 @@ export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
           <div className={styles.info}>
             <div className={styles.sticky}>
               <nav className={`rise ${styles.crumbs}`} aria-label="Konum">
-                <Link href="/koleksiyon">Koleksiyon</Link>
+                <Link href="/#koleksiyon">Koleksiyon</Link>
                 <span aria-hidden>/</span>
                 <Link href={`/markalar/${product.brand}`}>{brand}</Link>
               </nav>

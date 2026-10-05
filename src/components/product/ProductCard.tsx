@@ -13,18 +13,30 @@ import styles from "./ProductCard.module.css";
  * On hover the second photograph fades in, the image eases closer and a
  * "Sepete ekle" bar rises over its foot; the heart saves it to favourites.
  */
-export function ProductCard({ product, priority = false, sizes }: { product: Product; priority?: boolean; sizes?: string }) {
+export function ProductCard({
+  product,
+  priority = false,
+  sizes,
+  mark,
+}: {
+  product: Product;
+  priority?: boolean;
+  sizes?: string;
+  /** A gold mark over the photograph (e.g. "Haftanın saati"). */
+  mark?: string;
+}) {
   const [cover, alt] = product.images;
   const name = `${brandName(product.brand)} ${product.model}`;
   const imgSizes = sizes ?? "(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw";
   return (
-    <article className={styles.card}>
+    <article className={styles.card} data-marked={mark ? "" : undefined}>
       <Link href={`/saat/${product.slug}`} className={styles.link}>
         <div className={styles.media} data-tone={product.tone}>
           {cover && (
             <Image src={cover} alt={name} fill sizes={imgSizes} priority={priority} className={styles.image} />
           )}
           {alt && <Image src={alt} alt="" fill sizes={imgSizes} className={`${styles.image} ${styles.alt}`} />}
+          {mark && <span className={styles.mark}>{mark}</span>}
         </div>
         <div className={styles.info}>
           <p className={styles.brand}>{brandName(product.brand)}</p>

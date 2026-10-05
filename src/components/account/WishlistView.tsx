@@ -18,7 +18,7 @@ export function WishlistView({ contained = false }: { contained?: boolean }) {
       <div className={`${wrap} ${styles.empty}`}>
         <p className={styles.emptyTitle}>Henüz favori saatiniz yok.</p>
         <p className={styles.emptyText}>Bir saati kaydetmek için fotoğrafının üzerindeki kalbe dokunun.</p>
-        <ButtonLink href="/koleksiyon">Koleksiyonu keşfedin</ButtonLink>
+        <ButtonLink href="/#koleksiyon">Koleksiyonu keşfedin</ButtonLink>
       </div>
     );
 

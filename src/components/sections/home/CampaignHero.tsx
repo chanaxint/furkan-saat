@@ -27,7 +27,7 @@ export function CampaignHero() {
       <div className={styles.copy}>
         <p className={styles.line}>Yeni sezon saatler</p>
         <p className={styles.line}>Sınırlı sayıda</p>
-        <Link href="/koleksiyon" className={styles.button}>
+        <Link href="/#koleksiyon" className={styles.button}>
           Alışverişe başla
         </Link>
       </div>

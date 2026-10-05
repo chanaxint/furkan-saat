@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { useGsap } from "@/hooks/useGsap";
+import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { STAGES } from "@/lib/data/stages";
@@ -75,7 +76,36 @@ export function BrandStage({
   const motion = STAGES[brand.slug];
   const state = useMemo(() => createStageState(motion), [motion]);
   const [active, setActive] = useState(true);
-  const { scrollTo } = useSmoothScroll();
+  const { scrollTo, lenis } = useSmoothScroll();
+
+  // The page always opens on its first scene: the browser is not to put it
+  // back where it was (a reload, the back button), nor carry over the scroll
+  // of the page before. Until the visitor scrolls, keep it at the top while
+  // the layout and the scroll triggers settle.
+  useIsomorphicLayoutEffect(() => {
+    if (window.location.hash) return;
+    history.scrollRestoration = "manual";
+    const top = () => window.scrollY !== 0 && window.scrollTo(0, 0);
+    top();
+    const onRefresh = () => requestAnimationFrame(top);
+    const stop = () => done();
+    const events = ["wheel", "touchstart", "keydown", "pointerdown"] as const;
+    ScrollTrigger.addEventListener("refresh", onRefresh);
+    window.addEventListener("load", onRefresh);
+    events.forEach((t) => window.addEventListener(t, stop, { passive: true }));
+    const timer = window.setTimeout(stop, 1500);
+    function done() {
+      ScrollTrigger.removeEventListener("refresh", onRefresh);
+      window.removeEventListener("load", onRefresh);
+      events.forEach((t) => window.removeEventListener(t, stop));
+      clearTimeout(timer);
+    }
+    return done;
+  }, []);
+  // Smooth scrolling may still be easing toward the old page's position.
+  useEffect(() => {
+    if (!window.location.hash && window.scrollY < 4) lenis?.scrollTo(0, { immediate: true, force: true });
+  }, [lenis]);
 
   useEffect(() => {
     const el = region.current;

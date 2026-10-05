@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "preview": "next build && next start -p 4321"
+    "preview": "node -e \"require('fs').rmSync('.next/dev/types',{recursive:true,force:true})\" && next build && next start -p 4321"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",

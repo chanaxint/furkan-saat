@@ -274,3 +274,8 @@
   right: var(--gutter);
   bottom: clamp(28px, 5svh, 56px);
 }
+
+/* Gold brands: the film dissolves into the dark marble the watches sit on. */
+.hero[data-theme="gold"] {
+  --after: #241c16;
+}

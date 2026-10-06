@@ -3,14 +3,22 @@
  * gold accents. The light-ground tokens are redefined so every component on
  * the page (cards, labels, lines) follows.
  */
+/*
+ * Gold brands (Freelook): the watches on the dark marble of the brand's own
+ * logo picture, held still behind the page; ivory type with gold accents.
+ */
 .gold {
-  --text-on-light: #2a2318;
-  --text-on-light-muted: rgba(42, 35, 24, 0.64);
-  --text-on-light-faint: rgba(42, 35, 24, 0.42);
-  --line-on-light: rgba(176, 138, 69, 0.3);
-  --champagne-600: #b08a45;
-  --green-900: #2a2318;
-  background: #fbf8f2;
+  --text-on-light: #f2ede3;
+  --text-on-light-muted: rgba(242, 237, 227, 0.7);
+  --text-on-light-faint: rgba(242, 237, 227, 0.45);
+  --line-on-light: rgba(201, 164, 92, 0.35);
+  --champagne-600: #c9a45c;
+  --green-900: #f2ede3;
+  /* Fixed to the screen, so the watches move over a still slab of marble. */
+  background:
+    linear-gradient(rgba(14, 10, 8, 0.35), rgba(14, 10, 8, 0.35)) fixed,
+    url("/assets/images/brands/freelook-marble-2.webp") center / cover no-repeat fixed,
+    #1c1612;
   color: var(--text-on-light);
 }
 .gold .name {
@@ -199,7 +207,14 @@
     font-size: 1.9rem;
   }
 }
+.scenePetals.front {
+  z-index: 2;
+}
 .overScene > *:not(.scenePetals) {
   position: relative;
   z-index: 1;
+}
+/* The picture at the foot sits beneath the petals: they fall over it. */
+.overScene > .carpet {
+  z-index: -1;
 }

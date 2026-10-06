@@ -13,11 +13,14 @@ export function Petals({
   className,
   density = 1,
   wind = false,
+  count,
 }: {
   className?: string;
   density?: number;
   /** Some petals also cross the screen from the sides, carried on the wind. */
   wind?: boolean;
+  /** An exact number of petals (otherwise from the screen size and density). */
+  count?: number;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -108,7 +111,7 @@ export function Petals({
       h = c.clientHeight;
       c.width = Math.round(w * dpr);
       c.height = Math.round(h * dpr);
-      const n = Math.round(Math.min(70, Math.max(24, (w * h) / 26000)) * density);
+      const n = count ?? Math.round(Math.min(70, Math.max(24, (w * h) / 26000)) * density);
       petals = Array.from({ length: n }, () => make(false));
     };
 
@@ -180,7 +183,7 @@ export function Petals({
       ro.disconnect();
       document.removeEventListener("visibilitychange", sync);
     };
-  }, [density, wind]);
+  }, [density, wind, count]);
 
   return <canvas ref={canvas} className={className} aria-hidden />;
 }

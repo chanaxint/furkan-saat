@@ -29,8 +29,8 @@ const EXIT_END = -0.5;
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
 /** Seconds of the drop film: the watch goes into the water ("Su geçirmez"), and has settled (the words). */
-const SPLASH_AT = 0.33;
-const SAID_AT = 2;
+const SPLASH_AT = 0.52;
+const SAID_AT = 2.8;
 /** Where the water's surface is at the end of the film (percent of the height). */
 const SURFACE = 38;
 /** Bubbles rising beside the watch once it rests: [x offset from centre, start height, size (px), seconds, delay]. */

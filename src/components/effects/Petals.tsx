@@ -9,7 +9,16 @@ import { prefersReducedMotion } from "@/lib/gsap";
  * as it falls (a flip about its length) and sways on the air. Runs only while
  * on screen and the tab is visible; with reduced motion it stays still.
  */
-export function Petals({ className, density = 1 }: { className?: string; density?: number }) {
+export function Petals({
+  className,
+  density = 1,
+  wind = false,
+}: {
+  className?: string;
+  density?: number;
+  /** Some petals also cross the screen from the sides, carried on the wind. */
+  wind?: boolean;
+}) {
   const canvas = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -62,6 +71,23 @@ export function Petals({ className, density = 1 }: { className?: string; density
       // Mostly far, some mid, a few near the lens.
       const r = Math.random();
       const z = r < 0.6 ? rnd(0, 0.35) : r < 0.92 ? rnd(0.35, 0.75) : rnd(0.75, 1);
+      // On the wind: in from the left or the right edge, across and gently down.
+      if (wind && top && Math.random() < 0.4) {
+        const fromLeft = Math.random() < 0.5;
+        return {
+          x: fromLeft ? -60 : w + 60,
+          y: rnd(-0.05, 0.75) * h,
+          z,
+          rot: rnd(0, Math.PI * 2),
+          spin: rnd(-1.4, 1.4) * (0.4 + z),
+          flip: rnd(0, Math.PI * 2),
+          flipV: rnd(1.6, 3.6),
+          sway: rnd(0, Math.PI * 2),
+          swayV: rnd(0.6, 1.3),
+          vy: (14 + 34 * z) * rnd(0.7, 1.2),
+          vx: (fromLeft ? 1 : -1) * (60 + 120 * z) * rnd(0.8, 1.25),
+        };
+      }
       return {
         x: rnd(-0.1, 1.1) * w,
         y: top ? rnd(-0.25, -0.02) * h : rnd(-0.1, 1) * h,
@@ -117,7 +143,7 @@ export function Petals({ className, density = 1 }: { className?: string; density
         p.rot += p.spin * dt;
         p.flip += p.flipV * dt;
         p.sway += p.swayV * dt;
-        if (p.y > h + 60 || p.x > w + 80) petals[i] = make(true);
+        if (p.y > h + 60 || p.x > w + 80 || p.x < -80) petals[i] = make(true);
       }
       draw();
       raf = requestAnimationFrame(tick);
@@ -154,7 +180,7 @@ export function Petals({ className, density = 1 }: { className?: string; density
       ro.disconnect();
       document.removeEventListener("visibilitychange", sync);
     };
-  }, [density]);
+  }, [density, wind]);
 
   return <canvas ref={canvas} className={className} aria-hidden />;
 }

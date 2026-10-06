@@ -3,8 +3,6 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
-import { Petals } from "@/components/effects/Petals";
-import { SceneMusic } from "@/components/effects/SceneMusic";
 import type { Brand } from "@/lib/data/types";
 import styles from "./BrandFilmHero.module.css";
 
@@ -14,8 +12,8 @@ import styles from "./BrandFilmHero.module.css";
  * scrolled fully out of view (or the tab is hidden) it pauses, and picks up
  * again on the way back.
  *
- * A brand with a `scene` instead opens on a still photograph with petals
- * drifting over it and its music (see Petals, SceneMusic).
+ * A brand with a `scene` instead opens on a still photograph that stays put
+ * while the page rises over it (the petals and music are the page's own).
  */
 export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
   const root = useRef<HTMLElement>(null);
@@ -57,8 +55,6 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
       {scene ? (
         <>
           <Image src={scene.image} alt={scene.alt} fill priority sizes="100vw" className={styles.video} />
-          <Petals className={styles.petals} />
-          <SceneMusic src={scene.music} label={`${brand.name} müziği`} />
         </>
       ) : (
         film && (
@@ -80,7 +76,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
       )}
       <div className={styles.grade} aria-hidden />
       {/* The foot of the film goes out of focus and dissolves into the page below. */}
-      <div className={styles.fade} aria-hidden />
+      {!scene && <div className={styles.fade} aria-hidden />}
 
       <div className={styles.content}>
         <h1 className={styles.logo}>

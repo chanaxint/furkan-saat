@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
+import { Petals } from "@/components/effects/Petals";
+import { SceneMusic } from "@/components/effects/SceneMusic";
 import { BrandShowcase } from "@/components/brand/BrandShowcase";
 import { BrandStage } from "@/components/brand/BrandStage";
 import { ArticleCard } from "@/components/journal/ArticleCard";
@@ -41,7 +43,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   const stage = brand.stage;
   const opening = !!(film || scene || stage);
 
-  const pageClass = ["page", opening ? styles.afterFilm : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ");
+  const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ");
   const watches = (
     <section
       id="saatler"
@@ -147,6 +149,12 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           body
         )}
       </main>
+      {scene && (
+        <>
+          <Petals className={styles.scenePetals} wind />
+          <SceneMusic src={scene.music} label={`${brand.name} müziği`} />
+        </>
+      )}
       {/* A 3D stage page ends on its water film. */}
       {!stage && <Footer />}
     </>

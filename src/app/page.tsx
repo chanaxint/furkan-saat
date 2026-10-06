@@ -6,6 +6,7 @@ import { Marquee } from "@/components/sections/home/Marquee";
 import { CollectionSection } from "@/components/sections/home/CollectionSection";
 import { ShopRow } from "@/components/sections/home/ShopRow";
 import { HeroIntro } from "@/components/sections/intro/HeroIntro";
+import styles from "./page.module.css";
 import { getFeatured, getProducts, getProductsInCollection } from "@/lib/services/catalog";
 
 /**
@@ -23,12 +24,15 @@ export default async function Home() {
     <main>
       <HeroIntro />
       <BrandReels />
-      <CampaignHero />
-      <Marquee />
-      <ShopRow title="Yeni Gelenler" products={arrivals.slice(0, 4)} variant="centred" href="/#koleksiyon" />
-      <CollectionSection products={collection} weekly={weekly.map((p) => p.slug)} />
-      <FinalCTA />
-      <Footer />
+      {/* Everything after the brands is one layer: it rises over them as they stay pinned. */}
+      <div className={styles.layer}>
+        <CampaignHero />
+        <Marquee />
+        <ShopRow title="Yeni Gelenler" products={arrivals.slice(0, 4)} variant="centred" href="/#koleksiyon" />
+        <CollectionSection products={collection} weekly={weekly.map((p) => p.slug)} />
+        <FinalCTA />
+        <Footer />
+      </div>
     </main>
   );
 }

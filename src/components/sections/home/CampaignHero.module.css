@@ -1,12 +1,7 @@
 /* The copy is laid over the photograph on wide screens, beneath it on phones. */
-/* A layer of its own: it slides up over the brands, which stay put beneath it. */
 .hero {
   position: relative;
-  z-index: 2;
   background: var(--ivory);
-  box-shadow:
-    0 -1px 0 rgba(40, 30, 20, 0.08),
-    0 -30px 70px rgba(40, 30, 20, 0.22);
 }
 
 /* The photograph's own proportions, never taller than the screen. */

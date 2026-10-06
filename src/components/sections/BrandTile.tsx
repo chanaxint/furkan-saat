@@ -6,7 +6,7 @@ import styles from "./BrandReels.module.css";
 /** One brand tile: the brand's logo on a quiet green field; clicking opens the brand page. */
 export function BrandTile({ brand }: { brand: Brand }) {
   return (
-    <Link href={`/markalar/${brand.slug}`} prefetch={false} className={styles.tile} data-theme={brand.theme}>
+    <Link href={`/markalar/${brand.slug}`} prefetch={false} className={styles.tile} data-theme={brand.theme} data-brand={brand.slug}>
       <span className={styles.frame} data-art={brand.tile ? "" : undefined}>
         {brand.tile ? (
           <Image src={brand.tile} alt={`${brand.name} logosu`} fill sizes="(max-width: 1024px) 50vw, 25vw" className={styles.art} />

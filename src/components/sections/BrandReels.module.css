@@ -8,8 +8,9 @@
   position: relative;
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
-  background: linear-gradient(to bottom, transparent, var(--green-900) var(--overlap));
-  color: var(--ivory);
+  /* The deep cream the opening ends on, lightening to the campaign photograph's cream below. */
+  background: linear-gradient(to bottom, transparent, #a39684 var(--overlap), #bcaea0 100%);
+  color: var(--green-900);
   padding: 0 var(--gutter) clamp(80px, 10vw, 150px);
 }
 
@@ -20,7 +21,7 @@
   gap: 20px;
 }
 .marker {
-  color: var(--champagne);
+  color: #5c4f40;
 }
 .title {
   margin: 0;
@@ -31,7 +32,7 @@
   letter-spacing: -0.02em;
 }
 .title em {
-  color: var(--champagne);
+  color: #6e5a3e;
 }
 
 .grid {
@@ -57,7 +58,11 @@
   background:
     radial-gradient(70% 60% at 50% 45%, rgba(29, 70, 61, 0.55), transparent 75%),
     var(--green-850);
-  border: 1px solid var(--line-on-dark);
+  /* A fine line round each tile, and its own colour spreading into the cream around it. */
+  border: 1px solid rgba(7, 26, 22, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(255, 250, 240, 0.25),
+    0 30px 120px 10px var(--ambient, rgba(7, 26, 22, 0.2));
   transition:
     border-color 0.8s var(--ease-lux),
     background-color 0.8s var(--ease-lux);
@@ -164,8 +169,19 @@
 }
 .tile:hover .frame,
 .tile:focus-visible .frame {
-  border-color: var(--champagne-soft);
-  background-color: var(--green-800);
+  border-color: rgba(7, 26, 22, 0.5);
+}
+.tile[data-brand="casio"] {
+  --ambient: rgba(150, 156, 164, 0.75);
+}
+.tile[data-brand="daniel-klein"] {
+  --ambient: rgba(255, 255, 255, 0.85);
+}
+.tile[data-brand="essence"] {
+  --ambient: rgba(236, 186, 200, 0.8);
+}
+.tile[data-brand="freelook"] {
+  --ambient: rgba(58, 44, 30, 0.6);
 }
 .tile:hover .logo,
 .tile:focus-visible .logo {
@@ -177,14 +193,14 @@
   display: grid;
   gap: 6px;
   padding-top: 16px;
-  border-top: 1px solid var(--line-on-dark);
+  border-top: 1px solid rgba(7, 26, 22, 0.22);
 }
 .brand {
   font-size: var(--fs-small);
   font-weight: 500;
   letter-spacing: var(--tracking-caps-wide);
   text-transform: uppercase;
-  color: var(--ivory);
+  color: var(--green-900);
 }
 .tile[data-theme="gold"] .logo {
   opacity: 1;

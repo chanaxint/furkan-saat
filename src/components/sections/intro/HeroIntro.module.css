@@ -205,11 +205,13 @@
 
 /* ------------------------------------------------------------ blend */
 /*
- * Black into the house green. Clouds of green rise into the black and black
- * reaches down into the green, so the mixing itself is visible; the band ends
- * on exactly the green the site continues in (--green-900), with no seam.
+ * Black into a deep cream. Warm clouds rise into the black and black reaches
+ * down into the cream, so the mixing itself is visible; the band ends on
+ * exactly the cream the brands section continues in (--blend-end), no seam.
  */
 .blend {
+  /* Where the brands section takes over (a deeper cream, lightening below). */
+  --blend-end: #a39684;
   position: relative;
   height: 100svh;
   overflow: hidden;
@@ -217,10 +219,11 @@
     to bottom,
     var(--black) 0%,
     var(--black) 8%,
-    #06100d 34%,
-    #071713 56%,
-    var(--green-900) 76%,
-    var(--green-900) 100%
+    #1a1612 30%,
+    #4a4137 50%,
+    #7d7061 66%,
+    var(--blend-end) 82%,
+    var(--blend-end) 100%
   );
 }
 .blend::after {
@@ -240,24 +243,24 @@
   will-change: transform;
   animation: drift 20s ease-in-out infinite alternate;
 }
-/* Green rising into the black. */
+/* Cream rising into the black. */
 .mist:nth-child(1) {
   left: -14%;
   top: 14%;
   width: 72%;
   height: 40%;
-  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.85), rgba(19, 52, 45, 0.45) 45%, rgba(19, 52, 45, 0.12) 75%, transparent);
+  background: radial-gradient(closest-side, rgba(122, 108, 92, 0.75), rgba(96, 84, 71, 0.4) 45%, rgba(96, 84, 71, 0.1) 75%, transparent);
 }
 .mist:nth-child(3) {
   right: -10%;
   top: 4%;
   width: 52%;
   height: 30%;
-  background: radial-gradient(closest-side, rgba(29, 70, 61, 0.65), rgba(29, 70, 61, 0.2) 60%, transparent);
+  background: radial-gradient(closest-side, rgba(140, 125, 108, 0.55), rgba(140, 125, 108, 0.18) 60%, transparent);
   animation-duration: 26s;
   animation-direction: alternate-reverse;
 }
-/* Black reaching down into the green. */
+/* Black reaching down into the cream. */
 .mist:nth-child(2) {
   right: -8%;
   top: 34%;

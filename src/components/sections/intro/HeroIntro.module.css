@@ -233,8 +233,9 @@
   opacity: 0.035;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   /* No grain on the last stretch, which must match the next section exactly. */
-  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 80%);
-  mask-image: linear-gradient(to bottom, #000 60%, transparent 80%);
+  /* …nor on the first, which must continue the black of the film above exactly. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 80%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 30%, #000 60%, transparent 80%);
 }
 /* Soft by their own gradients (no blur filter), moved on the compositor only. */
 .mist {

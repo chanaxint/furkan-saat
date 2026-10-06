@@ -17,6 +17,18 @@
   object-fit: cover;
   object-position: 50% 30%;
 }
+/* The top edge melts into the cream the brands section ends on, so there is no seam. */
+.frame::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 3;
+  height: clamp(60px, 9%, 120px);
+  background: linear-gradient(to bottom, #c4b7a7, rgba(196, 183, 167, 0.6) 40%, transparent);
+  pointer-events: none;
+}
 
 /* The house name, huge, in gold: on the wall, behind the model. */
 .giant {

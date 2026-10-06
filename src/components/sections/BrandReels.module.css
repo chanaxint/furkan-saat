@@ -9,7 +9,7 @@
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
   /* The deep cream the opening ends on, lightening to the campaign photograph's cream below. */
-  background: linear-gradient(to bottom, transparent, #a39684 var(--overlap), #bcaea0 100%);
+  background: linear-gradient(to bottom, transparent, #a39684 var(--overlap), #c4b7a7 100%);
   color: var(--green-900);
   padding: 0 var(--gutter) clamp(80px, 10vw, 150px);
 }

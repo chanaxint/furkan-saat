@@ -67,7 +67,7 @@ export default function AboutPage() {
           <p className={`t-display ${styles.visitTitle}`}>
             Butiğimizde <em>tanışalım.</em>
           </p>
-          <ButtonLink href="/ozel-gosterim">Randevu alın</ButtonLink>
+          <ButtonLink href="/iletisim">Randevu alın</ButtonLink>
         </section>
       </main>
       <Footer />

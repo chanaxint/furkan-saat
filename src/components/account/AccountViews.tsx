@@ -50,8 +50,8 @@ export function RequestsView() {
     return (
       <Empty
         title="Henüz bir talebiniz yok."
-        text="Özel gösterim, değerleme ve takas talepleriniz burada listelenir."
-        href="/ozel-gosterim"
+        text="Bilgi ve randevu talepleriniz burada listelenir."
+        href="/iletisim"
         cta="Randevu talep edin"
       />
     );

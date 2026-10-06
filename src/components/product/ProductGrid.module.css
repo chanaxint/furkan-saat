@@ -25,3 +25,9 @@
     row-gap: 64px;
   }
 }
+
+/* Long grids: rows far off screen skip layout and paint until scrolled near. */
+.grid > li {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 560px;
+}

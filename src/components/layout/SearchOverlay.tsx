@@ -75,7 +75,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
 
         {hasQuery && (
           <div className={styles.results} aria-live="polite">
-            {results.watches.length + results.brands.length + results.articles.length === 0 && (
+            {results.watches.length + results.brands.length === 0 && (
               <p className={styles.none}>
                 “{query}” için sonuç bulunamadı. Danışmanlarımız koleksiyon dışındaki saatleri de bulabilir —{" "}
                 <Link href="/iletisim" onClick={close}>
@@ -114,21 +114,6 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                     <li key={b.slug}>
                       <Link href={`/markalar/${b.slug}`} onClick={close}>
                         {b.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            )}
-            {results.articles.length > 0 && (
-              <section>
-                <p className={styles.label}>Dergi</p>
-                <ul className={styles.articles}>
-                  {results.articles.map((a) => (
-                    <li key={a.slug}>
-                      <Link href={`/dergi/${a.slug}`} onClick={close}>
-                        <span className={styles.ref}>{a.category}</span>
-                        <span className={styles.model}>{a.title}</span>
                       </Link>
                     </li>
                   ))}

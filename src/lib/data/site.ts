@@ -34,26 +34,8 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
     links: [
       { label: "Koleksiyon", href: "/#koleksiyon" },
       { label: "Markalar", href: "/#markalar" },
-      { label: "Dergi", href: "/dergi" },
-      { label: "Karşılaştır", href: "/karsilastir" },
-    ],
-  },
-  {
-    title: "Hizmetler",
-    links: [
-      { label: "Özel gösterim", href: "/ozel-gosterim" },
-      { label: "Saatinizi satın", href: "/saatinizi-satin" },
-      { label: "Takas", href: "/takas" },
-      { label: "Orijinallik", href: "/orijinallik" },
-    ],
-  },
-  {
-    title: "Yardım",
-    links: [
-      { label: "Sık sorulanlar", href: "/sss" },
-      { label: "Teslimat", href: "/teslimat" },
-      { label: "İade", href: "/iade" },
-      { label: "Garanti", href: "/garanti" },
+      { label: "Favoriler", href: "/favoriler" },
+      { label: "Sepet", href: "/sepet" },
     ],
   },
   {
@@ -70,22 +52,18 @@ export const FOOTER_COLUMNS: { title: string; links: NavLink[] }[] = [
 export const ASSURANCES = [
   {
     title: "Orijinallik garantisi",
-    href: "/orijinallik",
     text: "Her saat, referans ve seri numarası doğrulanarak; kasa, kadran ve mekanizması tek tek incelenerek satışa sunulur.",
   },
   {
     title: "Uzman inceleme",
-    href: "/orijinallik",
     text: "Mekanizma, su geçirmezlik ve hassasiyet testleri atölyemizde yapılır; durum raporu saatle birlikte teslim edilir.",
   },
   {
     title: "Güvenli teslimat",
-    href: "/teslimat",
     text: "Sigortalı, takipli ve imza karşılığı gönderim. Dilerseniz saatinizi butikte, özel bir randevuyla teslim alın.",
   },
   {
     title: "Garanti ve iade",
-    href: "/garanti",
     text: "Her saat Furkan Saat garantisiyle teslim edilir. Teslimden sonraki 14 gün içinde, kullanılmamış saatler için iade kabul edilir.",
   },
 ];

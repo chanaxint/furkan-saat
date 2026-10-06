@@ -277,7 +277,7 @@ export function BrandStage({
             <h1 className={styles.logo}>
               <Image src={brand.logo} alt={brand.name} fill priority sizes="(max-width: 767px) 70vw, 560px" />
             </h1>
-            <button type="button" className={styles.button} onClick={() => scrollTo(next)}>
+            <button type="button" className={styles.button} onClick={() => scrollTo(next, { immediate: true })}>
               Koleksiyonu keşfedin
             </button>
           </div>

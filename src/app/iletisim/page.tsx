@@ -55,7 +55,7 @@ export default function ContactPage() {
               Görmek istediğiniz saatleri ve size uygun günü bildirin; randevunuzu teyit edelim.
             </p>
             <div className={styles.actions}>
-              <ButtonLink href="/ozel-gosterim" variant="solid">
+              <ButtonLink href="/iletisim" variant="solid">
                 Randevu talep edin
               </ButtonLink>
               <ButtonLink href={whatsappUrl("Merhaba, butikte özel bir randevu almak istiyorum.")} external>

@@ -6,11 +6,10 @@ import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
 import { Petals } from "@/components/effects/Petals";
 import { BrandShowcase } from "@/components/brand/BrandShowcase";
 import { BrandStage } from "@/components/brand/BrandStage";
-import { ArticleCard } from "@/components/journal/ArticleCard";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionMarker } from "@/components/ui/SectionMarker";
-import { getArticlesByBrand, getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
+import { getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
 import { whatsappUrl } from "@/lib/services/enquiries";
 import styles from "./page.module.css";
 
@@ -33,7 +32,7 @@ export async function generateMetadata({ params }: PageProps<"/markalar/[slug]">
 export default async function BrandPage({ params }: PageProps<"/markalar/[slug]">) {
   const brand = await getBrand((await params).slug);
   if (!brand) notFound();
-  const [products, articles] = await Promise.all([getProductsByBrand(brand.slug), getArticlesByBrand(brand.slug)]);
+  const products = await getProductsByBrand(brand.slug);
   // With a film or a 3D stage, the opening carries the name (as the logo), so
   // the watches follow it directly.
   const film = brand.film;
@@ -65,25 +64,10 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
       )}
     </section>
   );
-  const rest = (
-    <>
-      {articles.length > 0 && (
-        <section className={`container ${styles.watches}`} aria-label="Dergiden">
-          <p className={styles.label}>Dergiden</p>
-          <ul className={styles.articles}>
-            {articles.map((a) => (
-              <li key={a.slug}>
-                <ArticleCard article={a} feature />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </>
-  );
-
   const body = (
     <div id="hikaye" className={pageClass} data-nav-theme="light">
+      {/* The petals fall on over the page, behind the watches' photographs. */}
+      {scene && <Petals className={styles.scenePetals} wind />}
       {!opening && (
         <header className={`container ${styles.intro}`}>
           <div className={`rise ${styles.facts}`}>
@@ -110,7 +94,6 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
       )}
 
       {watches}
-      {rest}
       {/* The very foot of the site: the watch on gathered petals, the page above it. */}
       {scene?.carpet && (
         <div className={styles.carpet}>
@@ -147,7 +130,6 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           body
         )}
       </main>
-      {scene && <Petals className={styles.scenePetals} wind />}
       {/* A 3D stage page ends on its water film. */}
       {/* A 3D stage page ends on its water film, a scene page on its petals. */}
       {!stage && !scene && <Footer />}

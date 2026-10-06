@@ -144,11 +144,14 @@
     0 -1px 0 rgba(40, 20, 28, 0.06),
     0 -28px 70px rgba(40, 20, 28, 0.2);
 }
-/* The petals drift over the whole page (not over the bar). */
+/*
+ * The petals: a fixed layer inside the sheet, above its ground (and so over
+ * the photograph above it too) but beneath the sheet's own content.
+ */
 .scenePetals {
   position: fixed;
   inset: 0;
-  z-index: 30;
+  z-index: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
@@ -195,4 +198,8 @@
     text-align: center;
     font-size: 1.9rem;
   }
+}
+.overScene > *:not(.scenePetals) {
+  position: relative;
+  z-index: 1;
 }

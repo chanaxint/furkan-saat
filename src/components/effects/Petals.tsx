@@ -103,7 +103,7 @@ export function Petals({
       };
     };
     const resize = () => {
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = c.clientWidth;
       h = c.clientHeight;
       c.width = Math.round(w * dpr);

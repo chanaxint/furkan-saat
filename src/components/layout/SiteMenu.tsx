@@ -16,19 +16,11 @@ const MAIN = [
 
 const GROUPS = [
   {
-    title: "Hizmetler",
-    links: [
-      { label: "Özel gösterim", href: "/ozel-gosterim" },
-      { label: "Saatinizi satın", href: "/saatinizi-satin" },
-      { label: "Takas", href: "/takas" },
-    ],
-  },
-  {
     title: "Hesap",
     links: [
       { label: "Favoriler", href: "/favoriler" },
+      { label: "Sepet", href: "/sepet" },
       { label: "Hesabım", href: "/hesap" },
-      { label: "Karşılaştır", href: "/karsilastir" },
     ],
   },
 ];
@@ -89,8 +81,8 @@ export function SiteMenu({ open, onClose }: { open: boolean; onClose: () => void
       <div className={styles.footer}>
         <p className={styles.groupTitle}>Butik — {BOUTIQUE.city}</p>
         <p className={styles.hours}>{BOUTIQUE.hours}</p>
-        <Link href="/ozel-gosterim" onClick={onClose} className={styles.cta}>
-          Özel randevu alın <span aria-hidden>→</span>
+        <Link href="/iletisim" onClick={onClose} className={styles.cta}>
+          Bize ulaşın <span aria-hidden>→</span>
         </Link>
       </div>
     </Drawer>

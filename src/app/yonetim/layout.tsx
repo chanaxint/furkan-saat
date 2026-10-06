@@ -22,7 +22,6 @@ export default async function AdminLayout({ children }: LayoutProps<"/yonetim">)
         </Link>
         <nav className={styles.nav}>
           <Link href="/yonetim">Saatler ve stok</Link>
-          <Link href="/yonetim/dergi">Dergi</Link>
           <Link href="/yonetim/donusler">3D dönüşler</Link>
           <Link href="/yonetim/ayarlar">İletişim ve banka</Link>
           <Link href="/" target="_blank">

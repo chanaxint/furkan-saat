@@ -293,13 +293,8 @@ export function HeroIntro() {
         </button>
       </div>
 
-      {/* Where the black of the film mixes into the house green of the site. */}
-      <div className={styles.blend} aria-hidden>
-        <span className={styles.mist} />
-        <span className={styles.mist} />
-        <span className={styles.mist} />
-        <span className={styles.mist} />
-      </div>
+      {/* Where the black of the film turns, tone by tone, into the cream of the site. */}
+      <div className={styles.blend} aria-hidden />
     </section>
   );
 }

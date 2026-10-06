@@ -1,6 +1,5 @@
 import { ArticleCard } from "@/components/journal/ArticleCard";
 import { ArrowLink } from "@/components/ui/ArrowLink";
-import { SectionMarker } from "@/components/ui/SectionMarker";
 import { SplitText } from "@/components/ui/SplitText";
 import { getArticles } from "@/lib/services/catalog";
 import styles from "./JournalSection.module.css";
@@ -12,7 +11,6 @@ export async function JournalSection() {
     <section className={styles.section} id="dergi" data-nav-theme="light" aria-label="Dergi">
       <div className="container">
         <header className={styles.header}>
-          <SectionMarker index="02" label="Dergi" />
           <SplitText text={"Saatçiliğin\n*dünyası*"} className={`t-display ${styles.heading}`} />
         </header>
         <div className={styles.layout}>

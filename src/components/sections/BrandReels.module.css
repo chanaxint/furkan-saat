@@ -4,7 +4,7 @@
  * settles on the house green the blend ends on.
  */
 .section {
-  --overlap: 62svh;
+  --overlap: 22svh;
   position: relative;
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);

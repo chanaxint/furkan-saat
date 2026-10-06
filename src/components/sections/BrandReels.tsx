@@ -1,5 +1,4 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { SectionMarker } from "@/components/ui/SectionMarker";
 import { BRANDS } from "@/lib/data/brands";
 import { BrandTile } from "./BrandTile";
 import styles from "./BrandReels.module.css";
@@ -12,7 +11,6 @@ export function BrandReels() {
   return (
     <section className={styles.section} id="markalar" data-nav-theme="light" aria-label="Öne çıkan markalar">
       <header className={styles.header}>
-        <SectionMarker index="01" label="Markalar" className={styles.marker} />
         <h2 className={styles.title}>
           Öne çıkan <em>markalar</em>
         </h2>

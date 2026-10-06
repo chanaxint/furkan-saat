@@ -50,14 +50,22 @@ export function ShopRow({
 }
 
 function ShopCard({ product }: { product: Product }) {
-  const [cover, alt] = product.images;
+  const [cover, alt] = product.front ? [product.front, product.images[0]] : product.images;
   const brand = brandName(product.brand);
   const sizes = "(max-width: 767px) 72vw, (max-width: 1100px) 33vw, 20vw";
   return (
     <article className={styles.card}>
       <Link href={`/saat/${product.slug}`} className={styles.link}>
-        <div className={styles.media}>
-          {cover && <Image src={cover} alt={`${brand} ${product.model}`} fill sizes={sizes} className={styles.image} />}
+        <div className={styles.media} data-front={product.front ? "" : undefined}>
+          {cover && (
+            <Image
+              src={cover}
+              alt={`${brand} ${product.model}`}
+              fill
+              sizes={sizes}
+              className={`${styles.image} ${product.front ? styles.front : ""}`}
+            />
+          )}
           {alt && <Image src={alt} alt="" fill sizes={sizes} className={`${styles.image} ${styles.alt}`} />}
         </div>
         <p className={styles.name}>

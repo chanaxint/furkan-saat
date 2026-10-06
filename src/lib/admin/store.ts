@@ -80,6 +80,7 @@ export function validateProduct(input: Record<string, unknown>): Product {
     price,
     currency: oneOf(input.currency, CURRENCIES, "Para birimi"),
     images,
+    ...(typeof input.front === "string" && IMAGE.test(input.front) ? { front: input.front } : {}),
     description: str(input.description, "Açıklama"),
     specs: {
       movement: oneOf(specs.movement, MOVEMENTS, "Mekanizma"),

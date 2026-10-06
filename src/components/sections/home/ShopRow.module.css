@@ -56,6 +56,8 @@
   scroll-snap-align: start;
 }
 .section[data-variant="centred"] .row {
+  max-width: 1240px;
+  margin-inline: auto;
   grid-auto-columns: calc((100% - 3 * 16px) / 4);
   gap: 16px;
   padding: 0 var(--gutter);
@@ -77,7 +79,7 @@
 }
 .media {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   background: #e4dfd5;
 }
@@ -93,13 +95,13 @@
 /*
  * "Sepete ekle": a frosted bar over the foot of the photograph, shown on hover
  * (on touch screens a small bag button, always there). The photo is 4:5, so
- * its foot is at 125cqw from the top of the card.
+ * its foot is at 100cqw from the top of the card.
  */
 .add {
   position: absolute;
   left: 14px;
   right: 14px;
-  top: calc(125cqw - 14px);
+  top: calc(100cqw - 14px);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -144,7 +146,7 @@
   .add {
     left: auto;
     right: 10px;
-    top: calc(125cqw - 10px);
+    top: calc(100cqw - 10px);
     width: 40px;
     height: 40px;
     padding: 0;
@@ -218,4 +220,12 @@
   .head {
     flex-wrap: wrap;
   }
+}
+
+.media[data-front] {
+  background: #f3f3f1;
+}
+.front {
+  object-fit: contain;
+  padding: 8%;
 }

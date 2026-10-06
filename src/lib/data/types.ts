@@ -40,6 +40,8 @@ export type Product = {
   currency: Currency;
   /** Gallery, first image is the cover; the second is shown on hover. */
   images: string[];
+  /** The watch head-on on a white ground: when set, the card's picture (the cover then shows on hover). */
+  front?: string;
   /** Short editorial line for the watch page. */
   description: string;
   specs: ProductSpecs;

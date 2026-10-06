@@ -25,15 +25,23 @@ export function ProductCard({
   /** A gold mark over the photograph (e.g. "Haftanın saati"). */
   mark?: string;
 }) {
-  const [cover, alt] = product.images;
+  // A front shot leads, the photograph in hand comes in on hover.
+  const [cover, alt] = product.front ? [product.front, product.images[0]] : product.images;
   const name = `${brandName(product.brand)} ${product.model}`;
   const imgSizes = sizes ?? "(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw";
   return (
     <article className={styles.card} data-marked={mark ? "" : undefined}>
       <Link href={`/saat/${product.slug}`} className={styles.link}>
-        <div className={styles.media} data-tone={product.tone}>
+        <div className={styles.media} data-tone={product.tone} data-front={product.front ? "" : undefined}>
           {cover && (
-            <Image src={cover} alt={name} fill sizes={imgSizes} priority={priority} className={styles.image} />
+            <Image
+              src={cover}
+              alt={name}
+              fill
+              sizes={imgSizes}
+              priority={priority}
+              className={`${styles.image} ${product.front ? styles.front : ""}`}
+            />
           )}
           {alt && <Image src={alt} alt="" fill sizes={imgSizes} className={`${styles.image} ${styles.alt}`} />}
           {mark && <span className={styles.mark}>{mark}</span>}

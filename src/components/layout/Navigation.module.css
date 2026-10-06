@@ -20,6 +20,14 @@
   --ink: var(--green-900);
   --ground: var(--ivory);
 }
+/* Over a section of the same ivory (the sign-in screen): a shade deeper, with a hairline. */
+.nav[data-theme="light"][data-tone="deep"] {
+  --ground: #e3dccd;
+}
+.nav[data-tone="deep"]::before {
+  opacity: 1;
+  box-shadow: 0 1px 0 rgba(7, 26, 22, 0.08);
+}
 
 /* Once the page has scrolled, the bar takes the ground colour of the section beneath. */
 .nav::before {

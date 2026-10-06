@@ -65,6 +65,10 @@ export const BRANDS: Brand[] = [
     cover: "/assets/images/watches/daniel-klein-exclusive-pembe-kadran.webp",
     logo: "/assets/images/brands/daniel-klein.png",
     tile: "/assets/images/brands/tile-daniel-klein.webp",
+    watchHero: {
+      model: "/assets/models/daniel-klein-watch.glb",
+      label: "Yeşil kadranlı, çelik ve altın renkli Daniel Klein saat",
+    },
   },
   {
     slug: "essence",

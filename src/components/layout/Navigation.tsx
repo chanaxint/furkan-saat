@@ -26,6 +26,7 @@ type Mode = "immersive" | "visible" | "hidden";
 export function Navigation() {
   const [mode, setMode] = useState<Mode>("visible");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [tone, setTone] = useState<string | undefined>();
   const [solid, setSolid] = useState(false);
   const [menu, setMenu] = useState(false);
   const [searching, setSearching] = useState(false);
@@ -57,6 +58,8 @@ export function Navigation() {
 
       const themed = probe.map((el) => el.closest<HTMLElement>("[data-nav-theme]")).find(Boolean);
       setTheme((themed?.dataset.navTheme as "dark" | "light") ?? "dark");
+      // A section can ask for a deeper ground so the bar does not melt into it.
+      setTone(themed?.dataset.navTone);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -76,7 +79,7 @@ export function Navigation() {
 
   return (
     <>
-      <header className={styles.nav} data-mode={mode} data-theme={theme} data-solid={solid || undefined}>
+      <header className={styles.nav} data-mode={mode} data-theme={theme} data-tone={tone} data-solid={solid || undefined}>
         <div className={styles.inner}>
           <div className={styles.start}>
             <button className={styles.menuButton} aria-expanded={menu} onClick={() => setMenu(true)}>

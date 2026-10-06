@@ -88,6 +88,11 @@ export type Brand = {
     /** A cut-out (transparent above) laid along the foot of the page, as if petals had gathered there. */
     carpet?: string;
   };
+  /**
+   * Optional 3D opening: the watch alone, head-on at the centre of the screen,
+   * turning to follow the pointer, with the brand's name set huge behind it.
+   */
+  watchHero?: { model: string; label: string };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**

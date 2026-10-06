@@ -201,7 +201,7 @@ export function AuthScreen({ next = "/hesap", initialTab = "in", notice }: { nex
 
   if (sentTo)
     return (
-      <div className={styles.screen} data-nav-theme="light">
+      <div className={styles.screen} data-nav-theme="light" data-nav-tone="deep">
         <section className={styles.panel} aria-labelledby="dogrula-baslik">
           <h1 id="dogrula-baslik" className={styles.heading}>
             E-postanızı doğrulayın
@@ -231,7 +231,7 @@ export function AuthScreen({ next = "/hesap", initialTab = "in", notice }: { nex
     );
 
   return (
-    <div className={styles.screen} data-nav-theme="light">
+    <div className={styles.screen} data-nav-theme="light" data-nav-tone="deep">
       <section className={styles.panel}>
         <h1 className="visually-hidden">{tab === "in" ? "Üye girişi" : "Üye ol"}</h1>
         <div className={styles.tabs} role="tablist" aria-label="Üyelik">

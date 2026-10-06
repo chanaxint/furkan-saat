@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
+import { BrandWatchHero } from "@/components/brand/BrandWatchHero";
 import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
 import { Petals } from "@/components/effects/Petals";
 import { BrandShowcase } from "@/components/brand/BrandShowcase";
@@ -38,7 +39,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   const film = brand.film;
   const scene = brand.scene;
   const stage = brand.stage;
-  const opening = !!(film || scene || stage);
+  const watchHero = brand.watchHero;
+  const opening = !!(film || scene || stage || watchHero);
 
   const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ");
   const watches = (
@@ -112,6 +114,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   return (
     <>
       <main>
+        {watchHero && <BrandWatchHero name={brand.name} model={watchHero.model} label={watchHero.label} />}
         {(film || scene) && <BrandFilmHero brand={brand} next={brand.showcase ? "#yakindan" : "#saatler"} />}
         {brand.showcase && (
           <div id="yakindan" className={brand.theme === "gold" ? styles.gold : undefined}>

@@ -46,7 +46,7 @@ export function ForgotPasswordScreen({ linkFailed = false }: { linkFailed?: bool
   };
 
   return (
-    <div className={styles.screen} data-nav-theme="light">
+    <div className={styles.screen} data-nav-theme="light" data-nav-tone="deep">
       <section className={styles.panel} aria-labelledby="unuttum-baslik">
         <h1 id="unuttum-baslik" className={styles.heading}>
           Şifremi unuttum
@@ -128,7 +128,7 @@ export function ResetPasswordScreen() {
   };
 
   return (
-    <div className={styles.screen} data-nav-theme="light">
+    <div className={styles.screen} data-nav-theme="light" data-nav-tone="deep">
       <section className={styles.panel} aria-labelledby="yenile-baslik">
         <h1 id="yenile-baslik" className={styles.heading}>
           Yeni şifre

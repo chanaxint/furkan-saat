@@ -1,0 +1,39 @@
+/* Full screen, a pale studio grey; nothing but the name and the watch. */
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  background: radial-gradient(70% 70% at 50% 48%, #f6f5f2 0%, #e7e5e0 70%, #dcd9d3 100%);
+}
+/* The name, huge, centred behind the watch. */
+.name {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(3rem, 12.6vw, 16rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #141414;
+  user-select: none;
+}
+.stage {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease-soft);
+}
+.stage[data-ready] {
+  opacity: 1;
+}
+@media (max-width: 640px) {
+  .name {
+    font-size: 12.6vw;
+  }
+}

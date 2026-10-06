@@ -1,5 +1,6 @@
-import { OrdersView } from "@/components/account/AccountViews";
+import { ProfileView } from "@/components/account/AccountViews";
 
-export default function AccountOrdersPage() {
-  return <OrdersView />;
+/** Profilim: the account's first page. */
+export default function AccountPage() {
+  return <ProfileView />;
 }

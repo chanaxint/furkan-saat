@@ -26,7 +26,7 @@ export function OrderConfirmation() {
       <div className={`container ${styles.wrap}`}>
         <p className={styles.title}>Sipariş bulunamadı.</p>
         <p className={styles.muted}>Siparişleriniz, verildikleri cihazdaki hesabınızda görünür.</p>
-        <ButtonLink href="/hesap">Siparişlerim</ButtonLink>
+        <ButtonLink href="/hesap/siparisler">Siparişlerim</ButtonLink>
       </div>
     );
 
@@ -79,7 +79,7 @@ export function OrderConfirmation() {
       </section>
 
       <div className={styles.links}>
-        <ButtonLink href="/hesap">Siparişlerim</ButtonLink>
+        <ButtonLink href="/hesap/siparisler">Siparişlerim</ButtonLink>
         <ButtonLink href="/#koleksiyon" variant="line">
           Koleksiyona dönün
         </ButtonLink>

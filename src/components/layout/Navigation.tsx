@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "@/components/providers/AuthProvider";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { BagIcon, HeartIcon, PersonIcon, SearchIcon } from "@/components/product/icons";
 import { ScrollTrigger } from "@/lib/gsap";
@@ -32,6 +33,7 @@ export function Navigation() {
   const { scrollTo } = useSmoothScroll();
   const pathname = usePathname();
   const wishlist = useWishlist();
+  const auth = useAuth();
   const cart = useCart();
   const cartDrawer = useCartDrawer();
 
@@ -98,7 +100,11 @@ export function Navigation() {
               <HeartIcon />
               {wishlist.slugs.length > 0 && <sup>{wishlist.slugs.length}</sup>}
             </Link>
-            <Link href="/hesap" className={`${styles.icon} ${styles.account}`} aria-label="Hesabım">
+            <Link
+              href={auth.status === "authenticated" ? "/hesap" : "/giris"}
+              className={`${styles.icon} ${styles.account}`}
+              aria-label={auth.status === "authenticated" ? "Hesabım" : "Hesabım: giriş yapın veya üye olun"}
+            >
               <PersonIcon />
             </Link>
             <button className={styles.icon} onClick={() => cartDrawer.setOpen(true)} aria-label={`Sepet (${cart.count})`}>

@@ -15,6 +15,30 @@
 .nav a[aria-current="page"]::before {
   content: "— ";
 }
+.nav a:focus-visible,
+.signOut:focus-visible {
+  outline: 1px solid var(--green-900);
+  outline-offset: 4px;
+}
+/* Signing out closes the index, set apart by a hairline. */
+.signOut {
+  justify-self: start;
+  margin-top: 14px;
+  padding: 14px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line-on-light);
+  background: none;
+  font: inherit;
+  color: var(--text-on-light-muted);
+  cursor: pointer;
+  transition: color 0.4s var(--ease-lux);
+}
+.signOut:hover {
+  color: var(--text-on-light);
+}
+.signOut:disabled {
+  opacity: 0.6;
+}
 
 @media (max-width: 900px) {
   .nav {
@@ -23,5 +47,10 @@
     gap: 10px 24px;
     padding-bottom: 20px;
     border-bottom: 1px solid var(--line-on-light);
+  }
+  .signOut {
+    margin: 0;
+    padding: 0;
+    border: 0;
   }
 }

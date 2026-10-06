@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { ScrollLine } from "@/components/layout/ScrollLine";
 import { SiteLoader } from "@/components/layout/SiteLoader";
+import { AuthProvider } from "@/components/providers/AuthProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
@@ -33,12 +34,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preload" href="/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossOrigin="" />
       </head>
       <body>
-        <SmoothScroll>
-          <Navigation />
-          {children}
-          <ScrollLine />
-          <SiteLoader />
-        </SmoothScroll>
+        <AuthProvider>
+          <SmoothScroll>
+            <Navigation />
+            {children}
+            <ScrollLine />
+            <SiteLoader />
+          </SmoothScroll>
+        </AuthProvider>
       </body>
     </html>
   );

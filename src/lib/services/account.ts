@@ -5,10 +5,10 @@ import type { EnquiryRequest } from "./enquiries";
 import { createLocalStore } from "./localStore";
 
 /**
- * The customer account. Until sign-in exists it lives on this device: the
- * profile, saved addresses, orders and requests are kept in the browser.
- * When accounts move to a server (e.g. Supabase), replace the store calls in
- * this file; the pages use only the hook and functions exported here.
+ * What this browser remembers for checkout and requests: contact details,
+ * delivery addresses, orders placed here and appointment requests. Membership
+ * itself (sign-in, profile, saved addresses, order history, favourites) lives
+ * in Supabase — see components/providers/AuthProvider and services/customer.
  */
 
 export type Profile = { name: string; email: string; phone: string };
@@ -40,12 +40,7 @@ export type Order = {
 
 export type StoredRequest = EnquiryRequest & { id: string; createdAt: string };
 
-/** A member signed in on this device (no server yet: kept locally, the password only as a hash). */
-export type Member = { name: string; email: string; passwordHash: string };
-
 type AccountState = {
-  member?: Member | null;
-  signedIn?: boolean;
   profile: Profile | null;
   addresses: Address[];
   orders: Order[];
@@ -80,28 +75,3 @@ export const findOrder = (id: string) => store.get().orders.find((o) => o.id ===
 
 export const recordRequest = (r: EnquiryRequest) =>
   update((s) => ({ ...s, requests: [{ ...r, id: newId(), createdAt: new Date().toISOString() }, ...s.requests] }));
-
-/* ------------------------------------------------------------- membership */
-
-async function hash(text: string) {
-  const data = new TextEncoder().encode(text);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
-}
-
-/** Sign up: the member is stored on this device and signed in. */
-export async function signUp(name: string, email: string, password: string) {
-  const member = { name, email: email.trim().toLowerCase(), passwordHash: await hash(password) };
-  update((s) => ({ ...s, member, signedIn: true, profile: s.profile ?? { name, email: member.email, phone: "" } }));
-}
-
-/** Sign in: returns an error message, or null when it worked. */
-export async function signIn(email: string, password: string) {
-  const m = store.get().member;
-  if (!m || m.email !== email.trim().toLowerCase()) return "Bu e-posta ile kayıtlı bir üyelik bulunamadı.";
-  if (m.passwordHash !== (await hash(password))) return "Şifre hatalı.";
-  update((s) => ({ ...s, signedIn: true }));
-  return null;
-}
-
-export const signOut = () => update((s) => ({ ...s, signedIn: false }));

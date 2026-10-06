@@ -1,28 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { signOut, useAccount } from "@/lib/services/account";
-import { AuthScreen } from "./AuthScreen";
-import styles from "./AuthScreen.module.css";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useAuth } from "@/components/providers/AuthProvider";
+import { loginPath } from "@/lib/auth/redirect";
 
-/** The account pages show only to a signed-in member; otherwise the sign-in screen. */
+/**
+ * Account pages are rendered only for a signed-in customer (checked on the
+ * server by the proxy and the layout). This keeps watch in the browser: if
+ * the session ends while a page is open — it expires, or the customer signs
+ * out in another tab — it goes to the sign-in page, back here afterwards.
+ */
 export function AccountGate({ children }: { children: React.ReactNode }) {
-  const account = useAccount();
-  // The account lives in this browser: render nothing until it has been read.
-  const [ready, setReady] = useState(false);
-  useEffect(() => setReady(true), []);
-  // The bar samples what is beneath it on scroll: have it look again once the screen is in.
+  const { status, expired, signedOutHere } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
   useEffect(() => {
-    if (ready) requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
-  }, [ready, account.signedIn]);
-  if (!ready) return <div style={{ minHeight: "100svh" }} />;
-  if (!account.signedIn) return <AuthScreen />;
-  return (
-    <>
-      {children}
-      <button type="button" className={styles.signOut} onClick={signOut}>
-        Çıkış yap
-      </button>
-    </>
-  );
+    // Signing out with "Çıkış yap" leads on by itself (AccountNav).
+    if (status === "unauthenticated" && !signedOutHere)
+      router.replace(loginPath(pathname, expired ? { oturum: "sona-erdi" } : undefined));
+  }, [status, expired, signedOutHere, pathname, router]);
+
+  // The bar samples what is beneath it on scroll: have it look again once the page is in.
+  useEffect(() => {
+    requestAnimationFrame(() => window.dispatchEvent(new Event("scroll")));
+  }, []);
+
+  return <>{children}</>;
 }

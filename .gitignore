@@ -6,3 +6,8 @@ next-env.d.ts
 .env*.local
 .DS_Store
 .vercel
+
+# Environment files hold secrets (Supabase keys): never committed. Only the example is.
+.env
+.env.*
+!.env.example

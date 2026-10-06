@@ -1,5 +1,6 @@
-import { ProfileView } from "@/components/account/AccountViews";
+import { redirect } from "next/navigation";
 
+/** The profile is the account's first page now. */
 export default function AccountProfilePage() {
-  return <ProfileView />;
+  redirect("/hesap");
 }

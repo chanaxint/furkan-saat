@@ -1,9 +1,13 @@
 -- A minimal stand-in for what Supabase provides, so the migrations and the RLS
 -- tests can run on a plain local PostgreSQL (scripts/test-db.sh). Never run
 -- this on a Supabase project: there, these objects already exist.
-create role anon nologin;
-create role authenticated nologin;
-create role service_role nologin bypassrls;
+-- Roles belong to the whole server: create them only once.
+do $$
+begin
+  if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon nologin; end if;
+  if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated nologin; end if;
+  if not exists (select 1 from pg_roles where rolname = 'service_role') then create role service_role nologin bypassrls; end if;
+end $$;
 
 create schema auth;
 create table auth.users (

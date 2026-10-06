@@ -1,19 +1,32 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { useAuth } from "@/components/providers/AuthProvider";
 import styles from "./AccountNav.module.css";
 
 const LINKS = [
-  { href: "/hesap", label: "Siparişler" },
-  { href: "/hesap/favoriler", label: "Favoriler" },
+  { href: "/hesap", label: "Profilim" },
+  { href: "/hesap/adresler", label: "Adreslerim" },
+  { href: "/hesap/siparisler", label: "Siparişlerim" },
+  { href: "/hesap/favoriler", label: "Favorilerim" },
   { href: "/hesap/talepler", label: "Randevu ve talepler" },
-  { href: "/hesap/adresler", label: "Adresler" },
-  { href: "/hesap/profil", label: "Profil" },
 ];
 
 export function AccountNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { signOut } = useAuth();
+  const [leaving, setLeaving] = useState(false);
+
+  const leave = async () => {
+    setLeaving(true);
+    await signOut();
+    router.replace("/giris?cikis=tamam");
+    router.refresh();
+  };
+
   return (
     <nav className={styles.nav} aria-label="Hesabım">
       {LINKS.map((l) => (
@@ -21,6 +34,9 @@ export function AccountNav() {
           {l.label}
         </Link>
       ))}
+      <button type="button" className={styles.signOut} onClick={leave} disabled={leaving}>
+        {leaving ? "Çıkış yapılıyor…" : "Çıkış yap"}
+      </button>
     </nav>
   );
 }

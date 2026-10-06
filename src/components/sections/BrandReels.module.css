@@ -233,3 +233,8 @@
     transform: none;
   }
 }
+
+.anchor {
+  display: block;
+  height: 0;
+}

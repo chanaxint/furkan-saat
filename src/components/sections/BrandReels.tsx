@@ -10,20 +10,32 @@ import styles from "./BrandReels.module.css";
  */
 export function BrandReels() {
   return (
-    <section className={styles.section} id="markalar" data-nav-theme="light" aria-label="Öne çıkan markalar">
-      <header className={styles.header}>
-        <h2 className={styles.title}>
-          Öne çıkan <em>markalar</em>
-        </h2>
-      </header>
-      <Reveal as="ul" className={styles.grid} stagger={0.1}>
-        {BRANDS.map((b) => (
-          <li key={b.slug}>
-            <BrandTile brand={b} />
-          </li>
-        ))}
-      </Reveal>
-      <PinFoot />
-    </section>
+    <>
+      {/*
+       * The link target sits in the normal flow: the section itself is sticky,
+       * so its on-screen position (what scrolling to it would measure) is where
+       * it is pinned, not where it starts.
+       */}
+      <span id="markalar" className={styles.anchor} aria-hidden />
+      <section
+        className={styles.section}
+        data-nav-theme="light"
+        aria-label="Öne çıkan markalar"
+      >
+        <header className={styles.header}>
+          <h2 className={styles.title}>
+            Öne çıkan <em>markalar</em>
+          </h2>
+        </header>
+        <Reveal as="ul" className={styles.grid} stagger={0.1}>
+          {BRANDS.map((b) => (
+            <li key={b.slug}>
+              <BrandTile brand={b} />
+            </li>
+          ))}
+        </Reveal>
+        <PinFoot />
+      </section>
+    </>
   );
 }

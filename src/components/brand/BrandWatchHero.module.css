@@ -32,8 +32,85 @@
 .stage[data-ready] {
   opacity: 1;
 }
+/*
+ * Frosted panes in the four corners, clear of the name (the middle band) and
+ * the watch (the centre). Empty glass; the note rises in on hover or focus.
+ */
+.pane {
+  position: absolute;
+  z-index: 2;
+  width: min(26vw, 340px);
+  height: min(26vh, 220px);
+  padding: clamp(18px, 1.8vw, 28px);
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.22);
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 20px 50px rgba(20, 20, 20, 0.08);
+  color: #141414;
+  cursor: default;
+  outline: none;
+  transition:
+    background-color 0.6s var(--ease-soft),
+    box-shadow 0.6s var(--ease-soft),
+    transform 0.8s var(--ease-lux);
+}
+.pane[data-corner="0"] { top: calc(var(--nav-h) * 0.6); left: 4vw; }
+.pane[data-corner="1"] { top: calc(var(--nav-h) * 0.6); right: 4vw; }
+.pane[data-corner="2"] { bottom: 6vh; left: 4vw; }
+.pane[data-corner="3"] { bottom: 6vh; right: 4vw; }
+.pane:hover,
+.pane:focus-visible {
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 26px 60px rgba(20, 20, 20, 0.12);
+  transform: translateY(-3px);
+}
+.pane:focus-visible {
+  box-shadow:
+    inset 0 0 0 1px #141414,
+    0 26px 60px rgba(20, 20, 20, 0.12);
+}
+.paneText {
+  display: grid;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.5s var(--ease-soft),
+    transform 0.7s var(--ease-lux);
+}
+.pane:hover .paneText,
+.pane:focus-visible .paneText {
+  opacity: 1;
+  transform: none;
+}
+.paneTitle {
+  margin: 0;
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.paneBody {
+  margin: 0;
+  font-size: var(--fs-small);
+  line-height: 1.55;
+  color: rgba(20, 20, 20, 0.78);
+}
+
 @media (max-width: 640px) {
   .name {
     font-size: 12.6vw;
+  }
+  /* Phones: no hover, and no room in the corners. */
+  .pane {
+    display: none;
   }
 }

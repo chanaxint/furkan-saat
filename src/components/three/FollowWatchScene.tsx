@@ -38,7 +38,7 @@ export default function FollowWatchScene({
   return (
     <Canvas
       frameloop={active ? "always" : "never"}
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 7], fov: 30, near: 0.1, far: 50 }}
       gl={{ antialias: true, alpha: true, powerPreference: "high-performance", outputColorSpace: SRGBColorSpace, toneMapping: ACESFilmicToneMapping }}
       style={{ position: "absolute", inset: 0 }}
@@ -76,7 +76,7 @@ function Watch({ model, facing, onReady }: { model: string; facing: [number, num
     const box = new Box3().setFromObject(clone);
     const size = box.getSize(new Vector3());
     const centre = box.getCenter(new Vector3());
-    const scale = 2.55 / Math.max(size.x, size.y);
+    const scale = 2.1 / Math.max(size.x, size.y);
     clone.position.sub(centre).multiplyScalar(scale);
     clone.scale.setScalar(scale);
     return clone;
@@ -89,9 +89,11 @@ function Watch({ model, facing, onReady }: { model: string; facing: [number, num
     if (!g) return;
     const t = state.clock.elapsedTime;
     // With a pointer: look towards it. Without one: a slow, small sway.
-    const tx = pointer.moved ? pointer.x * 0.5 : Math.sin(t * 0.5) * 0.18;
-    const ty = pointer.moved ? pointer.y * 0.32 : Math.sin(t * 0.37) * 0.08;
-    const k = 1 - Math.exp(-dt * 4);
+    // Aim the dial at the pointer: the angle to where it sits on a plane in front of the watch.
+    const tx = pointer.moved ? Math.atan(pointer.x * 1.2) : Math.sin(t * 0.5) * 0.18;
+    const ty = pointer.moved ? Math.atan(pointer.y * 0.8) : Math.sin(t * 0.37) * 0.08;
+    // Close follow, frame-rate independent (no lag, no jitter at 60/120 Hz).
+    const k = 1 - Math.exp(-Math.min(dt, 0.05) * 14);
     g.rotation.y = MathUtils.lerp(g.rotation.y, tx, k);
     g.rotation.x = MathUtils.lerp(g.rotation.x, ty, k);
     g.position.y = Math.sin(t * 0.8) * 0.03;

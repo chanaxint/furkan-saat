@@ -92,7 +92,12 @@ export type Brand = {
    * Optional 3D opening: the watch alone, head-on at the centre of the screen,
    * turning to follow the pointer, with the brand's name set huge behind it.
    */
-  watchHero?: { model: string; label: string };
+  watchHero?: {
+    model: string;
+    label: string;
+    /** Up to four notes in frosted panes at the screen's corners, read on hover. */
+    notes?: { title: string; text: string }[];
+  };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**

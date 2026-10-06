@@ -114,7 +114,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   return (
     <>
       <main>
-        {watchHero && <BrandWatchHero name={brand.name} model={watchHero.model} label={watchHero.label} />}
+        {watchHero && <BrandWatchHero name={brand.name} model={watchHero.model} label={watchHero.label} notes={watchHero.notes} />}
         {(film || scene) && <BrandFilmHero brand={brand} next={brand.showcase ? "#yakindan" : "#saatler"} />}
         {brand.showcase && (
           <div id="yakindan" className={brand.theme === "gold" ? styles.gold : undefined}>

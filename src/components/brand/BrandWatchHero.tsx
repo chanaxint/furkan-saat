@@ -9,9 +9,21 @@ const FollowWatchScene = dynamic(() => import("@/components/three/FollowWatchSce
 /**
  * A brand page opening with nothing on screen but the watch, head-on at the
  * centre and following the pointer, and the house's name set huge behind it.
+ * Four frosted panes sit in the corners, empty until the pointer (or focus)
+ * reaches one: then it tells something about the watch or the house.
  * The site's bar steps aside while it fills the screen.
  */
-export function BrandWatchHero({ name, model, label }: { name: string; model: string; label: string }) {
+export function BrandWatchHero({
+  name,
+  model,
+  label,
+  notes = [],
+}: {
+  name: string;
+  model: string;
+  label: string;
+  notes?: { title: string; text: string }[];
+}) {
   const root = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(true);
   const [ready, setReady] = useState(false);
@@ -44,6 +56,14 @@ export function BrandWatchHero({ name, model, label }: { name: string; model: st
       <div className={styles.stage} data-ready={ready || undefined} role="img" aria-label={label}>
         <FollowWatchScene model={model} active={visible} onReady={() => setReady(true)} />
       </div>
+      {notes.slice(0, 4).map((n, i) => (
+        <div key={n.title} className={styles.pane} data-corner={i} tabIndex={0} aria-label={`${n.title}: ${n.text}`}>
+          <div className={styles.paneText} aria-hidden>
+            <p className={styles.paneTitle}>{n.title}</p>
+            <p className={styles.paneBody}>{n.text}</p>
+          </div>
+        </div>
+      ))}
     </section>
   );
 }

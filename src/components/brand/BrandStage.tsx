@@ -46,8 +46,6 @@ const BUBBLES: [number, number, number, number, number][] = [
   [3, 92, 6, 4.8, 1.1],
   [-6, 95, 4, 4.2, 3.3],
 ];
-/** The drop starts when the collection's lower edge has risen this far up the screen. */
-const DROP_START = "top 88%";
 
 export function BrandStage({
   brand,
@@ -69,7 +67,6 @@ export function BrandStage({
   const hero = useRef<HTMLElement>(null);
   const title = useRef<HTMLDivElement>(null);
   const scene = useRef<HTMLDivElement>(null);
-  const back = useRef<HTMLElement>(null);
   const film = useRef<HTMLVideoElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
@@ -121,10 +118,31 @@ export function BrandStage({
     // Two stretches of scroll: the scenes while the opening is pinned, then the
     // last turn while the collection rises over the watch like a layer of its
     // own — the watch spins down and goes in beneath it.
-    const { total } = sceneTimes(motion);
+    const { total, times } = sceneTimes(motion);
     const exit = exitStart(motion);
+    // The drop film takes over once the watch has turned into the second-last
+    // scene: that pose matches the film's first frame, so the 3D watch is what
+    // falls into the water.
+    const sc = scene.current!;
+    const drop = film.current;
+    const wetAt = drop && times.length > 2 ? times[times.length - 2].arrive : Infinity;
     const clock = { p: 0 };
     let gone = false;
+    let wet = false;
+    const set = (key: "film" | "splash" | "said", on: boolean) => {
+      if (on) sc.dataset[key] = "";
+      else delete sc.dataset[key];
+    };
+    const soak = (on: boolean) => {
+      if (!drop || on === wet) return;
+      wet = on;
+      set("film", on);
+      set("splash", false);
+      set("said", false);
+      drop.pause();
+      drop.currentTime = 0;
+      if (on) drop.play().catch(() => {});
+    };
     const time = () => {
       const h = hero.current!;
       const vh = window.innerHeight;
@@ -133,11 +151,13 @@ export function BrandStage({
       return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
     };
     const draw = () => {
-      const o = sampleStage(motion, time(), state, stage.lines.length);
+      const t = time();
+      const o = sampleStage(motion, t, state, stage.lines.length);
       applyOverlay(o, title.current, lines.current, sides);
+      soak(t >= wetAt - 0.02);
       scene.current?.style.setProperty("--show", gone ? "0" : state.show.toFixed(3));
-      // Once it has faded, or the collection covers it, there is nothing to draw.
-      if (!gone && state.show > 0.005) wake.current();
+      // Once it has faded, is in the film, or the collection covers it, there is nothing to draw.
+      if (!gone && !wet && state.show > 0.005) wake.current();
     };
     draw();
     const tl = gsap.to(clock, { p: 1, ease: "none", onUpdate: draw });
@@ -163,37 +183,11 @@ export function BrandStage({
       },
     });
 
-    // After the collection: the water film. As the collection's lower edge
-    // rises, the watch drops out from under it into the water ("Su geçirmez"
-    // as it goes in); then it rests there, bubbles rising, the words beside it.
-    const sc = scene.current!;
-    const drop = film.current;
-    const water = back.current;
-    if (!drop || !water) return;
-    const set = (key: "film" | "splash" | "said", on: boolean) => {
-      if (on) sc.dataset[key] = "";
-      else delete sc.dataset[key];
-    };
-    const reset = () => {
-      drop.pause();
-      drop.currentTime = 0;
-      set("splash", false);
-      set("said", false);
-    };
-    ScrollTrigger.create({ trigger: water, start: "top bottom", end: "bottom top", onToggle: (self) => set("film", self.isActive) });
-    ScrollTrigger.create({
-      trigger: water,
-      start: DROP_START,
-      onEnter: () => {
-        reset();
-        drop.play().catch(() => {});
-      },
-      onLeaveBack: reset,
-    });
-    // The film ends on the watch at rest; it stays on that frame, with the bubbles going on over it.
+    // In the water: "Su geçirmez" as it goes in; then it rests, bubbles rising, the words beside it.
+    if (!drop) return;
     const onTime = () => {
-      set("splash", drop.currentTime >= SPLASH_AT);
-      set("said", drop.currentTime >= SAID_AT);
+      set("splash", wet && drop.currentTime >= SPLASH_AT);
+      set("said", wet && drop.currentTime >= SAID_AT);
     };
     drop.addEventListener("timeupdate", onTime);
     drop.addEventListener("ended", onTime);
@@ -302,7 +296,6 @@ export function BrandStage({
       </section>
 
       <div className={styles.over}>{children}</div>
-      {stage.film && <section ref={back} className={styles.back} aria-hidden />}
       {rest && <div className={styles.over}>{rest}</div>}
     </div>
   );

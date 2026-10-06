@@ -178,23 +178,30 @@
   }
 }
 
-/*
- * After the collection: the stretch of scroll over the water film (fixed in
- * the scene, revealed as the collection rises off it; shown with data-film).
- */
-.back {
-  position: relative;
-  height: 190svh;
-  pointer-events: none;
-}
+/* The water film, in the fixed scene: shown (data-film) once the 3D watch hands over to it. */
 .film {
   position: absolute;
   inset: 0;
   visibility: hidden;
+  opacity: 0;
   background: #c9d6d8;
+  transition:
+    opacity 0.45s var(--ease-soft),
+    visibility 0s linear 0.45s;
 }
+/*
+ * The hand-over: the film's first frame matches the watch's last pose, and
+ * it fades in over it (seamless on wide screens; a soft dissolve on phones,
+ * where the film is cropped differently). The 3D layer goes once it is covered.
+ */
 .scene[data-film] .film {
   visibility: visible;
+  opacity: 1;
+  transition: opacity 0.45s var(--ease-soft);
+}
+.scene[data-film] .canvas {
+  opacity: 0;
+  transition: opacity 0s linear 0.45s;
 }
 .film video {
   position: absolute;

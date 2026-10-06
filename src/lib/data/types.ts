@@ -133,7 +133,11 @@ export type BrandStageDef = {
   eyebrow: string;
   /** What is said beside the close-ups: the name on the dial, then the bracelet. */
   lines: [StageLineDef, StageLineDef];
-  /** After the collection: the watch dropping into water and coming to rest in it (played once). */
+  /**
+   * The end of the opening: the watch dropping into water and coming to rest
+   * in it (played once). Its first frame matches the stage's second-last
+   * scene, where the 3D watch hands over to the film.
+   */
   film?: { drop: StageFilm & { poster: string } };
   /** In the water: the title as the watch goes in, then eyebrow and text beside it. */
   water?: { eyebrow: string; title: string; accent: string; text: string };

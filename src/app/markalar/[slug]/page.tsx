@@ -135,8 +135,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           body
         )}
       </main>
-      {/* A 3D stage page ends on its water film. */}
-      {/* A 3D stage page ends on its water film, a scene page on its petals. */}
+      {/* A scene page ends on its petals; a 3D stage page on its collection (its water film closes the opening). */}
       {!stage && !scene &&
         (brand.foot ? (
           // The page ends on the house's own photograph, edge to edge.

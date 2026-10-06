@@ -72,7 +72,7 @@ export const BRANDS: Brand[] = [
         { title: "Suya dayanıklı", text: "Günlük kullanımda yağmura, el yıkamaya ve sıçrayan suya dayanır. Yüzme ve duş için uygun değildir." },
         { title: "Kuvars mekanizma", text: "Pille çalışan hassas kuvars mekanizma: kurma gerektirmez, tarih penceresiyle her gün hazır." },
         { title: "Bicolor çelik bilezik", text: "Paslanmaz çelik kasa ve bilezik; altın renk kaplı halkalar yeşil kadranla buluşur." },
-        { title: "Daniel Klein", text: "1998'den beri Hong Kong'da. Seksenden fazla ülkede güncel tasarımı ulaşılabilir kılan imza marka." },
+        { title: "Daniel Klein", lang: "en", text: "1998'den beri Hong Kong'da. Seksenden fazla ülkede güncel tasarımı ulaşılabilir kılan imza marka." },
       ],
     },
   },

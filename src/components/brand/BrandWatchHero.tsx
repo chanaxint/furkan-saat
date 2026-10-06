@@ -22,7 +22,7 @@ export function BrandWatchHero({
   name: string;
   model: string;
   label: string;
-  notes?: { title: string; text: string }[];
+  notes?: { title: string; text: string; lang?: string }[];
 }) {
   const root = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(true);
@@ -59,7 +59,9 @@ export function BrandWatchHero({
       {notes.slice(0, 4).map((n, i) => (
         <div key={n.title} className={styles.pane} data-corner={i} tabIndex={0} aria-label={`${n.title}: ${n.text}`}>
           <div className={styles.paneText} aria-hidden>
-            <p className={styles.paneTitle}>{n.title}</p>
+            <p className={styles.paneTitle} lang={n.lang}>
+              {n.title}
+            </p>
             <p className={styles.paneBody}>{n.text}</p>
           </div>
         </div>

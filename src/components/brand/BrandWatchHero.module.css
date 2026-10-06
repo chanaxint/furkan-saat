@@ -33,76 +33,93 @@
   opacity: 1;
 }
 /*
- * Frosted panes in the four corners, clear of the name (the middle band) and
- * the watch (the centre). Empty glass; the note rises in on hover or focus.
+ * Notes in the four corners, clear of the name (the middle band) and the
+ * watch (the centre): only their titles show; the text opens on hover or focus.
  */
 .pane {
   position: absolute;
   z-index: 2;
-  width: min(26vw, 340px);
-  height: min(26vh, 220px);
-  padding: clamp(18px, 1.8vw, 28px);
-  display: flex;
-  align-items: flex-end;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.22);
-  -webkit-backdrop-filter: blur(18px) saturate(1.15);
-  backdrop-filter: blur(18px) saturate(1.15);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.6),
-    0 20px 50px rgba(20, 20, 20, 0.08);
+  width: min(24vw, 300px);
+  padding: 10px 0;
   color: #141414;
   cursor: default;
   outline: none;
-  transition:
-    background-color 0.6s var(--ease-soft),
-    box-shadow 0.6s var(--ease-soft),
-    transform 0.8s var(--ease-lux);
 }
-.pane[data-corner="0"] { top: calc(var(--nav-h) * 0.6); left: 4vw; }
-.pane[data-corner="1"] { top: calc(var(--nav-h) * 0.6); right: 4vw; }
-.pane[data-corner="2"] { bottom: 6vh; left: 4vw; }
-.pane[data-corner="3"] { bottom: 6vh; right: 4vw; }
-.pane:hover,
+.pane[data-corner="0"] { top: calc(var(--nav-h) * 0.9); left: 5vw; }
+.pane[data-corner="1"] { top: calc(var(--nav-h) * 0.9); right: 5vw; text-align: right; }
+.pane[data-corner="2"] { bottom: 9vh; left: 5vw; }
+.pane[data-corner="3"] { bottom: 9vh; right: 5vw; text-align: right; }
 .pane:focus-visible {
-  background: rgba(255, 255, 255, 0.5);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 26px 60px rgba(20, 20, 20, 0.12);
-  transform: translateY(-3px);
-}
-.pane:focus-visible {
-  box-shadow:
-    inset 0 0 0 1px #141414,
-    0 26px 60px rgba(20, 20, 20, 0.12);
+  outline: 1px solid #141414;
+  outline-offset: 8px;
 }
 .paneText {
   display: grid;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0.5s var(--ease-soft),
-    transform 0.7s var(--ease-lux);
-}
-.pane:hover .paneText,
-.pane:focus-visible .paneText {
-  opacity: 1;
-  transform: none;
+  gap: 0;
 }
 .paneTitle {
   margin: 0;
   font-size: var(--fs-micro);
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
+}
+/* A short rule under the title that lengthens on hover. */
+.paneTitle::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 1px;
+  margin-top: 10px;
+  background: currentColor;
+  transition: width 0.7s var(--ease-lux);
+}
+.pane[data-corner="1"] .paneTitle::after,
+.pane[data-corner="3"] .paneTitle::after {
+  margin-left: auto;
+}
+.pane:hover .paneTitle::after,
+.pane:focus-visible .paneTitle::after {
+  width: 64px;
 }
 .paneBody {
   margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
   font-size: var(--fs-small);
-  line-height: 1.55;
-  color: rgba(20, 20, 20, 0.78);
+  line-height: 1.6;
+  color: rgba(20, 20, 20, 0.75);
+  transition:
+    max-height 0.6s var(--ease-lux),
+    margin-top 0.6s var(--ease-lux),
+    opacity 0.5s var(--ease-soft),
+    transform 0.6s var(--ease-lux);
+}
+.pane:hover .paneBody,
+.pane:focus-visible .paneBody {
+  max-height: 8em;
+  margin-top: 12px;
+  opacity: 1;
+  transform: none;
+}
+/* Corners at the foot open upwards (the title stays put). */
+.pane[data-corner="2"] .paneText,
+.pane[data-corner="3"] .paneText {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.pane[data-corner="2"] .paneBody,
+.pane[data-corner="3"] .paneBody {
+  transform: translateY(4px);
+}
+.pane[data-corner="2"]:hover .paneBody,
+.pane[data-corner="3"]:hover .paneBody,
+.pane[data-corner="2"]:focus-visible .paneBody,
+.pane[data-corner="3"]:focus-visible .paneBody {
+  margin: 0 0 12px;
+  transform: none;
 }
 
 @media (max-width: 640px) {

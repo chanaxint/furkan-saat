@@ -96,7 +96,7 @@ export type Brand = {
     model: string;
     label: string;
     /** Up to four notes in frosted panes at the screen's corners, read on hover. */
-    notes?: { title: string; text: string }[];
+    notes?: { title: string; text: string; /** e.g. "en" for a brand name, so capitals are not Turkish-dotted. */ lang?: string }[];
   };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;

@@ -223,9 +223,10 @@
 }
 
 .media[data-front] {
-  background: #f3f3f1;
+  background: #fff;
 }
 .front {
   object-fit: contain;
-  padding: 8%;
+  padding: 6%;
+  mix-blend-mode: multiply;
 }

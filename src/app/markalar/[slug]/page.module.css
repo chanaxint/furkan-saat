@@ -275,9 +275,10 @@
 .footPhoto {
   position: relative;
   width: 100%;
-  /* The gap above it in the page's own ivory, not the site's dark ground. */
-  border-top: var(--space-xl) solid var(--ivory);
-  box-sizing: content-box;
+}
+/* The page above it ends a breath after the last watch. */
+.withFoot {
+  padding-bottom: clamp(28px, 3vw, 48px);
 }
 .footPhoto img {
   object-fit: cover;

@@ -42,7 +42,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   const watchHero = brand.watchHero;
   const opening = !!(film || scene || stage || watchHero);
 
-  const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ");
+  const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : "", brand.foot ? styles.withFoot : ""].join(" ");
   const watches = (
     <section
       id="saatler"

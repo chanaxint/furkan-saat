@@ -258,6 +258,13 @@
   box-shadow: inset 0 0 0 1px rgba(196, 128, 148, 0.45);
 }
 
+/* Freelook: every four watches on their own band, deep espresso and warm bronze in turn, over the marble. */
+.gold {
+  --band-a: rgba(22, 16, 11, 0.78);
+  --band-b: rgba(74, 52, 30, 0.62);
+  --band-line: rgba(201, 164, 92, 0.32);
+}
+
 .gold :global(article) > a > div[data-front] {
   -webkit-backdrop-filter: blur(16px) saturate(1.1);
   backdrop-filter: blur(16px) saturate(1.1);

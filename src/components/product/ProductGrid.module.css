@@ -37,3 +37,44 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 420px;
 }
+
+/*
+ * Bands: every four watches on a band the full width of the screen. The band
+ * spreads past the container with a box-shadow of its own colour, clipped
+ * to its height.
+ */
+.band {
+  position: relative;
+  padding-block: clamp(36px, 4.5vw, 64px);
+  background: var(--band-a, transparent);
+  box-shadow: 0 0 0 100vmax var(--band-a, transparent);
+  clip-path: inset(0 -100vmax);
+}
+/* A fine line between bands, edge to edge like the band itself. */
+.band::before,
+.band:last-child::after {
+  content: "";
+  position: absolute;
+  left: -100vmax;
+  right: -100vmax;
+  top: 0;
+  height: 1px;
+  background: var(--band-line, transparent);
+}
+.band:last-child::after {
+  top: auto;
+  bottom: 0;
+}
+.band:nth-child(even) {
+  background: var(--band-b, transparent);
+  box-shadow: 0 0 0 100vmax var(--band-b, transparent);
+}
+/* Four on desktop; on smaller screens the four wrap within their band. */
+.bandGrid {
+  row-gap: clamp(32px, 4vw, 48px);
+}
+@media (max-width: 1100px) {
+  .bandGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -51,7 +51,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
         {products.length > 0 ? `Koleksiyonda · ${products.length} saat` : "Koleksiyonda"}
       </p>
       {products.length > 0 ? (
-        <ProductGrid products={products} priorityCount={3} />
+        <ProductGrid products={products} priorityCount={3} bands={brand.theme === "gold"} />
       ) : (
         <div className={styles.empty}>
           <p className={styles.emptyText}>

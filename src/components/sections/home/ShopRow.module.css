@@ -56,8 +56,6 @@
   scroll-snap-align: start;
 }
 .section[data-variant="centred"] .row {
-  max-width: 1240px;
-  margin-inline: auto;
   grid-auto-columns: calc((100% - 3 * 16px) / 4);
   gap: 16px;
   padding: 0 var(--gutter);
@@ -222,11 +220,11 @@
   }
 }
 
+/* A shade lighter than the ground of the section it sits in (set per page via --tile-bg). */
 .media[data-front] {
-  background: #fff;
+  background: var(--tile-bg, #f8f5ef);
 }
 .front {
   object-fit: contain;
   padding: 6%;
-  mix-blend-mode: multiply;
 }

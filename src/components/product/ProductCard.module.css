@@ -214,11 +214,11 @@
  * With a front shot (the watch head-on on white): it is the picture, set on a
  * pale studio grey, and the photograph in hand fades in on hover.
  */
+/* A shade lighter than the ground of the section it sits in (set per page via --tile-bg). */
 .media[data-front] {
-  background: #fff;
+  background: var(--tile-bg, #f8f5ef);
 }
 .front {
   object-fit: contain;
   padding: 6%;
-  mix-blend-mode: multiply;
 }

@@ -224,3 +224,14 @@
 .overScene > .carpet {
   z-index: -1;
 }
+
+/* The front shots' tiles: a shade lighter than each brand's own ground. */
+.gold {
+  --tile-bg: rgba(255, 244, 228, 0.1);
+}
+.overStage {
+  --tile-bg: #f6f6f4;
+}
+.overScene {
+  --tile-bg: #faf6f2;
+}

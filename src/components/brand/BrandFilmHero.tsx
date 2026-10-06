@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { SceneMusic } from "@/components/effects/SceneMusic";
 import type { Brand } from "@/lib/data/types";
 import styles from "./BrandFilmHero.module.css";
 
@@ -13,7 +14,8 @@ import styles from "./BrandFilmHero.module.css";
  * again on the way back.
  *
  * A brand with a `scene` instead opens on a still photograph that stays put
- * while the page rises over it (the petals and music are the page's own).
+ * while the page rises over it, with its music's small switch (the petals
+ * are the page's own).
  */
 export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
   const root = useRef<HTMLElement>(null);
@@ -55,6 +57,8 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
       {scene ? (
         <>
           <Image src={scene.image} alt={scene.alt} fill priority sizes="100vw" className={styles.video} />
+          {/* The music's switch lives on the photograph only (the music plays on). */}
+          <SceneMusic src={scene.music} label={`${brand.name} müziği`} className={styles.music} />
         </>
       ) : (
         film && (

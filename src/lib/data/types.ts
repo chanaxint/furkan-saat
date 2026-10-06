@@ -77,7 +77,13 @@ export type Brand = {
    * Optional opening as a still photograph instead of a film, with cherry
    * petals drifting over it and music that loops (starts on the first click).
    */
-  scene?: { image: string; alt: string; music: { m4a: string; mp3: string } };
+  scene?: {
+    image: string;
+    alt: string;
+    music: { m4a: string; mp3: string };
+    /** A cut-out (transparent above) laid along the foot of the page, as if petals had gathered there. */
+    carpet?: string;
+  };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**

@@ -13,7 +13,16 @@ const VOLUME = 0.55;
  * Browsers only allow sound after a click, tap or key press, so it starts on
  * the first one; a small button turns it off and on (remembered).
  */
-export function SceneMusic({ src, label = "Müzik" }: { src: { m4a: string; mp3: string }; label?: string }) {
+export function SceneMusic({
+  src,
+  label = "Müzik",
+  className,
+}: {
+  src: { m4a: string; mp3: string };
+  label?: string;
+  /** Where the switch sits (positioned by the caller). */
+  className?: string;
+}) {
   const [on, setOn] = useState(false);
   const want = useRef(true);
   const button = useRef<HTMLButtonElement>(null);
@@ -122,7 +131,7 @@ export function SceneMusic({ src, label = "Müzik" }: { src: { m4a: string; mp3:
     <button
       ref={button}
       type="button"
-      className={styles.toggle}
+      className={`${styles.toggle} ${className ?? ""}`}
       data-on={on || undefined}
       onClick={toggle}
       aria-pressed={on}
@@ -134,7 +143,6 @@ export function SceneMusic({ src, label = "Müzik" }: { src: { m4a: string; mp3:
         <i />
         <i />
       </span>
-      <span className={styles.text}>{on ? "Ses açık" : "Ses kapalı"}</span>
     </button>
   );
 }

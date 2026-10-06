@@ -78,6 +78,7 @@ export const BRANDS: Brand[] = [
       image: "/assets/images/brands/essence-sakura.jpg",
       alt: "Kiraz çiçekleri altında taş yolda duran sedef kadranlı, taşlı çerçeveli Essence saat",
       music: { m4a: "/assets/audio/essence-japon.m4a", mp3: "/assets/audio/essence-japon.mp3" },
+      carpet: "/assets/images/brands/essence-petal-foot.webp",
     },
   },
   {

@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
 import { Petals } from "@/components/effects/Petals";
-import { SceneMusic } from "@/components/effects/SceneMusic";
 import { BrandShowcase } from "@/components/brand/BrandShowcase";
 import { BrandStage } from "@/components/brand/BrandStage";
 import { ArticleCard } from "@/components/journal/ArticleCard";
@@ -149,14 +149,15 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           body
         )}
       </main>
-      {scene && (
-        <>
-          <Petals className={styles.scenePetals} wind />
-          <SceneMusic src={scene.music} label={`${brand.name} müziği`} />
-        </>
-      )}
+      {scene && <Petals className={styles.scenePetals} wind />}
       {/* A 3D stage page ends on its water film. */}
       {!stage && <Footer />}
+      {/* The very foot of the site: the watch on gathered petals, the ivory above it. */}
+      {scene?.carpet && (
+        <div className={styles.carpet} aria-hidden>
+          <Image src={scene.carpet} alt="" fill sizes="100vw" />
+        </div>
+      )}
     </>
   );
 }

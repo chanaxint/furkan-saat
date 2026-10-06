@@ -269,3 +269,8 @@
     display: none;
   }
 }
+.music {
+  position: absolute;
+  right: var(--gutter);
+  bottom: clamp(28px, 5svh, 56px);
+}

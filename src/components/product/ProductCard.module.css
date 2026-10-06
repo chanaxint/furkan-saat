@@ -222,3 +222,8 @@
   object-fit: contain;
   padding: 6%;
 }
+
+/* On a front shot's light tile the heart is dark (light on Freelook's charcoal). */
+.card:has(.media[data-front]) .wish {
+  color: var(--tile-ink, #1d2a26);
+}

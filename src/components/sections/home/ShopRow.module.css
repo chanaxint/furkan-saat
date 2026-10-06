@@ -6,7 +6,7 @@
   --text-on-light-muted: rgba(242, 237, 227, 0.68);
   --text-on-light-faint: rgba(242, 237, 227, 0.42);
   --line-on-light: rgba(242, 237, 227, 0.18);
-  --tile-bg: #2c5a4e;
+  --tile-bg: radial-gradient(85% 75% at 50% 42%, #efe6d4, #dccdb2);
   padding: clamp(56px, 7vw, 110px) 0 clamp(40px, 5vw, 80px);
 }
 
@@ -202,7 +202,7 @@
   position: absolute;
   top: 14px;
   right: 14px;
-  color: var(--ivory);
+  color: #1d2a26;
 }
 
 @media (max-width: 1100px) {

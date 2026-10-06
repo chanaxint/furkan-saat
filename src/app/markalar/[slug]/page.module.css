@@ -229,6 +229,7 @@
 .gold {
   /* A deep, quiet charcoal: the watches stand out on it. */
   --tile-bg: radial-gradient(85% 75% at 50% 40%, #3b3a38, #262524);
+  --tile-ink: #f2ede3;
 }
 .overStage {
   /* A light studio grey, clearly a tile on the page's grey. */

@@ -122,6 +122,12 @@ export type BrandStageDef = {
   model: string;
   /** Centre of the watch head in model units. */
   pivot: [number, number, number];
+  /**
+   * A steel case back laid over the model's back plate (where generated
+   * models repeat the dial): its plane along the dial's axis and its radius,
+   * in model units.
+   */
+  caseback?: { z: number; radius: number };
   /** Poses, timings and turns live in stages.json under the brand's slug (edited at /yonetim/donusler). */
   /** Small line above the name, e.g. "1946'dan beri · Tokyo". */
   eyebrow: string;

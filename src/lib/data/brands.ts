@@ -23,6 +23,7 @@ export const BRANDS: Brand[] = [
     stage: {
       model: "/assets/models/casio-watch.glb",
       pivot: [0, 0, 0.62],
+      caseback: { z: 0.574, radius: 0.452 },
       eyebrow: "1946'dan beri · Tokyo",
       lines: [
         {

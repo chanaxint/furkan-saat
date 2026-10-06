@@ -217,6 +217,7 @@ export function BrandStage({
             state={state}
             model={stage.model}
             pivot={stage.pivot}
+            caseback={stage.caseback}
             active={active}
             onWake={onWake}
             tone="steel"

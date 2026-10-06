@@ -3,7 +3,7 @@
 import { Environment, Lightformer, useGLTF } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef } from "react";
-import { ACESFilmicToneMapping, Euler, FrontSide, type Group, type Mesh, type PerspectiveCamera, Quaternion, SRGBColorSpace, Vector3 } from "three";
+import { ACESFilmicToneMapping, CanvasTexture, Euler, FrontSide, type Group, type Mesh, MeshStandardMaterial, type PerspectiveCamera, Quaternion, SRGBColorSpace, Vector3 } from "three";
 import { SHOWCASE_FOV, SPIN_AXIS_A, SPIN_AXIS_B, type ShowcaseState } from "@/lib/scene/showcase";
 
 type Props = {
@@ -17,6 +17,8 @@ type Props = {
   /** Receives a function that renders one new frame (called on every timeline update). */
   onWake: (wake: () => void) => void;
   onReady?: () => void;
+  /** A steel case back over the model's back plate (see BrandStageDef.caseback). */
+  caseback?: { z: number; radius: number };
   /** Metal the light is tuned for: polished gold, or steel. */
   tone?: "gold" | "steel";
   /**
@@ -43,6 +45,7 @@ export default function ShowcaseWatchScene({
   onReady,
   tone = "gold",
   portrait = { lift: 0.55, pull: 1.7 },
+  caseback,
 }: Props) {
   return (
     <Canvas
@@ -63,7 +66,7 @@ export default function ShowcaseWatchScene({
     >
       {tone === "gold" ? <GoldLighting /> : <SteelLighting />}
       <Suspense fallback={null}>
-        <Rig state={state} model={model} pivot={pivot} onWake={onWake} onReady={onReady} portrait={portrait} />
+        <Rig state={state} model={model} pivot={pivot} onWake={onWake} onReady={onReady} portrait={portrait} caseback={caseback} />
       </Suspense>
     </Canvas>
   );
@@ -136,7 +139,8 @@ function Rig({
   onWake,
   onReady,
   portrait: lift,
-}: Pick<Props, "state" | "model" | "pivot" | "onWake" | "onReady"> & { portrait: Portrait }) {
+  caseback,
+}: Pick<Props, "state" | "model" | "pivot" | "onWake" | "onReady" | "caseback"> & { portrait: Portrait }) {
   const gltf = useGLTF(model);
   const watch = useRef<Group>(null);
   const size = useThree((s) => s.size);
@@ -196,6 +200,60 @@ function Rig({
   return (
     <group ref={watch}>
       <primitive object={scene} position={[-pivot[0], -pivot[1], -pivot[2]]} />
+      {caseback && <CaseBack z={caseback.z - pivot[2]} radius={caseback.radius} />}
+    </group>
+  );
+}
+
+/**
+ * A screwed-down steel case back: a brushed outer ring, a slightly raised
+ * centre plate with fine concentric turning, and a groove between them. Faces
+ * away from the dial (-z) and sits just behind the model's own back plate.
+ */
+function CaseBack({ z, radius }: { z: number; radius: number }) {
+  const brushed = useMemo(() => {
+    // Fine concentric lines (a turned finish) as a roughness/colour map.
+    const size = 512;
+    const c = document.createElement("canvas");
+    c.width = c.height = size;
+    const g = c.getContext("2d")!;
+    g.fillStyle = "#d6d9dc";
+    g.fillRect(0, 0, size, size);
+    for (let r = 2; r < size / 2; r += 1.5) {
+      const v = 200 + Math.round((Math.sin(r * 0.9) + Math.sin(r * 2.7) * 0.5) * 12);
+      g.strokeStyle = `rgb(${v},${v + 3},${v + 6})`;
+      g.lineWidth = 0.8;
+      g.beginPath();
+      g.arc(size / 2, size / 2, r, 0, Math.PI * 2);
+      g.stroke();
+    }
+    const t = new CanvasTexture(c);
+    t.colorSpace = SRGBColorSpace;
+    t.anisotropy = 8;
+    return t;
+  }, []);
+
+  // Satin steel: metallic, but rough enough to read as grey, not as a mirror of the dark studio.
+  const ring = useMemo(() => new MeshStandardMaterial({ color: "#ffffff", metalness: 0.92, roughness: 0.3, map: brushed, envMapIntensity: 2.2 }), [brushed]);
+  const plate = useMemo(() => new MeshStandardMaterial({ color: "#ffffff", metalness: 0.92, roughness: 0.22, map: brushed, envMapIntensity: 2.4 }), [brushed]);
+  const groove = useMemo(() => new MeshStandardMaterial({ color: "#55595d", metalness: 0.9, roughness: 0.55 }), []);
+  const depth = radius * 0.035;
+
+  return (
+    // Rotated so the cylinders' +y runs along -z (away from the dial).
+    <group position={[0, 0, z]} rotation-x={-Math.PI / 2}>
+      {/* Outer ring: the back's full disc, just behind the model's plate. */}
+      <mesh position={[0, depth / 2, 0]} material={ring}>
+        <cylinderGeometry args={[radius, radius * 0.97, depth, 96]} />
+      </mesh>
+      {/* Groove. */}
+      <mesh position={[0, depth + 0.0015, 0]} material={groove} rotation-x={Math.PI / 2}>
+        <torusGeometry args={[radius * 0.72, radius * 0.012, 8, 96]} />
+      </mesh>
+      {/* Raised centre plate. */}
+      <mesh position={[0, depth + depth * 0.35, 0]} material={plate}>
+        <cylinderGeometry args={[radius * 0.7, radius * 0.7, depth * 0.7, 96]} />
+      </mesh>
     </group>
   );
 }

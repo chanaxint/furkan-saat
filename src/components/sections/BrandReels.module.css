@@ -150,6 +150,18 @@
 .logo img {
   object-fit: contain;
 }
+/* Tile artwork: the brand's own picture fills the frame (clipped to it). */
+.frame[data-art] {
+  overflow: hidden;
+}
+.art {
+  object-fit: cover;
+  transition: transform 1.6s var(--ease-lux);
+}
+.tile:hover .art,
+.tile:focus-visible .art {
+  transform: scale(1.04);
+}
 .tile:hover .frame,
 .tile:focus-visible .frame {
   border-color: var(--champagne-soft);
@@ -173,13 +185,6 @@
   letter-spacing: var(--tracking-caps-wide);
   text-transform: uppercase;
   color: var(--ivory);
-}
-/* Gold brands: the name in polished gold, like the logo. */
-.tile[data-theme="gold"] .brand {
-  background: linear-gradient(100deg, #b8913f 0%, #e9d29a 45%, #c9a45c 70%, #a07a35 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 .tile[data-theme="gold"] .logo {
   opacity: 1;

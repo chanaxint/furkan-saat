@@ -68,6 +68,8 @@ export type Brand = {
   cover: string;
   /** Logo (ivory on transparent) for the home page brand tile and the brand page opening. */
   logo: string;
+  /** Artwork for the home page brand tile (4:5, logo included). */
+  tile?: string;
   /**
    * Optional film for the brand page opening: it loops silently behind the
    * logo, full screen (16:9 or wider, a few seconds, no sound needed).

@@ -19,6 +19,7 @@ export const BRANDS: Brand[] = [
       "1974'te ilk saati Casiotron'u tanıtan Japon üretici; efsanevi F-91W'dan safir camlı Edifice serisine kadar dayanıklılığı ve erişilebilir teknolojisiyle dünyanın en çok takılan saatlerinden bazılarını üretir.",
     cover: "/assets/images/watches/casio-edifice-efb-730d-3av.webp",
     logo: "/assets/images/brands/casio.png",
+    tile: "/assets/images/brands/tile-casio.webp",
     stage: {
       model: "/assets/models/casio-watch.glb",
       pivot: [0, 0, 0.62],
@@ -63,6 +64,7 @@ export const BRANDS: Brand[] = [
       "Hong Kong merkezli Daniel Klein Group'un imza markası; seksenden fazla ülkede, güncel tasarımı ulaşılabilir kılan saatler. Exclusive serisi çok fonksiyonlu kadranları ve güçlü kasalarıyla öne çıkar.",
     cover: "/assets/images/watches/daniel-klein-exclusive-pembe-kadran.webp",
     logo: "/assets/images/brands/daniel-klein.png",
+    tile: "/assets/images/brands/tile-daniel-klein.webp",
   },
   {
     slug: "essence",
@@ -74,6 +76,7 @@ export const BRANDS: Brand[] = [
       "Seul'de doğan Essence, sedef kadranlar, taşlı çerçeveler ve mücevher etkili bileziklerle kadın saatlerine odaklanır; her model bir aksesuar kadar dikkatle tasarlanır.",
     cover: "/assets/images/watches/essence-kare-yesil-roma.webp",
     logo: "/assets/images/brands/essence.png",
+    tile: "/assets/images/brands/tile-essence.webp",
     scene: {
       image: "/assets/images/brands/essence-sakura.jpg",
       alt: "Kiraz çiçekleri altında taş yolda duran sedef kadranlı, taşlı çerçeveli Essence saat",
@@ -91,6 +94,7 @@ export const BRANDS: Brand[] = [
       "1999'da Paris'te kurulan Freelook, Parisli kadının zahmetsiz zarafetinden ilham alır. Kristal taşlar ve altın detaylar, günlük şıklık için tasarlanmış modellerde buluşur.",
     cover: "/assets/images/watches/freelook-baget-tasli-yesil.webp",
     logo: "/assets/images/brands/freelook-gold.webp",
+    tile: "/assets/images/brands/tile-freelook.webp",
     film: {
       mp4: "/assets/video/brands/freelook.mp4",
       webm: "/assets/video/brands/freelook.webm",

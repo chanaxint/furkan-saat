@@ -213,12 +213,19 @@
     font-size: 1.9rem;
   }
 }
-.scenePetals.front {
-  z-index: 2;
-}
 .overScene > *:not(.scenePetals) {
   position: relative;
   z-index: 1;
+}
+/* The watches sit on a plain, slightly deeper cream, edge to edge: no motifs, no petals. */
+.overScene > .watches {
+  background: #ebe3d4;
+  box-shadow: 0 0 0 100vmax #ebe3d4;
+  clip-path: inset(0 -100vmax);
+  padding-top: clamp(36px, 4.5vw, 64px);
+}
+.overScene.afterFilm {
+  padding-top: 0;
 }
 /* The picture at the foot sits beneath the petals: they fall over it. */
 .overScene > .carpet {

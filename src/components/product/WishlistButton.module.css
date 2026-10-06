@@ -13,8 +13,19 @@
 .button:hover {
   opacity: 0.6;
 }
+/* Saved: a vivid red heart that pops in. */
+.button[aria-pressed="true"] {
+  opacity: 1;
+}
 .button[aria-pressed="true"] svg {
-  color: var(--wine);
+  color: #e0182d;
+  filter: drop-shadow(0 1px 3px rgba(224, 24, 45, 0.35));
+  animation: pop 0.45s var(--ease-lux);
+}
+@keyframes pop {
+  0% { transform: scale(0.7); }
+  55% { transform: scale(1.22); }
+  100% { transform: scale(1); }
 }
 .button:active svg {
   transform: scale(0.88);

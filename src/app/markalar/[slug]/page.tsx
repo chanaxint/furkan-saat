@@ -66,10 +66,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   );
   const body = (
     <div id="hikaye" className={pageClass} data-nav-theme="light">
-      {/* The petals fall on over the page, behind the watches' photographs. */}
-      {scene && <Petals className={styles.scenePetals} wind />}
-      {/* …and a few drift in front of them. */}
-      {scene && <Petals className={`${styles.scenePetals} ${styles.front}`} wind count={4} />}
+      {/* A few petals drift down behind the watches, falling over the picture at the foot. */}
+      {scene && <Petals className={styles.scenePetals} wind count={4} />}
       {!opening && (
         <header className={`container ${styles.intro}`}>
           <div className={`rise ${styles.facts}`}>

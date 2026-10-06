@@ -2,7 +2,7 @@
 .layer {
   position: relative;
   z-index: 2;
-  background: #e2d5be;
+  background: #ebe3d4;
   box-shadow:
     0 -1px 0 rgba(40, 30, 20, 0.08),
     0 -30px 70px rgba(40, 30, 20, 0.22);

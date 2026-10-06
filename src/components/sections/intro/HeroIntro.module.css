@@ -210,7 +210,7 @@
  * brands section continues in (--blend-end).
  */
 .blend {
-  --blend-end: #d6c7ac;
+  --blend-end: #e4dac7;
   position: relative;
   height: 55svh;
   background: linear-gradient(
@@ -218,14 +218,14 @@
     #07080a 0%,
     #07080a 10%,
     #0e0d0c 20%,
-    #1d1a16 28%,
-    #2f2a23 36%,
-    #463e34 44%,
-    #605548 52%,
-    #7c6f5e 60%,
-    #998a75 68%,
-    #b3a38a 76%,
-    #c7b79c 84%,
+    #1e1c18 28%,
+    #322d27 36%,
+    #4a443b 44%,
+    #655d52 52%,
+    #827a6c 60%,
+    #a09786 68%,
+    #bcb29f 76%,
+    #d2c8b4 84%,
     var(--blend-end) 92%,
     var(--blend-end) 100%
   );

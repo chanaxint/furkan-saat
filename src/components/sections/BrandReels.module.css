@@ -10,7 +10,7 @@
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
   /* The deep cream the opening ends on, warming to the page's cream below. */
-  background: linear-gradient(to bottom, #d6c7ac, #e2d5be);
+  background: linear-gradient(to bottom, #e4dac7, #ebe3d4);
   color: var(--green-900);
   padding: clamp(8px, 1.5vw, 24px) var(--gutter) clamp(80px, 10vw, 150px);
 }

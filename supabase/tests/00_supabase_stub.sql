@@ -1,0 +1,33 @@
+-- A minimal stand-in for what Supabase provides, so the migrations and the RLS
+-- tests can run on a plain local PostgreSQL (scripts/test-db.sh). Never run
+-- this on a Supabase project: there, these objects already exist.
+create role anon nologin;
+create role authenticated nologin;
+create role service_role nologin bypassrls;
+
+create schema auth;
+create table auth.users (
+  id                  uuid primary key default gen_random_uuid(),
+  email               text,
+  raw_user_meta_data  jsonb not null default '{}'::jsonb,
+  created_at          timestamptz not null default now()
+);
+
+-- As in Supabase: the user id from the request's JWT claims.
+create function auth.uid() returns uuid
+language sql stable
+as $$
+  select nullif(coalesce(
+    current_setting('request.jwt.claim.sub', true),
+    current_setting('request.jwt.claims', true)::jsonb ->> 'sub'
+  ), '')::uuid
+$$;
+
+grant usage on schema auth to anon, authenticated, service_role;
+grant execute on function auth.uid() to anon, authenticated, service_role;
+
+-- Supabase's default grants on the public schema (RLS is what protects rows).
+grant usage on schema public to anon, authenticated, service_role;
+alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
+alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
+alter default privileges in schema public grant all on sequences to anon, authenticated, service_role;

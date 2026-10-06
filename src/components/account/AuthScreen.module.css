@@ -1,18 +1,13 @@
 /* Below the bar: the form on the left, the photograph filling the rest. */
 .screen {
   display: grid;
-  grid-template-columns: minmax(380px, 1fr) minmax(0, 44%);
+  grid-template-columns: minmax(340px, 31%) 1fr;
   min-height: 100svh;
   padding-top: var(--nav-h);
   background: var(--ivory);
 }
-/* The form in the middle of its half, a touch larger. */
 .panel {
-  display: grid;
-  align-content: center;
-  justify-content: center;
-  grid-template-columns: minmax(0, 560px);
-  padding: clamp(48px, 9vh, 120px) clamp(24px, 6vw, 120px);
+  padding: clamp(48px, 9vh, 120px) clamp(24px, 3vw, 48px);
 }
 .tabs {
   display: flex;
@@ -24,7 +19,7 @@
   border: 0;
   background: none;
   font-family: var(--font-display);
-  font-size: clamp(1.9rem, 2.6vw, 2.7rem);
+  font-size: clamp(1.7rem, 2.2vw, 2.2rem);
   font-weight: 400;
   color: var(--text-on-light-muted);
   cursor: pointer;
@@ -36,7 +31,7 @@
 .form {
   display: grid;
   gap: 30px;
-  max-width: 560px;
+  max-width: 450px;
 }
 .field {
   position: relative;
@@ -122,7 +117,7 @@
 .photo img {
   object-fit: cover;
   /* The dial at the centre of the frame. */
-  object-position: 48% 50%;
+  object-position: 50% 50.5%;
 }
 
 @media (max-width: 860px) {

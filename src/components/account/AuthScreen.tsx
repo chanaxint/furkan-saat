@@ -93,7 +93,7 @@ export function AuthScreen() {
           alt="Gri kayalar üzerinde siyah kadranlı çelik Daniel Klein saat"
           fill
           priority
-          sizes="(max-width: 860px) 100vw, 44vw"
+          sizes="(max-width: 860px) 100vw, 70vw"
         />
       </div>
     </div>

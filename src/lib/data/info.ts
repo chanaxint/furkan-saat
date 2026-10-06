@@ -74,7 +74,7 @@ export const INFO_PAGES: InfoPage[] = [
       {
         title: "Teslim alma",
         text: [
-          "Teslimat yalnızca alıcının kendisine, kimlik kontrolü ve imza karşılığı yapılır. Dilerseniz saatinizi İstanbul butiğimizde, özel bir randevuyla teslim alabilirsiniz.",
+          "Teslimat yalnızca alıcının kendisine, kimlik kontrolü ve imza karşılığı yapılır. Dilerseniz saatinizi Nevşehir butiğimizde, özel bir randevuyla teslim alabilirsiniz.",
         ],
       },
       {

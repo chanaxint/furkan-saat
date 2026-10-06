@@ -8,9 +8,9 @@ import { SmoothScroll } from "@/components/providers/SmoothScroll";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://furkansaat.com"),
-  title: "Furkan Saat — Seçkin Saatler, İstanbul",
+  title: "Furkan Saat — Seçkin Saatler, Nevşehir",
   description:
-    "Seçkin saatler için özel bir ev. Casio, Daniel Klein, Essence ve Freelook — orijinal saatler, İstanbul.",
+    "Seçkin saatler için özel bir ev. Casio, Daniel Klein, Essence ve Freelook — orijinal saatler, Nevşehir.",
   openGraph: {
     title: "Furkan Saat — Seçkin Saatler",
     description: "Seçkin saatler için özel bir ev.",

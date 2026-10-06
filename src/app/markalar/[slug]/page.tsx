@@ -113,7 +113,11 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
       {rest}
       {/* The very foot of the site: the watch on gathered petals, the page above it. */}
       {scene?.carpet && (
-        <div className={styles.carpet} aria-hidden>
+        <div className={styles.carpet}>
+          {/* The house's name closes the page, in the ivory above the petals. */}
+          <p className={styles.carpetMark}>
+            Furkan <span>Saat</span>
+          </p>
           <Image src={scene.carpet} alt="" fill sizes="100vw" />
         </div>
       )}

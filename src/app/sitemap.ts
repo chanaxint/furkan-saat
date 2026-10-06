@@ -8,7 +8,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [products, brands, articles] = await Promise.all([getProducts(), getBrands(), getArticles()]);
   const pages = [
     "",
-    "/markalar",
     "/dergi",
     "/hakkimizda",
     "/iletisim",

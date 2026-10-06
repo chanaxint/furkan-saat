@@ -8,7 +8,7 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "İletişim — Furkan Saat",
-  description: "Furkan Saat İstanbul butiği: adres, çalışma saatleri, telefon, WhatsApp ve özel randevu.",
+  description: "Furkan Saat Nevşehir butiği: adres, çalışma saatleri, telefon, WhatsApp ve özel randevu.",
 };
 
 export default function ContactPage() {

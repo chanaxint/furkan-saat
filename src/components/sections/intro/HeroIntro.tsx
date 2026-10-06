@@ -282,7 +282,7 @@ export function HeroIntro() {
           </p>
           <h1 className={styles.mark}>
             Furkan <span>Saat</span>
-            <span className="visually-hidden"> — İstanbul&apos;da seçkin saatlerin özel evi</span>
+            <span className="visually-hidden"> — Nevşehir&apos;de seçkin saatlerin özel evi</span>
           </h1>
           <span className={styles.rule} aria-hidden />
         </div>

@@ -11,7 +11,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/collection/mercedes-benz", destination: "/markalar/mercedes-benz", permanent: true },
       { source: "/collection", destination: "/#koleksiyon", permanent: true },
-      // The collection lives on the home page now.
+      // The collection and the brands live on the home page now.
+      { source: "/markalar", destination: "/#markalar", permanent: false },
       { source: "/koleksiyon", destination: "/#koleksiyon", permanent: false },
       { source: "/koleksiyonlar", destination: "/#koleksiyon", permanent: false },
       { source: "/koleksiyonlar/:slug", destination: "/#koleksiyon", permanent: false },

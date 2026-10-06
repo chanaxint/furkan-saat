@@ -9,7 +9,7 @@ import styles from "../service.module.css";
 
 export const metadata: Metadata = {
   title: "Özel Gösterim — Furkan Saat",
-  description: "Saatleri İstanbul butiğimizde, size ayrılmış bir saatte ve acele etmeden inceleyin.",
+  description: "Saatleri Nevşehir butiğimizde, size ayrılmış bir saatte ve acele etmeden inceleyin.",
 };
 
 export default function PrivateViewingPage() {

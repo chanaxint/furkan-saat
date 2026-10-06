@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import { usePathname } from "next/navigation";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 
@@ -55,6 +56,27 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     if (typeof document === "undefined" || !("fonts" in document)) return;
     document.fonts.ready.then(() => ScrollTrigger.refresh());
   }, []);
+
+  // A new page opens at its top. Smooth scrolling keeps its own target, which
+  // would otherwise carry the old page's position over (and, the new page
+  // being shorter, land at its foot). The home page and links to a #section
+  // place themselves.
+  const pathname = usePathname();
+  const firstPath = useRef(true);
+  useEffect(() => {
+    if (firstPath.current) {
+      firstPath.current = false;
+      return;
+    }
+    if (pathname === "/" || window.location.hash) return;
+    const top = () => {
+      lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+      if (window.scrollY !== 0) window.scrollTo(0, 0);
+    };
+    top();
+    const raf = requestAnimationFrame(top);
+    return () => cancelAnimationFrame(raf);
+  }, [pathname]);
 
   const api: ScrollApi = {
     lenis,

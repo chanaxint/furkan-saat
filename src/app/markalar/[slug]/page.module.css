@@ -165,3 +165,34 @@
   object-fit: cover;
   object-position: 50% 100%;
 }
+/* "Furkan Saat" in the clear ivory at the top left, clear of the watch and the petals. */
+.carpetMark {
+  position: absolute;
+  z-index: 1;
+  left: var(--gutter);
+  top: 3%;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 3.2vw, 3.4rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--green-900);
+}
+.carpetMark span {
+  font-style: italic;
+  color: #b07a8a;
+}
+@media (max-width: 767px) {
+  /* Phones: the ivory above the petals is too low for it; it sits just above the picture. */
+  .carpet {
+    margin-top: 72px;
+  }
+  .carpetMark {
+    top: -48px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 1.9rem;
+  }
+}

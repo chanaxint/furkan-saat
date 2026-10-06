@@ -9,13 +9,13 @@ import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Hakkımızda — Furkan Saat",
-  description: "Furkan Saat: İstanbul'da seçkin saatler için özel bir ev. Hikâyemiz, yaklaşımımız ve hizmetlerimiz.",
+  description: "Furkan Saat: Nevşehir'de seçkin saatler için özel bir ev. Hikâyemiz, yaklaşımımız ve hizmetlerimiz.",
 };
 
 const CHAPTERS = [
   {
     title: "Hikayemiz",
-    text: "Furkan Saat, saati bir aksesuar değil, kuşaktan kuşağa geçen bir emanet olarak görenler için kuruldu. İstanbul'daki butiğimizde, dünyanın en saygın saat evlerinden seçilmiş parçaları sakin ve özenli bir ortamda sunuyoruz.",
+    text: "Furkan Saat, saati bir aksesuar değil, kuşaktan kuşağa geçen bir emanet olarak görenler için kuruldu. Nevşehir'deki butiğimizde, dünyanın en saygın saat evlerinden seçilmiş parçaları sakin ve özenli bir ortamda sunuyoruz.",
   },
   {
     title: "Yaklaşımımız",
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <PageHeader
           marker="Hakkımızda"
           title="Seçkin saatler için *özel bir ev*"
-          lede="İstanbul'da, randevuyla ve acele etmeden."
+          lede="Nevşehir'de, randevuyla ve acele etmeden."
         />
 
         <figure className={`container ${styles.figure}`}>

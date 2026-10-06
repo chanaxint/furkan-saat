@@ -134,7 +134,15 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
       </main>
       {/* A 3D stage page ends on its water film. */}
       {/* A 3D stage page ends on its water film, a scene page on its petals. */}
-      {!stage && !scene && <Footer />}
+      {!stage && !scene &&
+        (brand.theme === "gold" ? (
+          // Freelook: the foot of the page on the same still marble as the watches.
+          <div className={`${styles.gold} ${styles.goldFoot}`}>
+            <Footer />
+          </div>
+        ) : (
+          <Footer />
+        ))}
     </>
   );
 }

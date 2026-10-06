@@ -31,6 +31,12 @@
   color: #8c6a2f;
 }
 
+/* The footer lets the marble through. */
+.goldFoot :global(footer) {
+  background: transparent;
+  color: var(--text-on-light);
+}
+
 /* Over a 3D stage: no ground of its own — the stage's grey veil shows the watch behind. */
 .overStage {
   background: transparent;

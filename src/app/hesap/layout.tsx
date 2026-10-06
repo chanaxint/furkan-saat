@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AccountGate } from "@/components/account/AccountGate";
 import { AccountNav } from "@/components/account/AccountNav";
 import { Footer } from "@/components/layout/Footer";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -9,12 +10,12 @@ export const metadata: Metadata = { title: "Hesabım — Furkan Saat", robots: {
 /** Account pages share the header and the side index. */
 export default function AccountLayout({ children }: LayoutProps<"/hesap">) {
   return (
-    <>
+    <AccountGate>
       <main className="page" data-nav-theme="light">
         <PageHeader
           marker="Hesabım"
           title="*Hesabım*"
-          lede="Siparişleriniz, favorileriniz ve talepleriniz. Hesabınız şimdilik bu cihazda saklanır; üye girişi yakında."
+          lede="Siparişleriniz, favorileriniz ve talepleriniz."
         />
         <div className={`container ${styles.layout}`}>
           <AccountNav />
@@ -22,6 +23,6 @@ export default function AccountLayout({ children }: LayoutProps<"/hesap">) {
         </div>
       </main>
       <Footer />
-    </>
+    </AccountGate>
   );
 }

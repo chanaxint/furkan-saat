@@ -1,0 +1,144 @@
+/* Below the bar: the form on the left, the photograph filling the rest. */
+.screen {
+  display: grid;
+  grid-template-columns: minmax(340px, 31%) 1fr;
+  min-height: 100svh;
+  padding-top: var(--nav-h);
+  background: var(--ivory);
+}
+.panel {
+  padding: clamp(48px, 9vh, 120px) clamp(24px, 3vw, 48px);
+}
+.tabs {
+  display: flex;
+  gap: clamp(32px, 4vw, 64px);
+  margin-bottom: clamp(36px, 6vh, 64px);
+}
+.tabs button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 2.2vw, 2.2rem);
+  font-weight: 400;
+  color: var(--text-on-light-muted);
+  cursor: pointer;
+}
+.tabs button[aria-selected="true"] {
+  color: var(--green-900);
+  font-weight: 600;
+}
+.form {
+  display: grid;
+  gap: 30px;
+  max-width: 450px;
+}
+.field {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  font-size: var(--fs-small);
+  color: var(--text-on-light-muted);
+}
+.field i {
+  font-style: normal;
+  color: #b0303a;
+}
+.field input {
+  width: 100%;
+  padding: 8px 32px 10px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line-on-light);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--green-900);
+  outline: none;
+  transition: border-color 0.3s var(--ease-soft);
+}
+.field input:focus {
+  border-bottom-color: var(--green-900);
+}
+.eye {
+  position: absolute;
+  right: 0;
+  bottom: 8px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-on-light-muted);
+  cursor: pointer;
+}
+.eye svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+.error {
+  margin: -8px 0 0;
+  font-size: var(--fs-small);
+  color: #b0303a;
+}
+.submit {
+  margin-top: 18px;
+  padding: 19px;
+  border: 0;
+  background: var(--green-900);
+  color: var(--ivory);
+  font: inherit;
+  font-size: var(--fs-small);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.3s var(--ease-soft);
+}
+.submit:hover {
+  background: #0f3a30;
+}
+.submit:disabled {
+  opacity: 0.6;
+}
+.forgot {
+  justify-self: start;
+  margin-top: -8px;
+  font-size: var(--fs-small);
+  color: var(--green-900);
+}
+.photo {
+  position: relative;
+  min-height: 60svh;
+}
+.photo img {
+  object-fit: cover;
+  object-position: 50% 45%;
+}
+
+@media (max-width: 860px) {
+  .screen {
+    grid-template-columns: 1fr;
+  }
+  .photo {
+    order: -1;
+    min-height: 42svh;
+  }
+}
+.signOut {
+  display: block;
+  margin: 0 auto var(--space-l);
+  padding: 12px 28px;
+  border: 1px solid var(--line-on-light);
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: var(--fs-micro);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green-900);
+  cursor: pointer;
+}

@@ -38,6 +38,12 @@
 
 /* After a film opening the bar is already accounted for: a plain section gap instead. */
 .afterFilm {
+  /* A sheet of its own, rising over the opening with a soft shadow at its edge. */
+  position: relative;
+  z-index: 2;
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 -30px 70px rgba(0, 0, 0, 0.3);
   min-height: 0;
   padding-top: clamp(36px, 4.5vw, 64px);
 }

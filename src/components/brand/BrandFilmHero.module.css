@@ -279,3 +279,20 @@
 .hero[data-theme="gold"] {
   --after: #241c16;
 }
+
+/*
+ * Every opening stays put while the page rises over it as a sheet of its own
+ * (no dissolve): film or still photograph alike.
+ */
+.hero {
+  --fade: 0px;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+.facts {
+  bottom: clamp(28px, 5svh, 56px);
+}
+.cue {
+  bottom: clamp(20px, 4svh, 44px);
+}

@@ -79,8 +79,6 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
         )
       )}
       <div className={styles.grade} aria-hidden />
-      {/* The foot of the film goes out of focus and dissolves into the page below. */}
-      {!scene && <div className={styles.fade} aria-hidden />}
 
       <div className={styles.content}>
         <h1 className={styles.logo}>

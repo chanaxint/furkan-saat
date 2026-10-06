@@ -1,3 +1,4 @@
+import { PinFoot } from "@/components/ui/PinFoot";
 import { Reveal } from "@/components/ui/Reveal";
 import { BRANDS } from "@/lib/data/brands";
 import { BrandTile } from "./BrandTile";
@@ -22,6 +23,7 @@ export function BrandReels() {
           </li>
         ))}
       </Reveal>
+      <PinFoot />
     </section>
   );
 }

@@ -1,7 +1,12 @@
 /* The copy is laid over the photograph on wide screens, beneath it on phones. */
+/* A layer of its own: it slides up over the brands, which stay put beneath it. */
 .hero {
   position: relative;
+  z-index: 2;
   background: var(--ivory);
+  box-shadow:
+    0 -1px 0 rgba(40, 30, 20, 0.08),
+    0 -30px 70px rgba(40, 30, 20, 0.22);
 }
 
 /* The photograph's own proportions, never taller than the screen. */
@@ -16,18 +21,6 @@
 .photo {
   object-fit: cover;
   object-position: 50% 30%;
-}
-/* The top edge melts into the cream the brands section ends on, so there is no seam. */
-.frame::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 3;
-  height: clamp(60px, 9%, 120px);
-  background: linear-gradient(to bottom, #c4b7a7, rgba(196, 183, 167, 0.6) 40%, transparent);
-  pointer-events: none;
 }
 
 /* The house name, huge, in gold: on the wall, behind the model. */

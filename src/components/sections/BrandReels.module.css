@@ -4,14 +4,15 @@
  * settles on the house green the blend ends on.
  */
 .section {
-  --overlap: 22svh;
-  position: relative;
+  --overlap: 0px;
+  /* Once its foot reaches the bottom of the screen it stays, and the campaign rises over it (top set by PinFoot). */
+  position: sticky;
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
   /* The deep cream the opening ends on, lightening to the campaign photograph's cream below. */
-  background: linear-gradient(to bottom, transparent, #a39684 var(--overlap), #c4b7a7 100%);
+  background: linear-gradient(to bottom, #a39684, #c4b7a7);
   color: var(--green-900);
-  padding: 0 var(--gutter) clamp(80px, 10vw, 150px);
+  padding: clamp(24px, 4vw, 64px) var(--gutter) clamp(80px, 10vw, 150px);
 }
 
 .header {

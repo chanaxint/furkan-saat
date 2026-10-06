@@ -215,3 +215,51 @@
     display: none;
   }
 }
+
+/* ------------------------------------------------------------ scene */
+/* A still photograph with petals: the watch sits low, so the name goes high. */
+.petals {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.hero[data-scene] {
+  --fade: 12svh;
+}
+.hero[data-scene] .video {
+  object-position: 50% 70%;
+}
+.hero[data-scene] .grade {
+  background:
+    linear-gradient(to bottom, rgba(20, 8, 14, 0.5), rgba(20, 8, 14, 0.12) 32%, transparent 48%),
+    radial-gradient(130% 100% at 50% 50%, transparent 60%, rgba(10, 4, 8, 0.35) 100%);
+}
+.hero[data-scene] .content {
+  place-content: start center;
+  padding-top: calc(var(--nav-h) + clamp(16px, 5svh, 64px));
+  padding-bottom: 0;
+}
+.hero[data-scene] .logo {
+  height: min(150px, 16svh);
+}
+/* Over pale blossom: the line in ivory with a deeper shadow, so it reads. */
+.hero[data-scene] .signature {
+  color: var(--ivory);
+  text-shadow:
+    0 1px 2px rgba(40, 14, 26, 0.55),
+    0 4px 28px rgba(40, 14, 26, 0.55);
+}
+.hero[data-scene] .facts {
+  text-shadow: 0 1px 12px rgba(20, 8, 14, 0.6);
+}
+.hero[data-scene] .facts dt {
+  color: rgba(242, 237, 227, 0.8);
+}
+@media (max-width: 767px) {
+  /* Phones: the watch fills the foot of the photograph; nothing over it. */
+  .hero[data-scene] .cue {
+    display: none;
+  }
+}

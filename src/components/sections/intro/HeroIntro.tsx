@@ -14,37 +14,40 @@ import styles from "./HeroIntro.module.css";
  * line       the film cuts to black and "İstediğiniz her saat" is there at once
  * mark       the line gives way to "Furkan Saat"
  * done       the page is released; scrolling continues into the black → green blend
- * rewinding  scrolling back up at the top: the titles go and the film runs
- *            backwards to its first frame, then it is idle again
  *
  * Sound (lib/sound/introSound): ticks that accelerate with the film, a deep
- * hit on the cut, a chime with the name, slowing ticks on the rewind.
+ * hit on the cut, a chime with the name.
  */
-type Phase = "idle" | "playing" | "line" | "mark" | "done" | "rewinding";
+type Phase = "idle" | "playing" | "line" | "mark" | "done";
 
 /** How long each title holds (ms). */
 const LINE_MS = 1500;
 const MARK_MS = 1200;
-/** Rewind speed (the reversed film is played faster than real time). */
-const REWIND_RATE = 2;
 /** If a film stalls (slow network), the sequence moves on anyway. */
 const SAFETY_MS = 14000;
-/** A scroll-up only rewinds once the page has rested at the top this long, or on a fresh gesture. */
-const TOP_REST_MS = 900;
-const GESTURE_GAP_MS = 250;
 
 const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " ", "Spacebar"]);
 const FORWARD_KEYS = new Set(["ArrowDown", "PageDown", "End", " ", "Spacebar"]);
-const BACK_KEYS = new Set(["ArrowUp", "PageUp", "Home"]);
 
 const { film } = ASSETS.intro;
+
+/**
+ * The opening plays only when the site is entered (or reloaded) on the home
+ * page — never when coming back to it from another page.
+ */
+let introUsed = false;
+function introAllowed() {
+  if (introUsed) return false;
+  const nav = performance.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined;
+  return !nav || new URL(nav.name).pathname === "/";
+}
 
 /**
  * Where to land instead of the opening: the section a link's #hash names
  * (the wordmark leads to the campaign).
  */
 function landing(): HTMLElement | null {
-  const target = window.location.hash;
+  const target = window.location.hash || (introAllowed() ? "" : "#markalar");
   if (!target || target === "#top") return null;
   try {
     return document.querySelector<HTMLElement>(target);
@@ -56,13 +59,13 @@ function landing(): HTMLElement | null {
 /**
  * HERO INTRO — the opening of the home page. The visitor's first scroll plays
  * the film; when it ends, the titles cut in over black, and the page then
- * flows through a band where the black mixes into the house green. Scrolling
- * back up at the top rewinds it all.
+ * flows through a band where the black mixes into the house green. It plays
+ * once per visit (entering or reloading the site); scrolling back up never
+ * leads back into it, and returning to the home page skips it.
  */
 export function HeroIntro() {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const reverse = useRef<HTMLVideoElement>(null);
   const [phase, setPhase] = useState<Phase>("idle");
   const phaseRef = useRef<Phase>("idle");
   const timers = useRef<number[]>([]);
@@ -113,36 +116,13 @@ export function HeroIntro() {
     v.play().catch(titles);
   }, [go, later, titles]);
 
-  /** Back to the first frame: the reversed film's last frame is the film's first. */
-  const rewound = useCallback(() => {
-    if (phaseRef.current !== "rewinding") return;
-    clearTimers();
-    reverse.current?.pause();
-    introSound.stop(0.3);
-    go("idle");
-  }, [go, clearTimers]);
-
-  const rewind = useCallback(() => {
-    const p = phaseRef.current;
-    if (p !== "line" && p !== "mark" && p !== "done") return;
-    clearTimers();
-    go("rewinding");
-    const v = video.current;
-    if (v) {
-      v.pause();
-      v.currentTime = 0;
-    }
-    const r = reverse.current;
-    introSound.rewind((Number.isFinite(r?.duration) ? r!.duration : 5) / REWIND_RATE);
-    later(rewound, SAFETY_MS);
-    if (!r) return rewound();
-    r.currentTime = 0;
-    r.playbackRate = REWIND_RATE;
-    r.play().catch(rewound);
-  }, [go, later, clearTimers, rewound]);
-
-  // Hold the page at the top while the opening plays; at the top, scrolling back rewinds it.
+  // Hold the page at the top while the opening plays.
   useEffect(() => {
+    const mountedAt = performance.now();
+    // Leaving the home page (not React's quick remount in development): the opening is spent.
+    const spent = () => {
+      if (performance.now() - mountedAt > 1000) introUsed = true;
+    };
     // The browser does not put a reloaded page back where it was: a reload starts at the opening.
     history.scrollRestoration = "manual";
     if ((performance.getEntriesByType?.("navigation")[0] as PerformanceNavigationTiming | undefined)?.type === "reload" && window.location.hash) {
@@ -177,26 +157,17 @@ export function HeroIntro() {
     if (land || window.scrollY > 40 || prefersReducedMotion()) {
       go("done");
       delete document.documentElement.dataset.intro;
-      return unland;
+      return () => {
+        unland();
+        spent();
+      };
     }
     let touchY = 0;
-    let lastWheel = 0;
-    let topSince = performance.now();
 
     const held = () => phaseRef.current !== "done";
-    const atTop = () => window.scrollY <= 1;
-    /** In the released page, only a deliberate scroll-up at the top rewinds. */
-    const mayRewind = (fresh: boolean) =>
-      phaseRef.current !== "done" || (atTop() && (fresh || performance.now() - topSince > TOP_REST_MS));
 
+    // While the opening holds the page, a scroll down starts the film; nothing leads back into it.
     const onWheel = (e: WheelEvent) => {
-      const fresh = e.timeStamp - lastWheel > GESTURE_GAP_MS;
-      lastWheel = e.timeStamp;
-      if (e.deltaY < 0 && atTop() && mayRewind(fresh)) {
-        e.preventDefault();
-        e.stopPropagation();
-        return rewind();
-      }
       if (!held()) return;
       e.preventDefault();
       e.stopPropagation();
@@ -204,12 +175,8 @@ export function HeroIntro() {
     };
     const onTouchStart = (e: TouchEvent) => (touchY = e.touches[0]?.clientY ?? 0);
     const onTouchMove = (e: TouchEvent) => {
-      const dy = touchY - (e.touches[0]?.clientY ?? touchY);
-      if (dy < -8 && atTop() && mayRewind(true)) {
-        if (e.cancelable) e.preventDefault();
-        return rewind();
-      }
       if (!held()) return;
+      const dy = touchY - (e.touches[0]?.clientY ?? touchY);
       if (e.cancelable) e.preventDefault();
       if (dy > 8) start();
     };
@@ -217,17 +184,11 @@ export function HeroIntro() {
       if (!SCROLL_KEYS.has(e.key)) return;
       const t = e.target as HTMLElement | null;
       if (t?.closest("input, textarea, select, [contenteditable]")) return;
-      if (BACK_KEYS.has(e.key) && atTop() && mayRewind(true)) {
-        e.preventDefault();
-        return rewind();
-      }
       if (!held()) return;
       e.preventDefault();
       if (FORWARD_KEYS.has(e.key)) start();
     };
     const onScroll = () => {
-      if (!atTop()) topSince = Infinity;
-      else if (topSince === Infinity) topSince = performance.now();
       // The scrollbar (or anything else) moving a held page: back to the top,
       // and on the first frame it counts as the scroll that starts the film.
       if (held() && window.scrollY > 0) {
@@ -256,8 +217,9 @@ export function HeroIntro() {
       window.removeEventListener("scroll", onScroll);
       clearTimers();
       delete document.documentElement.dataset.intro;
+      spent();
     };
-  }, [go, start, rewind, clearTimers, rise]);
+  }, [go, start, clearTimers, rise]);
 
   // Smooth scrolling only runs once released. The navigation stays away while
   // the opening plays and the name fills the screen, and returns once the page
@@ -311,19 +273,6 @@ export function HeroIntro() {
           <source src={film.mobile} type="video/mp4" media="(max-width: 767px)" />
           <source src={film.mp4} type="video/mp4" />
           <source src={film.webm} type="video/webm" />
-        </video>
-        <video
-          ref={reverse}
-          className={styles.reverse}
-          muted
-          playsInline
-          preload="auto"
-          onEnded={rewound}
-          aria-hidden
-        >
-          <source src={film.reverse.mobile} type="video/mp4" media="(max-width: 767px)" />
-          <source src={film.reverse.mp4} type="video/mp4" />
-          <source src={film.reverse.webm} type="video/webm" />
         </video>
         <div className={styles.grade} aria-hidden />
 

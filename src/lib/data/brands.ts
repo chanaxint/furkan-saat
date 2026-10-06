@@ -74,6 +74,11 @@ export const BRANDS: Brand[] = [
       "Seul'de doğan Essence, sedef kadranlar, taşlı çerçeveler ve mücevher etkili bileziklerle kadın saatlerine odaklanır; her model bir aksesuar kadar dikkatle tasarlanır.",
     cover: "/assets/images/watches/essence-kare-yesil-roma.webp",
     logo: "/assets/images/brands/essence.png",
+    scene: {
+      image: "/assets/images/brands/essence-sakura.jpg",
+      alt: "Kiraz çiçekleri altında taş yolda duran sedef kadranlı, taşlı çerçeveli Essence saat",
+      music: { m4a: "/assets/audio/essence-sakura.m4a", mp3: "/assets/audio/essence-sakura.mp3" },
+    },
   },
   {
     slug: "freelook",

@@ -73,6 +73,11 @@ export type Brand = {
    * logo, full screen (16:9 or wider, a few seconds, no sound needed).
    */
   film?: { mp4: string; webm?: string; poster?: string };
+  /**
+   * Optional opening as a still photograph instead of a film, with cherry
+   * petals drifting over it and music that loops (starts on the first click).
+   */
+  scene?: { image: string; alt: string; music: { m4a: string; mp3: string } };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**

@@ -3,6 +3,8 @@
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
+import { Petals } from "@/components/effects/Petals";
+import { SceneMusic } from "@/components/effects/SceneMusic";
 import type { Brand } from "@/lib/data/types";
 import styles from "./BrandFilmHero.module.css";
 
@@ -11,8 +13,11 @@ import styles from "./BrandFilmHero.module.css";
  * behind the brand's logo. It only plays while some of it is on screen; once
  * scrolled fully out of view (or the tab is hidden) it pauses, and picks up
  * again on the way back.
+ *
+ * A brand with a `scene` instead opens on a still photograph with petals
+ * drifting over it and its music (see Petals, SceneMusic).
  */
-export function BrandFilmHero({ brand, next }: { brand: Brand & { film: NonNullable<Brand["film"]> }; next: string }) {
+export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const { scrollTo } = useSmoothScroll();
@@ -21,6 +26,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand & { film: NonNulla
     const el = root.current;
     const v = video.current;
     if (!el || !v) return;
+
     let visible = true;
     const sync = () => {
       if (visible && !document.hidden) v.play().catch(() => {});
@@ -38,23 +44,40 @@ export function BrandFilmHero({ brand, next }: { brand: Brand & { film: NonNulla
     };
   }, []);
 
-  const { film } = brand;
+  const { film, scene } = brand;
   return (
-    <section ref={root} className={styles.hero} data-theme={brand.theme} data-nav-theme="dark" aria-label={brand.name}>
-      <video
-        ref={video}
-        className={styles.video}
-        poster={film.poster}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        aria-hidden
-      >
-        {film.webm && <source src={film.webm} type="video/webm" />}
-        <source src={film.mp4} type="video/mp4" />
-      </video>
+    <section
+      ref={root}
+      className={styles.hero}
+      data-theme={brand.theme}
+      data-scene={scene ? "" : undefined}
+      data-nav-theme="dark"
+      aria-label={brand.name}
+    >
+      {scene ? (
+        <>
+          <Image src={scene.image} alt={scene.alt} fill priority sizes="100vw" className={styles.video} />
+          <Petals className={styles.petals} />
+          <SceneMusic src={scene.music} label={`${brand.name} müziği`} />
+        </>
+      ) : (
+        film && (
+          <video
+            ref={video}
+            className={styles.video}
+            poster={film.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden
+          >
+            {film.webm && <source src={film.webm} type="video/webm" />}
+            <source src={film.mp4} type="video/mp4" />
+          </video>
+        )
+      )}
       <div className={styles.grade} aria-hidden />
       {/* The foot of the film goes out of focus and dissolves into the page below. */}
       <div className={styles.fade} aria-hidden />

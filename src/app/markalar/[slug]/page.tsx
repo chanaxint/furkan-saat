@@ -37,8 +37,9 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   // With a film or a 3D stage, the opening carries the name (as the logo), so
   // the watches follow it directly.
   const film = brand.film;
+  const scene = brand.scene;
   const stage = brand.stage;
-  const opening = !!(film || stage);
+  const opening = !!(film || scene || stage);
 
   const pageClass = ["page", opening ? styles.afterFilm : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : ""].join(" ");
   const watches = (
@@ -126,7 +127,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   return (
     <>
       <main>
-        {film && <BrandFilmHero brand={{ ...brand, film }} next={brand.showcase ? "#yakindan" : "#saatler"} />}
+        {(film || scene) && <BrandFilmHero brand={brand} next={brand.showcase ? "#yakindan" : "#saatler"} />}
         {brand.showcase && (
           <div id="yakindan" className={brand.theme === "gold" ? styles.gold : undefined}>
             <BrandShowcase showcase={brand.showcase} label={`${brand.name} — yakından`} />

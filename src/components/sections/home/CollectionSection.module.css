@@ -1,6 +1,12 @@
 .section {
-  background: var(--ivory);
-  color: var(--green-900);
+  /* The house green of the brands section, with type turned to ivory. */
+  background: #234a40;
+  color: var(--ivory);
+  --text-on-light: var(--ivory);
+  --text-on-light-muted: rgba(242, 237, 227, 0.68);
+  --text-on-light-faint: rgba(242, 237, 227, 0.42);
+  --line-on-light: rgba(242, 237, 227, 0.18);
+  --tile-bg: #2c5a4e;
   padding: clamp(24px, 3vw, 48px) 0 clamp(80px, 9vw, 140px);
   /* Landing here from a link: the title clear of the bar. */
   scroll-margin-top: var(--nav-h);

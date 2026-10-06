@@ -8,7 +8,7 @@ import styles from "./CollectionSection.module.css";
  */
 export function CollectionSection({ products, weekly }: { products: Product[]; weekly: string[] }) {
   return (
-    <section id="koleksiyon" className={styles.section} data-nav-theme="light" aria-labelledby="koleksiyon-baslik">
+    <section id="koleksiyon" className={styles.section} data-nav-theme="dark" aria-labelledby="koleksiyon-baslik">
       <header className={`container ${styles.head}`}>
         <h2 id="koleksiyon-baslik" className={styles.title}>
           Koleksiyon

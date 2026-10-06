@@ -1,8 +1,9 @@
 .band {
   overflow: hidden;
-  background: var(--green-900);
-  color: var(--champagne);
-  border-block: 1px solid var(--line-on-dark);
+  /* Cream, the name in a deep polished gold. */
+  background: #efe7d8;
+  color: #8f6a2c;
+  border-block: 1px solid rgba(143, 106, 44, 0.22);
 }
 .track {
   display: flex;

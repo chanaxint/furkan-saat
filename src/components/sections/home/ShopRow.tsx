@@ -29,7 +29,7 @@ export function ShopRow({
 }) {
   if (products.length === 0) return null;
   return (
-    <section className={styles.section} data-variant={variant} data-nav-theme="light" aria-label={title}>
+    <section className={styles.section} data-variant={variant} data-nav-theme="dark" aria-label={title}>
       <header className={styles.head}>
         <h2 className={styles.title}>{title}</h2>
         {href && (

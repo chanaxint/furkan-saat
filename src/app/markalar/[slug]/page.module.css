@@ -227,11 +227,14 @@
 
 /* The front shots' tiles: a shade lighter than each brand's own ground. */
 .gold {
-  --tile-bg: rgba(255, 244, 228, 0.1);
+  /* A deep, quiet charcoal: the watches stand out on it. */
+  --tile-bg: radial-gradient(85% 75% at 50% 40%, #3b3a38, #262524);
 }
 .overStage {
-  --tile-bg: #f6f6f4;
+  /* A light studio grey, clearly a tile on the page's grey. */
+  --tile-bg: radial-gradient(85% 75% at 50% 42%, #f7f7f6, #dededc);
 }
 .overScene {
-  --tile-bg: #faf6f2;
+  /* Blossom: a soft but clear pink, lighter at the centre. */
+  --tile-bg: radial-gradient(85% 75% at 50% 42%, #fcf1f2, #f5dfe3);
 }

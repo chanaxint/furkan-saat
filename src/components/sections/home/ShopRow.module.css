@@ -1,6 +1,12 @@
 .section {
-  background: var(--ivory);
-  color: var(--green-900);
+  /* The house green of the brands section, with type turned to ivory. */
+  background: #234a40;
+  color: var(--ivory);
+  --text-on-light: var(--ivory);
+  --text-on-light-muted: rgba(242, 237, 227, 0.68);
+  --text-on-light-faint: rgba(242, 237, 227, 0.42);
+  --line-on-light: rgba(242, 237, 227, 0.18);
+  --tile-bg: #2c5a4e;
   padding: clamp(56px, 7vw, 110px) 0 clamp(40px, 5vw, 80px);
 }
 
@@ -196,7 +202,7 @@
   position: absolute;
   top: 14px;
   right: 14px;
-  color: var(--green-900);
+  color: var(--ivory);
 }
 
 @media (max-width: 1100px) {

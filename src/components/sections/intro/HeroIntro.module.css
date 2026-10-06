@@ -205,29 +205,35 @@
 
 /* ------------------------------------------------------------ blend */
 /*
- * Black into a soft house green, tone by tone: one long gradient with many close stops
- * along an eased curve (no clouds, no blur), ending on exactly the green the
+ * Black into the deep cream, tone by tone: one long gradient with many close stops
+ * along an eased curve (no clouds, no blur), ending on exactly the cream the
  * brands section continues in (--blend-end).
  */
 .blend {
-  --blend-end: #1d3d35;
+  --blend-end: #d6c7ac;
   position: relative;
   height: 55svh;
   background: linear-gradient(
     to bottom,
     #07080a 0%,
     #07080a 10%,
-    #080c0b 20%,
-    #0a110f 28%,
-    #0c1714 36%,
-    #0f1e1a 44%,
-    #122520 52%,
-    #152c26 60%,
-    #17322b 68%,
-    #193630 76%,
-    #1b3a33 84%,
+    #0e0d0c 20%,
+    #1d1a16 28%,
+    #2f2a23 36%,
+    #463e34 44%,
+    #605548 52%,
+    #7c6f5e 60%,
+    #998a75 68%,
+    #b3a38a 76%,
+    #c7b79c 84%,
     var(--blend-end) 92%,
-    var(--blend-end) 100%  );
+    var(--blend-end) 100%
+  );
+}
+
+.blendLight {
+  position: absolute;
+  inset: 50% 0 0 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

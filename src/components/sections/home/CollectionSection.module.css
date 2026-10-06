@@ -1,22 +1,20 @@
 .section {
-  /* The house green of the brands section, with type turned to ivory. */
-  background: #234a40;
-  color: var(--ivory);
-  --text-on-light: var(--ivory);
-  --text-on-light-muted: rgba(242, 237, 227, 0.68);
-  --text-on-light-faint: rgba(242, 237, 227, 0.42);
-  --line-on-light: rgba(242, 237, 227, 0.18);
-  --tile-bg: radial-gradient(85% 75% at 50% 42%, #efe6d4, #dccdb2);
+  /* The house's deep, warm cream; the watch tiles a lighter cream on it. */
+  background: #e2d5be;
+  color: var(--green-900);
+  --line-on-light: rgba(60, 45, 25, 0.16);
+  --tile-bg: radial-gradient(85% 75% at 50% 42%, #f6f0e4, #ebe1cf);
   padding: clamp(24px, 3vw, 48px) 0 clamp(80px, 9vw, 140px);
   /* Landing here from a link: the title clear of the bar. */
   scroll-margin-top: var(--nav-h);
 }
+/* The title and its line centred over the collection. */
 .head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px 24px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
   margin-bottom: clamp(18px, 2vw, 28px);
 }
 .title {

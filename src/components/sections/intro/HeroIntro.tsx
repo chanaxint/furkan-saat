@@ -13,7 +13,7 @@ import styles from "./HeroIntro.module.css";
  * playing    the film plays once, start to end
  * line       the film cuts to black and "İstediğiniz her saat" is there at once
  * mark       the line gives way to "Furkan Saat"
- * done       the page is released; scrolling continues into the black → green blend
+ * done       the page is released; scrolling continues into the black → cream blend
  *
  * Sound (lib/sound/introSound): ticks that accelerate with the film, a deep
  * hit on the cut, a chime with the name.
@@ -294,7 +294,10 @@ export function HeroIntro() {
       </div>
 
       {/* Where the black of the film turns, tone by tone, into the cream of the site. */}
-      <div className={styles.blend} aria-hidden />
+      <div className={styles.blend} aria-hidden>
+        {/* Its cream end reads as light: the bar turns ivory over it. */}
+        <div className={styles.blendLight} data-nav-theme="light" />
+      </div>
     </section>
   );
 }

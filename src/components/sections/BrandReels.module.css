@@ -9,9 +9,9 @@
   position: sticky;
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
-  /* The soft green the opening ends on, a touch lighter below. */
-  background: linear-gradient(to bottom, #1d3d35, #234a40);
-  color: var(--ivory);
+  /* The deep cream the opening ends on, warming to the page's cream below. */
+  background: linear-gradient(to bottom, #d6c7ac, #e2d5be);
+  color: var(--green-900);
   padding: clamp(8px, 1.5vw, 24px) var(--gutter) clamp(80px, 10vw, 150px);
 }
 
@@ -19,10 +19,12 @@
   max-width: var(--max-w);
   margin: 0 auto clamp(40px, 5vw, 72px);
   display: grid;
+  justify-items: center;
+  text-align: center;
   gap: 20px;
 }
 .marker {
-  color: var(--champagne);
+  color: #5c4f40;
 }
 .title {
   margin: 0;
@@ -33,7 +35,7 @@
   letter-spacing: -0.02em;
 }
 .title em {
-  color: var(--champagne);
+  color: #6e5a3e;
 }
 
 .grid {
@@ -60,10 +62,10 @@
     radial-gradient(70% 60% at 50% 45%, rgba(29, 70, 61, 0.55), transparent 75%),
     var(--green-850);
   /* A fine line round each tile, and its own colour spreading into the cream around it. */
-  border: 1px solid rgba(242, 237, 227, 0.32);
+  border: 1px solid rgba(7, 26, 22, 0.28);
   box-shadow:
     0 0 0 1px rgba(255, 250, 240, 0.25),
-    0 30px 120px 10px var(--ambient, rgba(0, 0, 0, 0.2));
+    0 30px 120px 10px var(--ambient, rgba(7, 26, 22, 0.2));
   transition:
     border-color 0.8s var(--ease-lux),
     background-color 0.8s var(--ease-lux);
@@ -170,19 +172,19 @@
 }
 .tile:hover .frame,
 .tile:focus-visible .frame {
-  border-color: rgba(242, 237, 227, 0.6);
+  border-color: rgba(7, 26, 22, 0.5);
 }
 .tile[data-brand="casio"] {
-  --ambient: rgba(170, 176, 184, 0.4);
+  --ambient: rgba(150, 156, 164, 0.75);
 }
 .tile[data-brand="daniel-klein"] {
-  --ambient: rgba(255, 255, 255, 0.32);
+  --ambient: rgba(255, 255, 255, 0.85);
 }
 .tile[data-brand="essence"] {
-  --ambient: rgba(236, 186, 200, 0.42);
+  --ambient: rgba(236, 186, 200, 0.8);
 }
 .tile[data-brand="freelook"] {
-  --ambient: rgba(150, 118, 70, 0.45);
+  --ambient: rgba(58, 44, 30, 0.6);
 }
 .tile:hover .logo,
 .tile:focus-visible .logo {
@@ -194,14 +196,14 @@
   display: grid;
   gap: 6px;
   padding-top: 16px;
-  border-top: 1px solid rgba(242, 237, 227, 0.18);
+  border-top: 1px solid rgba(7, 26, 22, 0.22);
 }
 .brand {
   font-size: var(--fs-small);
   font-weight: 500;
   letter-spacing: var(--tracking-caps-wide);
   text-transform: uppercase;
-  color: var(--ivory);
+  color: var(--green-900);
 }
 .tile[data-theme="gold"] .logo {
   opacity: 1;

@@ -5,9 +5,9 @@ import { Footer } from "@/components/layout/Footer";
 import { Assurances } from "@/components/product/Assurances";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { ProductGallery } from "@/components/product/ProductGallery";
-import { ProductGrid } from "@/components/product/ProductGrid";
 import { ProductSpecs } from "@/components/product/ProductSpecs";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
+import { RelatedCarousel } from "@/components/product/RelatedCarousel";
 import { SectionMarker } from "@/components/ui/SectionMarker";
 import { brandName, getProduct, getProducts, getRelated } from "@/lib/services/catalog";
 import { refLabel } from "@/lib/format";
@@ -34,7 +34,7 @@ export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
   const product = await getProduct((await params).slug);
   if (!product) notFound();
   const brand = brandName(product.brand);
-  const related = await getRelated(product);
+  const related = await getRelated(product, 12);
 
   // Structured data for search engines.
   const jsonLd = {
@@ -111,10 +111,14 @@ export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
 
         {related.length > 0 && (
           <section className={`container ${styles.related}`} aria-label="Diğer saatler">
-            <h2 className={`t-display ${styles.relatedTitle}`}>
-              Bunlar da <em>ilginizi çekebilir</em>
-            </h2>
-            <ProductGrid products={related} />
+            <RelatedCarousel
+              products={related}
+              title={
+                <h2 className={`t-display ${styles.relatedTitle}`}>
+                  Bunlar da <em>ilginizi çekebilir</em>
+                </h2>
+              }
+            />
           </section>
         )}
       </main>

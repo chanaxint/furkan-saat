@@ -19,7 +19,7 @@ export function BrandReels() {
       <span id="markalar" className={styles.anchor} aria-hidden />
       <section
         className={styles.section}
-        data-nav-theme="light"
+        data-nav-theme="dark"
         aria-label="Öne çıkan markalar"
       >
         <header className={styles.header}>

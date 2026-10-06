@@ -9,9 +9,9 @@
   position: sticky;
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
-  /* The deep cream the opening ends on, lightening to the campaign photograph's cream below. */
-  background: linear-gradient(to bottom, #a39684, #c4b7a7);
-  color: var(--green-900);
+  /* The soft green the opening ends on, a touch lighter below. */
+  background: linear-gradient(to bottom, #1d3d35, #234a40);
+  color: var(--ivory);
   padding: clamp(8px, 1.5vw, 24px) var(--gutter) clamp(80px, 10vw, 150px);
 }
 
@@ -22,7 +22,7 @@
   gap: 20px;
 }
 .marker {
-  color: #5c4f40;
+  color: var(--champagne);
 }
 .title {
   margin: 0;
@@ -33,7 +33,7 @@
   letter-spacing: -0.02em;
 }
 .title em {
-  color: #6e5a3e;
+  color: var(--champagne);
 }
 
 .grid {
@@ -60,10 +60,10 @@
     radial-gradient(70% 60% at 50% 45%, rgba(29, 70, 61, 0.55), transparent 75%),
     var(--green-850);
   /* A fine line round each tile, and its own colour spreading into the cream around it. */
-  border: 1px solid rgba(7, 26, 22, 0.28);
+  border: 1px solid rgba(242, 237, 227, 0.32);
   box-shadow:
     0 0 0 1px rgba(255, 250, 240, 0.25),
-    0 30px 120px 10px var(--ambient, rgba(7, 26, 22, 0.2));
+    0 30px 120px 10px var(--ambient, rgba(0, 0, 0, 0.2));
   transition:
     border-color 0.8s var(--ease-lux),
     background-color 0.8s var(--ease-lux);
@@ -170,19 +170,19 @@
 }
 .tile:hover .frame,
 .tile:focus-visible .frame {
-  border-color: rgba(7, 26, 22, 0.5);
+  border-color: rgba(242, 237, 227, 0.6);
 }
 .tile[data-brand="casio"] {
-  --ambient: rgba(150, 156, 164, 0.75);
+  --ambient: rgba(170, 176, 184, 0.4);
 }
 .tile[data-brand="daniel-klein"] {
-  --ambient: rgba(255, 255, 255, 0.85);
+  --ambient: rgba(255, 255, 255, 0.32);
 }
 .tile[data-brand="essence"] {
-  --ambient: rgba(236, 186, 200, 0.8);
+  --ambient: rgba(236, 186, 200, 0.42);
 }
 .tile[data-brand="freelook"] {
-  --ambient: rgba(58, 44, 30, 0.6);
+  --ambient: rgba(150, 118, 70, 0.45);
 }
 .tile:hover .logo,
 .tile:focus-visible .logo {
@@ -194,14 +194,14 @@
   display: grid;
   gap: 6px;
   padding-top: 16px;
-  border-top: 1px solid rgba(7, 26, 22, 0.22);
+  border-top: 1px solid rgba(242, 237, 227, 0.18);
 }
 .brand {
   font-size: var(--fs-small);
   font-weight: 500;
   letter-spacing: var(--tracking-caps-wide);
   text-transform: uppercase;
-  color: var(--green-900);
+  color: var(--ivory);
 }
 .tile[data-theme="gold"] .logo {
   opacity: 1;

@@ -205,30 +205,29 @@
 
 /* ------------------------------------------------------------ blend */
 /*
- * Black into the cream, tone by tone: one long gradient with many close stops
- * along an eased curve (no clouds, no blur), ending on exactly the cream the
+ * Black into a soft house green, tone by tone: one long gradient with many close stops
+ * along an eased curve (no clouds, no blur), ending on exactly the green the
  * brands section continues in (--blend-end).
  */
 .blend {
-  --blend-end: #a39684;
+  --blend-end: #1d3d35;
   position: relative;
   height: 55svh;
   background: linear-gradient(
     to bottom,
     #07080a 0%,
     #07080a 10%,
-    #0d0d0e 20%,
-    #181613 28%,
-    #26221d 36%,
-    #38322b 44%,
-    #4c443b 52%,
-    #61584d 60%,
-    #766b5e 68%,
-    #887c6d 76%,
-    #978a7a 84%,
+    #080c0b 20%,
+    #0a110f 28%,
+    #0c1714 36%,
+    #0f1e1a 44%,
+    #122520 52%,
+    #152c26 60%,
+    #17322b 68%,
+    #193630 76%,
+    #1b3a33 84%,
     var(--blend-end) 92%,
-    var(--blend-end) 100%
-  );
+    var(--blend-end) 100%  );
 }
 
 @media (prefers-reduced-motion: reduce) {

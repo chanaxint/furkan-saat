@@ -212,7 +212,7 @@
 .blend {
   --blend-end: #a39684;
   position: relative;
-  height: 100svh;
+  height: 55svh;
   background: linear-gradient(
     to bottom,
     #07080a 0%,

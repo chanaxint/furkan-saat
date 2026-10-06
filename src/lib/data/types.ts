@@ -98,6 +98,8 @@ export type Brand = {
     /** Up to four notes in frosted panes at the screen's corners, read on hover. */
     notes?: { title: string; text: string; /** e.g. "en" for a brand name, so capitals are not Turkish-dotted. */ lang?: string }[];
   };
+  /** Optional photograph that closes the page, full width, in place of the site footer. */
+  foot?: { image: string; alt: string; width: number; height: number };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**

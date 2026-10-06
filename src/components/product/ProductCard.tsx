@@ -47,7 +47,9 @@ export function ProductCard({
           {mark && <span className={styles.mark}>{mark}</span>}
         </div>
         <div className={styles.info}>
-          <p className={styles.brand}>{brandName(product.brand)}</p>
+          <p className={styles.brand} lang="en">
+            {brandName(product.brand)}
+          </p>
           <h3 className={styles.model}>{product.model}</h3>
           <p className={styles.meta}>
             <span>{refLabel(product.reference)}</span>

@@ -75,6 +75,12 @@ export const BRANDS: Brand[] = [
         { title: "Daniel Klein", lang: "en", text: "1998'den beri Hong Kong'da. Seksenden fazla ülkede güncel tasarımı ulaşılabilir kılan imza marka." },
       ],
     },
+    foot: {
+      image: "/assets/images/brands/daniel-klein-foot.webp",
+      alt: "Bankta sarılan genç bir çift, bileklerinde Daniel Klein saatler — Daniel Klein, It's your time",
+      width: 2560,
+      height: 1387,
+    },
   },
   {
     slug: "essence",

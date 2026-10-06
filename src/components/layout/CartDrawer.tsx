@@ -53,7 +53,7 @@ export function CartDrawer() {
                 <Image src={p.images[0]} alt="" fill sizes="96px" />
               </Link>
               <div className={styles.text}>
-                <p className={styles.brand}>{brandName(p.brand)}</p>
+                <p className={styles.brand} lang="en">{brandName(p.brand)}</p>
                 <p className={styles.model}>{p.model}</p>
                 {p.reference && <p className={styles.ref}>{refLabel(p.reference)}</p>}
                 <button className={styles.remove} onClick={() => cart.remove(p.slug)}>

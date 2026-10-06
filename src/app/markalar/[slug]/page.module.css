@@ -270,3 +270,15 @@
   backdrop-filter: blur(16px) saturate(1.1);
   box-shadow: inset 0 0 0 1px rgba(242, 237, 227, 0.12);
 }
+
+/* A photograph closing the page, the full width of the screen. */
+.footPhoto {
+  position: relative;
+  width: 100%;
+  /* The gap above it in the page's own ivory, not the site's dark ground. */
+  border-top: var(--space-xl) solid var(--ivory);
+  box-sizing: content-box;
+}
+.footPhoto img {
+  object-fit: cover;
+}

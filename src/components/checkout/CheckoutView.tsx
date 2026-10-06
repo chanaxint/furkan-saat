@@ -151,7 +151,7 @@ export function CheckoutView() {
                 <Image src={item.images[0]} alt="" fill sizes="72px" />
               </span>
               <span className={styles.lineText}>
-                <span className={styles.brand}>{brandName(item.brand)}</span>
+                <span className={styles.brand} lang="en">{brandName(item.brand)}</span>
                 <span className={styles.model}>{item.model}</span>
                 {item.reference && <span className={styles.ref}>{refLabel(item.reference)}</span>}
               </span>

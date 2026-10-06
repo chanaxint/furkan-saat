@@ -95,7 +95,7 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
                           <Image src={p.images[0]} alt="" fill sizes="96px" />
                         </span>
                         <span className={styles.watchText}>
-                          <span className={styles.brand}>{brandName(p.brand)}</span>
+                          <span className={styles.brand} lang="en">{brandName(p.brand)}</span>
                           <span className={styles.model}>{p.model}</span>
                           {p.reference && <span className={styles.ref}>{refLabel(p.reference)}</span>}
                         </span>

@@ -32,7 +32,7 @@ export function CartView() {
               <Image src={p.images[0]} alt={`${brandName(p.brand)} ${p.model}`} fill sizes="160px" />
             </Link>
             <div className={styles.lineText}>
-              <p className={styles.brand}>{brandName(p.brand)}</p>
+              <p className={styles.brand} lang="en">{brandName(p.brand)}</p>
               <Link href={`/saat/${p.slug}`} className={styles.model}>
                 {p.model}
               </Link>

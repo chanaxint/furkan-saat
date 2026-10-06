@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
@@ -34,8 +33,7 @@ export async function generateMetadata({ params }: PageProps<"/markalar/[slug]">
 export default async function BrandPage({ params }: PageProps<"/markalar/[slug]">) {
   const brand = await getBrand((await params).slug);
   if (!brand) notFound();
-  const [products, brands, articles] = await Promise.all([getProductsByBrand(brand.slug), getBrands(), getArticlesByBrand(brand.slug)]);
-  const others = brands.filter((b) => b.slug !== brand.slug);
+  const [products, articles] = await Promise.all([getProductsByBrand(brand.slug), getArticlesByBrand(brand.slug)]);
   // With a film or a 3D stage, the opening carries the name (as the logo), so
   // the watches follow it directly.
   const film = brand.film;
@@ -81,16 +79,6 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           </ul>
         </section>
       )}
-      <nav className={`container ${styles.others}`} aria-label="Diğer markalar">
-        <p className={styles.label}>Diğer saat evleri</p>
-        <ul>
-          {others.map((b) => (
-            <li key={b.slug}>
-              <Link href={`/markalar/${b.slug}`}>{b.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
     </>
   );
 
@@ -123,6 +111,12 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
 
       {watches}
       {rest}
+      {/* The very foot of the site: the watch on gathered petals, the page above it. */}
+      {scene?.carpet && (
+        <div className={styles.carpet} aria-hidden>
+          <Image src={scene.carpet} alt="" fill sizes="100vw" />
+        </div>
+      )}
     </div>
   );
 
@@ -151,13 +145,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
       </main>
       {scene && <Petals className={styles.scenePetals} wind />}
       {/* A 3D stage page ends on its water film. */}
-      {!stage && <Footer />}
-      {/* The very foot of the site: the watch on gathered petals, the ivory above it. */}
-      {scene?.carpet && (
-        <div className={styles.carpet} aria-hidden>
-          <Image src={scene.carpet} alt="" fill sizes="100vw" />
-        </div>
-      )}
+      {/* A 3D stage page ends on its water film, a scene page on its petals. */}
+      {!stage && !scene && <Footer />}
     </>
   );
 }

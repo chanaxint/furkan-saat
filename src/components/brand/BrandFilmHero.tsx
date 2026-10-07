@@ -44,13 +44,14 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
     };
   }, []);
 
-  const { film, scene } = brand;
+  const { film, scene, photo } = brand;
   return (
     <section
       ref={root}
       className={styles.hero}
       data-theme={brand.theme}
       data-scene={scene ? "" : undefined}
+      data-photo={photo ? "" : undefined}
       data-nav-theme="dark"
       aria-label={brand.name}
     >
@@ -60,6 +61,8 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
           {/* The music's switch lives on the photograph only (the music plays on). */}
           <SceneMusic src={scene.music} label={`${brand.name} müziği`} className={styles.music} />
         </>
+      ) : photo ? (
+        <Image src={photo.image} alt={photo.alt} fill priority sizes="100vw" className={styles.video} />
       ) : (
         film && (
           <video
@@ -85,6 +88,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
           <Image src={brand.pageLogo ?? brand.logo} alt={brand.name} fill priority sizes="(max-width: 767px) 60vw, 340px" />
         </h1>
         <p className={styles.signature}>{brand.signature}</p>
+        {photo?.caption && <p className={styles.caption}>{photo.caption}</p>}
       </div>
 
       <dl className={styles.facts}>

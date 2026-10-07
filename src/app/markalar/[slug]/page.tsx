@@ -40,7 +40,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   const scene = brand.scene;
   const stage = brand.stage;
   const watchHero = brand.watchHero;
-  const opening = !!(film || scene || stage || watchHero);
+  const photo = brand.photo;
+  const opening = !!(film || scene || stage || watchHero || photo);
 
   const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : "", brand.foot ? styles.withFoot : ""].join(" ");
   const watches = (
@@ -117,7 +118,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
     <>
       <main>
         {watchHero && <BrandWatchHero name={brand.name} model={watchHero.model} label={watchHero.label} notes={watchHero.notes} />}
-        {(film || scene) && <BrandFilmHero brand={brand} next={brand.showcase ? "#yakindan" : "#saatler"} />}
+        {(film || scene || photo) && <BrandFilmHero brand={brand} next={brand.showcase ? "#yakindan" : "#saatler"} />}
         {brand.showcase && (
           <div id="yakindan" className={brand.theme === "gold" ? styles.gold : undefined}>
             <BrandShowcase showcase={brand.showcase} label={`${brand.name} — yakından`} />

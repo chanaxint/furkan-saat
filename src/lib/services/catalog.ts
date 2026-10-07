@@ -47,6 +47,11 @@ export const SORTS: { key: SortKey; label: string }[] = [
 
 /** Who a watch is for: the women's collection; digital classics for anyone; the rest men's. */
 const gender = (p: Product) => (p.collections.includes("kadin") ? "kadin" : p.collections.includes("dijital") ? "unisex" : "erkek");
+/** The women's or the men's watches for /kadin and /erkek, the unisex digital classics after them on both. */
+export const getProductsByGender = async (g: "kadin" | "erkek") => [
+  ...PRODUCTS.filter((p) => gender(p) === g),
+  ...PRODUCTS.filter((p) => gender(p) === "unisex"),
+];
 const GENDERS = [
   { value: "kadin", label: "Kadın" },
   { value: "erkek", label: "Erkek" },

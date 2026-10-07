@@ -1,0 +1,12 @@
+.watches {
+  padding-bottom: var(--space-xl);
+}
+.count {
+  margin-bottom: var(--space-m);
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line-on-light);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}

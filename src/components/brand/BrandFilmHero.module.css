@@ -297,9 +297,13 @@
   bottom: clamp(20px, 4svh, 44px);
 }
 
-/* A page on its own still life (Santa Barbara Polo): the opening simply scrolls away, nothing rises over it. */
+/*
+ * A page on its own still life (Santa Barbara Polo): the opening scrolls
+ * away with the page until only its last quarter is left at the top, and
+ * holds there while the watches pass over it.
+ */
 .hero[data-flow] {
-  position: relative;
+  top: calc(24svh - max(100svh, 520px));
 }
 
 /* A still photograph (Santa Barbara Polo): a club estate at golden hour, the crest over the lawn. */

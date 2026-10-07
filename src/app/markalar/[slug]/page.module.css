@@ -66,8 +66,6 @@
  */
 .withBackdrop {
   isolation: isolate;
-  /* Straight on from the opening, not a sheet over it. */
-  box-shadow: none;
   min-height: 100svh;
   background: #eee4d6;
 }

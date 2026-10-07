@@ -1,4 +1,4 @@
-/* Over the page for a second, then fades and is gone (no clicks caught). Below the site loader, which covers a first visit. */
+/* Over the page for a second, then gone at once, blur and all (no fade; no clicks caught). Below the site loader, which covers a first visit. */
 .loader {
   position: fixed;
   inset: 0;
@@ -6,28 +6,51 @@
   display: grid;
   place-items: center;
   pointer-events: none;
-  animation: away 0.4s var(--ease-soft, ease) 1s forwards;
+  /* A very light blur over the page behind while it loads. */
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  animation: away 0s linear 1s forwards;
 }
-/* Outline and seams only, white with a soft dark edge so they read on any ground. */
+/* Outline and seam only, white with a soft dark edge so they read on any ground. */
 .ball {
+  --turn: 0.9s;
   width: 30px;
   height: 30px;
   overflow: visible;
   filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.55)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
-  animation: spin 0.7s linear infinite;
 }
 .ball circle,
 .ball path {
   fill: none;
   stroke: #fff;
-  stroke-width: 3;
   stroke-linecap: round;
+  stroke-linejoin: round;
 }
-
-/* Clockwise: rolling to the right. */
-@keyframes spin {
-  to {
-    rotate: 360deg;
+.rim {
+  stroke-width: 2.8;
+}
+.near {
+  stroke-width: 2.6;
+}
+.far {
+  stroke-width: 1.6;
+  stroke-opacity: 0.35;
+}
+/* One frame of the turn at a time: each shows for its slice of the cycle. */
+.frame {
+  opacity: 0;
+  animation: show var(--turn) steps(1, end) infinite;
+  animation-delay: calc(var(--turn) * var(--k) / var(--frames) - var(--turn));
+}
+@keyframes show {
+  0% {
+    opacity: 1;
+  }
+  2.78% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
   }
 }
 @keyframes away {
@@ -38,7 +61,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ball {
+  .frame {
     animation: none;
+  }
+  .frame:first-of-type {
+    opacity: 1;
   }
 }

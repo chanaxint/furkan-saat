@@ -255,6 +255,15 @@ export function HeroIntro() {
 
   const onCue = () => (phase === "done" ? scrollTo("#markalar") : start());
 
+  /** "İntroyu atla": the film, titles and sound stop, the page is released and goes on to the brands. */
+  const skip = () => {
+    clearTimers();
+    video.current?.pause();
+    introSound.stop();
+    go("done");
+    window.setTimeout(() => scrollTo("#markalar", { immediate: true }), 60);
+  };
+
   return (
     <section ref={root} id="top" className={styles.intro} data-nav-theme="dark" aria-label="Açılış">
       <div className={styles.stage} data-phase={phase}>
@@ -286,6 +295,13 @@ export function HeroIntro() {
           </h1>
           <span className={styles.rule} aria-hidden />
         </div>
+
+        {/* Small at the top: there before the first scroll, then out of the way; it comes back under the pointer. */}
+        {phase !== "done" && (
+          <button type="button" className={styles.skip} onClick={skip}>
+            İntroyu atla
+          </button>
+        )}
 
         <button type="button" className={styles.cue} onClick={onCue}>
           Aşağı kaydırın

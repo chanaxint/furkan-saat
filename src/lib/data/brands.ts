@@ -21,9 +21,9 @@ export const BRANDS: Brand[] = [
     logo: "/assets/images/brands/casio.png",
     tile: "/assets/images/brands/tile-casio.webp",
     stage: {
-      model: "/assets/models/casio-watch.glb",
+      model: "/assets/models/casio-watch-hq.glb",
       pivot: [0, 0, 0.62],
-      caseback: { z: 0.574, radius: 0.452 },
+      caseback: { z: 0.592, radius: 0.446 },
       eyebrow: "1946'dan beri · Tokyo",
       lines: [
         {

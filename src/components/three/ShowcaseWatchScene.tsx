@@ -50,7 +50,8 @@ export default function ShowcaseWatchScene({
   return (
     <Canvas
       frameloop={active ? "demand" : "never"}
-      dpr={[1, 1.5]}
+      // Sharp on high-density screens (the watch is the page's subject).
+      dpr={[1, 2]}
       camera={{ position: [0, 0, 0], fov: SHOWCASE_FOV, near: 0.05, far: 60 }}
       gl={{
         antialias: true,
@@ -155,7 +156,7 @@ function Rig({
       const m = o as Mesh;
       if (!m.isMesh) return;
       const mat = m.material as { map?: { anisotropy: number }; envMapIntensity?: number; side: number };
-      if (mat.map) mat.map.anisotropy = 8;
+      if (mat.map) mat.map.anisotropy = 16;
       mat.envMapIntensity = 1.1;
       // The model is closed: its back faces never show, so skip drawing them.
       mat.side = FrontSide;

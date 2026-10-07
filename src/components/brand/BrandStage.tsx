@@ -29,7 +29,7 @@ const EXIT_END = -0.5;
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
 /** Seconds into the splash film when "Su geçirmez" appears (the water has hit the watch). */
-const SAID_AT = 2.4;
+const SAID_AT = 1.5;
 
 export function BrandStage({
   brand,
@@ -59,6 +59,8 @@ export function BrandStage({
   const state = useMemo(() => createStageState(motion), [motion]);
   const [active, setActive] = useState(true);
   const { scrollTo, lenis } = useSmoothScroll();
+  const lenisRef = useRef(lenis);
+  lenisRef.current = lenis;
 
   // The page always opens on its first scene: the browser is not to put it
   // back where it was (a reload, the back button), nor carry over the scroll
@@ -137,6 +139,34 @@ export function BrandStage({
       if (played && !film.paused && !film.ended) raf = requestAnimationFrame(words);
     };
     const sc = scene.current!;
+    // While the water hits, the page holds still: no scrolling until the film has played.
+    const stop = (e: Event) => e.preventDefault();
+    const stopKeys = (e: KeyboardEvent) => {
+      if ([" ", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) e.preventDefault();
+    };
+    let locked = false;
+    let release = 0;
+    const unlock = () => {
+      if (!locked) return;
+      locked = false;
+      clearTimeout(release);
+      lenisRef.current?.start();
+      document.documentElement.style.removeProperty("overflow");
+      window.removeEventListener("wheel", stop);
+      window.removeEventListener("touchmove", stop);
+      window.removeEventListener("keydown", stopKeys);
+    };
+    const lock = () => {
+      if (locked || !film) return;
+      locked = true;
+      lenisRef.current?.stop();
+      document.documentElement.style.overflow = "hidden";
+      window.addEventListener("wheel", stop, { passive: false });
+      window.addEventListener("touchmove", stop, { passive: false });
+      window.addEventListener("keydown", stopKeys);
+      // Never longer than the film (should it not play at all, a short hold).
+      release = window.setTimeout(unlock, ((film.duration || 4.7) + 0.3) * 1000);
+    };
     const splash = (t: number) => {
       if (!film) return;
       const on = t >= hitAt && t < until;
@@ -144,6 +174,7 @@ export function BrandStage({
         played = true;
         film.currentTime = 0;
         film.play().catch(() => {});
+        lock();
       } else if (played && t < hitAt - 0.3) {
         played = false;
         film.pause();
@@ -189,9 +220,12 @@ export function BrandStage({
       if (!raf) raf = requestAnimationFrame(words);
     };
     film?.addEventListener("playing", onPlay);
+    film?.addEventListener("ended", unlock);
     return () => {
       cancelAnimationFrame(raf);
+      unlock();
       film?.removeEventListener("playing", onPlay);
+      film?.removeEventListener("ended", unlock);
     };
   }, region);
 

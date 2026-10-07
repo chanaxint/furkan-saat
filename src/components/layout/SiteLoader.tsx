@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { ASSETS } from "@/lib/assets";
+import { BRANDS } from "@/lib/data/brands";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./SiteLoader.module.css";
 
@@ -29,10 +30,17 @@ const RING = 168;
 
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
+/** Pages that open on a loader of their own (a brand's `loader`). */
+const OWN_LOADER = new Set(BRANDS.filter((b) => b.loader).map((b) => `/markalar/${b.slug}`));
+
 export function SiteLoader() {
+  const path = usePathname() ?? "";
+  // A visit that starts on a page with its own loader opens on that one
+  // instead (decided once, on the first page, so it never plays later on).
+  const [own] = useState(() => OWN_LOADER.has(path));
   // The management panel opens without it.
-  const admin = usePathname()?.startsWith("/yonetim") ?? false;
-  if (admin) return null;
+  const admin = path.startsWith("/yonetim");
+  if (admin || own) return null;
   return <Loader />;
 }
 

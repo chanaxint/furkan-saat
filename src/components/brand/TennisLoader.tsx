@@ -2,7 +2,8 @@ import styles from "./TennisLoader.module.css";
 
 /**
  * The brand page's opening beat: a small see-through tennis ball, its seam
- * drawn on the sphere, turning to the right about an upright axis in the
+ * drawn on the sphere and showing at its sides, turning to the right about an
+ * upright axis in the
  * middle of the screen for about a second. The near side of the seam is
  * bright, the far side faint (it shows through). The turn is drawn here as a
  * run of frames that CSS steps through, so it plays from the first paint
@@ -15,9 +16,11 @@ const R = 29;
 const A = 0.72;
 const B = 0.28;
 const C = 2 * Math.sqrt(A * B);
-// A slight tilt, so the turn reads as a ball and not a flat disc.
-const TILT_X = (18 * Math.PI) / 180;
-const TILT_Z = (12 * Math.PI) / 180;
+// Set so the near side of the seam shows as two arcs at the left and right
+// (the ball as it is usually drawn), with a slight lean.
+const SET_Y = Math.PI / 4;
+const SET_X = Math.PI / 2;
+const LEAN = (8 * Math.PI) / 180;
 
 const f = (n: number) => n.toFixed(2);
 
@@ -25,15 +28,17 @@ function frame(phi: number) {
   const pts: { x: number; y: number; z: number }[] = [];
   for (let i = 0; i <= SAMPLES; i++) {
     const t = (i / SAMPLES) * Math.PI * 2;
-    // The seam, lying with its loops toward the poles of the upright axis.
+    // The seam on the sphere…
     let x = A * Math.cos(t) + B * Math.cos(3 * t);
     let z = A * Math.sin(t) - B * Math.sin(3 * t);
     let y = C * Math.sin(2 * t);
-    // Turn about the upright axis (to the right on the near side)…
+    // …set with its arcs at the sides…
+    [x, z] = [x * Math.cos(SET_Y) + z * Math.sin(SET_Y), -x * Math.sin(SET_Y) + z * Math.cos(SET_Y)];
+    [y, z] = [y * Math.cos(SET_X) - z * Math.sin(SET_X), y * Math.sin(SET_X) + z * Math.cos(SET_X)];
+    // …turned about the upright axis, the near side moving right…
     [x, z] = [x * Math.cos(phi) + z * Math.sin(phi), -x * Math.sin(phi) + z * Math.cos(phi)];
-    // …then the fixed tilt.
-    [y, z] = [y * Math.cos(TILT_X) - z * Math.sin(TILT_X), y * Math.sin(TILT_X) + z * Math.cos(TILT_X)];
-    [x, y] = [x * Math.cos(TILT_Z) - y * Math.sin(TILT_Z), x * Math.sin(TILT_Z) + y * Math.cos(TILT_Z)];
+    // …and leaning a little.
+    [x, y] = [x * Math.cos(LEAN) - y * Math.sin(LEAN), x * Math.sin(LEAN) + y * Math.cos(LEAN)];
     pts.push({ x: 32 + x * R, y: 32 - y * R, z });
   }
   let near = "";

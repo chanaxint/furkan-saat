@@ -299,11 +299,11 @@
 
 /*
  * A page on its own still life (Santa Barbara Polo): the opening scrolls
- * away with the page until only its last quarter is left at the top, and
+ * away with the page until about two fifths of it are left at the top, and
  * holds there while the watches pass over it.
  */
 .hero[data-flow] {
-  top: calc(24svh - max(100svh, 520px));
+  top: calc(39svh - max(100svh, 520px));
 }
 
 /* A still photograph (Santa Barbara Polo): a club estate at golden hour, the crest over the lawn. */

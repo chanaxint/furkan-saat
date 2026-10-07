@@ -58,42 +58,33 @@
   padding-top: clamp(36px, 4.5vw, 64px);
 }
 /*
- * The house's own still life behind the watches: a screen-high picture that
- * stays in view the whole way down the section (sticky). On wide screens the
- * upright photograph stands at the right, its left edge fading into the same
- * cream; on phones it fills the screen.
+ * The house's own still life behind the watches, edge to edge: a screen-high
+ * picture that stays in view the whole way down the section (sticky within a
+ * layer the size of the section, so it never runs on over the footer).
  */
 .withBackdrop {
   isolation: isolate;
   min-height: 100svh;
-  background: linear-gradient(to bottom, #ebe2d3, #efe5d7 25%, #ebe3d4 50%, #e4d6c6 75%, #d8cbbb);
+  background: #efe5d7;
 }
 .backdrop {
-  position: sticky;
-  top: 0;
+  position: absolute;
+  inset: 0;
   z-index: -1;
-  height: 100svh;
-  margin-top: calc(-1 * clamp(36px, 4.5vw, 64px));
-  margin-bottom: -100svh;
   pointer-events: none;
 }
 .backdrop::before {
   content: "";
-  position: absolute;
+  position: sticky;
   top: 0;
-  right: 0;
-  bottom: 0;
-  aspect-ratio: 1116 / 2000;
-  background: var(--backdrop) center / cover no-repeat;
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%);
-  mask-image: linear-gradient(to right, transparent, #000 12%);
+  display: block;
+  height: 100svh;
+  /* Wide screens show the lower half: the second ball and the racquet head. */
+  background: var(--backdrop) center 85% / cover no-repeat;
 }
 @media (max-aspect-ratio: 1116 / 2000) {
   .backdrop::before {
-    left: 0;
-    aspect-ratio: auto;
-    -webkit-mask-image: none;
-    mask-image: none;
+    background-position: center;
   }
 }
 

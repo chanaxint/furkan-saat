@@ -10,7 +10,7 @@
   color: var(--ivory);
   pointer-events: auto;
   /* Never stays up, even if scripts fail. */
-  animation: failsafe 0.8s ease 14s forwards;
+  animation: failsafe 0.6s ease 7s forwards;
 }
 .loader::before {
   content: "";

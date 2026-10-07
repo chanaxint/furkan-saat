@@ -22,7 +22,7 @@ type Phase = "mark" | "ring" | "land" | "done";
 
 /** Shortest and longest time on screen (ms). */
 const MIN_MS = 2800;
-const MAX_MS = 9000;
+const MAX_MS = 5000;
 /** The wordmark holds this long before the ring takes over. */
 const MARK_MS = 1350;
 /** Ring diameter while loading (px); see .ring in the CSS. */

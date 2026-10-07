@@ -1,27 +1,12 @@
 /*
- * White and gold (brand theme "gold"): warm white ground, deep brown ink and
- * gold accents. The light-ground tokens are redefined so every component on
- * the page (cards, labels, lines) follows.
- */
-/*
- * Gold brands (Freelook) — a Paris salon at night: a deep warm noir with a
- * faint glow of gold from above and a fine art-deco lattice drawn into it;
- * the watches on champagne-ivory tiles framed in a gold hairline; ivory type
- * with gold accents.
+ * Gold brands (Freelook): the home page's own cream ground, the watches
+ * standing straight on it (no tiles), with gold accents: the name, the rules
+ * between rows, a faint warm light behind each watch.
  */
 .gold {
-  --text-on-light: #f2ede3;
-  --text-on-light-muted: rgba(242, 237, 227, 0.7);
-  --text-on-light-faint: rgba(242, 237, 227, 0.45);
-  --line-on-light: rgba(201, 164, 92, 0.35);
-  --champagne-600: #c9a45c;
-  --green-900: #f2ede3;
-  /* Midnight blue, lit in gold from above and softly deeper toward the foot: plain, no pattern. */
-  background:
-    radial-gradient(70% 560px at 50% 0, rgba(201, 164, 92, 0.18), transparent 75%),
-    radial-gradient(120% 70% at 50% 100%, rgba(4, 8, 16, 0.6), transparent 70%),
-    linear-gradient(180deg, #14213a 0%, #0f1a2f 50%, #0a1222 100%);
-  color: var(--text-on-light);
+  --line-on-light: rgba(160, 125, 60, 0.35);
+  --champagne-600: #a8843e;
+  background: #ebe3d4;
 }
 .gold .name {
   background: linear-gradient(100deg, #8c6a2f 0%, #c9a45c 38%, #e9d29a 52%, #b8913f 70%, #8c6a2f 100%);
@@ -33,10 +18,9 @@
   color: #8c6a2f;
 }
 
-/* The footer lets the marble through. */
+/* The footer on the same cream. */
 .goldFoot :global(footer) {
   background: transparent;
-  color: var(--text-on-light);
 }
 
 /* Over a 3D stage: no ground of its own — the stage's grey veil shows the watch behind. */
@@ -279,9 +263,8 @@
 
 /* The front shots' tiles: a shade lighter than each brand's own ground. */
 .gold {
-  /* No tiles: the watches stand straight on the midnight blue, a faint gold glow behind each. */
-  --tile-bg: radial-gradient(48% 46% at 50% 50%, rgba(201, 164, 92, 0.16), transparent 72%);
-  --tile-ink: #f2ede3;
+  /* No tiles: the watches stand straight on the cream, a faint warm light behind each. */
+  --tile-bg: radial-gradient(48% 46% at 50% 50%, rgba(255, 252, 244, 0.75), transparent 72%);
 }
 .overStage {
   /* A light studio grey, clearly a tile on the page's grey. */
@@ -297,15 +280,12 @@
   box-shadow: inset 0 0 0 1px rgba(196, 128, 148, 0.45);
 }
 
-/* Freelook: every four watches on their own band, deep espresso and warm bronze in turn, over the marble. */
 /* Every four watches a row of their own, divided by a gold rule that fades at both ends. */
 .gold {
   --band-a: transparent;
   --band-b: transparent;
   --band-line: linear-gradient(90deg, transparent, rgba(201, 164, 92, 0.55) 30%, rgba(233, 210, 154, 0.8) 50%, rgba(201, 164, 92, 0.55) 70%, transparent);
 }
-
-/* A gold hairline inside each tile and a soft shadow lifting it off the ground. */
 
 /* A photograph closing the page, the full width of the screen. */
 .footPhoto {

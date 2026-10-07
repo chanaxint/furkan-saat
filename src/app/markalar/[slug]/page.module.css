@@ -4,8 +4,10 @@
  * the page (cards, labels, lines) follows.
  */
 /*
- * Gold brands (Freelook): the watches on the dark marble of the brand's own
- * logo picture, held still behind the page; ivory type with gold accents.
+ * Gold brands (Freelook) — a Paris salon at night: a deep warm noir with a
+ * faint glow of gold from above and a fine art-deco lattice drawn into it;
+ * the watches on champagne-ivory tiles framed in a gold hairline; ivory type
+ * with gold accents.
  */
 .gold {
   --text-on-light: #f2ede3;
@@ -14,11 +16,13 @@
   --line-on-light: rgba(201, 164, 92, 0.35);
   --champagne-600: #c9a45c;
   --green-900: #f2ede3;
-  /* Fixed to the screen, so the watches move over a still slab of marble. */
   background:
-    linear-gradient(rgba(14, 10, 8, 0.35), rgba(14, 10, 8, 0.35)) fixed,
-    url("/assets/images/brands/freelook-marble-2.webp") center / cover no-repeat fixed,
-    #1c1612;
+    /* Gold light falling from above the collection. */
+    radial-gradient(70% 520px at 50% 0, rgba(201, 164, 92, 0.16), transparent 75%),
+    /* Fine diamond lattice, barely there. */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cpath d='M28 0L56 28L28 56L0 28Z' fill='none' stroke='%23c9a45c' stroke-width='.6' opacity='.07'/%3E%3Ccircle cx='28' cy='28' r='1' fill='%23c9a45c' opacity='.12'/%3E%3C/svg%3E")
+      0 0 / 56px 56px,
+    linear-gradient(180deg, #17120e 0%, #110d0a 55%, #0d0a08 100%);
   color: var(--text-on-light);
 }
 .gold .name {
@@ -240,9 +244,9 @@
 
 /* The front shots' tiles: a shade lighter than each brand's own ground. */
 .gold {
-  /* Frosted glass over the marble: the veins blur through, a little darkened. */
-  --tile-bg: rgba(28, 24, 21, 0.32);
-  --tile-ink: #f2ede3;
+  /* Champagne-ivory, softly lit from the centre: the watches stand out on the noir. */
+  --tile-bg: radial-gradient(80% 72% at 50% 44%, #fbf7ef, #ece2cf);
+  --tile-ink: #3a2c1a;
 }
 .overStage {
   /* A light studio grey, clearly a tile on the page's grey. */
@@ -259,16 +263,20 @@
 }
 
 /* Freelook: every four watches on their own band, deep espresso and warm bronze in turn, over the marble. */
+/* Every four watches a row of their own, divided by a gold rule that fades at both ends. */
 .gold {
-  --band-a: rgba(22, 16, 11, 0.78);
-  --band-b: rgba(74, 52, 30, 0.62);
-  --band-line: rgba(201, 164, 92, 0.32);
+  --band-a: transparent;
+  --band-b: transparent;
+  --band-line: linear-gradient(90deg, transparent, rgba(201, 164, 92, 0.55) 30%, rgba(233, 210, 154, 0.8) 50%, rgba(201, 164, 92, 0.55) 70%, transparent);
 }
 
+/* A gold hairline inside each tile and a soft shadow lifting it off the ground. */
 .gold :global(article) > a > div[data-front] {
-  -webkit-backdrop-filter: blur(16px) saturate(1.1);
-  backdrop-filter: blur(16px) saturate(1.1);
-  box-shadow: inset 0 0 0 1px rgba(242, 237, 227, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(201, 164, 92, 0.6),
+    inset 0 0 0 5px rgba(251, 247, 239, 0.9),
+    inset 0 0 0 6px rgba(201, 164, 92, 0.28),
+    0 22px 46px rgba(0, 0, 0, 0.45);
 }
 
 /* A photograph closing the page, the full width of the screen. */

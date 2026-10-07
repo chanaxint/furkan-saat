@@ -50,13 +50,13 @@
   box-shadow: 0 0 0 100vmax var(--band-a, transparent);
   clip-path: inset(0 -100vmax);
 }
-/* A fine line between bands, edge to edge like the band itself. */
+/* A fine line between bands, across the collection's width (a gradient --band-line can fade at both ends). */
 .band::before,
 .band:last-child::after {
   content: "";
   position: absolute;
-  left: -100vmax;
-  right: -100vmax;
+  left: 0;
+  right: 0;
   top: 0;
   height: 1px;
   background: var(--band-line, transparent);

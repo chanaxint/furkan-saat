@@ -61,7 +61,8 @@ export type Product = {
 export type Brand = {
   slug: string;
   name: string;
-  founded: string;
+  /** Year founded; left out when not confirmed (then not shown). */
+  founded?: string;
   origin: string;
   /** One quiet line under the name. */
   signature: string;

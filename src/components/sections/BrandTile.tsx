@@ -17,7 +17,9 @@ export function BrandTile({ brand }: { brand: Brand }) {
         )}
       </span>
       <span className={styles.caption}>
-        <span className={styles.brand}>{brand.name}</span>
+        <span className={styles.brand} lang="en">
+          {brand.name}
+        </span>
         <span className={styles.cta}>
           Markayı keşfedin <span aria-hidden>→</span>
         </span>

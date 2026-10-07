@@ -119,4 +119,15 @@ export const BRANDS: Brand[] = [
     },
     theme: "gold",
   },
+  {
+    slug: "santa-barbara-polo",
+    name: "Santa Barbara Polo & Racquet Club",
+    origin: "Santa Barbara, Kaliforniya",
+    signature: "Polo ve tenisin sportif zarafeti.",
+    description:
+      "Kaliforniya'daki Santa Barbara'nın kulüp yaşamından ilham alan marka; polo ve tenisin sportif zarafetini günlük kullanıma uygun saatlere taşır.",
+    cover: "/assets/images/brands/tile-santa-barbara-polo.webp",
+    logo: "/assets/images/brands/tile-santa-barbara-polo.webp",
+    tile: "/assets/images/brands/tile-santa-barbara-polo.webp",
+  },
 ];

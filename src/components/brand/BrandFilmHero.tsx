@@ -88,10 +88,12 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
       </div>
 
       <dl className={styles.facts}>
-        <div>
-          <dt>Kuruluş</dt>
-          <dd>{brand.founded}</dd>
-        </div>
+        {brand.founded && (
+          <div>
+            <dt>Kuruluş</dt>
+            <dd>{brand.founded}</dd>
+          </div>
+        )}
         <div>
           <dt>Köken</dt>
           <dd>{brand.origin}</dd>

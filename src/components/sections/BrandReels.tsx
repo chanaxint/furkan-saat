@@ -1,12 +1,14 @@
 import { PinFoot } from "@/components/ui/PinFoot";
 import { Reveal } from "@/components/ui/Reveal";
 import { BRANDS } from "@/lib/data/brands";
+import { BrandRail } from "./BrandRail";
 import { BrandTile } from "./BrandTile";
 import styles from "./BrandReels.module.css";
 
 /**
- * 01 — FEATURED BRANDS, straight after the opening: four equal tiles side by
- * side, each with the brand's logo (`logo` in lib/data/brands.ts).
+ * 01 — FEATURED BRANDS, straight after the opening: equal tiles side by side
+ * (four in view on desktop), each with the brand's artwork; with more brands
+ * than fit, the row slides sideways with arrows (BrandRail).
  */
 export function BrandReels() {
   return (
@@ -22,18 +24,21 @@ export function BrandReels() {
         data-nav-theme="light"
         aria-label="Öne çıkan markalar"
       >
-        <header className={styles.header}>
-          <h2 className={styles.title}>
-            Öne çıkan <em>markalar</em>
-          </h2>
-        </header>
-        <Reveal as="ul" className={styles.grid} stagger={0.1}>
-          {BRANDS.map((b) => (
-            <li key={b.slug}>
-              <BrandTile brand={b} />
-            </li>
-          ))}
-        </Reveal>
+        <BrandRail
+          title={
+            <h2 className={styles.title}>
+              Öne çıkan <em>markalar</em>
+            </h2>
+          }
+        >
+          <Reveal as="ul" className={styles.grid} stagger={0.1}>
+            {BRANDS.map((b) => (
+              <li key={b.slug}>
+                <BrandTile brand={b} />
+              </li>
+            ))}
+          </Reveal>
+        </BrandRail>
         <PinFoot />
       </section>
     </>

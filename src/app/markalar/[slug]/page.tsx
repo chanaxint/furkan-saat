@@ -77,10 +77,12 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           <div className={`rise ${styles.facts}`}>
             <SectionMarker label="Saat evi" />
             <dl>
-              <div>
-                <dt>Kuruluş</dt>
-                <dd>{brand.founded}</dd>
-              </div>
+              {brand.founded && (
+                <div>
+                  <dt>Kuruluş</dt>
+                  <dd>{brand.founded}</dd>
+                </div>
+              )}
               <div>
                 <dt>Köken</dt>
                 <dd>{brand.origin}</dd>

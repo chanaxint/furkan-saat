@@ -43,9 +43,9 @@
 .root[data-open] .panel {
   transform: none;
 }
-/* Half the page (never narrower than a comfortable column; full width on phones). */
+/* A good part of the page, a little under half (never narrower than a comfortable column; full width on phones). */
 .root[data-size="half"] .panel {
-  width: max(50vw, min(560px, 100vw));
+  width: max(40vw, min(540px, 100vw));
 }
 /* House green: the light-ground line token is flipped so every border inside follows. */
 .root[data-tone="green"] .panel {

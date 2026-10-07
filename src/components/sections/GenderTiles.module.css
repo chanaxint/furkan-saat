@@ -13,16 +13,20 @@
   display: block;
   aspect-ratio: 4 / 3;
   overflow: hidden;
+  /* Softly rounded corners; the clip keeps the photograph's zoom inside them (Safari too). */
+  border-radius: 14px;
+  isolation: isolate;
   outline-offset: 4px;
 }
 .photo {
   object-fit: cover;
   object-position: 50% 45%;
-  transition: transform 1.4s var(--ease-lux);
+  transition: scale 1.4s var(--ease-lux);
 }
 .tile:hover .photo,
 .tile:focus-visible .photo {
-  transform: scale(1.04);
+  /* `scale` (not transform): the scroll animation drives the photo's transform. */
+  scale: 1.04;
 }
 .shade {
   position: absolute;

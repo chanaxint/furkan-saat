@@ -1,5 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
+import { useGsap } from "@/hooks/useGsap";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import styles from "./GenderTiles.module.css";
 
 const TILES = [
@@ -20,10 +25,29 @@ const TILES = [
   },
 ];
 
-/** Two large tiles under the brands: the women's watches (/kadin) and the men's (/erkek). */
+/** How far below its place each tile starts (px), the second further, so it trails the first. */
+const RISE = [140, 340];
+
+/**
+ * Two large tiles under the brands: the women's watches (/kadin) and the
+ * men's (/erkek). As the page scrolls them in they rise into place with the
+ * scroll, the second trailing the first, and the photographs settle inside
+ * their rounded frames.
+ */
 export function GenderTiles() {
+  const root = useRef<HTMLUListElement>(null);
+  useGsap(() => {
+    if (prefersReducedMotion()) return;
+    const items = gsap.utils.toArray<HTMLElement>("li", root.current);
+    items.forEach((li, i) => {
+      const scroll = { trigger: root.current, start: "top bottom", end: "top 25%", scrub: 0.6 };
+      gsap.fromTo(li, { y: RISE[i] ?? RISE[RISE.length - 1] }, { y: 0, ease: "none", scrollTrigger: scroll });
+      const photo = li.querySelector("img");
+      if (photo) gsap.fromTo(photo, { scale: 1.14 }, { scale: 1, ease: "none", scrollTrigger: scroll });
+    });
+  }, root);
   return (
-    <ul className={styles.grid}>
+    <ul ref={root} className={styles.grid}>
       {TILES.map((t) => (
         <li key={t.value}>
           <Link href={`/${t.value}`} className={styles.tile}>

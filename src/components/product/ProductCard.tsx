@@ -7,6 +7,7 @@ import { AddToCartButton } from "./AddToCartButton";
 import { PriceDisplay } from "./PriceDisplay";
 import { WishlistButton } from "./WishlistButton";
 import styles from "./ProductCard.module.css";
+import { HoverCard } from "./HoverCard";
 
 /**
  * A watch in a grid: a large photograph and four quiet lines of type.
@@ -30,7 +31,7 @@ export function ProductCard({
   const name = `${brandName(product.brand)} ${product.model}`;
   const imgSizes = sizes ?? "(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 33vw";
   return (
-    <article className={styles.card} data-marked={mark ? "" : undefined}>
+    <HoverCard className={styles.card} data-marked={mark ? "" : undefined}>
       <Link href={`/saat/${product.slug}`} className={styles.link}>
         <div className={styles.media} data-tone={product.tone} data-front={product.front ? "" : undefined}>
           {cover && (
@@ -59,6 +60,6 @@ export function ProductCard({
       </Link>
       <WishlistButton slug={product.slug} className={styles.wish} />
       <AddToCartButton product={product} className={styles.add} />
-    </article>
+    </HoverCard>
   );
 }

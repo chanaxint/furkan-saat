@@ -32,10 +32,9 @@ export function GenderTiles() {
           >
             <Image src={t.image} alt={t.alt} fill sizes="(max-width: 767px) 100vw, 50vw" className={styles.photo} />
             <span className={styles.shade} aria-hidden />
-            <span className={styles.label}>
-              <span className={styles.name}>{t.label}</span>
-              <span className={styles.cta}>Saatleri keşfedin</span>
-            </span>
+            {/* The name over the top of the photograph, the invitation at its foot. */}
+            <span className={styles.name}>{t.label}</span>
+            <span className={styles.cta}>Keşfedin</span>
           </a>
         </li>
       ))}

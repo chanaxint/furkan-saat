@@ -6,6 +6,7 @@ import { WishlistButton } from "@/components/product/WishlistButton";
 import type { Product } from "@/lib/data/types";
 import { brandName } from "@/lib/services/catalog";
 import styles from "./ShopRow.module.css";
+import { HoverCard } from "@/components/product/HoverCard";
 
 /**
  * A row of watches, shop-window style.
@@ -54,7 +55,7 @@ function ShopCard({ product }: { product: Product }) {
   const brand = brandName(product.brand);
   const sizes = "(max-width: 767px) 72vw, (max-width: 1100px) 33vw, 20vw";
   return (
-    <article className={styles.card}>
+    <HoverCard className={styles.card}>
       <Link href={`/saat/${product.slug}`} className={styles.link}>
         <div className={styles.media} data-front={product.front ? "" : undefined}>
           {cover && (
@@ -75,6 +76,6 @@ function ShopCard({ product }: { product: Product }) {
       </Link>
       <WishlistButton slug={product.slug} className={styles.wish} />
       <AddToCartButton product={product} className={styles.add} />
-    </article>
+    </HoverCard>
   );
 }

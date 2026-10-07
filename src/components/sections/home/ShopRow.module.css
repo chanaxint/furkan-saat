@@ -164,10 +164,11 @@
   }
 }
 @media (hover: hover) {
-  .link:hover .image {
+  /* Set by HoverCard: the second photograph, kept while the mouse is on "Sepete ekle" or the heart. */
+  .card[data-hover-photo] .image {
     transform: scale(1.03);
   }
-  .link:hover .alt {
+  .card[data-hover-photo] .alt {
     opacity: 1;
   }
 }

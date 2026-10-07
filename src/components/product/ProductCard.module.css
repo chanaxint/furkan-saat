@@ -23,10 +23,11 @@
   opacity: 0;
 }
 @media (hover: hover) {
-  .link:hover .image {
+  /* Set by HoverCard: the second photograph, kept while the mouse is on "Sepete ekle" or the heart. */
+  .card[data-hover-photo] .image {
     transform: scale(1.03);
   }
-  .link:hover .alt {
+  .card[data-hover-photo] .alt {
     opacity: 1;
   }
 }
@@ -90,8 +91,9 @@
   gap: 10px;
   padding: 15px;
   border: 1px solid rgba(255, 255, 255, 0.55);
-  background: rgba(242, 237, 227, 0.8);
-  color: var(--text-on-light);
+  background: rgba(242, 237, 227, 0.88);
+  /* The house green, whatever the page's palette (on dark pages the ink tokens turn light). */
+  color: #071a16;
   font-size: var(--fs-micro);
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -112,9 +114,9 @@
 .add:hover,
 .add:focus-visible,
 .add[data-in-cart] {
-  background: var(--green-900);
-  border-color: var(--green-900);
-  color: var(--ivory);
+  background: #071a16;
+  border-color: #071a16;
+  color: #f2ede3;
 }
 .card:hover .add,
 .add:focus-visible {

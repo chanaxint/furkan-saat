@@ -5,7 +5,7 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 
 type Props = {
-  /** Use "\n" to force editorial line breaks. `*word*` renders in italics. */
+  /** Use "\n" to force editorial line breaks. `*word*` renders as the accent (em). */
   text: string;
   as?: ElementType;
   className?: string;

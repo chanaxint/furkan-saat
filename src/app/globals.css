@@ -212,6 +212,12 @@ ol {
 }
 
 /* ---------------------------------------------------------- typography */
+/* No italics anywhere on the site: emphasis keeps its colour, not a slant. */
+em,
+i,
+cite {
+  font-style: normal;
+}
 .t-display {
   font-family: var(--font-display);
   font-weight: 300;
@@ -220,7 +226,7 @@ ol {
 }
 .t-display em,
 .t-italic {
-  font-style: italic;
+  font-style: normal;
   font-weight: 300;
 }
 .t-xxl { font-size: var(--fs-display-xxl); }

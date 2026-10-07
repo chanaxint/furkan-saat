@@ -68,7 +68,7 @@
   font-size: 1.55rem;
 }
 .price[data-request] {
-  font-style: italic;
+  font-style: normal;
   font-size: 1.4rem;
 }
 .availability {
@@ -111,14 +111,6 @@
   font-weight: 500;
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
-}
-
-.assurances {
-  display: grid;
-  gap: var(--space-l);
-  margin-top: var(--space-xl);
-  padding-top: var(--space-l);
-  border-top: 1px solid var(--line-on-light);
 }
 
 .related {

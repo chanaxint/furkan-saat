@@ -4,7 +4,7 @@ import styles from "./PageHeader.module.css";
 
 /**
  * Opening of every inner page: small marker, a light serif title, one line of
- * context. `*word*` in the title is set in italics.
+ * context. `*word*` in the title is set as the accent (em).
  */
 export function PageHeader({
   marker,

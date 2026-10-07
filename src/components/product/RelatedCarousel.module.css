@@ -1,26 +1,43 @@
 .head {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
   margin-bottom: var(--space-l);
 }
 .head > :first-child {
   margin-bottom: 0;
 }
-.arrows {
-  display: flex;
-  gap: 10px;
-  flex-shrink: 0;
+/*
+ * The arrows stand either side of the row, level with the middle of the
+ * (square) photographs: the left one in the margin before the first card,
+ * the right one in the margin after the last in view.
+ */
+.rail {
+  --gap: clamp(16px, 2vw, 32px);
+  --cols: 4;
+  --reach: min(66px, max(var(--gutter), calc((100vw - var(--max-w)) / 2)) - 8px);
+  position: relative;
+  container-type: inline-size;
+}
+.rail > .arrow {
+  position: absolute;
+  z-index: 3;
+  top: calc((100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols) / 2);
+  translate: 0 -50%;
+}
+.rail > .arrow[data-side="prev"] {
+  left: calc(-1 * var(--reach));
+}
+.rail > .arrow[data-side="next"] {
+  right: calc(-1 * var(--reach));
 }
 .arrow {
   display: grid;
   place-items: center;
   width: 52px;
   height: 52px;
-  border: 1px solid var(--line-on-light);
+  border: 1px solid rgba(7, 26, 22, 0.28);
   border-radius: 50%;
-  background: transparent;
+  background: rgba(242, 237, 227, 0.82);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   color: var(--green-900);
   cursor: pointer;
   transition:
@@ -48,7 +65,7 @@
   outline-offset: 3px;
 }
 .arrow:disabled {
-  opacity: 0.3;
+  opacity: 0.35;
   cursor: default;
 }
 
@@ -57,7 +74,6 @@
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns: calc((100% - 3 * var(--gap)) / 4);
-  --gap: clamp(16px, 2vw, 32px);
   column-gap: var(--gap);
   margin: 0;
   padding: 0 0 8px;
@@ -77,13 +93,16 @@
   .track {
     grid-auto-columns: calc((100% - 2 * var(--gap)) / 3);
   }
+  .rail {
+    --cols: 3;
+  }
 }
 @media (max-width: 640px) {
   .track {
     --gap: 12px;
     grid-auto-columns: 68%;
   }
-  .arrows {
+  .rail > .arrow {
     display: none;
   }
 }

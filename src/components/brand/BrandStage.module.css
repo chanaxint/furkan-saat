@@ -144,7 +144,7 @@
   letter-spacing: -0.015em;
 }
 .lineTitle em {
-  font-style: italic;
+  font-style: normal;
   color: #2f5d4f;
 }
 .lineText {

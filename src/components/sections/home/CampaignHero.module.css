@@ -91,7 +91,7 @@
   bottom: clamp(28px, 9%, 90px);
   margin: 0;
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-weight: 500;
   font-size: clamp(1.4rem, 2.6vw, 2.6rem);
   line-height: 1;

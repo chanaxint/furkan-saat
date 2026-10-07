@@ -92,7 +92,7 @@
 }
 .signature {
   font-family: var(--font-display);
-  font-style: italic;
+  font-style: normal;
   font-weight: 300;
   font-size: clamp(1.3rem, 2vw, 1.9rem);
   color: var(--champagne);

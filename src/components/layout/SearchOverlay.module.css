@@ -148,7 +148,7 @@
   font-size: 1rem;
 }
 .price[data-request] {
-  font-style: italic;
+  font-style: normal;
   color: var(--text-on-light-muted);
 }
 .brands {

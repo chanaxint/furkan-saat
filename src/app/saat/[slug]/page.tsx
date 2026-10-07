@@ -2,13 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
-import { Assurances } from "@/components/product/Assurances";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductSpecs } from "@/components/product/ProductSpecs";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
 import { RelatedCarousel } from "@/components/product/RelatedCarousel";
-import { SectionMarker } from "@/components/ui/SectionMarker";
 import { brandName, getProduct, getProducts, getRelated } from "@/lib/services/catalog";
 import { refLabel } from "@/lib/format";
 import styles from "./page.module.css";
@@ -103,11 +101,6 @@ export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
             </div>
           </div>
         </div>
-
-        <section className={`container ${styles.assurances}`} aria-label="Güvence">
-          <SectionMarker label="Her saatle birlikte" />
-          <Assurances />
-        </section>
 
         {related.length > 0 && (
           <section className={`container ${styles.related}`} aria-label="Diğer saatler">

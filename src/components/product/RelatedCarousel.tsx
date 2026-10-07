@@ -7,7 +7,9 @@ import styles from "./RelatedCarousel.module.css";
 
 /**
  * "Bunlar da ilginizi çekebilir": a row of watches that slides sideways —
- * arrows on desktop, a swipe on phones. Each arrow moves by one screenful.
+ * arrows either side of the row (level with the middle of the photographs,
+ * as on the home page's brands) on desktop, a swipe on phones. Each arrow
+ * moves by one screenful.
  */
 export function RelatedCarousel({ products, title }: { products: Product[]; title: React.ReactNode }) {
   const track = useRef<HTMLUListElement>(null);
@@ -37,28 +39,30 @@ export function RelatedCarousel({ products, title }: { products: Product[]; titl
 
   return (
     <>
-      <div className={styles.head}>
-        {title}
-        <div className={styles.arrows}>
-          <button type="button" className={styles.arrow} onClick={() => move(-1)} disabled={edge.start} aria-label="Önceki saatler">
-            <svg viewBox="0 0 24 24" aria-hidden>
-              <path d="M15 5l-7 7 7 7" />
-            </svg>
-          </button>
-          <button type="button" className={styles.arrow} onClick={() => move(1)} disabled={edge.end} aria-label="Sonraki saatler">
-            <svg viewBox="0 0 24 24" aria-hidden>
-              <path d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+      <div className={styles.head}>{title}</div>
+      <div className={styles.rail}>
+        <ul ref={track} className={styles.track} onScroll={measure} data-lenis-prevent-wheel>
+          {products.map((p) => (
+            <li key={p.slug}>
+              <ProductCard product={p} sizes="(max-width: 640px) 70vw, (max-width: 1100px) 34vw, 25vw" />
+            </li>
+          ))}
+        </ul>
+        {!(edge.start && edge.end) && (
+          <>
+            <button type="button" className={styles.arrow} data-side="prev" onClick={() => move(-1)} disabled={edge.start} aria-label="Önceki saatler">
+              <svg viewBox="0 0 24 24" aria-hidden>
+                <path d="M15 5l-7 7 7 7" />
+              </svg>
+            </button>
+            <button type="button" className={styles.arrow} data-side="next" onClick={() => move(1)} disabled={edge.end} aria-label="Sonraki saatler">
+              <svg viewBox="0 0 24 24" aria-hidden>
+                <path d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </>
+        )}
       </div>
-      <ul ref={track} className={styles.track} onScroll={measure} data-lenis-prevent-wheel>
-        {products.map((p) => (
-          <li key={p.slug}>
-            <ProductCard product={p} sizes="(max-width: 640px) 70vw, (max-width: 1100px) 34vw, 25vw" />
-          </li>
-        ))}
-      </ul>
     </>
   );
 }

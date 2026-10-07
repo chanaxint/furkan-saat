@@ -260,7 +260,7 @@
   background: linear-gradient(135deg, #f1dfa6, #b8913f);
 }
 .sortList li[aria-selected="true"] {
-  font-style: italic;
+  font-style: normal;
 }
 
 /* Space before the grid. */

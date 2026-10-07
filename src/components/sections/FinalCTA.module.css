@@ -42,6 +42,6 @@
   display: inline-block;
 }
 .accent {
-  font-style: italic;
+  font-style: normal;
   color: color-mix(in srgb, var(--champagne-600) calc(var(--mix) * 100%), var(--champagne));
 }

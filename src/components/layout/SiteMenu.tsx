@@ -38,7 +38,7 @@ export function SiteMenu({ open, onClose }: { open: boolean; onClose: () => void
     <Drawer open={open} onClose={onClose} label="Menü" side="left" size="half" tone="green">
       <nav className={styles.menu} aria-label="Menü">
         <ul className={styles.main}>
-          {MAIN.map((l, n) => (
+          {MAIN.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
@@ -47,7 +47,6 @@ export function SiteMenu({ open, onClose }: { open: boolean; onClose: () => void
                 aria-current={current(l.href) ? "page" : undefined}
                 style={{ "--i": i++ } as React.CSSProperties}
               >
-                <span className={styles.index}>{String(n + 1).padStart(2, "0")}</span>
                 {l.label}
               </Link>
             </li>

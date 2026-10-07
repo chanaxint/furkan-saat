@@ -28,24 +28,9 @@ const EXIT_END = -0.5;
 /** Phones: the watch sits higher and further back. */
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
-/** Seconds of the drop film: the watch goes into the water ("Su geçirmez"), and has settled (the words). */
-const SPLASH_AT = 0.52;
-const SAID_AT = 2.8;
-/** Where the water's surface is at the end of the film (percent of the height). */
-const SURFACE = 38;
-/** Bubbles rising beside the watch once it rests: [x offset from centre, start height, size (px), seconds, delay]. */
-const BUBBLES: [number, number, number, number, number][] = [
-  [27, 62, 9, 3.4, 0],
-  [31, 58, 6, 2.9, 0.9],
-  [25, 66, 12, 4.1, 1.7],
-  [33, 61, 5, 2.6, 2.4],
-  [29, 70, 7, 3.6, 3.1],
-  [-27, 56, 8, 3.8, 0.5],
-  [-24, 63, 5, 3.0, 1.4],
-  [-30, 60, 10, 4.4, 2.6],
-  [3, 92, 6, 4.8, 1.1],
-  [-6, 95, 4, 4.2, 3.3],
-];
+/** Water text beside the splash: shown between these points of the splash (0–1). */
+const SAID_FROM = 0.3;
+const SAID_TO = 0.92;
 
 export function BrandStage({
   brand,
@@ -67,7 +52,8 @@ export function BrandStage({
   const hero = useRef<HTMLElement>(null);
   const title = useRef<HTMLDivElement>(null);
   const scene = useRef<HTMLDivElement>(null);
-  const film = useRef<HTMLVideoElement>(null);
+  const water = useRef<HTMLDivElement>(null);
+  const said = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
   const motion = STAGES[brand.slug];
@@ -120,29 +106,14 @@ export function BrandStage({
     // own — the watch spins down and goes in beneath it.
     const { total, times } = sceneTimes(motion);
     const exit = exitStart(motion);
-    // The drop film takes over once the watch has turned into the second-last
-    // scene: that pose matches the film's first frame, so the 3D watch is what
-    // falls into the water.
-    const sc = scene.current!;
-    const drop = film.current;
-    const wetAt = drop && times.length > 2 ? times[times.length - 2].arrive : Infinity;
+    // The splash runs across the turn and hold of the scene marked for it.
+    const si = motion.scenes.findIndex((sc) => sc.splash);
+    const from = si > 0 ? times[si].start : Infinity;
+    const to = si > 0 ? times[si].leave : Infinity;
+    const vids = Array.from(water.current?.querySelectorAll("video") ?? []);
+    vids.forEach((v) => v.pause());
     const clock = { p: 0 };
     let gone = false;
-    let wet = false;
-    const set = (key: "film" | "splash" | "said", on: boolean) => {
-      if (on) sc.dataset[key] = "";
-      else delete sc.dataset[key];
-    };
-    const soak = (on: boolean) => {
-      if (!drop || on === wet) return;
-      wet = on;
-      set("film", on);
-      set("splash", false);
-      set("said", false);
-      drop.pause();
-      drop.currentTime = 0;
-      if (on) drop.play().catch(() => {});
-    };
     const time = () => {
       const h = hero.current!;
       const vh = window.innerHeight;
@@ -150,14 +121,39 @@ export function BrandStage({
       const p0 = pinned / (pinned + vh * (1 - EXIT_END));
       return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
     };
+    const splash = (t: number) => {
+      const w = water.current;
+      if (!w || !vids.length) return;
+      const p = (t - from) / (to - from);
+      const on = p > 0 && p < 1;
+      // In and out softly at its ends, so the water never pops.
+      const fade = on ? Math.min(1, p / 0.06, (1 - p) / 0.08) : 0;
+      w.style.opacity = fade.toFixed(3);
+      w.style.visibility = on ? "visible" : "hidden";
+      if (on) {
+        for (const v of vids) {
+          const d = v.duration || 8;
+          const at = Math.min(d - 0.05, p * d);
+          // Seek only when the frame changes (24 fps): steady scrubbing, no decoder thrash.
+          if (Math.abs(v.currentTime - at) > 1 / 48) v.currentTime = at;
+        }
+      }
+      const s2 = said.current;
+      if (s2) {
+        const a = Math.min(1, Math.max(0, (p - SAID_FROM) / 0.08)) * Math.min(1, Math.max(0, (SAID_TO - p) / 0.08));
+        s2.style.opacity = a.toFixed(3);
+        s2.style.visibility = a < 0.01 ? "hidden" : "visible";
+        s2.style.setProperty("--shift", `${(1 - a) * 30}px`);
+      }
+    };
     const draw = () => {
       const t = time();
       const o = sampleStage(motion, t, state, stage.lines.length);
       applyOverlay(o, title.current, lines.current, sides);
-      soak(t >= wetAt - 0.02);
+      splash(t);
       scene.current?.style.setProperty("--show", gone ? "0" : state.show.toFixed(3));
-      // Once it has faded, is in the film, or the collection covers it, there is nothing to draw.
-      if (!gone && !wet && state.show > 0.005) wake.current();
+      // Once it has faded, or the collection covers it, there is nothing to draw.
+      if (!gone && state.show > 0.005) wake.current();
     };
     draw();
     const tl = gsap.to(clock, { p: 1, ease: "none", onUpdate: draw });
@@ -182,19 +178,10 @@ export function BrandStage({
         draw();
       },
     });
-
-    // In the water: "Su geçirmez" as it goes in; then it rests, bubbles rising, the words beside it.
-    if (!drop) return;
-    const onTime = () => {
-      set("splash", wet && drop.currentTime >= SPLASH_AT);
-      set("said", wet && drop.currentTime >= SAID_AT);
-    };
-    drop.addEventListener("timeupdate", onTime);
-    drop.addEventListener("ended", onTime);
-    return () => {
-      drop.removeEventListener("timeupdate", onTime);
-      drop.removeEventListener("ended", onTime);
-    };
+    // Seeking needs the frames' index: draw again once the films know their length.
+    const onMeta = () => draw();
+    vids.forEach((v) => v.addEventListener("loadedmetadata", onMeta));
+    return () => vids.forEach((v) => v.removeEventListener("loadedmetadata", onMeta));
   }, region);
 
   const onWake = useCallback((fn: () => void) => {
@@ -218,43 +205,29 @@ export function BrandStage({
             portrait={PORTRAIT}
           />
         </div>
-        {stage.film && (
-          <div className={styles.film}>
-            <video ref={film} className={styles.drop} muted playsInline preload="auto" poster={stage.film.drop.poster}>
-              <source src={stage.film.drop.mobile} type="video/mp4" media="(max-width: 767px)" />
-              <source src={stage.film.drop.mp4} type="video/mp4" />
-              <source src={stage.film.drop.webm} type="video/webm" />
-            </video>
-            <div className={styles.bubbles}>
-              {BUBBLES.map(([x, y, size, dur, delay], i) => (
-                <i
-                  key={i}
-                  style={
-                    {
-                      "--x": x,
-                      "--y": `${y}%`,
-                      "--rise": y - SURFACE,
-                      "--size": `${size}px`,
-                      animationDuration: `${dur}s`,
-                      animationDelay: `${delay}s`,
-                    } as React.CSSProperties
-                  }
-                />
-              ))}
-            </div>
-            {stage.water && (
-              <>
-                <h2 className={`${styles.lineTitle} ${styles.waterTitle}`}>
-                  {stage.water.title.split(stage.water.accent)[0]}
-                  <em>{stage.water.accent}</em>
-                  {stage.water.title.split(stage.water.accent)[1]}
-                </h2>
-                <div className={styles.waterText}>
-                  <p className={styles.eyebrow}>{stage.water.eyebrow}</p>
-                  <p className={styles.lineText}>{stage.water.text}</p>
-                </div>
-              </>
-            )}
+        {stage.splash && (
+          // The same film twice: inverted and multiplied, the water's body and
+          // edges darken the light ground like real water; screened, its
+          // highlights brighten the watch behind it.
+          <div ref={water} className={styles.water}>
+            {(["body", "light"] as const).map((k) => (
+              <video key={k} className={styles.splash} data-layer={k} muted playsInline preload="auto">
+                <source src={stage.splash!.mobile} type="video/mp4" media="(max-width: 767px)" />
+                <source src={stage.splash!.mp4} type="video/mp4" />
+                {stage.splash!.webm && <source src={stage.splash!.webm} type="video/webm" />}
+              </video>
+            ))}
+          </div>
+        )}
+        {stage.water && (
+          <div ref={said} className={styles.said}>
+            <p className={styles.eyebrow}>{stage.water.eyebrow}</p>
+            <h2 className={styles.lineTitle}>
+              {stage.water.title.split(stage.water.accent)[0]}
+              <em>{stage.water.accent}</em>
+              {stage.water.title.split(stage.water.accent)[1]}
+            </h2>
+            <p className={styles.lineText}>{stage.water.text}</p>
           </div>
         )}
       </div>

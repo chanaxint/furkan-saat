@@ -39,13 +39,10 @@ export const BRANDS: Brand[] = [
           text: "Üç sıra halkalı paslanmaz çelik bilezik; katlanır kilidiyle bileğe tam oturur.",
         },
       ],
-      film: {
-        drop: {
-          mp4: "/assets/video/brands/casio-water-drop.mp4",
-          mobile: "/assets/video/brands/casio-water-drop-mobile.mp4",
-          webm: "/assets/video/brands/casio-water-drop.webm",
-          poster: "/assets/video/brands/casio-water-drop.jpg",
-        },
+      splash: {
+        mp4: "/assets/video/brands/casio-splash.mp4",
+        mobile: "/assets/video/brands/casio-splash-mobile.mp4",
+        webm: "/assets/video/brands/casio-splash.webm",
       },
       water: {
         eyebrow: "50 metre · 5 bar",

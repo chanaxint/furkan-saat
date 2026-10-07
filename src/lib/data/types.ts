@@ -137,16 +137,17 @@ export type BrandStageDef = {
   /** What is said beside the close-ups: the name on the dial, then the bracelet. */
   lines: [StageLineDef, StageLineDef];
   /**
-   * The end of the opening: the watch dropping into water and coming to rest
-   * in it (played once). Its first frame matches the stage's second-last
-   * scene, where the 3D watch hands over to the film.
+   * Real water (filmed on black) that crashes into the watch from the side
+   * while it turns, during the scene marked `splash` in stages.json; scrubbed
+   * by the scroll. Shown over the 3D layer through blend modes, so only the
+   * water shows on the light ground.
    */
-  film?: { drop: StageFilm & { poster: string } };
-  /** In the water: the title as the watch goes in, then eyebrow and text beside it. */
+  splash?: StageFilm;
+  /** Beside the splash: the title, then eyebrow and text. */
   water?: { eyebrow: string; title: string; accent: string; text: string };
 };
 
-export type StageFilm = { mp4: string; mobile: string; webm: string };
+export type StageFilm = { mp4: string; mobile: string; webm?: string };
 
 export type StageLineDef = {
   /** Side of the screen the line sits on (the watch is on the other side). */

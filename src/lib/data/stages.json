@@ -60,42 +60,43 @@
         "ease": "inOut"
       },
       {
-        "name": "Suya",
+        "name": "Su çarpması",
+        "x": -0.22,
+        "y": 0.0,
+        "z": -3.3,
+        "q": [
+          -0.05743,
+          0.32639,
+          0.04739,
+          0.9423
+        ],
+        "move": 2.6,
+        "hold": 4.2,
+        "spins": 0,
+        "axis": "a",
         "line": null,
         "fade": false,
         "ease": "inOut",
-        "move": 3.0,
-        "hold": 3.4,
-        "spins": 0,
-        "axis": "a",
-        "x": 0.08,
-        "y": 0.25,
-        "z": -3.6,
-        "q": [
-          -0.08509,
-          -0.35959,
-          -0.06984,
-          0.92659
-        ]
+        "splash": true
       },
       {
-        "name": "Film (koleksiyon üstüne gelir)",
+        "name": "Ürünlerin arkasına",
+        "x": 0.25,
+        "y": -1.55,
+        "z": -6.5,
+        "q": [
+          -0.12441,
+          -0.4996,
+          -0.13134,
+          0.84716
+        ],
+        "move": 2.4,
+        "hold": 0,
+        "spins": 1,
+        "axis": "a",
         "line": null,
         "fade": false,
-        "ease": "inOut",
-        "move": 1.0,
-        "hold": 0,
-        "spins": 0,
-        "axis": "a",
-        "x": 0.08,
-        "y": 0.25,
-        "z": -3.6,
-        "q": [
-          -0.08509,
-          -0.35959,
-          -0.06984,
-          0.92659
-        ]
+        "ease": "in"
       }
     ]
   }

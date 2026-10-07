@@ -36,6 +36,8 @@ export type StageScene = {
    * turning (from a scene out of sight). Default "inOut".
    */
   ease?: StageEase;
+  /** The brand's water splash plays across this scene's turn and hold (scrubbed by the scroll). */
+  splash?: boolean;
 };
 
 export type StageEase = "inOut" | "in" | "out";

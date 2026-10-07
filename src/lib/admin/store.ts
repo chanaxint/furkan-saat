@@ -229,6 +229,7 @@ export function validateStage(input: Record<string, unknown>): StageMotion {
       line: line === null ? null : Math.round(line),
       fade: sc.fade === true,
       ease: (sc.ease === "in" || sc.ease === "out" ? sc.ease : "inOut") as StageEase,
+      ...(sc.splash === true ? { splash: true } : {}),
     };
   });
   return { speed: num(input.speed, "Kaydırma uzunluğu", 10, 400), scenes };

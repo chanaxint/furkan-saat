@@ -27,7 +27,7 @@ export class WaterDrops {
   }
 
   resize() {
-    this.dpr = Math.min(2, window.devicePixelRatio || 1);
+    this.dpr = Math.min(1.5, window.devicePixelRatio || 1);
     this.canvas.width = Math.round(window.innerWidth * this.dpr);
     this.canvas.height = Math.round(window.innerHeight * this.dpr);
   }

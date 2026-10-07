@@ -153,7 +153,7 @@ export type BrandStageDef = {
    * frame, in the film's pixels: head centre, head radius, water surface),
    * then rises out of the water with drops running off it.
    */
-  pool?: StageFilm & { poster: string; size: [number, number]; fps: number; track: { x: number[]; y: number[]; r: number[]; s: number[] } };
+  pool?: StageFilm & { poster: string; size: [number, number]; fps: number; track: { x: number[]; y: number[]; r: number[]; s: number[]; src: number[]; up: number } };
   /** Beside the splash: the title, then eyebrow and text. */
   water?: { eyebrow: string; title: string; accent: string; text: string };
 };

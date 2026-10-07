@@ -185,9 +185,6 @@
 .water {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  /* The film's own backdrop, above it once it is drawn down. */
-  background: #bcbcbd;
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
@@ -206,8 +203,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9%);
-  mask-image: linear-gradient(to bottom, transparent, #000 9%);
 }
 /* The watch under water: the water's blue-green laid over it, below the surface line (placed from the timeline). */
 .tint {
@@ -216,9 +211,8 @@
   visibility: hidden;
   pointer-events: none;
   background: linear-gradient(to bottom, rgba(120, 168, 176, 0.5), rgba(96, 146, 156, 0.62));
+  /* No backdrop filter: over a playing film and the 3D canvas it costs every frame. */
   mix-blend-mode: multiply;
-  -webkit-backdrop-filter: blur(1.2px);
-  backdrop-filter: blur(1.2px);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
   mask-image: linear-gradient(to right, transparent, #000 18%, #000 82%, transparent);
 }

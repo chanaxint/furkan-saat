@@ -32,26 +32,17 @@ const EXIT_END = -0.5;
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
 /**
- * Into the water (the brand's `pool` film, its own watch taken out). Seconds
- * into the film: when the 3D watch starts to rise, how long it takes to come
- * out, when "Su geçirmez" appears and when the page may scroll on again.
+ * Into the water (the brand's `pool` film, its own watch taken out: it drops
+ * in, and the same splash runs backwards as it comes out). After the film the
+ * watch goes on up, clear of the water, and comes to rest: how long that
+ * takes, and where it rests and how big (fractions of the screen's height).
  */
-const RISE_AT = 2.6;
-const RISE_FOR = 1.0;
-const SAID_AT = 3.5;
-/**
- * Out of the water, as fractions of the screen's height: where the watch's
- * head comes to rest and how big it is, and where the surface ends up (the
- * film is drawn down as if the camera rose with the watch).
- */
-const RISE_TO = { y: 0.38, r: 0.16, surface: 0.9 };
-const FREE_AT = 4.6;
+const SETTLE_FOR = 0.9;
+const SETTLE_TO = { y: 0.28, r: 0.17 };
 /** After the watch has settled and the page holds still, a breath before it drops. */
 const BEAT_MS = 220;
 /** The 3D watch's head radius in scene units (to size it like the filmed one). */
 const HEAD_R = 0.452;
-/** Easing for the rise: leaves the water quickly, settles softly. */
-const easeOut = (k: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, k)), 3);
 const smooth01 = (k: number) => {
   const t = Math.min(1, Math.max(0, k));
   return t * t * (3 - 2 * t);
@@ -155,6 +146,9 @@ export function BrandStage({
     let raf = 0;
     let lastT = 0;
     let emerged = false;
+    // performance.now() at film time 0 (0 until it plays)
+    let t0 = 0;
+    const dur = pool ? (pool.track.x.length - 1) / pool.fps : 0;
     const ov = { x: 0, y: 0, z: 0, q: [0, 0, 0, 1] as [number, number, number, number] };
     const qa = new Quaternion();
     const qb = new Quaternion();
@@ -181,7 +175,7 @@ export function BrandStage({
       const sc = Math.max(W / pool!.size[0], H / pool!.size[1]);
       const ox = (W - pool!.size[0] * sc) / 2;
       const oy = (H - pool!.size[1] * sc) / 2;
-      return { x: ox + L(tr.x) * sc, y: oy + L(tr.y) * sc, r: L(tr.r) * sc, s: oy + L(tr.s) * sc, W, H, frame: fi };
+      return { x: ox + L(tr.x) * sc, y: oy + L(tr.y) * sc, r: L(tr.r) * sc, s: oy + L(tr.s) * sc, W, H, frame: fi, src: L(tr.src) };
     };
     // A head at (sx, sy) of radius r px on screen → the scene's state (undoing the phone placement in ShowcaseWatchScene).
     const toScene = (sx: number, sy: number, r: number, W: number, H: number) => {
@@ -226,37 +220,46 @@ export function BrandStage({
       const now = performance.now();
       const dt = lastT ? Math.min(0.05, (now - lastT) / 1000) : 1 / 60;
       lastT = now;
-      const c = film.currentTime;
-      if (phase !== "idle") {
-        const h = filmed(c);
-        // Down with the filmed watch, turning to face us; then up out of the
-        // water, the film drawn down below it as if the camera rose with it.
+      // A steady clock from the moment the film starts (kept in step with it),
+      // so the watch moves every frame, not only when the film reports a new time.
+      let c = film.currentTime;
+      if (t0) {
+        c = (now - t0) / 1000;
+        if (!film.paused && !film.ended && Math.abs(c - film.currentTime) > 0.12) {
+          t0 = now - film.currentTime * 1000;
+          c = film.currentTime;
+        }
+      }
+      if (phase === "run") {
+        // The film's frame, or (once it is over) its last one.
+        const h = filmed(Math.min(c, dur));
         let sy = h.y;
         let r = h.r;
-        let pan = 0;
-        if (c > RISE_AT) {
-          const e = easeOut((c - RISE_AT) / RISE_FOR);
-          sy = h.y + (h.H * RISE_TO.y - h.y) * e;
-          r = h.r + (Math.min(h.r, h.H * RISE_TO.r) - h.r) * e;
-          pan = Math.max(0, h.H * RISE_TO.surface - h.s) * e;
+        let under = 1;
+        // Down with the filmed watch, turning to face us, and back up out of
+        // the water with it (turning back); then on up and to rest, facing us.
+        qa.copy(qStart).slerp(qFront, smooth01(h.src / 150));
+        if (c > dur) {
+          const e = smooth01((c - dur) / SETTLE_FOR);
+          sy = h.y + (h.H * SETTLE_TO.y - h.y) * e;
+          r = h.r + (Math.min(h.r, h.H * SETTLE_TO.r) - h.r) * e;
+          qa.slerp(qFront, e);
+          under = 1 - e;
         }
-        film.style.transform = pan ? `translate3d(0, ${pan.toFixed(1)}px, 0)` : "";
-        const surface = h.s + pan;
         toScene(h.x, sy, r, h.W, h.H);
-        qa.copy(qStart).slerp(qFront, smooth01(h.frame / 150));
         ov.q = qa.toArray() as [number, number, number, number];
-        setTint({ x: h.x, y: sy, r, s: surface }, 1);
+        setTint({ x: h.x, y: sy, r, s: h.s }, under);
         // Out of the water: drops on it, drips off it (and they go up with it).
         if (water2) {
-          if (!emerged && c > RISE_AT && sy + r * 0.9 < surface) {
+          if (!emerged && h.frame >= pool.track.up && sy < h.s) {
             emerged = true;
             water2.emerge(h.x, sy, r, sy + r * 1.1);
           }
           if (emerged) water2.moveTo(h.x, sy);
         }
-        setSaid(smooth01((c - SAID_AT) / 0.5));
-        if (c >= FREE_AT || film.ended) unlock();
-        if (c > RISE_AT + RISE_FOR) phase = "done";
+        setSaid(smooth01((c - dur - 0.25) / 0.5));
+        if (c >= dur + SETTLE_FOR + 0.3) unlock();
+        if (c >= dur + SETTLE_FOR) phase = "done";
         draw();
       }
       let more = false;
@@ -264,7 +267,7 @@ export function BrandStage({
         more = water2.frame(dt) && water2.fade > 0;
         if (!more) water2.clear();
       }
-      if ((phase !== "idle" && !film.paused && !film.ended) || more) raf = requestAnimationFrame(tick);
+      if (phase === "run" || more) raf = requestAnimationFrame(tick);
       else lastT = 0;
     };
     // While the water plays, the page holds still: no scrolling until the watch is out.
@@ -293,7 +296,7 @@ export function BrandStage({
       window.addEventListener("touchmove", stop, { passive: false });
       window.addEventListener("keydown", stopKeys);
       // Never longer than the run (should the film not play at all, a short hold).
-      release = window.setTimeout(unlock, FREE_AT * 1000 + BEAT_MS + 400);
+      release = window.setTimeout(unlock, (dur + SETTLE_FOR + 2) * 1000 + BEAT_MS);
     };
     // Where the page must stand for the timeline to read `t` (it holds there while the water plays).
     const scrollFor = (t: number) => {
@@ -312,10 +315,8 @@ export function BrandStage({
       emerged = false;
       clearTimeout(beat);
       film?.pause();
-      if (film) {
-        film.currentTime = 0;
-        film.style.transform = "";
-      }
+      t0 = 0;
+      if (film) film.currentTime = 0;
       delete sc.dataset.film;
       water2?.clear();
       setSaid(0);
@@ -390,17 +391,16 @@ export function BrandStage({
       },
     });
     const onPlay = () => {
+      if (film) t0 = performance.now() - film.currentTime * 1000;
       if (!raf) raf = requestAnimationFrame(tick);
     };
     const onResize = () => water2?.resize();
     film?.addEventListener("playing", onPlay);
-    film?.addEventListener("ended", unlock);
     window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
       reset();
       film?.removeEventListener("playing", onPlay);
-      film?.removeEventListener("ended", unlock);
       window.removeEventListener("resize", onResize);
     };
   }, region);

@@ -9,6 +9,7 @@ import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { STAGES } from "@/lib/data/stages";
+import { SHOWCASE_FOV } from "@/lib/scene/showcase";
 import { applyOverlay, createStageState, exitStart, sampleStage, sceneTimes } from "@/lib/scene/stage";
 import styles from "./BrandStage.module.css";
 
@@ -29,7 +30,18 @@ const EXIT_END = -0.5;
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
 /** Seconds into the splash film when "Su geçirmez" appears (the water has hit the watch). */
-const SAID_AT = 1.5;
+const SAID_AT = 0.9;
+/**
+ * The splash film is water only (the filmed watch taken out), as a
+ * hard-light map: mid-grey leaves the page as it is, darker darkens, lighter
+ * brightens. Its frame is 1920×1080; the filmed watch's head sat at WATCH_AT,
+ * and one unit of the 3D scene measured UNIT pixels there. The film is placed
+ * on the 3D watch's position and size on screen, so the water hits it on any
+ * screen.
+ */
+const FILM = { w: 1920, h: 1080 };
+const WATCH_AT = { x: 853.8, y: 545.6 };
+const UNIT = 513.5;
 
 export function BrandStage({
   brand,
@@ -107,11 +119,9 @@ export function BrandStage({
     // own — the watch spins down and goes in beneath it.
     const { total, times } = sceneTimes(motion);
     const exit = exitStart(motion);
-    // The splash: the scene marked for it holds the watch in exactly the pose
-    // of the film's first frame. As it arrives there, the film takes over
-    // (the 3D layer hides under it) and the water crashes into the watch, once,
-    // in real time at 60 fps. Scrolling on past the scene hands back to the 3D
-    // watch; scrolling back above it resets the film, to crash in again.
+    // The splash: as the watch settles into the scene marked for it, the water
+    // crashes into it, once, in real time (60 fps) while the page holds still.
+    // Scrolling back above that point resets it, to crash in again.
     const si = motion.scenes.findIndex((sc) => sc.splash);
     const hitAt = si > 0 ? times[si].arrive - 0.05 : Infinity;
     const until = si > 0 ? times[si].leave : Infinity;
@@ -120,6 +130,7 @@ export function BrandStage({
     const clock = { p: 0 };
     let gone = false;
     let played = false;
+    let inWindow = false;
     let raf = 0;
     const time = () => {
       const h = hero.current!;
@@ -128,15 +139,41 @@ export function BrandStage({
       const p0 = pinned / (pinned + vh * (1 - EXIT_END));
       return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
     };
-    const words = () => {
+    // Put the water on the 3D watch: where its head is on screen, at its size (as ShowcaseWatchScene places it).
+    const place = () => {
+      const w = water.current;
+      if (!w) return;
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const aspect = W / H;
+      const portrait = aspect < 1 ? 1 - aspect : 0;
+      const px = state.x * Math.max(0, 1 - portrait * 2);
+      const py = state.y + portrait * PORTRAIT.lift;
+      const pz = -state.z * (1 + portrait * PORTRAIT.pull);
+      const f = H / 2 / Math.tan(((SHOWCASE_FOV / 2) * Math.PI) / 180);
+      const k = f / pz / UNIT;
+      const sx = W / 2 + (px / pz) * f;
+      const sy = H / 2 - (py / pz) * f;
+      w.style.transform = `translate(${sx - WATCH_AT.x * k}px, ${sy - WATCH_AT.y * k}px) scale(${k})`;
+    };
+    // While the film plays: fade it in and out at its ends, show the words.
+    const tick = () => {
       raf = 0;
+      const w = water.current;
+      if (!w || !film) return;
+      const d = film.duration || 3.3;
+      const c = film.currentTime;
+      const a = played && inWindow ? Math.max(0, Math.min(1, c / 0.05, (d - c) / 0.45)) : 0;
+      w.style.opacity = a.toFixed(3);
+      w.style.visibility = a > 0.001 ? "visible" : "hidden";
       const s2 = said.current;
-      if (!s2 || !film) return;
-      const a = played && sc.dataset.film !== undefined ? Math.min(1, Math.max(0, (film.currentTime - SAID_AT) / 0.6)) : 0;
-      s2.style.opacity = a.toFixed(3);
-      s2.style.visibility = a < 0.01 ? "hidden" : "visible";
-      s2.style.setProperty("--shift", `${(1 - a) * 30}px`);
-      if (played && !film.paused && !film.ended) raf = requestAnimationFrame(words);
+      if (s2) {
+        const b = played && inWindow ? Math.min(1, Math.max(0, (c - SAID_AT) / 0.4)) : 0;
+        s2.style.opacity = b.toFixed(3);
+        s2.style.visibility = b < 0.01 ? "hidden" : "visible";
+        s2.style.setProperty("--shift", `${(1 - b) * 30}px`);
+      }
+      if (played && !film.paused && !film.ended) raf = requestAnimationFrame(tick);
     };
     const sc = scene.current!;
     // While the water hits, the page holds still: no scrolling until the film has played.
@@ -165,13 +202,14 @@ export function BrandStage({
       window.addEventListener("touchmove", stop, { passive: false });
       window.addEventListener("keydown", stopKeys);
       // Never longer than the film (should it not play at all, a short hold).
-      release = window.setTimeout(unlock, ((film.duration || 4.7) + 0.3) * 1000);
+      release = window.setTimeout(unlock, ((film.duration || 3.3) + 0.3) * 1000);
     };
     const splash = (t: number) => {
       if (!film) return;
-      const on = t >= hitAt && t < until;
-      if (on && !played) {
+      inWindow = t < until;
+      if (!played && t >= hitAt && inWindow) {
         played = true;
+        place();
         film.currentTime = 0;
         film.play().catch(() => {});
         lock();
@@ -180,9 +218,8 @@ export function BrandStage({
         film.pause();
         film.currentTime = 0;
       }
-      if (on && played) sc.dataset.film = "";
-      else delete sc.dataset.film;
-      if (!raf) raf = requestAnimationFrame(words);
+      if (played) place();
+      if (!raf) raf = requestAnimationFrame(tick);
     };
     const draw = () => {
       const t = time();
@@ -217,15 +254,18 @@ export function BrandStage({
       },
     });
     const onPlay = () => {
-      if (!raf) raf = requestAnimationFrame(words);
+      if (!raf) raf = requestAnimationFrame(tick);
     };
+    const onResize = () => played && place();
     film?.addEventListener("playing", onPlay);
     film?.addEventListener("ended", unlock);
+    window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
       unlock();
       film?.removeEventListener("playing", onPlay);
       film?.removeEventListener("ended", unlock);
+      window.removeEventListener("resize", onResize);
     };
   }, region);
 

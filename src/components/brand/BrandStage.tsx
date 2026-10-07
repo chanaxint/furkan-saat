@@ -9,6 +9,7 @@ import { useIsomorphicLayoutEffect } from "@/hooks/useIsomorphicLayoutEffect";
 import type { Brand, BrandStageDef } from "@/lib/data/types";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { STAGES } from "@/lib/data/stages";
+import { Quaternion } from "three";
 import { SHOWCASE_FOV } from "@/lib/scene/showcase";
 import { WaterDrops } from "@/lib/scene/drops";
 import { applyOverlay, createStageState, exitStart, sampleStage, sceneTimes } from "@/lib/scene/stage";
@@ -30,25 +31,25 @@ const EXIT_END = -0.5;
 /** Phones: the watch sits higher and further back. */
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
-/** Seconds into the splash film when "Su geçirmez" appears (the water has hit the watch). */
-const SAID_AT = 0.55;
-/** Seconds into the film when the water reaches the watch (the spray and drops in front of it start). */
-const HIT_AT = 0.45;
-/** After the watch has settled and the page holds still, a breath before the water comes. */
-const BEAT_MS = 260;
 /**
- * The splash film is water only (the filmed watch taken out), as a
- * hard-light map: mid-grey leaves the page as it is, darker darkens, lighter
- * brightens. Its frame is 1920×1080; the filmed watch's head sat at WATCH_AT,
- * and one unit of the 3D scene measured UNIT pixels there. The film is placed
- * on the 3D watch's position and size on screen, so the water hits it on any
- * screen.
+ * Into the water (the brand's `pool` film, its own watch taken out). Seconds
+ * into the film: when the 3D watch starts to rise, how long it takes to come
+ * out, when "Su geçirmez" appears and when the page may scroll on again.
  */
-const FILM = { w: 1920, h: 1080 };
-const WATCH_AT = { x: 853.8, y: 545.6 };
-/** The filmed watch head's centre and radius in the film's frame. */
-const HEAD = { x: 769, y: 567, r: 310 };
-const UNIT = 513.5;
+const RISE_AT = 2.6;
+const RISE_FOR = 1.0;
+const SAID_AT = 3.5;
+const FREE_AT = 4.6;
+/** After the watch has settled and the page holds still, a breath before it drops. */
+const BEAT_MS = 220;
+/** The 3D watch's head radius in scene units (to size it like the filmed one). */
+const HEAD_R = 0.452;
+/** Easing for the rise: leaves the water quickly, settles softly. */
+const easeOut = (k: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, k)), 3);
+const smooth01 = (k: number) => {
+  const t = Math.min(1, Math.max(0, k));
+  return t * t * (3 - 2 * t);
+};
 
 export function BrandStage({
   brand,
@@ -73,6 +74,7 @@ export function BrandStage({
   const water = useRef<HTMLDivElement>(null);
   const said = useRef<HTMLDivElement>(null);
   const drops = useRef<HTMLCanvasElement>(null);
+  const tint = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
   const motion = STAGES[brand.slug];
@@ -127,20 +129,31 @@ export function BrandStage({
     // own — the watch spins down and goes in beneath it.
     const { total, times } = sceneTimes(motion);
     const exit = exitStart(motion);
-    // The splash: as the watch settles into the scene marked for it, the water
-    // crashes into it, once, in real time (60 fps) while the page holds still.
-    // Scrolling back above that point resets it, to crash in again.
+    // Into the water: as the watch settles into the scene marked for it, the
+    // page holds still and the pool film plays; the 3D watch follows the filmed
+    // watch's path down into the water, then rises out of it with water
+    // running off it. Scrolling on takes it from there to the next scene;
+    // scrolling back above that point resets it all.
     const si = motion.scenes.findIndex((sc) => sc.splash);
-    const hitAt = si > 0 ? times[si].arrive - 0.02 : Infinity;
+    const pool = stage.pool;
+    const startAt = si > 0 ? times[si].arrive - 0.02 : Infinity;
     const until = si > 0 ? times[si].leave : Infinity;
+    const nextMove = si > 0 && si + 1 < motion.scenes.length ? motion.scenes[si + 1].move : 1;
     const film = water.current?.querySelector("video") ?? null;
     film?.pause();
     const clock = { p: 0 };
     let main: ScrollTrigger | null = null;
     let gone = false;
-    let played = false;
-    let inWindow = false;
+    // idle → run (film playing, the page held) → done (out of the water)
+    let phase: "idle" | "run" | "done" = "idle";
     let raf = 0;
+    let lastT = 0;
+    let emerged = false;
+    const ov = { x: 0, y: 0, z: 0, q: [0, 0, 0, 1] as [number, number, number, number] };
+    const qa = new Quaternion();
+    const qb = new Quaternion();
+    const qFront = new Quaternion();
+    const qStart = si > 0 ? new Quaternion().fromArray(motion.scenes[si].q).normalize() : new Quaternion();
     const time = () => {
       const h = hero.current!;
       const vh = window.innerHeight;
@@ -148,75 +161,102 @@ export function BrandStage({
       const p0 = pinned / (pinned + vh * (1 - EXIT_END));
       return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
     };
-    // Put the water on the 3D watch: where its head is on screen, at its size (as ShowcaseWatchScene places it).
-    const place = () => {
-      const w = water.current;
-      if (!w) return;
+    // The filmed watch at film time c, on screen (the film is shown object-fit: cover).
+    const filmed = (c: number) => {
+      const tr = pool!.track;
+      const n = tr.x.length - 1;
+      const fi = Math.min(n, Math.max(0, c * pool!.fps));
+      const i0 = Math.floor(fi);
+      const i1 = Math.min(n, i0 + 1);
+      const k = fi - i0;
+      const L = (a: number[]) => a[i0] * (1 - k) + a[i1] * k;
       const W = window.innerWidth;
       const H = window.innerHeight;
+      const sc = Math.max(W / pool!.size[0], H / pool!.size[1]);
+      const ox = (W - pool!.size[0] * sc) / 2;
+      const oy = (H - pool!.size[1] * sc) / 2;
+      return { x: ox + L(tr.x) * sc, y: oy + L(tr.y) * sc, r: L(tr.r) * sc, s: oy + L(tr.s) * sc, W, H, frame: fi };
+    };
+    // A head at (sx, sy) of radius r px on screen → the scene's state (undoing the phone placement in ShowcaseWatchScene).
+    const toScene = (sx: number, sy: number, r: number, W: number, H: number) => {
+      const f = H / 2 / Math.tan(((SHOWCASE_FOV / 2) * Math.PI) / 180);
+      const pz = (f * HEAD_R) / r;
+      const px = ((sx - W / 2) * pz) / f;
+      const py = (-(sy - H / 2) * pz) / f;
       const aspect = W / H;
       const portrait = aspect < 1 ? 1 - aspect : 0;
-      const px = state.x * Math.max(0, 1 - portrait * 2);
-      const py = state.y + portrait * PORTRAIT.lift;
-      const pz = -state.z * (1 + portrait * PORTRAIT.pull);
-      const f = H / 2 / Math.tan(((SHOWCASE_FOV / 2) * Math.PI) / 180);
-      const k = f / pz / UNIT;
-      const sx = W / 2 + (px / pz) * f;
-      const sy = H / 2 - (py / pz) * f;
-      const ox = sx - WATCH_AT.x * k;
-      const oy = sy - WATCH_AT.y * k;
-      w.style.transform = `translate(${ox}px, ${oy}px) scale(${k})`;
-      head = { x: ox + HEAD.x * k, y: oy + HEAD.y * k, r: HEAD.r * k };
+      const xf = Math.max(0, 1 - portrait * 2);
+      ov.x = xf > 0.02 ? px / xf : 0;
+      ov.y = py - portrait * PORTRAIT.lift;
+      ov.z = -pz / (1 + portrait * PORTRAIT.pull);
     };
-    let head = { x: 0, y: 0, r: 0 };
     const dropsCanvas = drops.current;
     const water2 = dropsCanvas ? new WaterDrops(dropsCanvas) : null;
-    let hit = false;
-    let last = 0;
-    // While the film plays: fade it in and out at its ends, show the words.
+    const sc = scene.current!;
+    const tintEl = tint.current;
+    // The watch under water takes on the water's colour, below the surface line only.
+    const setTint = (h: { x: number; y: number; r: number; s: number }, a: number) => {
+      if (!tintEl) return;
+      const top = Math.max(h.s, h.y - h.r * 3);
+      const on = a > 0.01 && top < h.y + h.r * 3;
+      tintEl.style.visibility = on ? "visible" : "hidden";
+      if (!on) return;
+      tintEl.style.opacity = a.toFixed(3);
+      tintEl.style.left = `${h.x - h.r * 1.9}px`;
+      tintEl.style.width = `${h.r * 3.8}px`;
+      tintEl.style.top = `${top}px`;
+    };
+    const setSaid = (a: number) => {
+      const s2 = said.current;
+      if (!s2) return;
+      s2.style.opacity = a.toFixed(3);
+      s2.style.visibility = a < 0.01 ? "hidden" : "visible";
+      s2.style.setProperty("--shift", `${(1 - a) * 30}px`);
+    };
+    // Each frame while the film plays (and while drops are still running).
     const tick = () => {
       raf = 0;
-      const w = water.current;
-      if (!w || !film) return;
-      const d = film.duration || 3.3;
-      const c = film.currentTime;
-      const a = played && inWindow ? Math.max(0, Math.min(1, c / 0.05, (d - c) / 0.45)) : 0;
-      w.style.opacity = a.toFixed(3);
-      w.style.visibility = a > 0.001 ? "visible" : "hidden";
-      const s2 = said.current;
-      if (s2) {
-        const b = played && inWindow ? Math.min(1, Math.max(0, (c - SAID_AT) / 0.4)) : 0;
-        s2.style.opacity = b.toFixed(3);
-        s2.style.visibility = b < 0.01 ? "hidden" : "visible";
-        s2.style.setProperty("--shift", `${(1 - b) * 30}px`);
-      }
-      // The water reaches the watch: spray across it, drops on it.
-      if (played && inWindow && !hit && c >= HIT_AT && water2) {
-        hit = true;
-        water2.burst(head.x, head.y, head.r);
-      }
+      if (!film || !pool) return;
       const now = performance.now();
-      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
-      last = now;
+      const dt = lastT ? Math.min(0.05, (now - lastT) / 1000) : 1 / 60;
+      lastT = now;
+      const c = film.currentTime;
+      if (phase !== "idle") {
+        const h = filmed(c);
+        // Down with the filmed watch, turning to face us; then up out of the water.
+        let sy = h.y;
+        const rise = easeOut((c - RISE_AT) / RISE_FOR);
+        if (c > RISE_AT) sy = h.y + (h.s - h.r * 2.3 - h.y) * rise;
+        toScene(h.x, sy, h.r, h.W, h.H);
+        qa.copy(qStart).slerp(qFront, smooth01(h.frame / 150));
+        ov.q = qa.toArray() as [number, number, number, number];
+        setTint({ ...h, y: sy }, 1);
+        // Out of the water: drops on it, drips off it.
+        if (!emerged && c > RISE_AT + RISE_FOR * 0.45 && water2) {
+          emerged = true;
+          water2.emerge(h.x, h.s - h.r * 2.3, h.r, h.s - h.r * 2.3 + h.r * 1.9);
+        }
+        setSaid(smooth01((c - SAID_AT) / 0.5));
+        if (c >= FREE_AT || film.ended) unlock();
+        if (c > RISE_AT + RISE_FOR) phase = "done";
+        draw();
+      }
       let more = false;
       if (water2 && water2.alive) {
-        // Gone with the watch: the drops clear once it moves on (or the page goes back).
-        water2.fade = played && inWindow ? Math.min(1, water2.fade + dt * 4) : Math.max(0, water2.fade - dt * 4);
         more = water2.frame(dt) && water2.fade > 0;
         if (!more) water2.clear();
       }
-      if ((played && !film.paused && !film.ended) || more) raf = requestAnimationFrame(tick);
-      else last = 0;
+      if ((phase !== "idle" && !film.paused && !film.ended) || more) raf = requestAnimationFrame(tick);
+      else lastT = 0;
     };
-    const sc = scene.current!;
-    // While the water hits, the page holds still: no scrolling until the film has played.
+    // While the water plays, the page holds still: no scrolling until the watch is out.
     const stop = (e: Event) => e.preventDefault();
     const stopKeys = (e: KeyboardEvent) => {
       if ([" ", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) e.preventDefault();
     };
     let locked = false;
     let release = 0;
-    const unlock = () => {
+    function unlock() {
       if (!locked) return;
       locked = false;
       clearTimeout(release);
@@ -225,19 +265,19 @@ export function BrandStage({
       window.removeEventListener("wheel", stop);
       window.removeEventListener("touchmove", stop);
       window.removeEventListener("keydown", stopKeys);
-    };
+    }
     const lock = () => {
-      if (locked || !film) return;
+      if (locked) return;
       locked = true;
       lenisRef.current?.stop();
       document.documentElement.style.overflow = "hidden";
       window.addEventListener("wheel", stop, { passive: false });
       window.addEventListener("touchmove", stop, { passive: false });
       window.addEventListener("keydown", stopKeys);
-      // Never longer than the film (should it not play at all, a short hold).
-      release = window.setTimeout(unlock, ((film.duration || 2.8) + 0.3) * 1000 + BEAT_MS);
+      // Never longer than the run (should the film not play at all, a short hold).
+      release = window.setTimeout(unlock, FREE_AT * 1000 + BEAT_MS + 400);
     };
-    // Where the page must stand for the timeline to read `t` (it holds there while the water hits).
+    // Where the page must stand for the timeline to read `t` (it holds there while the water plays).
     const scrollFor = (t: number) => {
       const st = main;
       if (!st) return window.scrollY;
@@ -249,37 +289,58 @@ export function BrandStage({
       return st.start + p * (st.end - st.start);
     };
     let beat = 0;
-    const splash = (t: number) => {
-      if (!film) return;
-      inWindow = t < until;
-      if (!played && t >= hitAt && inWindow) {
-        // The watch has settled: the page holds still, then the water comes.
-        played = true;
-        hit = false;
-        place();
-        const y = scrollFor(si > 0 ? times[si].arrive : t);
+    const reset = () => {
+      phase = "idle";
+      emerged = false;
+      clearTimeout(beat);
+      film?.pause();
+      if (film) film.currentTime = 0;
+      delete sc.dataset.film;
+      water2?.clear();
+      setSaid(0);
+      setTint({ x: 0, y: 0, r: 0, s: 0 }, 0);
+      unlock();
+    };
+    const run = (t: number) => {
+      if (!film || !pool) return;
+      if (phase === "idle" && t >= startAt && t < until) {
+        // The watch has settled: the page holds still, the water shows, and a beat later it drops.
+        phase = "run";
+        emerged = false;
+        const y = scrollFor(startAt + 0.02);
         if (lenisRef.current) lenisRef.current.scrollTo(y, { immediate: true, force: true });
         else window.scrollTo(0, y);
         lock();
-        clearTimeout(beat);
-        beat = window.setTimeout(() => {
-          film.currentTime = 0;
-          film.play().catch(() => {});
-        }, BEAT_MS);
-      } else if (played && t < hitAt - 0.3) {
-        played = false;
-        clearTimeout(beat);
-        film.pause();
         film.currentTime = 0;
+        sc.dataset.film = "";
+        clearTimeout(beat);
+        beat = window.setTimeout(() => film.play().catch(() => {}), BEAT_MS);
+        if (!raf) raf = requestAnimationFrame(tick);
+      } else if (phase !== "idle" && t < startAt - 0.3) {
+        reset();
       }
-      if (played) place();
-      if (!raf) raf = requestAnimationFrame(tick);
     };
     const draw = () => {
       const t = time();
       const o = sampleStage(motion, t, state, stage.lines.length);
       applyOverlay(o, title.current, lines.current, sides);
-      splash(t);
+      run(t);
+      if (phase !== "idle") {
+        // The watch goes where the water takes it; scrolling on, it eases from there into the next scene.
+        const k = t > until ? smooth01((t - until) / Math.max(0.1, nextMove)) : 0;
+        state.x = ov.x + (state.x - ov.x) * k;
+        state.y = ov.y + (state.y - ov.y) * k;
+        state.z = ov.z + (state.z - ov.z) * k;
+        qb.fromArray(state.q);
+        state.q = qa.fromArray(ov.q).slerp(qb, k).toArray() as [number, number, number, number];
+        // The water leaves as the page moves on, drops and all.
+        const away = t > until ? Math.max(0, 1 - (t - until) / 0.5) : 1;
+        sc.style.setProperty("--pool", away.toFixed(3));
+        if (water2) water2.fade = away;
+        if (away <= 0) delete sc.dataset.film;
+        else sc.dataset.film = "";
+        if (away < 1) setSaid(Math.min(away, said.current ? Number(said.current.style.opacity || 0) : 0));
+      }
       scene.current?.style.setProperty("--show", gone ? "0" : state.show.toFixed(3));
       // Once it has faded, or the collection covers it, there is nothing to draw.
       if (!gone && state.show > 0.005) wake.current();
@@ -310,17 +371,13 @@ export function BrandStage({
     const onPlay = () => {
       if (!raf) raf = requestAnimationFrame(tick);
     };
-    const onResize = () => {
-      water2?.resize();
-      if (played) place();
-    };
+    const onResize = () => water2?.resize();
     film?.addEventListener("playing", onPlay);
     film?.addEventListener("ended", unlock);
     window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(beat);
-      unlock();
+      reset();
       film?.removeEventListener("playing", onPlay);
       film?.removeEventListener("ended", unlock);
       window.removeEventListener("resize", onResize);
@@ -336,6 +393,15 @@ export function BrandStage({
     <div ref={region} className={styles.region}>
       <div ref={scene} className={styles.scene} aria-hidden>
         <div className={styles.light} />
+        {stage.pool && (
+          // The water, behind the 3D watch (its own watch taken out).
+          <div ref={water} className={styles.water}>
+            <video className={styles.pool} muted playsInline preload="auto" poster={stage.pool.poster}>
+              <source src={stage.pool.mobile} type="video/mp4" media="(max-width: 767px)" />
+              <source src={stage.pool.mp4} type="video/mp4" />
+            </video>
+          </div>
+        )}
         <div className={styles.canvas}>
           <ShowcaseWatchScene
             state={state}
@@ -348,16 +414,8 @@ export function BrandStage({
             portrait={PORTRAIT}
           />
         </div>
-        {stage.splash && (
-          <div ref={water} className={styles.water}>
-            <video className={styles.splash} muted playsInline preload="auto">
-              <source src={stage.splash.mobile} type="video/mp4" media="(max-width: 767px)" />
-              <source src={stage.splash.mp4} type="video/mp4" />
-              {stage.splash.webm && <source src={stage.splash.webm} type="video/webm" />}
-            </video>
-          </div>
-        )}
-        {stage.splash && <canvas ref={drops} className={styles.drops} />}
+        {stage.pool && <div ref={tint} className={styles.tint} />}
+        {stage.pool && <canvas ref={drops} className={styles.drops} />}
         {stage.water && (
           <div ref={said} className={styles.said}>
             <p className={styles.eyebrow}>{stage.water.eyebrow}</p>

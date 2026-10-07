@@ -7,7 +7,7 @@
 
 type Spray = { x: number; y: number; vx: number; vy: number; r: number; life: number; age: number };
 type Sheet = { y: number; amp: number; w: number; speed: number; age: number; life: number; phase: number };
-type Drop = { x: number; y: number; r: number; vy: number; delay: number; age: number; life: number; trail: number; wob: number };
+type Drop = { x: number; y: number; r: number; vy: number; delay: number; age: number; life: number; trail: number; wob: number; falls?: boolean };
 
 const rnd = (a: number, b: number) => a + Math.random() * (b - a);
 
@@ -80,6 +80,55 @@ export class WaterDrops {
         life: rnd(3.2, 5.5),
         trail: 0,
         wob: rnd(0, 6.28),
+      });
+    }
+  }
+
+  /**
+   * The watch comes up out of the water: water streams off it, drops cling
+   * to the crystal and case and run down, and drips fall from its lower edge.
+   * (cx, cy) the head's centre, r its radius, bottom the lowest point of the
+   * watch on screen.
+   */
+  emerge(cx: number, cy: number, r: number, bottom: number) {
+    this.fade = 1;
+    this.head = { x: cx, y: cy, r };
+    // A short spray thrown up and off as it breaks the surface.
+    for (let i = 0; i < 90; i++) {
+      const a = -Math.PI / 2 + rnd(-0.9, 0.9);
+      const v = rnd(500, 1300) * (r / 300);
+      this.spray.push({ x: cx + rnd(-1.1, 1.1) * r, y: cy + r * rnd(0.6, 1.1), vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: rnd(1.5, 4.5) * (r / 300), life: rnd(0.4, 0.9), age: 0 });
+    }
+    // Drops on the watch, running down.
+    for (let i = 0; i < 80; i++) {
+      const ang = rnd(0, Math.PI * 2);
+      const d = Math.sqrt(Math.random()) * r * 1.1;
+      const big = Math.random() < 0.4;
+      this.drops.push({
+        x: cx + Math.cos(ang) * d,
+        y: cy + Math.sin(ang) * d * 1.15,
+        r: (big ? rnd(8, 15) : rnd(3, 7)) * (r / 300),
+        vy: 0,
+        delay: rnd(0, 0.15),
+        age: 0,
+        life: rnd(3.5, 6),
+        trail: 0,
+        wob: rnd(0, 6.28),
+      });
+    }
+    // Drips: forming at the lower edge, then letting go and falling.
+    for (let i = 0; i < 16; i++) {
+      this.drops.push({
+        x: cx + rnd(-0.75, 0.75) * r,
+        y: bottom - rnd(0, 0.06) * r,
+        r: rnd(5, 9) * (r / 300),
+        vy: 0,
+        delay: rnd(0.1, 3.2),
+        age: 0,
+        life: 2.5,
+        trail: 0,
+        wob: rnd(0, 6.28),
+        falls: true,
       });
     }
   }
@@ -159,7 +208,13 @@ export class WaterDrops {
     for (const d of this.drops) {
       const t = d.age - d.delay;
       if (t < 0) continue;
-      if (d.r > 4.5 && t > 0.6) {
+      if (d.falls) {
+        // A drip swells for a moment, then drops away under gravity.
+        if (t > 0.35) {
+          d.vy += 2400 * dt;
+          d.y += d.vy * dt;
+        }
+      } else if (d.r > 4.5 && t > 0.6) {
         d.vy = Math.min(d.vy + 60 * dt, 90 * (d.r / 8));
         d.y += d.vy * dt;
         d.x += Math.sin(t * 3 + d.wob) * 6 * dt;

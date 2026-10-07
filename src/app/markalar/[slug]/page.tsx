@@ -7,6 +7,7 @@ import { BrandFilmHero } from "@/components/brand/BrandFilmHero";
 import { Petals } from "@/components/effects/Petals";
 import { BrandShowcase } from "@/components/brand/BrandShowcase";
 import { BrandStage } from "@/components/brand/BrandStage";
+import { TennisLoader } from "@/components/brand/TennisLoader";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionMarker } from "@/components/ui/SectionMarker";
@@ -118,6 +119,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
 
   return (
     <>
+      {brand.loader === "tennis" && <TennisLoader />}
       <main>
         {watchHero && <BrandWatchHero name={brand.name} model={watchHero.model} label={watchHero.label} notes={watchHero.notes} />}
         {(film || scene || photo) && <BrandFilmHero brand={brand} next={brand.showcase ? "#yakindan" : "#saatler"} />}

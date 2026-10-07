@@ -121,6 +121,8 @@ export type Brand = {
    * then swaying behind the collection.
    */
   stage?: BrandStageDef;
+  /** A short opening beat while the page loads: a tennis ball spinning mid-screen. */
+  loader?: "tennis";
   /** Behind the watches, the whole height of their section (cover). */
   backdrop?: string;
   /**

@@ -51,7 +51,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
       className={styles.hero}
       data-theme={brand.theme}
       data-scene={scene ? "" : undefined}
-      data-photo={photo ? "" : undefined}
+      data-photo={photo || film?.natural ? "" : undefined}
       data-nav-theme="dark"
       aria-label={brand.name}
     >
@@ -76,6 +76,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
             preload="auto"
             aria-hidden
           >
+            {film.mobile && <source src={film.mobile} type="video/mp4" media="(max-width: 767px)" />}
             {film.webm && <source src={film.webm} type="video/webm" />}
             <source src={film.mp4} type="video/mp4" />
           </video>
@@ -88,7 +89,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
           <Image src={brand.pageLogo ?? brand.logo} alt={brand.name} fill priority sizes="(max-width: 767px) 60vw, 340px" />
         </h1>
         <p className={styles.signature}>{brand.signature}</p>
-        {photo?.caption && <p className={styles.caption}>{photo.caption}</p>}
+        {(photo?.caption ?? film?.caption) && <p className={styles.caption}>{photo?.caption ?? film?.caption}</p>}
       </div>
 
       <dl className={styles.facts}>

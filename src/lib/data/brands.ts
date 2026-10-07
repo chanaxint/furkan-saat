@@ -123,13 +123,15 @@ export const BRANDS: Brand[] = [
     signature: "Polo ve tenisin sportif zarafeti.",
     description:
       "Kaliforniya'daki Santa Barbara'nın kulüp yaşamından ilham alan marka; polo ve tenisin sportif zarafetini günlük kullanıma uygun saatlere taşır.",
-    cover: "/assets/images/brands/santa-barbara-polo-estate-2.webp",
+    cover: "/assets/video/brands/santa-barbara-polo.jpg",
     logo: "/assets/images/brands/tile-santa-barbara-polo.webp",
     pageLogo: "/assets/images/brands/santa-barbara-polo-logo.png",
     tile: "/assets/images/brands/tile-santa-barbara-polo.webp",
-    photo: {
-      image: "/assets/images/brands/santa-barbara-polo-estate-2.webp",
-      alt: "Akşamüstü ışığında bir kulüp malikânesi, tenis kortları ve polo sahası",
+    film: {
+      mp4: "/assets/video/brands/santa-barbara-polo.mp4",
+      mobile: "/assets/video/brands/santa-barbara-polo-mobile.mp4",
+      poster: "/assets/video/brands/santa-barbara-polo.jpg",
+      natural: true,
       caption: "Santa Barbara · Kaliforniya",
     },
   },

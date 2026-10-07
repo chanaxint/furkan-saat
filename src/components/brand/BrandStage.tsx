@@ -39,6 +39,12 @@ const PORTRAIT = { lift: 0.32, pull: 2.2 };
 const RISE_AT = 2.6;
 const RISE_FOR = 1.0;
 const SAID_AT = 3.5;
+/**
+ * Out of the water, as fractions of the screen's height: where the watch's
+ * head comes to rest and how big it is, and where the surface ends up (the
+ * film is drawn down as if the camera rose with the watch).
+ */
+const RISE_TO = { y: 0.38, r: 0.16, surface: 0.9 };
 const FREE_AT = 4.6;
 /** After the watch has settled and the page holds still, a breath before it drops. */
 const BEAT_MS = 220;
@@ -223,18 +229,30 @@ export function BrandStage({
       const c = film.currentTime;
       if (phase !== "idle") {
         const h = filmed(c);
-        // Down with the filmed watch, turning to face us; then up out of the water.
+        // Down with the filmed watch, turning to face us; then up out of the
+        // water, the film drawn down below it as if the camera rose with it.
         let sy = h.y;
-        const rise = easeOut((c - RISE_AT) / RISE_FOR);
-        if (c > RISE_AT) sy = h.y + (h.s - h.r * 2.3 - h.y) * rise;
-        toScene(h.x, sy, h.r, h.W, h.H);
+        let r = h.r;
+        let pan = 0;
+        if (c > RISE_AT) {
+          const e = easeOut((c - RISE_AT) / RISE_FOR);
+          sy = h.y + (h.H * RISE_TO.y - h.y) * e;
+          r = h.r + (Math.min(h.r, h.H * RISE_TO.r) - h.r) * e;
+          pan = Math.max(0, h.H * RISE_TO.surface - h.s) * e;
+        }
+        film.style.transform = pan ? `translate3d(0, ${pan.toFixed(1)}px, 0)` : "";
+        const surface = h.s + pan;
+        toScene(h.x, sy, r, h.W, h.H);
         qa.copy(qStart).slerp(qFront, smooth01(h.frame / 150));
         ov.q = qa.toArray() as [number, number, number, number];
-        setTint({ ...h, y: sy }, 1);
-        // Out of the water: drops on it, drips off it.
-        if (!emerged && c > RISE_AT + RISE_FOR * 0.45 && water2) {
-          emerged = true;
-          water2.emerge(h.x, h.s - h.r * 2.3, h.r, h.s - h.r * 2.3 + h.r * 1.9);
+        setTint({ x: h.x, y: sy, r, s: surface }, 1);
+        // Out of the water: drops on it, drips off it (and they go up with it).
+        if (water2) {
+          if (!emerged && c > RISE_AT && sy + r * 0.9 < surface) {
+            emerged = true;
+            water2.emerge(h.x, sy, r, sy + r * 1.1);
+          }
+          if (emerged) water2.moveTo(h.x, sy);
         }
         setSaid(smooth01((c - SAID_AT) / 0.5));
         if (c >= FREE_AT || film.ended) unlock();
@@ -294,7 +312,10 @@ export function BrandStage({
       emerged = false;
       clearTimeout(beat);
       film?.pause();
-      if (film) film.currentTime = 0;
+      if (film) {
+        film.currentTime = 0;
+        film.style.transform = "";
+      }
       delete sc.dataset.film;
       water2?.clear();
       setSaid(0);
@@ -399,6 +420,7 @@ export function BrandStage({
             <video className={styles.pool} muted playsInline preload="auto" poster={stage.pool.poster}>
               <source src={stage.pool.mobile} type="video/mp4" media="(max-width: 767px)" />
               <source src={stage.pool.mp4} type="video/mp4" />
+              {stage.pool.webm && <source src={stage.pool.webm} type="video/webm" />}
             </video>
           </div>
         )}

@@ -43,6 +43,7 @@ export const BRANDS: Brand[] = [
       pool: {
         mp4: "/assets/video/brands/casio-pool.mp4",
         mobile: "/assets/video/brands/casio-pool-mobile.mp4",
+        webm: "/assets/video/brands/casio-pool.webm",
         poster: "/assets/video/brands/casio-pool.jpg",
         size: [1920, 742],
         fps: 60,

@@ -97,17 +97,17 @@ export class WaterDrops {
     for (let i = 0; i < 90; i++) {
       const a = -Math.PI / 2 + rnd(-0.9, 0.9);
       const v = rnd(500, 1300) * (r / 300);
-      this.spray.push({ x: cx + rnd(-1.1, 1.1) * r, y: cy + r * rnd(0.6, 1.1), vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: rnd(1.5, 4.5) * (r / 300), life: rnd(0.4, 0.9), age: 0 });
+      this.spray.push({ x: cx + rnd(-1.1, 1.1) * r, y: cy + r * rnd(0.6, 1.1), vx: Math.cos(a) * v, vy: Math.sin(a) * v, r: rnd(2, 5.5) * (r / 220), life: rnd(0.4, 0.9), age: 0 });
     }
     // Drops on the watch, running down.
-    for (let i = 0; i < 80; i++) {
+    for (let i = 0; i < 110; i++) {
       const ang = rnd(0, Math.PI * 2);
       const d = Math.sqrt(Math.random()) * r * 1.1;
       const big = Math.random() < 0.4;
       this.drops.push({
         x: cx + Math.cos(ang) * d,
         y: cy + Math.sin(ang) * d * 1.15,
-        r: (big ? rnd(8, 15) : rnd(3, 7)) * (r / 300),
+        r: (big ? rnd(9, 17) : rnd(3.5, 7.5)) * (r / 200),
         vy: 0,
         delay: rnd(0, 0.15),
         age: 0,
@@ -121,7 +121,7 @@ export class WaterDrops {
       this.drops.push({
         x: cx + rnd(-0.75, 0.75) * r,
         y: bottom - rnd(0, 0.06) * r,
-        r: rnd(5, 9) * (r / 300),
+        r: rnd(6, 10) * (r / 200),
         vy: 0,
         delay: rnd(0.1, 3.2),
         age: 0,
@@ -131,6 +131,20 @@ export class WaterDrops {
         falls: true,
       });
     }
+  }
+
+  /** The watch has moved (still rising): the drops on it go with it; those already falling don't. */
+  moveTo(cx: number, cy: number) {
+    const dx = cx - this.head.x;
+    const dy = cy - this.head.y;
+    if (!dx && !dy) return;
+    for (const d of this.drops) {
+      if (d.falls && d.vy > 0) continue;
+      d.x += dx;
+      d.y += dy;
+    }
+    this.head.x = cx;
+    this.head.y = cy;
   }
 
   /** Advance by dt seconds and draw. Returns whether anything is left. */

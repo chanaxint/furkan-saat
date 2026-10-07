@@ -179,10 +179,10 @@
 }
 
 /*
- * The splash: real water filmed on black, laid over the watch. One copy
- * inverted and multiplied darkens the ground where the water's body and edges
- * are (water on a light ground reads by its edges); the other, screened,
- * adds its highlights over the steel. Shown by the timeline (opacity).
+ * The splash film: the watch filmed in the 3D layer's last pose, the water
+ * crashing into it. Shown (data-film) as the watch arrives in that pose: it
+ * fades in over the 3D layer, which hides once covered; on the way out the
+ * 3D watch comes back and the film fades off it.
  */
 .water {
   position: absolute;
@@ -190,6 +190,18 @@
   visibility: hidden;
   opacity: 0;
   pointer-events: none;
+  transition:
+    opacity 0.35s var(--ease-soft),
+    visibility 0s linear 0.35s;
+}
+.scene[data-film] .water {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.25s var(--ease-soft);
+}
+.scene[data-film] .canvas {
+  opacity: 0;
+  transition: opacity 0s linear 0.25s;
 }
 .splash {
   position: absolute;
@@ -197,17 +209,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* The water comes in from the left edge: keep that edge on narrow screens. */
-  object-position: 0% 50%;
 }
-.splash[data-layer="body"] {
-  filter: invert(1) contrast(1.15) brightness(1.04) sepia(0.25) hue-rotate(150deg) saturate(1.3);
-  mix-blend-mode: multiply;
-  opacity: 0.72;
-}
-.splash[data-layer="light"] {
-  filter: contrast(1.6) brightness(0.9);
-  mix-blend-mode: screen;
+@media (max-width: 767px) {
+  /* Phones: keep the watch (left of the frame's centre) in view. */
+  .splash {
+    object-position: 44% 50%;
+  }
 }
 
 /* "Su geçirmez" beside the watch while the water hits it (opacity and shift from the timeline). */

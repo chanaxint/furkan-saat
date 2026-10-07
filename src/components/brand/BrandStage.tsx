@@ -28,8 +28,8 @@ const EXIT_END = -0.5;
 /** Phones: the watch sits higher and further back. */
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
-/** Seconds into the splash film when "Su geçirmez" appears (the water reaching the watch). */
-const SAID_AT = 1.6;
+/** Seconds into the splash film when "Su geçirmez" appears (the water has hit the watch). */
+const SAID_AT = 2.4;
 
 export function BrandStage({
   brand,
@@ -105,18 +105,19 @@ export function BrandStage({
     // own — the watch spins down and goes in beneath it.
     const { total, times } = sceneTimes(motion);
     const exit = exitStart(motion);
-    // The splash: as the watch settles into the scene marked for it, the
-    // water crashes in once, in real time (not scrubbed). Scrolling back above
-    // that point resets it, so it can crash in again.
+    // The splash: the scene marked for it holds the watch in exactly the pose
+    // of the film's first frame. As it arrives there, the film takes over
+    // (the 3D layer hides under it) and the water crashes into the watch, once,
+    // in real time at 60 fps. Scrolling on past the scene hands back to the 3D
+    // watch; scrolling back above it resets the film, to crash in again.
     const si = motion.scenes.findIndex((sc) => sc.splash);
-    const hitAt = si > 0 ? times[si].arrive - 0.15 : Infinity;
-    const until = si > 0 ? times[si].leave + 0.6 : Infinity;
-    const vids = Array.from(water.current?.querySelectorAll("video") ?? []);
-    vids.forEach((v) => v.pause());
+    const hitAt = si > 0 ? times[si].arrive - 0.05 : Infinity;
+    const until = si > 0 ? times[si].leave : Infinity;
+    const film = water.current?.querySelector("video") ?? null;
+    film?.pause();
     const clock = { p: 0 };
     let gone = false;
     let played = false;
-    let inWindow = false;
     let raf = 0;
     const time = () => {
       const h = hero.current!;
@@ -125,47 +126,32 @@ export function BrandStage({
       const p0 = pinned / (pinned + vh * (1 - EXIT_END));
       return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
     };
-    // While the film plays: fade it in and out at its ends, keep the second copy in step, show the words.
-    const tick = () => {
+    const words = () => {
       raf = 0;
-      const w = water.current;
-      const lead = vids[0];
-      if (!w || !lead) return;
-      const d = lead.duration || 8;
-      const c = lead.currentTime;
-      const fade = played && inWindow ? Math.min(1, c / 0.12, (d - c) / 0.6) : 0;
-      w.style.opacity = Math.max(0, fade).toFixed(3);
-      w.style.visibility = fade > 0.001 ? "visible" : "hidden";
-      for (const v of vids.slice(1)) if (Math.abs(v.currentTime - c) > 0.04) v.currentTime = c;
       const s2 = said.current;
-      if (s2) {
-        const a = played && inWindow ? Math.min(1, Math.max(0, (c - SAID_AT) / 0.5)) : 0;
-        s2.style.opacity = a.toFixed(3);
-        s2.style.visibility = a < 0.01 ? "hidden" : "visible";
-        s2.style.setProperty("--shift", `${(1 - a) * 30}px`);
-      }
-      if (played && !lead.paused && !lead.ended) raf = requestAnimationFrame(tick);
+      if (!s2 || !film) return;
+      const a = played && sc.dataset.film !== undefined ? Math.min(1, Math.max(0, (film.currentTime - SAID_AT) / 0.6)) : 0;
+      s2.style.opacity = a.toFixed(3);
+      s2.style.visibility = a < 0.01 ? "hidden" : "visible";
+      s2.style.setProperty("--shift", `${(1 - a) * 30}px`);
+      if (played && !film.paused && !film.ended) raf = requestAnimationFrame(words);
     };
-    const run = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
-    };
+    const sc = scene.current!;
     const splash = (t: number) => {
-      if (!vids.length) return;
-      inWindow = t < until;
-      if (!played && t >= hitAt && inWindow) {
+      if (!film) return;
+      const on = t >= hitAt && t < until;
+      if (on && !played) {
         played = true;
-        vids.forEach((v) => {
-          v.currentTime = 0;
-          v.play().catch(() => {});
-        });
+        film.currentTime = 0;
+        film.play().catch(() => {});
       } else if (played && t < hitAt - 0.3) {
         played = false;
-        vids.forEach((v) => {
-          v.pause();
-          v.currentTime = 0;
-        });
+        film.pause();
+        film.currentTime = 0;
       }
-      run();
+      if (on && played) sc.dataset.film = "";
+      else delete sc.dataset.film;
+      if (!raf) raf = requestAnimationFrame(words);
     };
     const draw = () => {
       const t = time();
@@ -199,17 +185,13 @@ export function BrandStage({
         draw();
       },
     });
-    const onPlay = () => run();
-    vids.forEach((v) => {
-      v.addEventListener("playing", onPlay);
-      v.addEventListener("ended", onPlay);
-    });
+    const onPlay = () => {
+      if (!raf) raf = requestAnimationFrame(words);
+    };
+    film?.addEventListener("playing", onPlay);
     return () => {
       cancelAnimationFrame(raf);
-      vids.forEach((v) => {
-        v.removeEventListener("playing", onPlay);
-        v.removeEventListener("ended", onPlay);
-      });
+      film?.removeEventListener("playing", onPlay);
     };
   }, region);
 
@@ -235,17 +217,12 @@ export function BrandStage({
           />
         </div>
         {stage.splash && (
-          // The same film twice: inverted and multiplied, the water's body and
-          // edges darken the light ground like real water; screened, its
-          // highlights brighten the watch behind it.
           <div ref={water} className={styles.water}>
-            {(["body", "light"] as const).map((k) => (
-              <video key={k} className={styles.splash} data-layer={k} muted playsInline preload="auto">
-                <source src={stage.splash!.mobile} type="video/mp4" media="(max-width: 767px)" />
-                <source src={stage.splash!.mp4} type="video/mp4" />
-                {stage.splash!.webm && <source src={stage.splash!.webm} type="video/webm" />}
-              </video>
-            ))}
+            <video className={styles.splash} muted playsInline preload="auto">
+              <source src={stage.splash.mobile} type="video/mp4" media="(max-width: 767px)" />
+              <source src={stage.splash.mp4} type="video/mp4" />
+              {stage.splash.webm && <source src={stage.splash.webm} type="video/webm" />}
+            </video>
           </div>
         )}
         {stage.water && (

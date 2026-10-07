@@ -137,10 +137,10 @@ export type BrandStageDef = {
   /** What is said beside the close-ups: the name on the dial, then the bracelet. */
   lines: [StageLineDef, StageLineDef];
   /**
-   * Real water (filmed on black) that crashes into the watch from the side
-   * as it settles into the scene marked `splash` in stages.json; plays once
-   * in real time (60 fps), and again after scrolling back above that point. Shown over the 3D layer through blend modes, so only the
-   * water shows on the light ground.
+   * The watch filmed with water crashing into it, its first frame in the pose
+   * of the scene marked `splash` in stages.json: as the 3D watch arrives
+   * there, the film takes over and plays once in real time; scrolling on hands
+   * back to the 3D watch.
    */
   splash?: StageFilm;
   /** Beside the splash: the title, then eyebrow and text. */

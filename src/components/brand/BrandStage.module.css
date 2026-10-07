@@ -209,6 +209,15 @@
   height: 100%;
 }
 
+/* Spray and drops in front of the watch (drawn by lib/scene/drops). */
+.drops {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
 /* "Su geçirmez" beside the watch while the water hits it (opacity and shift from the timeline). */
 .said {
   position: absolute;

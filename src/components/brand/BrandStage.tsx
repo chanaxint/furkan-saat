@@ -10,6 +10,7 @@ import type { Brand, BrandStageDef } from "@/lib/data/types";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { STAGES } from "@/lib/data/stages";
 import { SHOWCASE_FOV } from "@/lib/scene/showcase";
+import { WaterDrops } from "@/lib/scene/drops";
 import { applyOverlay, createStageState, exitStart, sampleStage, sceneTimes } from "@/lib/scene/stage";
 import styles from "./BrandStage.module.css";
 
@@ -30,7 +31,11 @@ const EXIT_END = -0.5;
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
 /** Seconds into the splash film when "Su geçirmez" appears (the water has hit the watch). */
-const SAID_AT = 0.9;
+const SAID_AT = 0.55;
+/** Seconds into the film when the water reaches the watch (the spray and drops in front of it start). */
+const HIT_AT = 0.45;
+/** After the watch has settled and the page holds still, a breath before the water comes. */
+const BEAT_MS = 260;
 /**
  * The splash film is water only (the filmed watch taken out), as a
  * hard-light map: mid-grey leaves the page as it is, darker darkens, lighter
@@ -41,6 +46,8 @@ const SAID_AT = 0.9;
  */
 const FILM = { w: 1920, h: 1080 };
 const WATCH_AT = { x: 853.8, y: 545.6 };
+/** The filmed watch head's centre and radius in the film's frame. */
+const HEAD = { x: 769, y: 567, r: 310 };
 const UNIT = 513.5;
 
 export function BrandStage({
@@ -65,6 +72,7 @@ export function BrandStage({
   const scene = useRef<HTMLDivElement>(null);
   const water = useRef<HTMLDivElement>(null);
   const said = useRef<HTMLDivElement>(null);
+  const drops = useRef<HTMLCanvasElement>(null);
   const lines = useRef<(HTMLDivElement | null)[]>([]);
   const wake = useRef<() => void>(() => {});
   const motion = STAGES[brand.slug];
@@ -123,11 +131,12 @@ export function BrandStage({
     // crashes into it, once, in real time (60 fps) while the page holds still.
     // Scrolling back above that point resets it, to crash in again.
     const si = motion.scenes.findIndex((sc) => sc.splash);
-    const hitAt = si > 0 ? times[si].arrive - 0.05 : Infinity;
+    const hitAt = si > 0 ? times[si].arrive - 0.02 : Infinity;
     const until = si > 0 ? times[si].leave : Infinity;
     const film = water.current?.querySelector("video") ?? null;
     film?.pause();
     const clock = { p: 0 };
+    let main: ScrollTrigger | null = null;
     let gone = false;
     let played = false;
     let inWindow = false;
@@ -154,8 +163,16 @@ export function BrandStage({
       const k = f / pz / UNIT;
       const sx = W / 2 + (px / pz) * f;
       const sy = H / 2 - (py / pz) * f;
-      w.style.transform = `translate(${sx - WATCH_AT.x * k}px, ${sy - WATCH_AT.y * k}px) scale(${k})`;
+      const ox = sx - WATCH_AT.x * k;
+      const oy = sy - WATCH_AT.y * k;
+      w.style.transform = `translate(${ox}px, ${oy}px) scale(${k})`;
+      head = { x: ox + HEAD.x * k, y: oy + HEAD.y * k, r: HEAD.r * k };
     };
+    let head = { x: 0, y: 0, r: 0 };
+    const dropsCanvas = drops.current;
+    const water2 = dropsCanvas ? new WaterDrops(dropsCanvas) : null;
+    let hit = false;
+    let last = 0;
     // While the film plays: fade it in and out at its ends, show the words.
     const tick = () => {
       raf = 0;
@@ -173,7 +190,23 @@ export function BrandStage({
         s2.style.visibility = b < 0.01 ? "hidden" : "visible";
         s2.style.setProperty("--shift", `${(1 - b) * 30}px`);
       }
-      if (played && !film.paused && !film.ended) raf = requestAnimationFrame(tick);
+      // The water reaches the watch: spray across it, drops on it.
+      if (played && inWindow && !hit && c >= HIT_AT && water2) {
+        hit = true;
+        water2.burst(head.x, head.y, head.r);
+      }
+      const now = performance.now();
+      const dt = last ? Math.min(0.05, (now - last) / 1000) : 1 / 60;
+      last = now;
+      let more = false;
+      if (water2 && water2.alive) {
+        // Gone with the watch: the drops clear once it moves on (or the page goes back).
+        water2.fade = played && inWindow ? Math.min(1, water2.fade + dt * 4) : Math.max(0, water2.fade - dt * 4);
+        more = water2.frame(dt) && water2.fade > 0;
+        if (!more) water2.clear();
+      }
+      if ((played && !film.paused && !film.ended) || more) raf = requestAnimationFrame(tick);
+      else last = 0;
     };
     const sc = scene.current!;
     // While the water hits, the page holds still: no scrolling until the film has played.
@@ -202,19 +235,40 @@ export function BrandStage({
       window.addEventListener("touchmove", stop, { passive: false });
       window.addEventListener("keydown", stopKeys);
       // Never longer than the film (should it not play at all, a short hold).
-      release = window.setTimeout(unlock, ((film.duration || 3.3) + 0.3) * 1000);
+      release = window.setTimeout(unlock, ((film.duration || 2.8) + 0.3) * 1000 + BEAT_MS);
     };
+    // Where the page must stand for the timeline to read `t` (it holds there while the water hits).
+    const scrollFor = (t: number) => {
+      const st = main;
+      if (!st) return window.scrollY;
+      const h = hero.current!;
+      const vh = window.innerHeight;
+      const pinned = Math.max(1, h.offsetHeight - vh);
+      const p0 = pinned / (pinned + vh * (1 - EXIT_END));
+      const p = t < exit ? (t / exit) * p0 : p0 + ((t - exit) / (total - exit)) * (1 - p0);
+      return st.start + p * (st.end - st.start);
+    };
+    let beat = 0;
     const splash = (t: number) => {
       if (!film) return;
       inWindow = t < until;
       if (!played && t >= hitAt && inWindow) {
+        // The watch has settled: the page holds still, then the water comes.
         played = true;
+        hit = false;
         place();
-        film.currentTime = 0;
-        film.play().catch(() => {});
+        const y = scrollFor(si > 0 ? times[si].arrive : t);
+        if (lenisRef.current) lenisRef.current.scrollTo(y, { immediate: true, force: true });
+        else window.scrollTo(0, y);
         lock();
+        clearTimeout(beat);
+        beat = window.setTimeout(() => {
+          film.currentTime = 0;
+          film.play().catch(() => {});
+        }, BEAT_MS);
       } else if (played && t < hitAt - 0.3) {
         played = false;
+        clearTimeout(beat);
         film.pause();
         film.currentTime = 0;
       }
@@ -232,7 +286,7 @@ export function BrandStage({
     };
     draw();
     const tl = gsap.to(clock, { p: 1, ease: "none", onUpdate: draw });
-    ScrollTrigger.create({
+    main = ScrollTrigger.create({
       trigger: hero.current,
       start: "top top",
       end: `bottom ${EXIT_END * 100}%`,
@@ -256,12 +310,16 @@ export function BrandStage({
     const onPlay = () => {
       if (!raf) raf = requestAnimationFrame(tick);
     };
-    const onResize = () => played && place();
+    const onResize = () => {
+      water2?.resize();
+      if (played) place();
+    };
     film?.addEventListener("playing", onPlay);
     film?.addEventListener("ended", unlock);
     window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
+      clearTimeout(beat);
       unlock();
       film?.removeEventListener("playing", onPlay);
       film?.removeEventListener("ended", unlock);
@@ -299,6 +357,7 @@ export function BrandStage({
             </video>
           </div>
         )}
+        {stage.splash && <canvas ref={drops} className={styles.drops} />}
         {stage.water && (
           <div ref={said} className={styles.said}>
             <p className={styles.eyebrow}>{stage.water.eyebrow}</p>

@@ -57,6 +57,37 @@
   min-height: 0;
   padding-top: clamp(36px, 4.5vw, 64px);
 }
+/*
+ * The house's own still life behind the watches, the whole height of the
+ * section (at least a screen): on wide screens the upright photograph stands
+ * at the right, its left edge fading into the same cream; on phones it fills.
+ */
+.withBackdrop {
+  isolation: isolate;
+  min-height: 100svh;
+  background: linear-gradient(to bottom, #ebe2d3, #efe5d7 25%, #ebe3d4 50%, #e4d6c6 75%, #d8cbbb);
+}
+.withBackdrop::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  aspect-ratio: 1116 / 2000;
+  background: var(--backdrop) center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%);
+  mask-image: linear-gradient(to right, transparent, #000 12%);
+  pointer-events: none;
+}
+@media (max-aspect-ratio: 1116 / 2000) {
+  .withBackdrop::before {
+    left: 0;
+    aspect-ratio: auto;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
 /* Straight after the film: the watches open the page, no gap above them. */
 .watches.first {
   margin-top: 0;

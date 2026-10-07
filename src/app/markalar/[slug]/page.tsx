@@ -43,7 +43,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   const photo = brand.photo;
   const opening = !!(film || scene || stage || watchHero || photo);
 
-  const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : "", brand.foot ? styles.withFoot : ""].join(" ");
+  const pageClass = ["page", opening ? styles.afterFilm : "", scene ? styles.overScene : "", brand.theme === "gold" ? styles.gold : "", stage ? styles.overStage : "", brand.foot ? styles.withFoot : "", brand.backdrop ? styles.withBackdrop : ""].join(" ");
+  const pageStyle = brand.backdrop ? ({ "--backdrop": `url(${brand.backdrop})` } as React.CSSProperties) : undefined;
   const watches = (
     <section
       id="saatler"
@@ -68,7 +69,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
     </section>
   );
   const body = (
-    <div id="hikaye" className={pageClass} data-nav-theme="light">
+    <div id="hikaye" className={pageClass} style={pageStyle} data-nav-theme="light">
       {/* The petals fall over the page and the picture at its foot, behind the watches' photographs… */}
       {scene && <Petals className={styles.scenePetals} wind />}
       {/* …and three or four drift across them. */}

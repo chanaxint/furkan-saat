@@ -121,6 +121,8 @@ export type Brand = {
    * then swaying behind the collection.
    */
   stage?: BrandStageDef;
+  /** Behind the watches, the whole height of their section (cover). */
+  backdrop?: string;
   /**
    * Palette. `gold`: the brand page has a warm white ground with gold accents,
    * and its home page tile name is set in gold (use a gold `logo` with it).

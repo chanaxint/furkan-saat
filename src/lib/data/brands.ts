@@ -116,6 +116,7 @@ export const BRANDS: Brand[] = [
     logo: "/assets/images/brands/tile-santa-barbara-polo.webp",
     pageLogo: "/assets/images/brands/santa-barbara-polo-logo.png",
     tile: "/assets/images/brands/tile-santa-barbara-polo.webp",
+    backdrop: "/assets/images/brands/santa-barbara-polo-backdrop.webp",
     film: {
       mp4: "/assets/video/brands/santa-barbara-polo.mp4",
       mobile: "/assets/video/brands/santa-barbara-polo-mobile.mp4",

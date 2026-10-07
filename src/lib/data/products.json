@@ -964,5 +964,795 @@
     "addedAt": "2026-10-02",
     "tone": "champagne",
     "front": "/assets/images/watches/front/x-freelook-klasik-beyaz-altin.webp"
+  },
+  {
+    "slug": "santa-barbara-polo-bicolor-tasli-beyaz-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Bicolor Taşlı — Beyaz Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-bicolor-tasli-beyaz-kadran.webp"
+    ],
+    "description": "Güneş ışını desenli beyaz kadran, taş saat işaretleri ve altın renk akrep-yelkovan; bicolor bilezikle zarif bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "ivory"
+  },
+  {
+    "slug": "santa-barbara-polo-tasli-buz-mavisi-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Taşlı — Buz Mavisi Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-tasli-buz-mavisi-kadran.webp"
+    ],
+    "description": "Buz mavisi güneş desenli kadran ve taş saat işaretleri; çelik kasa ve bilezikle sade, ışıltılı bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "stone"
+  },
+  {
+    "slug": "santa-barbara-polo-altin-bordo-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Altın — Bordo Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-altin-bordo-kadran.webp"
+    ],
+    "description": "Derin bordo kadran, ince altın çubuk işaretler ve altın renk kasa; küçük, klasik bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "wine"
+  },
+  {
+    "slug": "santa-barbara-polo-klasik-siyah-dokulu-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Klasik — Siyah Dokulu Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-klasik-siyah-dokulu-kadran.webp"
+    ],
+    "description": "Çekiç dokulu siyah kadran, çubuk işaretler ve tarih penceresi; çelik kasa ve beş sıra bilezikle klasik bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-multifonksiyon-gri-kadran-rose-detay",
+    "brand": "santa-barbara-polo",
+    "model": "Multifonksiyon — Gri Kadran, Rose Detay",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-multifonksiyon-gri-kadran-rose-detay.webp"
+    ],
+    "description": "Gri kadranda gün, 24 saat ve tarih alt kadranları; rose altın işaretler ve akrep-yelkovanla çelik bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "stone"
+  },
+  {
+    "slug": "santa-barbara-polo-tonneau-beyaz-kadran-kucuk-saniye",
+    "brand": "santa-barbara-polo",
+    "model": "Tonneau — Beyaz Kadran, Küçük Saniye",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-tonneau-beyaz-kadran-kucuk-saniye.webp"
+    ],
+    "description": "Fıçı (tonneau) biçimli çelik kasa, güneş desenli beyaz kadran, Roma rakamlı XII ve 6'da küçük saniye; zamansız bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "ivory"
+  },
+  {
+    "slug": "santa-barbara-polo-titanium-super-slim-siyah-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Titanium Super Slim — Siyah Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-titanium-super-slim-siyah-kadran.webp"
+    ],
+    "description": "İnce kasalı Titanium Super Slim: sade siyah kadran, çubuk işaretler ve hafif titanyum gövde.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Titanyum",
+      "strap": "Titanyum bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-sapphire-super-slim-siyah-sekizgen",
+    "brand": "santa-barbara-polo",
+    "model": "Sapphire Super Slim — Siyah Sekizgen",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-sapphire-super-slim-siyah-sekizgen.webp"
+    ],
+    "description": "Vidalı sekizgen siyah çerçeve, çizgi dokulu siyah kadran ve tarih penceresi; safir camlı, ince kasalı bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah kaplama paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-sekizgen-kronograf-mavi-kaucuk-kordon",
+    "brand": "santa-barbara-polo",
+    "model": "Sekizgen Kronograf — Mavi Kauçuk Kordon",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-sekizgen-kronograf-mavi-kaucuk-kordon.webp"
+    ],
+    "description": "Sekizgen çelik kasa, vidalı mavi çerçeve ve mavi kadranda üç alt kadranlı kronograf; mavi kauçuk kordonla sportif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Mavi kauçuk kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-klasik-buz-mavisi-dokulu-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Klasik — Buz Mavisi Dokulu Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-klasik-buz-mavisi-dokulu-kadran.webp"
+    ],
+    "description": "Çekiç dokulu buz mavisi kadran, çubuk işaretler ve tarih penceresi; çelik kasa ve beş sıra bilezikle ferah bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "stone"
+  },
+  {
+    "slug": "santa-barbara-polo-automatic-iskelet-yesil-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Automatic İskelet — Yeşil Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-automatic-iskelet-yesil-kadran.webp"
+    ],
+    "description": "Yeşil kadranın ortasından görünen otomatik mekanizma, rose detaylar ve dakika ölçekli çelik çerçeve; iskelet tasarımlı bir erkek saati.",
+    "specs": {
+      "movement": "Otomatik",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "green"
+  },
+  {
+    "slug": "santa-barbara-polo-bicolor-yesil-dokulu-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Bicolor — Yeşil Dokulu Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-bicolor-yesil-dokulu-kadran.webp"
+    ],
+    "description": "Çekiç dokulu yeşil kadran, altın renk çerçeve ve işaretler, tarih penceresi; bicolor bilezikle şık bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "green"
+  },
+  {
+    "slug": "santa-barbara-polo-dual-time-kronograf-beyaz-roma-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Dual Time Kronograf — Beyaz Roma Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-dual-time-kronograf-beyaz-roma-kadran.webp"
+    ],
+    "description": "Roma rakamlı beyaz kadranda kronograf ve ikinci saat dilimi (Dual Time), tarih penceresi ve mavi çelik akrep-yelkovan.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "ivory"
+  },
+  {
+    "slug": "santa-barbara-polo-kronograf-lacivert-kadran-beyaz-kaucuk-kordon",
+    "brand": "santa-barbara-polo",
+    "model": "Kronograf — Lacivert Kadran, Beyaz Kauçuk Kordon",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-kronograf-lacivert-kadran-beyaz-kaucuk-kordon.webp"
+    ],
+    "description": "Köşeli çelik kasa, vidalı çerçeve ve lacivert kadranda üç alt kadranlı kronograf; beyaz kauçuk kordonla yazlık ve sportif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Beyaz kauçuk kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-tasli-multifonksiyon-gumus-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Taşlı Multifonksiyon — Gümüş Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-tasli-multifonksiyon-gumus-kadran.webp"
+    ],
+    "description": "Taşlı çerçeve, gümüş kadranda gün, 24 saat ve tarih alt kadranları; çelik bilezikle ışıltılı bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "stone"
+  },
+  {
+    "slug": "santa-barbara-polo-kare-tasli-bicolor-beyaz-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Kare Taşlı — Bicolor, Beyaz Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-kare-tasli-bicolor-beyaz-kadran.webp"
+    ],
+    "description": "Yuvarlatılmış kare kasa, taşlı altın renk çerçeve ve yatay çizgili beyaz kadran; bicolor bilezikle göz alıcı bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "champagne"
+  },
+  {
+    "slug": "santa-barbara-polo-ay-fazi-tasli-rose-bicolor",
+    "brand": "santa-barbara-polo",
+    "model": "Ay Fazı Taşlı — Rose Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-ay-fazi-tasli-rose-bicolor.webp"
+    ],
+    "description": "Taşlı rose çerçeve, taş işaretli beyaz kadran ve 6'da ay fazı göstergesi; gümüş-rose bilezikle romantik bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-rose bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "ivory"
+  },
+  {
+    "slug": "santa-barbara-polo-kronograf-karbon-desenli-siyah-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Kronograf — Karbon Desenli Siyah Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-kronograf-karbon-desenli-siyah-kadran.webp"
+    ],
+    "description": "Karbon desenli siyah kadran, rose altın detaylar, üç alt kadranlı kronograf ve tarih penceresi.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-kronograf-lacivert-cerceve",
+    "brand": "santa-barbara-polo",
+    "model": "Kronograf — Lacivert Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-kronograf-lacivert-cerceve.webp"
+    ],
+    "description": "Lacivert döner çerçeve, dalga desenli lacivert kadran, 24 saat göstergeli kronograf ve tarih penceresi; denizci ruhlu bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-dual-time-antrasit-kadran-rose-detay",
+    "brand": "santa-barbara-polo",
+    "model": "Dual Time — Antrasit Kadran, Rose Detay",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-dual-time-antrasit-kadran-rose-detay.webp"
+    ],
+    "description": "Katmanlı antrasit kadranda gün, ikinci saat dilimi (Dual Time) ve tarih; rose altın işaretlerle çelik bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "stone"
+  },
+  {
+    "slug": "santa-barbara-polo-multifonksiyon-siyah-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Multifonksiyon — Siyah Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-multifonksiyon-siyah-kadran.webp"
+    ],
+    "description": "Siyah kadranda gün, 24 saat ve tarih alt kadranları, parlak çubuk işaretler; çelik kasa ve bilezikle güçlü bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-automatic-open-heart-lacivert-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Automatic Open Heart — Lacivert Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-automatic-open-heart-lacivert-kadran.webp"
+    ],
+    "description": "Guilloche desenli lacivert kadranda açık kalp penceresinden görünen otomatik mekanizma ve küçük saniye; çelik kasa ve bilezik.",
+    "specs": {
+      "movement": "Otomatik",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-multifonksiyon-siyah-ip-kasa",
+    "brand": "santa-barbara-polo",
+    "model": "Multifonksiyon — Siyah IP Kasa",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-multifonksiyon-siyah-ip-kasa.webp"
+    ],
+    "description": "Siyah kaplama kasa ve bilezik, siyah kadranda gün, 24 saat ve tarih alt kadranları; baştan sona koyu bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah IP kaplama paslanmaz çelik",
+      "strap": "Siyah IP kaplama paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-2nd-time-siyah-dalga-desenli-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "2nd Time — Siyah Dalga Desenli Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-2nd-time-siyah-dalga-desenli-kadran.webp"
+    ],
+    "description": "Siyah kasa ve bilezik, dalga desenli siyah kadranda ikinci saat dilimi (2nd Time), alt kadranlar ve tarih penceresi.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah IP kaplama paslanmaz çelik",
+      "strap": "Siyah IP kaplama paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-gun-tarih-yay-gostergeli-lacivert-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Gün-Tarih Yay Göstergeli — Lacivert Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-gun-tarih-yay-gostergeli-lacivert-kadran.webp"
+    ],
+    "description": "Lacivert kadranda yay biçiminde gün ve tarih göstergeleri, açık işçilikli katmanlı tasarım; çelik kasa ve bilezikle farklı bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-retrograd-gun-yesil-kadran-kahverengi-deri",
+    "brand": "santa-barbara-polo",
+    "model": "Retrograd Gün — Yeşil Kadran, Kahverengi Deri",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-retrograd-gun-yesil-kadran-kahverengi-deri.webp"
+    ],
+    "description": "Altın renk kasa, yeşil kadranda yay biçimli retrograd gün göstergesi ve tarih alt kadranı; kroko desenli kahverengi deri kordon.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Altın renk kaplama paslanmaz çelik",
+      "strap": "Kahverengi deri kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "green"
+  },
+  {
+    "slug": "santa-barbara-polo-sekizgen-multifonksiyon-lacivert-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Sekizgen Multifonksiyon — Lacivert Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-sekizgen-multifonksiyon-lacivert-kadran.webp"
+    ],
+    "description": "Sekizgen çelik kasa, çizgili lacivert kadranda gün, 24 saat ve tarih alt kadranları; entegre çelik bilezikle modern bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-bicolor-lacivert-kadran-tirtikli-cerceve",
+    "brand": "santa-barbara-polo",
+    "model": "Bicolor — Lacivert Kadran, Tırtıklı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-bicolor-lacivert-kadran-tirtikli-cerceve.webp"
+    ],
+    "description": "Altın renk tırtıklı çerçeve, lacivert kadran, tarih penceresi ve 100 metre su geçirmezlik; bicolor bilezikle klasik bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "waterResistance": "100 m",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "deep"
+  },
+  {
+    "slug": "santa-barbara-polo-kronograf-buz-mavisi-kadran",
+    "brand": "santa-barbara-polo",
+    "model": "Kronograf — Buz Mavisi Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-kronograf-buz-mavisi-kadran.webp"
+    ],
+    "description": "Degrade buz mavisi kadranda siyah alt kadranlı kronograf ve tarih penceresi; çelik kasa ve bilezikle canlı bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "stone"
+  },
+  {
+    "slug": "santa-barbara-polo-moonphase-yesil-kadran-bicolor",
+    "brand": "santa-barbara-polo",
+    "model": "Moonphase — Yeşil Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/santa-barbara-polo-moonphase-yesil-kadran-bicolor.webp"
+    ],
+    "description": "Yeşil kadranda gün, tarih ve ay fazı (Moonphase) göstergeleri, altın renk çerçeve; bicolor bilezikle zengin bir erkek saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-07",
+    "tone": "green"
   }
 ]

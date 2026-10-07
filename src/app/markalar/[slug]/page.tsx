@@ -70,6 +70,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
   );
   const body = (
     <div id="hikaye" className={pageClass} style={pageStyle} data-nav-theme="light">
+      {brand.backdrop && <div className={styles.backdrop} aria-hidden />}
       {/* The petals fall over the page and the picture at its foot, behind the watches' photographs… */}
       {scene && <Petals className={styles.scenePetals} wind />}
       {/* …and three or four drift across them. */}

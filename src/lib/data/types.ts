@@ -138,8 +138,8 @@ export type BrandStageDef = {
   lines: [StageLineDef, StageLineDef];
   /**
    * Real water (filmed on black) that crashes into the watch from the side
-   * while it turns, during the scene marked `splash` in stages.json; scrubbed
-   * by the scroll. Shown over the 3D layer through blend modes, so only the
+   * as it settles into the scene marked `splash` in stages.json; plays once
+   * in real time (60 fps), and again after scrolling back above that point. Shown over the 3D layer through blend modes, so only the
    * water shows on the light ground.
    */
   splash?: StageFilm;

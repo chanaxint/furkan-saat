@@ -28,9 +28,8 @@ const EXIT_END = -0.5;
 /** Phones: the watch sits higher and further back. */
 const PORTRAIT = { lift: 0.32, pull: 2.2 };
 
-/** Water text beside the splash: shown between these points of the splash (0–1). */
-const SAID_FROM = 0.3;
-const SAID_TO = 0.92;
+/** Seconds into the splash film when "Su geçirmez" appears (the water reaching the watch). */
+const SAID_AT = 1.6;
 
 export function BrandStage({
   brand,
@@ -106,14 +105,19 @@ export function BrandStage({
     // own — the watch spins down and goes in beneath it.
     const { total, times } = sceneTimes(motion);
     const exit = exitStart(motion);
-    // The splash runs across the turn and hold of the scene marked for it.
+    // The splash: as the watch settles into the scene marked for it, the
+    // water crashes in once, in real time (not scrubbed). Scrolling back above
+    // that point resets it, so it can crash in again.
     const si = motion.scenes.findIndex((sc) => sc.splash);
-    const from = si > 0 ? times[si].start : Infinity;
-    const to = si > 0 ? times[si].leave : Infinity;
+    const hitAt = si > 0 ? times[si].arrive - 0.15 : Infinity;
+    const until = si > 0 ? times[si].leave + 0.6 : Infinity;
     const vids = Array.from(water.current?.querySelectorAll("video") ?? []);
     vids.forEach((v) => v.pause());
     const clock = { p: 0 };
     let gone = false;
+    let played = false;
+    let inWindow = false;
+    let raf = 0;
     const time = () => {
       const h = hero.current!;
       const vh = window.innerHeight;
@@ -121,30 +125,47 @@ export function BrandStage({
       const p0 = pinned / (pinned + vh * (1 - EXIT_END));
       return clock.p < p0 ? (clock.p / p0) * exit : exit + ((clock.p - p0) / (1 - p0)) * (total - exit);
     };
-    const splash = (t: number) => {
+    // While the film plays: fade it in and out at its ends, keep the second copy in step, show the words.
+    const tick = () => {
+      raf = 0;
       const w = water.current;
-      if (!w || !vids.length) return;
-      const p = (t - from) / (to - from);
-      const on = p > 0 && p < 1;
-      // In and out softly at its ends, so the water never pops.
-      const fade = on ? Math.min(1, p / 0.06, (1 - p) / 0.08) : 0;
-      w.style.opacity = fade.toFixed(3);
-      w.style.visibility = on ? "visible" : "hidden";
-      if (on) {
-        for (const v of vids) {
-          const d = v.duration || 8;
-          const at = Math.min(d - 0.05, p * d);
-          // Seek only when the frame changes (24 fps): steady scrubbing, no decoder thrash.
-          if (Math.abs(v.currentTime - at) > 1 / 48) v.currentTime = at;
-        }
-      }
+      const lead = vids[0];
+      if (!w || !lead) return;
+      const d = lead.duration || 8;
+      const c = lead.currentTime;
+      const fade = played && inWindow ? Math.min(1, c / 0.12, (d - c) / 0.6) : 0;
+      w.style.opacity = Math.max(0, fade).toFixed(3);
+      w.style.visibility = fade > 0.001 ? "visible" : "hidden";
+      for (const v of vids.slice(1)) if (Math.abs(v.currentTime - c) > 0.04) v.currentTime = c;
       const s2 = said.current;
       if (s2) {
-        const a = Math.min(1, Math.max(0, (p - SAID_FROM) / 0.08)) * Math.min(1, Math.max(0, (SAID_TO - p) / 0.08));
+        const a = played && inWindow ? Math.min(1, Math.max(0, (c - SAID_AT) / 0.5)) : 0;
         s2.style.opacity = a.toFixed(3);
         s2.style.visibility = a < 0.01 ? "hidden" : "visible";
         s2.style.setProperty("--shift", `${(1 - a) * 30}px`);
       }
+      if (played && !lead.paused && !lead.ended) raf = requestAnimationFrame(tick);
+    };
+    const run = () => {
+      if (!raf) raf = requestAnimationFrame(tick);
+    };
+    const splash = (t: number) => {
+      if (!vids.length) return;
+      inWindow = t < until;
+      if (!played && t >= hitAt && inWindow) {
+        played = true;
+        vids.forEach((v) => {
+          v.currentTime = 0;
+          v.play().catch(() => {});
+        });
+      } else if (played && t < hitAt - 0.3) {
+        played = false;
+        vids.forEach((v) => {
+          v.pause();
+          v.currentTime = 0;
+        });
+      }
+      run();
     };
     const draw = () => {
       const t = time();
@@ -178,10 +199,18 @@ export function BrandStage({
         draw();
       },
     });
-    // Seeking needs the frames' index: draw again once the films know their length.
-    const onMeta = () => draw();
-    vids.forEach((v) => v.addEventListener("loadedmetadata", onMeta));
-    return () => vids.forEach((v) => v.removeEventListener("loadedmetadata", onMeta));
+    const onPlay = () => run();
+    vids.forEach((v) => {
+      v.addEventListener("playing", onPlay);
+      v.addEventListener("ended", onPlay);
+    });
+    return () => {
+      cancelAnimationFrame(raf);
+      vids.forEach((v) => {
+        v.removeEventListener("playing", onPlay);
+        v.removeEventListener("ended", onPlay);
+      });
+    };
   }, region);
 
   const onWake = useCallback((fn: () => void) => {

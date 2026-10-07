@@ -1,4 +1,3 @@
-import casioDropTrack from "./casio-drop-track.json";
 import type { Brand } from "./types";
 
 /**
@@ -40,21 +39,6 @@ export const BRANDS: Brand[] = [
           text: "Üç sıra halkalı paslanmaz çelik bilezik; katlanır kilidiyle bileğe tam oturur.",
         },
       ],
-      pool: {
-        mp4: "/assets/video/brands/casio-pool.mp4",
-        mobile: "/assets/video/brands/casio-pool-mobile.mp4",
-        webm: "/assets/video/brands/casio-pool.webm",
-        poster: "/assets/video/brands/casio-pool.jpg",
-        size: [1920, 742],
-        fps: 60,
-        track: casioDropTrack,
-      },
-      water: {
-        eyebrow: "50 metre · 5 bar",
-        title: "Su geçirmez",
-        accent: "geçirmez",
-        text: "Yağmurda, el yıkarken, denizde ve havuzda kısa süreli yüzmede gönül rahatlığıyla takın.",
-      },
     },
   },
   {

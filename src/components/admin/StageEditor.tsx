@@ -528,10 +528,6 @@ export function StageEditor({ brand, stage, initial }: { brand: Brand; stage: Br
                   <input type="checkbox" checked={scene.fade} onChange={(e) => edit((s) => ({ ...s, fade: e.target.checked }))} />
                   <span>Bu sahneye giderken kaybolsun</span>
                 </label>
-                <label className={styles.check}>
-                  <input type="checkbox" checked={!!scene.splash} onChange={(e) => edit((s) => ({ ...s, splash: e.target.checked || undefined }))} />
-                  <span>Bu sahnede su çarpsın</span>
-                </label>
               </div>
             </>
           )}

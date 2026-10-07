@@ -36,8 +36,6 @@ export type StageScene = {
    * turning (from a scene out of sight). Default "inOut".
    */
   ease?: StageEase;
-  /** The brand's water splash crashes in as the watch arrives here (plays once, in real time). */
-  splash?: boolean;
 };
 
 export type StageEase = "inOut" | "in" | "out";

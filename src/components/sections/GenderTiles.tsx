@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import { useGsap } from "@/hooks/useGsap";
-import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { gsap, prefersReducedMotion, ScrollTrigger } from "@/lib/gsap";
 import styles from "./GenderTiles.module.css";
 
 const TILES = [
@@ -26,24 +26,43 @@ const TILES = [
 ];
 
 /** How far below its place each tile starts (px), the second further, so it trails the first. */
-const RISE = [140, 340];
+const RISE = [160, 300];
 
 /**
  * Two large tiles under the brands: the women's watches (/kadin) and the
- * men's (/erkek). As the page scrolls them in they rise into place with the
- * scroll, the second trailing the first, and the photographs settle inside
- * their rounded frames.
+ * men's (/erkek). When the page brings them in (scrolling down) they rise
+ * into place, the second trailing the first, the photographs settling inside
+ * their rounded frames. Only on the way in: scrolling back up leaves them
+ * as they are; once they are out of sight below, they are set back, ready to
+ * come in again next time.
  */
 export function GenderTiles() {
   const root = useRef<HTMLUListElement>(null);
   useGsap(() => {
     if (prefersReducedMotion()) return;
     const items = gsap.utils.toArray<HTMLElement>("li", root.current);
-    items.forEach((li, i) => {
-      const scroll = { trigger: root.current, start: "top bottom", end: "top 25%", scrub: 0.6 };
-      gsap.fromTo(li, { y: RISE[i] ?? RISE[RISE.length - 1] }, { y: 0, ease: "none", scrollTrigger: scroll });
-      const photo = li.querySelector("img");
-      if (photo) gsap.fromTo(photo, { scale: 1.14 }, { scale: 1, ease: "none", scrollTrigger: scroll });
+    const photos = items.map((li) => li.querySelector("img"));
+    const away = () => {
+      items.forEach((li, i) => gsap.set(li, { y: RISE[i] ?? RISE[RISE.length - 1], opacity: 0 }));
+      gsap.set(photos, { scale: 1.14 });
+    };
+    away();
+    const tl = gsap
+      .timeline({ paused: true })
+      .to(items, { y: 0, opacity: 1, duration: 1.3, ease: "power3.out", stagger: 0.18 }, 0)
+      .to(photos, { scale: 1, duration: 1.6, ease: "power2.out", stagger: 0.18 }, 0);
+    // In: as the tiles' top passes 85% of the screen, scrolling down.
+    const into = ScrollTrigger.create({ trigger: root.current, start: "top 85%", onEnter: () => tl.restart() });
+    // Opened already below that point (a reload, the back button): simply in place.
+    if (window.scrollY > into.start) tl.progress(1);
+    // Set back only once they are wholly below the screen again (scrolled back up past them).
+    ScrollTrigger.create({
+      trigger: root.current,
+      start: "top bottom",
+      onLeaveBack: () => {
+        tl.pause(0);
+        away();
+      },
     });
   }, root);
   return (

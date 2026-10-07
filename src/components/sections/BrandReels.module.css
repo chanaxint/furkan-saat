@@ -63,17 +63,35 @@
   scroll-snap-align: start;
 }
 
-/* The arrows sit at the right of the title row, above the scroller's top margin. */
+/*
+ * The arrows stand either side of the tiles, level with the middle of the
+ * pictures: the left one in the margin before the first tile, the right one
+ * at the edge of the screen over the next tile peeking in.
+ */
 .header {
   position: relative;
   z-index: 2;
 }
-.arrows {
+.rail {
+  --gap: clamp(12px, 1.4vw, 24px);
+  --cols: 4;
+  /* Room in the margin beside the row: the arrow sits in it, a little in from the screen's edge. */
+  --reach: min(66px, max(var(--gutter), calc((100vw - var(--max-w)) / 2)) - 8px);
+  position: relative;
+  container-type: inline-size;
+}
+.rail > .arrow {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  gap: 10px;
+  z-index: 3;
+  /* Half the height of a 4:5 picture in a column of the row. */
+  top: calc((100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols) * 0.625);
+  translate: 0 -50%;
+}
+.rail > .arrow[data-side="prev"] {
+  left: calc(-1 * var(--reach));
+}
+.rail > .arrow[data-side="next"] {
+  right: calc(-1 * var(--reach));
 }
 .arrow {
   display: grid;
@@ -82,7 +100,9 @@
   height: 52px;
   border: 1px solid rgba(7, 26, 22, 0.28);
   border-radius: 50%;
-  background: transparent;
+  background: rgba(242, 237, 227, 0.82);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   color: var(--green-900);
   cursor: pointer;
   transition:
@@ -110,7 +130,7 @@
   outline-offset: 3px;
 }
 .arrow:disabled {
-  opacity: 0.3;
+  opacity: 0.35;
   cursor: default;
 }
 
@@ -296,6 +316,9 @@
   .grid {
     grid-auto-columns: calc((100% - var(--gap)) / 2);
   }
+  .rail {
+    --cols: 2;
+  }
 }
 @media (hover: none) {
   .cta {
@@ -313,7 +336,7 @@
   .grid {
     grid-auto-columns: 78%;
   }
-  .arrows {
+  .rail > .arrow {
     display: none;
   }
 }

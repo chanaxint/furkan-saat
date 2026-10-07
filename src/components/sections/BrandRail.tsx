@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./BrandReels.module.css";
 
 /**
- * The brands as a row that slides sideways: arrows beside the title on wide
- * screens (one tile per click), a swipe on touch screens. The tiles stay in
+ * The brands as a row that slides sideways: arrows either side of the tiles on
+ * wide screens (one tile per click), a swipe on touch screens. The tiles stay in
  * their own list (passed as children) so they keep their reveal on scroll.
  */
 export function BrandRail({ title, children }: { title: React.ReactNode; children: React.ReactNode }) {
@@ -40,24 +40,24 @@ export function BrandRail({ title, children }: { title: React.ReactNode; childre
 
   return (
     <div ref={root}>
-      <header className={styles.header}>
-        {title}
+      <header className={styles.header}>{title}</header>
+      <div className={styles.rail}>
+        {children}
         {!(edge.start && edge.end) && (
-          <div className={styles.arrows}>
-            <button type="button" className={styles.arrow} onClick={() => move(-1)} disabled={edge.start} aria-label="Önceki markalar">
+          <>
+            <button type="button" className={styles.arrow} data-side="prev" onClick={() => move(-1)} disabled={edge.start} aria-label="Önceki markalar">
               <svg viewBox="0 0 24 24" aria-hidden>
                 <path d="M15 5l-7 7 7 7" />
               </svg>
             </button>
-            <button type="button" className={styles.arrow} onClick={() => move(1)} disabled={edge.end} aria-label="Sonraki markalar">
+            <button type="button" className={styles.arrow} data-side="next" onClick={() => move(1)} disabled={edge.end} aria-label="Sonraki markalar">
               <svg viewBox="0 0 24 24" aria-hidden>
                 <path d="M9 5l7 7-7 7" />
               </svg>
             </button>
-          </div>
+          </>
         )}
-      </header>
-      {children}
+      </div>
     </div>
   );
 }

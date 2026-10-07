@@ -4,6 +4,7 @@ import { AddToCartButton } from "@/components/product/AddToCartButton";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { WishlistButton } from "@/components/product/WishlistButton";
 import type { Product } from "@/lib/data/types";
+import { modelLabel } from "@/lib/format";
 import { brandName } from "@/lib/services/catalog";
 import styles from "./ShopRow.module.css";
 import { HoverCard } from "@/components/product/HoverCard";
@@ -70,7 +71,7 @@ function ShopCard({ product }: { product: Product }) {
           {alt && <Image src={alt} alt="" fill sizes={sizes} className={`${styles.image} ${styles.alt}`} />}
         </div>
         <p className={styles.name}>
-          {brand} {product.model}
+          {brand} {modelLabel(product.model, product.reference)}
         </p>
         <PriceDisplay price={product.price} currency={product.currency} className={styles.price} />
       </Link>

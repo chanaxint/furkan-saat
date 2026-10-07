@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/lib/data/types";
 import { brandName } from "@/lib/services/catalog";
-import { refLabel } from "@/lib/format";
+import { modelLabel } from "@/lib/format";
 import { AddToCartButton } from "./AddToCartButton";
 import { PriceDisplay } from "./PriceDisplay";
 import { WishlistButton } from "./WishlistButton";
@@ -51,11 +51,8 @@ export function ProductCard({
           <p className={styles.brand} lang="en">
             {brandName(product.brand)}
           </p>
-          <h3 className={styles.model}>{product.model}</h3>
-          <p className={styles.meta}>
-            <span>{refLabel(product.reference)}</span>
-            <PriceDisplay price={product.price} currency={product.currency} className={styles.price} />
-          </p>
+          <h3 className={styles.model}>{modelLabel(product.model, product.reference)}</h3>
+          <PriceDisplay price={product.price} currency={product.currency} className={styles.price} />
         </div>
       </Link>
       <WishlistButton slug={product.slug} className={styles.wish} />

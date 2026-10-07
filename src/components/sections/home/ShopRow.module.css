@@ -175,6 +175,7 @@
 .name {
   margin: 0;
   padding: 0 4px;
+  text-align: center;
   font-size: var(--fs-body);
   line-height: 1.35;
   overflow: hidden;
@@ -187,6 +188,8 @@
   font-variant-numeric: lining-nums tabular-nums;
   letter-spacing: 0.02em;
   padding: 0 4px;
+  text-align: center;
+  justify-self: center;
   font-size: var(--fs-body);
 }
 .price[data-request] {

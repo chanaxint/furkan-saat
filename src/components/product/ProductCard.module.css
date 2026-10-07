@@ -35,6 +35,9 @@
 .info {
   display: grid;
   gap: 8px;
+  /* Brand, model and price in a centred column under the photograph. */
+  justify-items: center;
+  text-align: center;
 }
 .brand {
   font-size: var(--fs-micro);
@@ -48,14 +51,6 @@
   font-size: clamp(1.1rem, 1.3vw, 1.4rem);
   line-height: 1.1;
   letter-spacing: -0.01em;
-}
-.meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  font-size: var(--fs-small);
-  color: var(--text-on-light-muted);
 }
 .price {
   font-family: var(--font-sans);

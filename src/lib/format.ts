@@ -31,6 +31,13 @@ export const slugify = (s: string) =>
     .replace(/^-+|-+$/g, "");
 
 /** "Ref. EFR-S108DE-3AV" — or nothing when the maker publishes no reference. */
+/**
+ * The watch's model for a card: its reference when the maker publishes one
+ * ("EFB-730D-3AV"), otherwise the model name without the description of the
+ * dial and bracelet ("Exclusive — Siyah, Deri Kayış" → "Exclusive").
+ */
+export const modelLabel = (model: string, reference: string) => reference || model.split(" — ")[0].trim();
+
 export const refLabel = (reference: string) => (reference ? `Ref. ${reference}` : "");
 
 /** "Casio Edifice Slim — EFR-S108DE-3AV", or without the dash when there is no reference. */

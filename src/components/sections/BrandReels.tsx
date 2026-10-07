@@ -1,8 +1,8 @@
-import { PinFoot } from "@/components/ui/PinFoot";
 import { Reveal } from "@/components/ui/Reveal";
 import { BRANDS } from "@/lib/data/brands";
 import { BrandRail } from "./BrandRail";
 import { BrandTile } from "./BrandTile";
+import { GenderTiles } from "./GenderTiles";
 import styles from "./BrandReels.module.css";
 
 /**
@@ -39,7 +39,7 @@ export function BrandReels() {
             ))}
           </Reveal>
         </BrandRail>
-        <PinFoot />
+        <GenderTiles />
       </section>
     </>
   );

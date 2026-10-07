@@ -1,9 +1,6 @@
-/* Everything after the brands: one sheet that slides up over them, a soft shadow at its edge. */
+/* Everything after the brands, in the page's flow (the campaign photograph follows on from the brands' ground). */
 .layer {
   position: relative;
   z-index: 2;
   background: #ebe3d4;
-  box-shadow:
-    0 -1px 0 rgba(40, 30, 20, 0.08),
-    0 -30px 70px rgba(40, 30, 20, 0.22);
 }

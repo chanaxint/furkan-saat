@@ -1,0 +1,59 @@
+/* Two large tiles side by side (stacked on phones), the brands' width. */
+.grid {
+  max-width: var(--max-w);
+  margin: clamp(48px, 6vw, 96px) auto 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(12px, 1.4vw, 24px);
+}
+.tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  outline-offset: 4px;
+}
+.photo {
+  object-fit: cover;
+  object-position: 50% 45%;
+  transition: transform 1.4s var(--ease-lux);
+}
+.tile:hover .photo,
+.tile:focus-visible .photo {
+  transform: scale(1.04);
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 8, 6, 0.55), transparent 55%);
+}
+.label {
+  position: absolute;
+  left: clamp(20px, 3vw, 44px);
+  bottom: clamp(20px, 3vw, 40px);
+  display: grid;
+  gap: 10px;
+  color: var(--ivory);
+}
+.name {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 4.4vw, 4.4rem);
+  line-height: 1;
+}
+.cta {
+  justify-self: start;
+  padding-bottom: 4px;
+  border-bottom: 1px solid currentColor;
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+@media (max-width: 767px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

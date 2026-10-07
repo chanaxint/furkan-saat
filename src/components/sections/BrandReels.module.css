@@ -5,12 +5,12 @@
  */
 .section {
   --overlap: 0px;
-  /* Once its foot reaches the bottom of the screen it stays, and the campaign rises over it (top set by PinFoot). */
-  position: sticky;
+  position: relative;
   z-index: 1;
   margin-top: calc(var(--overlap) * -1);
   /* The deep cream the opening ends on, warming to the page's cream below. */
-  background: linear-gradient(to bottom, #e4dac7, #ebe3d4);
+  /* From the cream the opening ends on, down to the campaign photograph's own wall colour. */
+  background: linear-gradient(to bottom, #e4dac7, #d6cab8 60%, #bfb1a1);
   color: var(--green-900);
   padding: clamp(8px, 1.5vw, 24px) var(--gutter) clamp(80px, 10vw, 150px);
 }

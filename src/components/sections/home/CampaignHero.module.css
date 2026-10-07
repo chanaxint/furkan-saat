@@ -1,7 +1,8 @@
 /* The copy is laid over the photograph on wide screens, beneath it on phones. */
 .hero {
   position: relative;
-  background: var(--ivory);
+  /* The photograph's own wall colour, continuing the brands' ground above it. */
+  background: #bfb1a1;
 }
 
 /* The photograph's own proportions, never taller than the screen. */
@@ -11,7 +12,10 @@
   aspect-ratio: 1376 / 768;
   max-height: 100svh;
   overflow: hidden;
-  background: #b9ab9a;
+  background: #bfb1a1;
+  /* Its top edge melts into the brands' ground (the same wall colour), no seam. */
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 2.5%);
+  mask-image: linear-gradient(to bottom, transparent, #000 2.5%);
 }
 .photo {
   object-fit: cover;

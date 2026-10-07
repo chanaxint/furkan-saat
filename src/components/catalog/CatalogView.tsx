@@ -27,6 +27,18 @@ export function CatalogView({ products, marked = [] }: { products: Product[]; ma
   const [open, setOpen] = useState(false);
   const panel = useId();
 
+  // Opened for women's or men's watches (the home page tiles, or ?cinsiyet= in a link).
+  useEffect(() => {
+    const g = new URLSearchParams(window.location.search).get("cinsiyet");
+    if (g) setFilters({ gender: [g] });
+    const on = (e: Event) => {
+      const v = (e as CustomEvent<{ gender: string }>).detail?.gender;
+      if (v) setFilters({ gender: [v] });
+    };
+    window.addEventListener("catalog:filter", on);
+    return () => window.removeEventListener("catalog:filter", on);
+  }, []);
+
   const facets = useMemo(() => facetOptions(products), [products]);
   const results = useMemo(() => sortProducts(applyFilters(products, filters), sort), [products, filters, sort]);
   const chosen = Object.values(filters).reduce((n, v) => n + (v?.length ?? 0), 0);

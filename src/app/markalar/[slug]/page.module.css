@@ -58,14 +58,18 @@
   padding-top: clamp(36px, 4.5vw, 64px);
 }
 /*
- * The house's own still life behind the watches, edge to edge: a screen-high
- * picture that stays in view the whole way down the section (sticky within a
- * layer the size of the section, so it never runs on over the footer).
+ * The house's own still life behind the watches: it stays in view the whole
+ * way down the section (sticky within a layer the size of the section, so it
+ * never runs on past it). On wide screens the upright photograph stands at
+ * the right, a little taller than the screen (the racquet head and the second
+ * ball in view), its left edge melting into the same cream; on phones it fills.
  */
 .withBackdrop {
   isolation: isolate;
+  /* Straight on from the opening, not a sheet over it. */
+  box-shadow: none;
   min-height: 100svh;
-  background: #efe5d7;
+  background: #eee4d6;
 }
 .backdrop {
   position: absolute;
@@ -79,12 +83,16 @@
   top: 0;
   display: block;
   height: 100svh;
-  /* Wide screens show the lower half: the second ball and the racquet head. */
-  background: var(--backdrop) center 85% / cover no-repeat;
+  background: var(--backdrop) right 82% / auto 135svh no-repeat;
+  -webkit-mask-image: linear-gradient(to right, transparent calc(100% - 135svh * 0.558), #000 calc(100% - 135svh * 0.558 + 160px));
+  mask-image: linear-gradient(to right, transparent calc(100% - 135svh * 0.558), #000 calc(100% - 135svh * 0.558 + 160px));
 }
-@media (max-aspect-ratio: 1116 / 2000) {
+@media (max-aspect-ratio: 3 / 4) {
   .backdrop::before {
     background-position: center;
+    background-size: cover;
+    -webkit-mask-image: none;
+    mask-image: none;
   }
 }
 

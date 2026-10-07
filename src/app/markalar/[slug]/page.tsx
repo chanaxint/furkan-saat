@@ -143,7 +143,8 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
         )}
       </main>
       {/* A scene page ends on its petals; a 3D stage page on its collection (its water film closes the opening). */}
-      {!stage && !scene &&
+      {/* A page on the house's own still life ends with its watches. */}
+      {!stage && !scene && !brand.backdrop &&
         (brand.foot ? (
           // The page ends on the house's own photograph, edge to edge.
           <div className={styles.footPhoto} style={{ aspectRatio: `${brand.foot.width} / ${brand.foot.height}` }}>

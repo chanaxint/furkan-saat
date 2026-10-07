@@ -52,6 +52,7 @@ export function BrandFilmHero({ brand, next }: { brand: Brand; next: string }) {
       data-theme={brand.theme}
       data-scene={scene ? "" : undefined}
       data-photo={photo || film?.natural ? "" : undefined}
+      data-flow={brand.backdrop ? "" : undefined}
       data-nav-theme="dark"
       aria-label={brand.name}
     >

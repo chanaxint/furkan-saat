@@ -1,44 +1,30 @@
-/* Over the page for a second, then fades and is gone (no clicks caught after). Below the site loader, which covers a first visit. */
+/* Over the page for a second, then fades and is gone (no clicks caught). Below the site loader, which covers a first visit. */
 .loader {
   position: fixed;
   inset: 0;
   z-index: 90;
   display: grid;
   place-items: center;
-  background: #efe5d7;
-  animation: away 0.45s var(--ease-soft, ease) 1s forwards;
+  pointer-events: none;
+  animation: away 0.4s var(--ease-soft, ease) 1s forwards;
 }
+/* Outline and seams only, white with a soft dark edge so they read on any ground. */
 .ball {
-  width: 44px;
-  height: 44px;
+  width: 30px;
+  height: 30px;
+  overflow: visible;
+  filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.55)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.25));
+  animation: spin 0.7s linear infinite;
 }
-.seams {
-  transform-box: view-box;
-  transform-origin: 50% 50%;
-  animation: spin 0.75s linear infinite;
-}
-.ball svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
+.ball circle,
 .ball path {
   fill: none;
-  stroke: #b8a78e;
-  stroke-width: 2.2;
+  stroke: #fff;
+  stroke-width: 3;
   stroke-linecap: round;
 }
-.shadow {
-  position: absolute;
-  top: calc(50% + 30px);
-  left: 50%;
-  width: 34px;
-  height: 7px;
-  translate: -50% 0;
-  border-radius: 50%;
-  background: radial-gradient(rgba(70, 52, 30, 0.22), transparent 70%);
-}
 
+/* Clockwise: rolling to the right. */
 @keyframes spin {
   to {
     rotate: 360deg;
@@ -52,7 +38,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .seams {
+  .ball {
     animation: none;
   }
 }

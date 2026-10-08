@@ -100,6 +100,7 @@ export const BRANDS: Brand[] = [
     tile: "/assets/images/brands/tile-freelook.webp",
     film: {
       mp4: "/assets/video/brands/freelook.mp4",
+      mobile: "/assets/video/brands/freelook-mobile.mp4",
       webm: "/assets/video/brands/freelook.webm",
       poster: "/assets/video/brands/freelook.webp",
     },

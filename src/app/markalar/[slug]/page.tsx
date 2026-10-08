@@ -11,6 +11,7 @@ import { TennisLoader } from "@/components/brand/TennisLoader";
 import { BrandDropFilm } from "@/components/brand/BrandDropFilm";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
+import { Reveal } from "@/components/ui/Reveal";
 import { SectionMarker } from "@/components/ui/SectionMarker";
 import { getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
 import { whatsappUrl } from "@/lib/services/enquiries";
@@ -152,10 +153,11 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           <div className={styles.footPhoto} style={{ aspectRatio: `${brand.foot.width} / ${brand.foot.height}` }}>
             <Image src={brand.foot.image} alt={brand.foot.alt} fill sizes="100vw" />
             {brand.foot.caption && (
-              <p className={styles.footCaption}>
+              // Fades up once the page has come down onto the photograph: the line, then the name.
+              <Reveal as="p" className={styles.footCaption} stagger={0.45} y={24} delay={0.25} start="top 62%">
                 <span>{brand.foot.caption.line}</span>
                 <strong>{brand.foot.caption.name}</strong>
-              </p>
+              </Reveal>
             )}
           </div>
         ) : brand.theme === "gold" ? (

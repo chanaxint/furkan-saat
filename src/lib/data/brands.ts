@@ -108,7 +108,7 @@ export const BRANDS: Brand[] = [
       image: "/assets/images/brands/freelook-foot.webp",
       alt: "Gece Paris: ışıklarla yanan Eyfel Kulesi, Seine nehri ve köprüleri yukarıdan",
       width: 3840,
-      height: 2143,
+      height: 1760,
       caption: { line: "Paris'ten gelen zarafet", name: "Freelook" },
     },
     theme: "gold",

@@ -151,6 +151,12 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
           // The page ends on the house's own photograph, edge to edge.
           <div className={styles.footPhoto} style={{ aspectRatio: `${brand.foot.width} / ${brand.foot.height}` }}>
             <Image src={brand.foot.image} alt={brand.foot.alt} fill sizes="100vw" />
+            {brand.foot.caption && (
+              <p className={styles.footCaption}>
+                <span>{brand.foot.caption.line}</span>
+                <strong>{brand.foot.caption.name}</strong>
+              </p>
+            )}
           </div>
         ) : brand.theme === "gold" ? (
           // Freelook: the foot of the page on the same still marble as the watches.

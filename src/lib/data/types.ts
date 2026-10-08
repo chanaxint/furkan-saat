@@ -112,7 +112,14 @@ export type Brand = {
   /** Optional opening on a still photograph (no music, no petals), the logo over it. */
   photo?: { image: string; alt: string; /** Small spaced line under the signature. */ caption?: string };
   /** Optional photograph that closes the page, full width, in place of the site footer. */
-  foot?: { image: string; alt: string; width: number; height: number };
+  foot?: {
+    image: string;
+    alt: string;
+    width: number;
+    height: number;
+    /** Words set over the photograph's empty side (e.g. the night sky): a line, then the name. */
+    caption?: { line: string; name: string };
+  };
   /** Optional 3D showcase after the opening: the watch performs as the page scrolls. */
   showcase?: BrandShowcaseDef;
   /**

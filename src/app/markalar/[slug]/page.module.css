@@ -309,7 +309,7 @@
 .footCaption {
   position: absolute;
   z-index: 1;
-  top: 13%;
+  top: 7%;
   right: 7%;
   display: grid;
   justify-items: end;

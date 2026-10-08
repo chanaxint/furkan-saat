@@ -8,6 +8,7 @@ import { Petals } from "@/components/effects/Petals";
 import { BrandShowcase } from "@/components/brand/BrandShowcase";
 import { BrandStage } from "@/components/brand/BrandStage";
 import { TennisLoader } from "@/components/brand/TennisLoader";
+import { BrandDropFilm } from "@/components/brand/BrandDropFilm";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionMarker } from "@/components/ui/SectionMarker";
@@ -141,6 +142,7 @@ export default async function BrandPage({ params }: PageProps<"/markalar/[slug]"
         ) : (
           body
         )}
+        {brand.dropFilm && <BrandDropFilm film={brand.dropFilm} label={brand.dropFilm.label} />}
       </main>
       {/* A scene page ends on its petals; a 3D stage page on its collection (its water film closes the opening). */}
       {/* A page on the house's own still life ends with its watches. */}

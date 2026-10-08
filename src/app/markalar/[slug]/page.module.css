@@ -48,6 +48,12 @@
  */
 .withBackdrop {
   isolation: isolate;
+  /* Its lower edge casts onto the film tucked beneath it. */
+  box-shadow:
+    0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 -30px 70px rgba(0, 0, 0, 0.3),
+    0 26px 50px -18px rgba(30, 24, 14, 0.45);
+  padding-bottom: clamp(56px, 6vw, 110px);
   min-height: 100svh;
   background: #eee4d6;
 }

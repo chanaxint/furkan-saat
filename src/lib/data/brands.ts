@@ -118,6 +118,13 @@ export const BRANDS: Brand[] = [
     tile: "/assets/images/brands/tile-santa-barbara-polo.webp",
     backdrop: "/assets/images/brands/santa-barbara-polo-backdrop.webp",
     loader: "tennis",
+    dropFilm: {
+      mp4: "/assets/video/brands/santa-barbara-polo-drop.mp4",
+      mobile: "/assets/video/brands/santa-barbara-polo-drop-mobile.mp4",
+      webm: "/assets/video/brands/santa-barbara-polo-drop.webm",
+      poster: "/assets/video/brands/santa-barbara-polo-drop.jpg",
+      label: "Tenis kortunda yığılan topların üzerine düşen çelik bilezikli saat",
+    },
     film: {
       mp4: "/assets/video/brands/santa-barbara-polo.mp4",
       mobile: "/assets/video/brands/santa-barbara-polo-mobile.mp4",

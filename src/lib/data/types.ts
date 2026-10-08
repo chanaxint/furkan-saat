@@ -121,6 +121,8 @@ export type Brand = {
    * then swaying behind the collection.
    */
   stage?: BrandStageDef;
+  /** A film at the very foot of the page, tucked under the collection (plays as it comes into view). */
+  dropFilm?: { mp4: string; mobile: string; webm: string; poster: string; label: string };
   /** A short opening beat while the page loads: a tennis ball spinning mid-screen. */
   loader?: "tennis";
   /** Behind the watches, the whole height of their section (cover). */

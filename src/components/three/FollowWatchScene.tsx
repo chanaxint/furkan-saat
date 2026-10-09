@@ -46,8 +46,8 @@ export default function FollowWatchScene({
       base.g += (e.gamma - base.g) * 0.004;
       const clamp = (v: number) => Math.max(-1, Math.min(1, v));
       // Gentler than the mouse: a full turn needs a good tilt of the phone.
-      pointer.x = clamp((e.gamma - base.g) / 40);
-      pointer.y = clamp((e.beta - base.b) / 40);
+      pointer.x = clamp((e.gamma - base.g) / 34);
+      pointer.y = clamp((e.beta - base.b) / 34);
       pointer.moved = true;
       pointer.tilt = true;
     };
@@ -126,11 +126,11 @@ function Watch({ model, facing, onReady }: { model: string; facing: [number, num
     const t = state.clock.elapsedTime;
     // With a pointer: look towards it. Without one: a slow, small sway.
     // Aim the dial at the pointer: the angle to where it sits on a plane in front of the watch.
-    const tx = pointer.moved ? Math.atan(pointer.x * (pointer.tilt ? 0.8 : 1.2)) : Math.sin(t * 0.5) * 0.18;
-    const ty = pointer.moved ? Math.atan(pointer.y * (pointer.tilt ? 0.55 : 0.8)) : Math.sin(t * 0.37) * 0.08;
+    const tx = pointer.moved ? Math.atan(pointer.x * (pointer.tilt ? 0.92 : 1.2)) : Math.sin(t * 0.5) * 0.18;
+    const ty = pointer.moved ? Math.atan(pointer.y * (pointer.tilt ? 0.62 : 0.8)) : Math.sin(t * 0.37) * 0.08;
     // Close follow, frame-rate independent (no lag, no jitter at 60/120 Hz).
     // The phone's tilt is followed more slowly, for a smooth, unhurried turn.
-    const k = 1 - Math.exp(-Math.min(dt, 0.05) * (pointer.tilt ? 3.2 : 14));
+    const k = 1 - Math.exp(-Math.min(dt, 0.05) * (pointer.tilt ? 4.6 : 14));
     g.rotation.y = MathUtils.lerp(g.rotation.y, tx, k);
     g.rotation.x = MathUtils.lerp(g.rotation.x, ty, k);
     g.position.y = Math.sin(t * 0.8) * 0.03;

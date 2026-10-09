@@ -31,8 +31,7 @@ const RISE = [160, 300];
 /**
  * Two large tiles under the brands: the women's watches (/kadin) and the
  * men's (/erkek). When the page brings them in (scrolling down) they rise
- * into place, the second trailing the first, the photographs settling inside
- * their rounded frames. Only on the way in: scrolling back up leaves them
+ * into place, the second trailing the first. Only on the way in: scrolling back up leaves them
  * as they are; once they are out of sight below, they are set back, ready to
  * come in again next time.
  */
@@ -41,16 +40,10 @@ export function GenderTiles() {
   useGsap(() => {
     if (prefersReducedMotion()) return;
     const items = gsap.utils.toArray<HTMLElement>("li", root.current);
-    const photos = items.map((li) => li.querySelector("img"));
-    const away = () => {
-      items.forEach((li, i) => gsap.set(li, { y: RISE[i] ?? RISE[RISE.length - 1], opacity: 0 }));
-      gsap.set(photos, { scale: 1.14 });
-    };
+    // Straight in: no fade and no soft zoom, the photographs sharp from the first frame.
+    const away = () => items.forEach((li, i) => gsap.set(li, { y: RISE[i] ?? RISE[RISE.length - 1] }));
     away();
-    const tl = gsap
-      .timeline({ paused: true })
-      .to(items, { y: 0, opacity: 1, duration: 1.3, ease: "power3.out", stagger: 0.18 }, 0)
-      .to(photos, { scale: 1, duration: 1.6, ease: "power2.out", stagger: 0.18 }, 0);
+    const tl = gsap.timeline({ paused: true }).to(items, { y: 0, duration: 1.1, ease: "power3.out", stagger: 0.15 }, 0);
     // In: as the tiles' top passes 85% of the screen, scrolling down.
     const into = ScrollTrigger.create({ trigger: root.current, start: "top 85%", onEnter: () => tl.restart() });
     // Opened already below that point (a reload, the back button): simply in place.

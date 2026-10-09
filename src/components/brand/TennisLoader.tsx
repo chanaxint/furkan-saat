@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import styles from "./TennisLoader.module.css";
 
 /**
@@ -55,9 +59,52 @@ function frame(phi: number) {
 
 const TURN = Array.from({ length: FRAMES }, (_, k) => frame((k / FRAMES) * Math.PI * 2));
 
+/** As long as the ball is up (TennisLoader.module.css: `away` at 1s). */
+const HOLD_MS = 1000;
+
 export function TennisLoader() {
+  const { lenis } = useSmoothScroll();
+  const born = useRef(0);
+  // From the very first paint (before scripts run) the page cannot scroll: a style the loader carries, dropped after the second.
+  const [held, setHeld] = useState(true);
+  // The page holds still while the ball turns; it scrolls the moment the ball is gone.
+  useEffect(() => {
+    if (!born.current) born.current = performance.now();
+    // (Smooth scrolling may arrive a moment later: hold only for what is left of the second.)
+    const left = HOLD_MS - (performance.now() - born.current);
+    if (left <= 0) {
+      setHeld(false);
+      return;
+    }
+    const html = document.documentElement;
+    const stop = (e: Event) => e.preventDefault();
+    const keys = (e: KeyboardEvent) => {
+      if ([" ", "PageDown", "PageUp", "ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) e.preventDefault();
+    };
+    lenis?.stop();
+    html.style.overflow = "hidden";
+    window.addEventListener("wheel", stop, { passive: false, capture: true });
+    window.addEventListener("touchmove", stop, { passive: false, capture: true });
+    window.addEventListener("keydown", keys, { capture: true });
+    const release = () => {
+      html.style.removeProperty("overflow");
+      lenis?.start();
+      window.removeEventListener("wheel", stop, { capture: true });
+      window.removeEventListener("touchmove", stop, { capture: true });
+      window.removeEventListener("keydown", keys, { capture: true });
+    };
+    const timer = window.setTimeout(() => {
+      release();
+      setHeld(false);
+    }, left);
+    return () => {
+      clearTimeout(timer);
+      release();
+    };
+  }, [lenis]);
   return (
     <div className={styles.loader} aria-hidden>
+      {held && <style>{"html{overflow:hidden}"}</style>}
       <svg className={styles.ball} viewBox="0 0 64 64" style={{ "--frames": FRAMES } as React.CSSProperties}>
         <circle className={styles.rim} cx="32" cy="32" r={R} />
         {TURN.map((p, k) => (

@@ -100,9 +100,17 @@
 }
 
 @media (max-width: 767px) {
-  /* Phones: the full photograph, the line and the button beneath it. */
+  /* Phones: an upright frame cut from the photograph (no zoom), the watch and her hands in it; the line and the button beneath. */
   .frame {
-    max-height: none;
+    aspect-ratio: 4 / 5;
+    max-height: 82svh;
+  }
+  .photo {
+    object-position: 46% 50%;
+  }
+  .giant {
+    font-size: 44vw;
+    top: 2%;
   }
   .copy {
     position: static;

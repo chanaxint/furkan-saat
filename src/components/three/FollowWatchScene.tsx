@@ -6,7 +6,7 @@ import { Suspense, useEffect, useMemo, useRef } from "react";
 import { ACESFilmicToneMapping, Box3, type Group, MathUtils, SRGBColorSpace, Vector3 } from "three";
 
 /** Where the pointer is, -1…1 on both axes (shared by the scene's frame loop). */
-const pointer = { x: 0, y: 0, moved: false };
+const pointer = { x: 0, y: 0, moved: false, tilt: false };
 
 /**
  * One watch, head-on, turning gently towards the pointer — as if it looks at
@@ -45,9 +45,11 @@ export default function FollowWatchScene({
       base.b += (e.beta - base.b) * 0.004;
       base.g += (e.gamma - base.g) * 0.004;
       const clamp = (v: number) => Math.max(-1, Math.min(1, v));
-      pointer.x = clamp((e.gamma - base.g) / 25);
-      pointer.y = clamp((e.beta - base.b) / 25);
+      // Gentler than the mouse: a full turn needs a good tilt of the phone.
+      pointer.x = clamp((e.gamma - base.g) / 40);
+      pointer.y = clamp((e.beta - base.b) / 40);
       pointer.moved = true;
+      pointer.tilt = true;
     };
     const listen = () => window.addEventListener("deviceorientation", tilt);
     // iPhone asks for permission to read motion, and only after a tap.
@@ -124,10 +126,11 @@ function Watch({ model, facing, onReady }: { model: string; facing: [number, num
     const t = state.clock.elapsedTime;
     // With a pointer: look towards it. Without one: a slow, small sway.
     // Aim the dial at the pointer: the angle to where it sits on a plane in front of the watch.
-    const tx = pointer.moved ? Math.atan(pointer.x * 1.2) : Math.sin(t * 0.5) * 0.18;
-    const ty = pointer.moved ? Math.atan(pointer.y * 0.8) : Math.sin(t * 0.37) * 0.08;
+    const tx = pointer.moved ? Math.atan(pointer.x * (pointer.tilt ? 0.8 : 1.2)) : Math.sin(t * 0.5) * 0.18;
+    const ty = pointer.moved ? Math.atan(pointer.y * (pointer.tilt ? 0.55 : 0.8)) : Math.sin(t * 0.37) * 0.08;
     // Close follow, frame-rate independent (no lag, no jitter at 60/120 Hz).
-    const k = 1 - Math.exp(-Math.min(dt, 0.05) * 14);
+    // The phone's tilt is followed more slowly, for a smooth, unhurried turn.
+    const k = 1 - Math.exp(-Math.min(dt, 0.05) * (pointer.tilt ? 3.2 : 14));
     g.rotation.y = MathUtils.lerp(g.rotation.y, tx, k);
     g.rotation.x = MathUtils.lerp(g.rotation.x, ty, k);
     g.position.y = Math.sin(t * 0.8) * 0.03;

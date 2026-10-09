@@ -163,16 +163,17 @@
     right: var(--gutter);
     width: auto;
     top: auto;
-    bottom: 6vh;
+    bottom: 3svh;
     transform: none;
     text-align: left;
-    padding-top: 40px;
+    padding-top: 28px;
     background: linear-gradient(to top, rgba(236, 236, 234, 0.96) 60%, transparent);
   }
   .lineTitle {
-    font-size: clamp(1.9rem, 8.5vw, 2.6rem);
+    font-size: clamp(1.5rem, 6.6vw, 2rem);
   }
   .lineText {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
   }
 }

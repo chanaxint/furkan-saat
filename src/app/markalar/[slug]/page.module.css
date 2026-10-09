@@ -305,6 +305,12 @@
 .footPhoto img {
   object-fit: cover;
 }
+/* Phones: a landscape photograph would be a thin strip; cut an upright frame from it (no zoom). */
+@media (max-width: 767px) {
+  .footPhoto:not([data-screen]) {
+    aspect-ratio: 4 / 5 !important;
+  }
+}
 /* With words over it: the whole screen, the sky kept (the city's foot is what gives way). */
 .footPhoto[data-screen] {
   height: 100svh;

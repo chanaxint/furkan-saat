@@ -1,7 +1,7 @@
 "use client";
 
 import { Environment, Lightformer, useGLTF } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef } from "react";
 import { ACESFilmicToneMapping, Box3, type Group, MathUtils, SRGBColorSpace, Vector3 } from "three";
 
@@ -10,7 +10,8 @@ const pointer = { x: 0, y: 0, moved: false };
 
 /**
  * One watch, head-on, turning gently towards the pointer — as if it looks at
- * you. On touch screens (no pointer) it sways slowly by itself.
+ * you. On touch screens it turns to where the finger touches; until then it
+ * sways slowly by itself. On a narrow (upright) screen it is drawn smaller.
  */
 export default function FollowWatchScene({
   model,
@@ -25,14 +26,28 @@ export default function FollowWatchScene({
   onReady?: () => void;
 }) {
   useEffect(() => {
-    const move = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
-      pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
-      pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
+    const at = (x: number, y: number) => {
+      pointer.x = (x / window.innerWidth) * 2 - 1;
+      pointer.y = (y / window.innerHeight) * 2 - 1;
       pointer.moved = true;
     };
+    const move = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      at(e.clientX, e.clientY);
+    };
+    // Touch screens: the watch turns to where the finger is (as it lands and as it moves).
+    const touch = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) at(t.clientX, t.clientY);
+    };
     window.addEventListener("pointermove", move, { passive: true });
-    return () => window.removeEventListener("pointermove", move);
+    window.addEventListener("touchstart", touch, { passive: true });
+    window.addEventListener("touchmove", touch, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("touchstart", touch);
+      window.removeEventListener("touchmove", touch);
+    };
   }, []);
 
   return (
@@ -67,6 +82,8 @@ export default function FollowWatchScene({
 function Watch({ model, facing, onReady }: { model: string; facing: [number, number, number]; onReady?: () => void }) {
   const gltf = useGLTF(model);
   const turn = useRef<Group>(null);
+  // Upright screens: smaller, so the name behind it shows either side.
+  const fit = useThree((st) => Math.min(1, st.viewport.width / 2.8));
 
   // Centred on its own bounds and scaled so its height fills most of the frame.
   const scene = useMemo(() => {
@@ -100,7 +117,7 @@ function Watch({ model, facing, onReady }: { model: string; facing: [number, num
   });
 
   return (
-    <group ref={turn}>
+    <group ref={turn} scale={fit}>
       <primitive object={scene} />
     </group>
   );

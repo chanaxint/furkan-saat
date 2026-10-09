@@ -26,7 +26,7 @@ const ShowcaseWatchScene = dynamic(() => import("@/components/three/ShowcaseWatc
  */
 const EXIT_END = -0.5;
 /** Phones: the watch sits higher and further back. */
-const PORTRAIT = { lift: 0.32, pull: 2.2 };
+const PORTRAIT = { lift: 0.42, pull: 4.8 };
 
 export function BrandStage({
   brand,

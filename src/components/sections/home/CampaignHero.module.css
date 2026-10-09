@@ -13,9 +13,6 @@
   max-height: 100svh;
   overflow: hidden;
   background: #bfb1a1;
-  /* Its top edge melts into the brands' ground (the same wall colour), no seam. */
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 2.5%);
-  mask-image: linear-gradient(to bottom, transparent, #000 2.5%);
 }
 .photo {
   object-fit: cover;

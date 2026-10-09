@@ -24,13 +24,13 @@ export const ASSETS = {
   intro: {
     /**
      * Opening film — watches changing on a wrist against black (5 s, no sound).
-     * Plays once on the first scroll; 720p for phones, 1080p elsewhere
+     * Plays once on the first scroll; 1080p everywhere (phones too: their upright crop needs it)
      * (H.264, with a VP9 WebM for browsers without it).
      */
     film: {
       mp4: "/assets/video/intro/intro-1080.mp4",
       webm: "/assets/video/intro/intro-1080.webm",
-      mobile: "/assets/video/intro/intro-720.mp4",
+      mobile: "/assets/video/intro/intro-1080.mp4",
       poster: "/assets/video/intro/intro-poster.webp",
       /**
        * The first watch's bezel in the first frame, as fractions of the frame:

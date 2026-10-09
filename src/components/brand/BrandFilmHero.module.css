@@ -331,3 +331,36 @@
   color: #f4ecd8;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
 }
+
+/*
+ * Phones, Freelook: the film (an upright cut of its own, centred) opens on the
+ * dial close up, so the name and its line go to the top, over a darker sky,
+ * smaller, clear of the watch.
+ */
+@media (max-width: 767px) {
+  .hero[data-theme="gold"] .content {
+    place-content: start center;
+    padding-top: calc(var(--nav-h) + 2svh);
+    padding-bottom: 0;
+    gap: 8px;
+  }
+  .hero[data-theme="gold"] .logo {
+    width: min(170px, 44vw);
+    height: min(140px, 16svh);
+  }
+  .hero[data-theme="gold"] .signature {
+    font-size: 1.1rem;
+  }
+  /* The film starts below the name, so the name sits on black, not on the dial. */
+  .hero[data-theme="gold"] .video {
+    top: 22svh;
+    height: calc(100% - 22svh);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%);
+    mask-image: linear-gradient(to bottom, transparent, #000 12%);
+  }
+  .hero[data-theme="gold"] .grade {
+    background:
+      linear-gradient(to bottom, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.35) 30%, transparent 46%),
+      linear-gradient(to top, rgba(0, 0, 0, 0.45), transparent 26%);
+  }
+}

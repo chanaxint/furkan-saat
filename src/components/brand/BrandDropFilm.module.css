@@ -18,3 +18,10 @@
   height: 100%;
   object-fit: cover;
 }
+
+/* Phones: an upright cut of its own (no zoom), the watch landing in the middle. */
+@media (max-width: 767px) {
+  .foot {
+    aspect-ratio: 813 / 1016;
+  }
+}

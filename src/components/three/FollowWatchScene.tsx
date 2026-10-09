@@ -10,8 +10,8 @@ const pointer = { x: 0, y: 0, moved: false };
 
 /**
  * One watch, head-on, turning gently towards the pointer — as if it looks at
- * you. On touch screens it turns to where the finger touches; until then it
- * sways slowly by itself. On a narrow (upright) screen it is drawn smaller.
+ * you. On phones it follows the phone's own tilt; until it moves (or where
+ * motion cannot be read) it sways slowly by itself. On a narrow (upright) screen it is drawn smaller.
  */
 export default function FollowWatchScene({
   model,
@@ -35,18 +35,35 @@ export default function FollowWatchScene({
       if (e.pointerType === "touch") return;
       at(e.clientX, e.clientY);
     };
-    // Touch screens: the watch turns to where the finger is (as it lands and as it moves).
-    const touch = (e: TouchEvent) => {
-      const t = e.touches[0];
-      if (t) at(t.clientX, t.clientY);
+    // Phones: the watch follows the phone itself as it is tilted in the hand
+    // (left/right, up/down and both at once), measured from how it was held
+    // when the page opened; drifts back to that slowly so it never sticks.
+    let base: { b: number; g: number } | null = null;
+    const tilt = (e: DeviceOrientationEvent) => {
+      if (e.beta == null || e.gamma == null) return;
+      if (!base) base = { b: e.beta, g: e.gamma };
+      base.b += (e.beta - base.b) * 0.004;
+      base.g += (e.gamma - base.g) * 0.004;
+      const clamp = (v: number) => Math.max(-1, Math.min(1, v));
+      pointer.x = clamp((e.gamma - base.g) / 25);
+      pointer.y = clamp((e.beta - base.b) / 25);
+      pointer.moved = true;
     };
+    const listen = () => window.addEventListener("deviceorientation", tilt);
+    // iPhone asks for permission to read motion, and only after a tap.
+    type Asks = { requestPermission?: () => Promise<"granted" | "denied"> };
+    const asks = (window.DeviceOrientationEvent as unknown as Asks | undefined)?.requestPermission;
+    const ask = () => {
+      window.removeEventListener("touchend", ask);
+      asks?.().then((r) => r === "granted" && listen()).catch(() => {});
+    };
+    if (asks) window.addEventListener("touchend", ask, { passive: true });
+    else listen();
     window.addEventListener("pointermove", move, { passive: true });
-    window.addEventListener("touchstart", touch, { passive: true });
-    window.addEventListener("touchmove", touch, { passive: true });
     return () => {
       window.removeEventListener("pointermove", move);
-      window.removeEventListener("touchstart", touch);
-      window.removeEventListener("touchmove", touch);
+      window.removeEventListener("deviceorientation", tilt);
+      window.removeEventListener("touchend", ask);
     };
   }, []);
 

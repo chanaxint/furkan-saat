@@ -112,8 +112,12 @@
 .icon {
   position: relative;
   display: inline-flex;
+  flex-shrink: 0;
   padding: 6px;
   transition: opacity 0.4s var(--ease-lux);
+}
+.icon svg {
+  flex-shrink: 0;
 }
 .icon:hover {
   opacity: 0.6;
@@ -186,14 +190,49 @@
   .menuLabel {
     display: none;
   }
+  /* The name takes what is left between the menu and the icons, never squeezing them. */
+  .inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 8px;
+  }
   .wordmark {
-    font-size: 1.05rem;
-    letter-spacing: 0.26em;
+    justify-self: center;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    margin-right: -0.2em;
   }
   .nav[data-mode="immersive"] .wordmark {
     letter-spacing: 0.3em;
   }
   .end {
-    gap: 10px;
+    gap: 4px;
+    margin-right: -8px;
+  }
+  /* Thumb-sized: larger icons, each in a comfortable tap target. */
+  .icon {
+    padding: 9px;
+  }
+  .icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.5;
+  }
+  .icon sup {
+    top: 3px;
+    right: 1px;
+    font-size: 10px;
+  }
+  .menuButton {
+    padding: 12px 12px 12px 0;
+  }
+  .menuIcon {
+    width: 26px;
+    height: 10px;
+  }
+  .menuIcon span {
+    height: 1.5px;
+  }
+  .menuIcon span:last-child {
+    top: 9px;
   }
 }

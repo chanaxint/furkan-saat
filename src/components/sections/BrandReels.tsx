@@ -20,11 +20,11 @@ export function BrandReels() {
       <section
         className={styles.section}
         data-nav-theme="light"
-        aria-label="Öne çıkan markalar"
+        aria-label="Markalarımız"
       >
         <header className={styles.header}>
           <h2 className={styles.title}>
-            Öne çıkan <em>markalar</em>
+            <em>Markalarımız</em>
           </h2>
         </header>
         {/* A belt that never stops: the brands drift slowly to the right, and the first follows the last. */}
@@ -32,8 +32,9 @@ export function BrandReels() {
           <ul className={styles.track} style={{ "--n": BRANDS.length } as React.CSSProperties}>
             {[0, 1].map((copy) =>
               BRANDS.map((b) => (
-                <li key={`${copy}-${b.slug}`} aria-hidden={copy === 1 || undefined} inert={copy === 1 || undefined}>
-                  <BrandTile brand={b} />
+                // The second copy is as clickable as the first (it is what is often on screen); only kept out of the tab order and screen readers.
+                <li key={`${copy}-${b.slug}`} aria-hidden={copy === 1 || undefined}>
+                  <BrandTile brand={b} tabIndex={copy === 1 ? -1 : undefined} />
                 </li>
               )),
             )}

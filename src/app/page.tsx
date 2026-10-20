@@ -11,8 +11,8 @@ import { getFeatured, getProducts, getProductsInCollection } from "@/lib/service
 
 /**
  * FURKAN SAAT — Homepage
- * Opening film (plays on the first scroll → "İstediğiniz her saat" → "Furkan Saat"
- * → black-to-green blend) · 01 Featured brands · campaign photograph · name band
+ * Opening film (plays on the first scroll → "İstediğiniz her saat" → "Furkan Saat")
+ * · campaign photograph, rising over it · featured brands · name band
  * · Yeni Gelenler · the whole collection, with filters · Final CTA · Footer
  */
 export default async function Home() {
@@ -23,10 +23,10 @@ export default async function Home() {
   return (
     <main>
       <HeroIntro />
-      <BrandReels />
-      {/* Everything after the brands is one layer: it rises over them as they stay pinned. */}
+      {/* Everything after the opening is one layer: it rises over the opening's last screen, which holds still beneath it. */}
       <div className={styles.layer}>
         <CampaignHero />
+        <BrandReels />
         <Marquee />
         <ShopRow title="Yeni Gelenler" products={arrivals.slice(0, 4)} variant="centred" href="/#koleksiyon" />
         <CollectionSection products={collection} weekly={weekly.map((p) => p.slug)} />

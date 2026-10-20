@@ -1,6 +1,7 @@
-/* Everything after the brands, in the page's flow (the campaign photograph follows on from the brands' ground). */
+/* Everything after the opening: a sheet of its own that slides up over the opening's last screen. */
 .layer {
   position: relative;
   z-index: 2;
   background: #ebe3d4;
+  box-shadow: 0 -30px 70px rgba(0, 0, 0, 0.45);
 }

@@ -1754,5 +1754,1124 @@
     ],
     "addedAt": "2026-10-07",
     "tone": "green"
+  },
+  {
+    "slug": "elle-paris-oval-yesil-kadran-altin-orgu-bilezik",
+    "brand": "elle-paris",
+    "model": "Oval — Yeşil Kadran, Altın Örgü Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-oval-yesil-kadran-altin-orgu-bilezik.webp"
+    ],
+    "description": "Oval altın renk kasa, güneş desenli yeşil kadran ve ince işaretler; yumuşak örgü bilezikle zarif bir günlük saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk örgü bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "green"
+  },
+  {
+    "slug": "elle-paris-oval-sampanya-kadran-altin-orgu-bilezik",
+    "brand": "elle-paris",
+    "model": "Oval — Şampanya Kadran, Altın Örgü Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-oval-sampanya-kadran-altin-orgu-bilezik.webp"
+    ],
+    "description": "Şampanya tonlu kadran ve oval altın renk kasa; örgü bilezikle bileğe yumuşakça oturan ince bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk örgü bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-klasik-beyaz-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Klasik — Beyaz Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-klasik-beyaz-kadran-altin.webp"
+    ],
+    "description": "Beyaz kadranda ELLE imzası, altın renk kasa ve bilezik; sade ve zamansız bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "ivory"
+  },
+  {
+    "slug": "elle-paris-tirtikli-cerceve-pembe-sedef-kadran",
+    "brand": "elle-paris",
+    "model": "Tırtıklı Çerçeve — Pembe Sedef Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tirtikli-cerceve-pembe-sedef-kadran.webp"
+    ],
+    "description": "Rose renk tırtıklı çerçeve, pembe sedef kadran ve bicolor bilezik; romantik ve göz alıcı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-rose bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "elle-paris-tirtikli-cerceve-sedef-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Tırtıklı Çerçeve — Sedef Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tirtikli-cerceve-sedef-kadran-bicolor.webp"
+    ],
+    "description": "Altın renk tırtıklı çerçeve, sedef kadran ve bicolor bilezik; klasik bir şıklık.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-mini-oval-beyaz-kadran-celik-orgu",
+    "brand": "elle-paris",
+    "model": "Mini Oval — Beyaz Kadran, Çelik Örgü",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-mini-oval-beyaz-kadran-celik-orgu.webp"
+    ],
+    "description": "Küçük oval çelik kasa, beyaz kadran ve yumuşak örgü bilezik; ince bilekler için zarif bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik örgü bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "elle-paris-tasli-cerceve-sedef-kadran-celik",
+    "brand": "elle-paris",
+    "model": "Taşlı Çerçeve — Sedef Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tasli-cerceve-sedef-kadran-celik.webp"
+    ],
+    "description": "Taşlarla çevrili çerçeve, sedef kadranda taş işaretler; çelik bilezikle ışıltılı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "elle-paris-tonneau-sampanya-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Tonneau — Şampanya Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tonneau-sampanya-kadran-altin.webp"
+    ],
+    "description": "Yumuşak hatlı tonneau kasa, şampanya kadran ve altın renk bilezik; vintage ruhlu bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-tasli-cerceve-beyaz-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Taşlı Çerçeve — Beyaz Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tasli-cerceve-beyaz-kadran-altin.webp"
+    ],
+    "description": "Taşlı altın renk çerçeve, beyaz kadranda taş işaretler; altın bilezikle ışıltılı bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "tasli",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-klasik-beyaz-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Klasik — Beyaz Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-klasik-beyaz-kadran-bicolor.webp"
+    ],
+    "description": "Beyaz kadranda büyük ELLE imzası ve taş işaretler; bicolor bilezikle şık bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "ivory"
+  },
+  {
+    "slug": "elle-paris-sekizgen-beyaz-kadran-celik",
+    "brand": "elle-paris",
+    "model": "Sekizgen — Beyaz Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-sekizgen-beyaz-kadran-celik.webp"
+    ],
+    "description": "Sekizgen çelik kasa, beyaz kadran ve çubuk işaretler; modern ve net çizgili.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "elle-paris-oval-mor-kadran-altin-bilezik",
+    "brand": "elle-paris",
+    "model": "Oval — Mor Kadran, Altın Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-oval-mor-kadran-altin-bilezik.webp"
+    ],
+    "description": "Güneş desenli mor kadran ve oval altın renk kasa; akıcı halkalı bilezikle iddialı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "elle-paris-kare-kelepce-yesil-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Kare Kelepçe — Yeşil Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-kare-kelepce-yesil-kadran-altin.webp"
+    ],
+    "description": "Yumuşak köşeli kare kasa, yeşil kadran ve ince kelepçe bilezik; mücevher gibi bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk kelepçe bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "green"
+  },
+  {
+    "slug": "elle-paris-hasir-bilezik-gri-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Hasır Bilezik — Gri Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-hasir-bilezik-gri-kadran-altin.webp"
+    ],
+    "description": "Gri kadran, altın renk kasa ve ince hasır bilezik; sade ve şık.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk hasır (mesh) bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "elle-paris-tirtikli-cerceve-gumus-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Tırtıklı Çerçeve — Gümüş Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tirtikli-cerceve-gumus-kadran-bicolor.webp"
+    ],
+    "description": "Altın renk tırtıklı çerçeve, gümüş kadran ve bicolor bilezik; klasik ve zamansız.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-klasik-beyaz-kadran-celik",
+    "brand": "elle-paris",
+    "model": "Klasik — Beyaz Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-klasik-beyaz-kadran-celik.webp"
+    ],
+    "description": "Beyaz kadranda ELLE imzası, çelik kasa ve bilezik; her güne yakışan sade bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "ivory"
+  },
+  {
+    "slug": "elle-paris-zincir-bilezik-yesil-kadran",
+    "brand": "elle-paris",
+    "model": "Zincir Bilezik — Yeşil Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-zincir-bilezik-yesil-kadran.webp"
+    ],
+    "description": "Yeşil kadran ve iri halkalı zincir bilezik; takı gibi taşınan modern bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik zincir bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "green"
+  },
+  {
+    "slug": "elle-paris-gunes-desenli-antrasit-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Güneş Desenli — Antrasit Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-gunes-desenli-antrasit-kadran-bicolor.webp"
+    ],
+    "description": "Işınsal desenli antrasit kadran, rose detaylar ve bicolor bilezik; karakterli bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "elle-paris-kare-gumus-kadran-tirtikli-cerceve",
+    "brand": "elle-paris",
+    "model": "Kare — Gümüş Kadran, Tırtıklı Çerçeve",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-kare-gumus-kadran-tirtikli-cerceve.webp"
+    ],
+    "description": "Tırtıklı çerçeveli kare çelik kasa, gümüş kadran ve çelik bilezik; zarif ve modern.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "elle-paris-oval-sedef-kadran-altin-orgu-bilezik",
+    "brand": "elle-paris",
+    "model": "Oval — Sedef Kadran, Altın Örgü Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-oval-sedef-kadran-altin-orgu-bilezik.webp"
+    ],
+    "description": "Sedef kadran, oval altın renk kasa ve örgü bilezik; ışığı yumuşakça yansıtan ince bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk örgü bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "ivory"
+  },
+  {
+    "slug": "elle-paris-klasik-bordo-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Klasik — Bordo Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-klasik-bordo-kadran-bicolor.webp"
+    ],
+    "description": "Derin bordo kadran, altın renk işaretler ve bicolor bilezik; sıcak ve şık.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "elle-paris-zincir-bilezik-sampanya-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Zincir Bilezik — Şampanya Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-zincir-bilezik-sampanya-kadran-altin.webp"
+    ],
+    "description": "Şampanya kadran ve altın renk zincir bilezik; bileğe takı gibi oturan zarif bir saat.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk zincir bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-fasetali-yesil-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Fasetalı — Yeşil Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-fasetali-yesil-kadran-bicolor.webp"
+    ],
+    "description": "Fasetalı camın altında yeşil kadran ve bicolor bilezik; ışıkla değişen görünüm.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "green"
+  },
+  {
+    "slug": "elle-paris-oval-beyaz-kadran-altin-bilezik",
+    "brand": "elle-paris",
+    "model": "Oval — Beyaz Kadran, Altın Bilezik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-oval-beyaz-kadran-altin-bilezik.webp"
+    ],
+    "description": "Oval altın renk kasa, beyaz kadran ve akıcı halkalı bilezik; zamansız bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "ivory"
+  },
+  {
+    "slug": "elle-paris-dikdortgen-sampanya-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Dikdörtgen — Şampanya Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-dikdortgen-sampanya-kadran-altin.webp"
+    ],
+    "description": "Dikdörtgen altın renk kasa, şampanya kadran ve altın bilezik; art deco esintili.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "champagne"
+  },
+  {
+    "slug": "elle-paris-hasir-bilezik-gumus-kadran-celik",
+    "brand": "elle-paris",
+    "model": "Hasır Bilezik — Gümüş Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-hasir-bilezik-gumus-kadran-celik.webp"
+    ],
+    "description": "Gümüş kadranda ELLE imzası, çelik kasa ve hasır bilezik; sade ve hafif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Paslanmaz çelik hasır (mesh) bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "elle-paris-klasik-mor-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Klasik — Mor Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-klasik-mor-kadran-altin.webp"
+    ],
+    "description": "Mor kadran, altın renk kasa ve bilezik; renkli ve şık bir kadın saati.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "elle-paris-tonneau-bordo-kadran-bicolor",
+    "brand": "elle-paris",
+    "model": "Tonneau — Bordo Kadran, Bicolor",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-tonneau-bordo-kadran-bicolor.webp"
+    ],
+    "description": "Tonneau kasa, bordo kadran ve bicolor bilezik; vintage ruhlu ve iddialı.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Gümüş-altın bicolor paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "elle-paris-klasik-yesil-kadran-altin",
+    "brand": "elle-paris",
+    "model": "Klasik — Yeşil Kadran, Altın",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/elle-paris-klasik-yesil-kadran-altin.webp"
+    ],
+    "description": "Güneş desenli yeşil kadran, altın renk kasa ve bilezik; canlı ve zarif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "strap": "Altın renk paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kadin",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "green"
+  },
+  {
+    "slug": "quantum-kronograf-lacivert-kadran-celik",
+    "brand": "quantum",
+    "model": "Kronograf — Lacivert Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-lacivert-kadran-celik.webp"
+    ],
+    "description": "Lacivert dokulu kadranda üç alt kadranlı kronograf, rose işaretler ve tarih penceresi; çelik bilezikle.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "quantum-kronograf-bordo-kadran-celik",
+    "brand": "quantum",
+    "model": "Kronograf — Bordo Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-bordo-kadran-celik.webp"
+    ],
+    "description": "Degrade bordo kadranda kronograf ve tarih penceresi; çelik kasa ve bilezikle sportif ve şık.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "quantum-kronograf-kahve-kadran-kaucuk-kordon",
+    "brand": "quantum",
+    "model": "Kronograf — Kahve Kadran, Kauçuk Kordon",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-kahve-kadran-kaucuk-kordon.webp"
+    ],
+    "description": "Siyah çerçeveli kasa, kahve tonlu kadranda kronograf; siyah kauçuk kordonla sportif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Siyah kauçuk kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "quantum-sapphire-bordo-lacivert-degrade-kadran",
+    "brand": "quantum",
+    "model": "Sapphire — Bordo-Lacivert Degrade Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-sapphire-bordo-lacivert-degrade-kadran.webp"
+    ],
+    "description": "Bordodan laciverde dönen degrade kadran, tarih penceresi ve 100 metre su geçirmezlik; entegre çelik bilezik.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "waterResistance": "100 m",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "quantum-kronograf-siyah-ip-bordo-kadran",
+    "brand": "quantum",
+    "model": "Kronograf — Siyah IP, Bordo Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-siyah-ip-bordo-kadran.webp"
+    ],
+    "description": "Baştan sona siyah kasa ve bilezik, bordo kadranda rose detaylı kronograf.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah IP kaplama paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Siyah IP kaplama paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "quantum-sapphire-buz-mavisi-dokulu-kadran",
+    "brand": "quantum",
+    "model": "Sapphire — Buz Mavisi Dokulu Kadran",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-sapphire-buz-mavisi-dokulu-kadran.webp"
+    ],
+    "description": "Buz mavisi dokulu kadran, kırmızı detaylı saniye ve tarih penceresi; siyah kauçuk kordonla modern.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Siyah kauçuk kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "stone"
+  },
+  {
+    "slug": "quantum-pilot-kronograf-yesil-kadran-deri",
+    "brand": "quantum",
+    "model": "Pilot Kronograf — Yeşil Kadran, Deri",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-pilot-kronograf-yesil-kadran-deri.webp"
+    ],
+    "description": "Yeşil kadranda pilot tarzı kronograf, dakika ölçekli çerçeve ve delikli kahverengi deri kordon.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Kahverengi delikli deri kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "green"
+  },
+  {
+    "slug": "quantum-iskelet-kronograf-mavi-kaucuk-kordon",
+    "brand": "quantum",
+    "model": "İskelet Kronograf — Mavi Kauçuk Kordon",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-iskelet-kronograf-mavi-kaucuk-kordon.webp"
+    ],
+    "description": "Açık işçilikli iskelet kadran, iri siyah kasa ve mavi-siyah kauçuk kordon; cesur ve sportif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Siyah IP kaplama paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Mavi-siyah kauçuk kordon"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "quantum-kronograf-siyah-kadran-celik",
+    "brand": "quantum",
+    "model": "Kronograf — Siyah Kadran, Çelik",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-siyah-kadran-celik.webp"
+    ],
+    "description": "Siyah kadranda üç alt kadranlı kronograf ve tarih penceresi; sade çizgili çelik kasa ve bilezik.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "spor",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "quantum-sapphire-bordo-kadran-arap-rakamli",
+    "brand": "quantum",
+    "model": "Sapphire — Bordo Kadran, Arap Rakamlı",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-sapphire-bordo-kadran-arap-rakamli.webp"
+    ],
+    "description": "Güneş desenli bordo kadranda Arap rakamları ve büyük tarih penceresi; çelik bilezikle.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "wine"
+  },
+  {
+    "slug": "quantum-kronograf-lacivert-kadran-sapphire",
+    "brand": "quantum",
+    "model": "Kronograf — Lacivert Kadran, Sapphire",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-lacivert-kadran-sapphire.webp"
+    ],
+    "description": "Lacivert kadranda kronograf, tarih penceresi ve safir cam; çelik kasa ve bilezikle klasik.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "deep"
+  },
+  {
+    "slug": "quantum-kronograf-beyaz-dokulu-kadran-altin-detay",
+    "brand": "quantum",
+    "model": "Kronograf — Beyaz Dokulu Kadran, Altın Detay",
+    "reference": "",
+    "price": null,
+    "currency": "TRY",
+    "images": [
+      "/assets/images/watches/quantum-kronograf-beyaz-dokulu-kadran-altin-detay.webp"
+    ],
+    "description": "Beyaz dokulu kadranda altın renk işaretler ve kronograf alt kadranları; çelik bilezikle zarif.",
+    "specs": {
+      "movement": "Kuvars",
+      "caseMaterial": "Paslanmaz çelik",
+      "crystal": "Safir",
+      "strap": "Paslanmaz çelik bilezik"
+    },
+    "condition": "Yeni",
+    "availability": "Stokta",
+    "fullSet": true,
+    "collections": [
+      "kronograf",
+      "klasik",
+      "yeni-gelenler"
+    ],
+    "addedAt": "2026-10-20",
+    "tone": "ivory"
   }
 ]

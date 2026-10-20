@@ -1,7 +1,10 @@
 .intro {
   /* The black of the film itself, so the frame has no edge. */
   --black: #07080a;
-  position: relative;
+  /* Its last screen holds still while the page that follows slides up over it. */
+  position: sticky;
+  top: 0;
+  z-index: 0;
   background: var(--black);
   color: var(--ivory);
 }
@@ -240,39 +243,6 @@
 }
 @keyframes cue-in {
   from { opacity: 0; }
-}
-
-/* ------------------------------------------------------------ blend */
-/*
- * Black into the deep cream, tone by tone: one long gradient with many close stops
- * along an eased curve (no clouds, no blur), ending on exactly the cream the
- * brands section continues in (--blend-end).
- */
-.blend {
-  --blend-end: #e4dac7;
-  position: relative;
-  height: 55svh;
-  background: linear-gradient(
-    to bottom,
-    #07080a 0%,
-    #07080a 10%,
-    #0e0d0c 20%,
-    #1e1c18 28%,
-    #322d27 36%,
-    #4a443b 44%,
-    #655d52 52%,
-    #827a6c 60%,
-    #a09786 68%,
-    #bcb29f 76%,
-    #d2c8b4 84%,
-    var(--blend-end) 92%,
-    var(--blend-end) 100%
-  );
-}
-
-.blendLight {
-  position: absolute;
-  inset: 50% 0 0 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

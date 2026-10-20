@@ -141,4 +141,26 @@ export const BRANDS: Brand[] = [
       caption: "Santa Barbara · Kaliforniya",
     },
   },
+  {
+    slug: "elle-paris",
+    name: "Elle Paris",
+    origin: "Paris",
+    signature: "Parisli kadının günlük şıklığı.",
+    description:
+      "Moda dünyasının Paris'teki ünlü adından ilham alan ELLE saatleri; oval ve tonneau kasalar, sedef ve renkli kadranlar, örgü ve zincir bileziklerle her güne zarif bir dokunuş.",
+    cover: "/assets/images/brands/tile-elle-paris.webp",
+    logo: "/assets/images/brands/elle-paris.png",
+    tile: "/assets/images/brands/tile-elle-paris.webp",
+  },
+  {
+    slug: "quantum",
+    name: "Quantum",
+    origin: "Sapphire koleksiyonu",
+    signature: "Safir camlı, güçlü erkek saatleri.",
+    description:
+      "Quantum, safir camlı kronograflar ve sportif modellerle güçlü bir erkek koleksiyonu sunar: dokulu ve degrade kadranlar, çelik bilezikler, kauçuk ve deri kordonlar.",
+    cover: "/assets/images/brands/tile-quantum.webp",
+    logo: "/assets/images/brands/quantum.png",
+    tile: "/assets/images/brands/tile-quantum.webp",
+  },
 ];

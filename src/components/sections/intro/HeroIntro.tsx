@@ -13,7 +13,7 @@ import styles from "./HeroIntro.module.css";
  * playing    the film plays once, start to end
  * line       the film cuts to black and "İstediğiniz her saat" is there at once
  * mark       the line gives way to "Furkan Saat"
- * done       the page is released; scrolling continues into the black → cream blend
+ * done       the page is released; the page that follows slides up over the opening
  *
  * Sound (lib/sound/introSound): ticks that accelerate with the film, a deep
  * hit on the cut, a chime with the name.
@@ -47,7 +47,7 @@ function introAllowed() {
  * (the wordmark leads to the campaign).
  */
 function landing(): HTMLElement | null {
-  const target = window.location.hash || (introAllowed() ? "" : "#markalar");
+  const target = window.location.hash || (introAllowed() ? "" : "#kampanya");
   if (!target || target === "#top") return null;
   try {
     return document.querySelector<HTMLElement>(target);
@@ -253,7 +253,7 @@ export function HeroIntro() {
     });
   }, root);
 
-  const onCue = () => (phase === "done" ? scrollTo("#markalar") : start());
+  const onCue = () => (phase === "done" ? scrollTo("#kampanya") : start());
 
   /** "İntroyu atla": the film, titles and sound stop, the page is released and goes on to the brands. */
   const skip = () => {
@@ -261,7 +261,7 @@ export function HeroIntro() {
     video.current?.pause();
     introSound.stop();
     go("done");
-    window.setTimeout(() => scrollTo("#markalar", { immediate: true }), 60);
+    window.setTimeout(() => scrollTo("#kampanya", { immediate: true }), 60);
   };
 
   return (
@@ -309,11 +309,6 @@ export function HeroIntro() {
         </button>
       </div>
 
-      {/* Where the black of the film turns, tone by tone, into the cream of the site. */}
-      <div className={styles.blend} aria-hidden>
-        {/* Its cream end reads as light: the bar turns ivory over it. */}
-        <div className={styles.blendLight} data-nav-theme="light" />
-      </div>
     </section>
   );
 }

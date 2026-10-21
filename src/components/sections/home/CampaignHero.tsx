@@ -51,24 +51,47 @@ const SLIDES: Slide[] = [
 /**
  * CAMPAIGN — the shop's front window after the opening: three full-width
  * photographs that slide one after another on their own (every few seconds,
- * the next coming in from the right), each with its lines and a way into the
+ * the next coming in from the right, always the same way round: after the
+ * last comes the first again), each with its lines and a way into the
  * shop. The first sets the house name huge behind the model.
  */
 export function CampaignHero() {
+  // `at` runs 0…SLIDES.length: the last position is a copy of the first, so
+  // after the last photograph the row keeps moving the same way onto the
+  // first; once there it jumps back (unseen, no transition) to the real one.
   const [at, setAt] = useState(0);
+  const [snap, setSnap] = useState(false);
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = window.setTimeout(() => setAt((i) => (i + 1) % SLIDES.length), HOLD_MS);
+    const t = window.setTimeout(() => setAt((i) => i + 1), HOLD_MS);
     return () => clearTimeout(t);
   }, [at]);
+  const onSlid = () => {
+    if (at === SLIDES.length) {
+      setSnap(true);
+      setAt(0);
+    }
+  };
+  // The jump has been painted without a transition: let the next slide animate again.
+  useEffect(() => {
+    if (!snap) return;
+    const r = requestAnimationFrame(() => requestAnimationFrame(() => setSnap(false)));
+    return () => cancelAnimationFrame(r);
+  }, [snap]);
+  const shown = at % SLIDES.length;
+  const row = [...SLIDES, SLIDES[0]];
 
   return (
     <section id="kampanya" className={styles.hero} data-nav-theme="light" data-nav-keep aria-label="Yeni sezon" aria-roledescription="carousel">
       <div className={styles.frame}>
-        <div className={styles.slides} style={{ transform: `translateX(${-at * 100}%)` }}>
-          {SLIDES.map((s, i) => (
-            <div key={s.image} className={styles.slide} aria-hidden={i !== at} style={{ "--focus": s.focus } as React.CSSProperties}>
-              <Image src={s.image} alt={s.alt} fill sizes="100vw" priority={i === 0} className={styles.photo} />
+        <div
+          className={styles.slides}
+          style={{ transform: `translateX(${-at * 100}%)`, transition: snap ? "none" : undefined }}
+          onTransitionEnd={(e) => e.target === e.currentTarget && onSlid()}
+        >
+          {row.map((s, i) => (
+            <div key={i} className={styles.slide} aria-hidden={i !== at} style={{ "--focus": s.focus } as React.CSSProperties}>
+              <Image src={s.image} alt={i === SLIDES.length ? "" : s.alt} fill sizes="100vw" priority={i === 0} className={styles.photo} />
               {s.cutout && (
                 <>
                   <p className={styles.giant} aria-hidden>
@@ -90,7 +113,7 @@ export function CampaignHero() {
         </div>
         <div className={styles.dots}>
           {SLIDES.map((s, i) => (
-            <button key={s.image} type="button" className={styles.dot} aria-current={i === at || undefined} aria-label={`${i + 1}. fotoğraf`} onClick={() => setAt(i)} />
+            <button key={s.image} type="button" className={styles.dot} aria-current={i === shown || undefined} aria-label={`${i + 1}. fotoğraf`} onClick={() => setAt(i)} />
           ))}
         </div>
       </div>

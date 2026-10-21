@@ -38,6 +38,102 @@
   color: #6e5a3e;
 }
 
+/* A row that slides sideways: four tiles in view on desktop, two on tablets, one and a bit on phones. */
+.grid {
+  --gap: clamp(12px, 1.4vw, 24px);
+  /* The scroller spans the whole screen (so nothing is cut at the margins); its padding keeps the tiles in line with the page. */
+  --side: max(var(--gutter), calc((100vw - var(--max-w)) / 2));
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 3 * var(--gap)) / 4);
+  column-gap: var(--gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  scroll-padding-inline: var(--side);
+  /* Room above and below for the tiles' glow and ambient light, which the scroller would otherwise clip. */
+  padding: 110px var(--side) 180px;
+  margin: -110px calc(-1 * var(--gutter)) -180px;
+}
+.grid::-webkit-scrollbar {
+  display: none;
+}
+.grid > li {
+  scroll-snap-align: start;
+}
+
+/*
+ * The arrows stand either side of the tiles, level with the middle of the
+ * pictures: the left one in the margin before the first tile, the right one
+ * at the edge of the screen over the next tile peeking in.
+ */
+.header {
+  position: relative;
+  z-index: 2;
+}
+.rail {
+  --gap: clamp(12px, 1.4vw, 24px);
+  --cols: 4;
+  /* Room in the margin beside the row: the arrow sits in it, a little in from the screen's edge. */
+  --reach: min(66px, max(var(--gutter), calc((100vw - var(--max-w)) / 2)) - 8px);
+  position: relative;
+  container-type: inline-size;
+}
+.rail > .arrow {
+  position: absolute;
+  z-index: 3;
+  /* Half the height of a 4:5 picture in a column of the row. */
+  top: calc((100cqw - (var(--cols) - 1) * var(--gap)) / var(--cols) * 0.625);
+  translate: 0 -50%;
+}
+.rail > .arrow[data-side="prev"] {
+  left: calc(-1 * var(--reach));
+}
+.rail > .arrow[data-side="next"] {
+  right: calc(-1 * var(--reach));
+}
+.arrow {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(7, 26, 22, 0.28);
+  border-radius: 50%;
+  background: rgba(242, 237, 227, 0.82);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  color: var(--green-900);
+  cursor: pointer;
+  transition:
+    background-color 0.4s var(--ease-soft),
+    color 0.4s var(--ease-soft),
+    border-color 0.4s var(--ease-soft),
+    opacity 0.4s var(--ease-soft);
+}
+.arrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.arrow:hover:not(:disabled) {
+  background: var(--green-900);
+  border-color: var(--green-900);
+  color: var(--ivory);
+}
+.arrow:focus-visible {
+  outline: 1px solid var(--green-900);
+  outline-offset: 3px;
+}
+.arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .tile {
   isolation: isolate;
   display: grid;
@@ -216,6 +312,14 @@
   transform: none;
 }
 
+@media (max-width: 1024px) {
+  .grid {
+    grid-auto-columns: calc((100% - var(--gap)) / 2);
+  }
+  .rail {
+    --cols: 2;
+  }
+}
 @media (hover: none) {
   .cta {
     opacity: 1;
@@ -228,53 +332,11 @@
   height: 0;
 }
 
-
-/* ------------------------------------------------------------ belt */
-.belt {
-  --tile: clamp(230px, 21.5vw, 380px);
-  --gap: clamp(12px, 1.4vw, 24px);
-  /* Edge to edge across the screen; room above and below for the tiles' glow. */
-  margin: -110px calc(-1 * var(--gutter)) -180px;
-  padding: 110px 0 180px;
-  overflow: hidden;
-}
-.track {
-  display: flex;
-  width: max-content;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  /* About seven seconds a brand: slow, steady, never stopping. */
-  animation: belt calc(var(--n) * 7s) linear infinite;
-}
-.track > li {
-  flex: 0 0 var(--tile);
-  margin-right: var(--gap);
-}
-/* Held still while a tile is under the pointer (or focused), so it can be read and clicked. */
-.track:hover,
-.track:focus-within {
-  animation-play-state: paused;
-}
-/* One full copy of the row to the right, then it starts over: a seamless loop. */
-@keyframes belt {
-  from {
-    transform: translateX(-50%);
+@media (max-width: 640px) {
+  .grid {
+    grid-auto-columns: 78%;
   }
-  to {
-    transform: translateX(0);
-  }
-}
-@media (max-width: 767px) {
-  .belt {
-    --tile: 64vw;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .belt {
-    overflow-x: auto;
-  }
-  .track {
-    animation: none;
+  .rail > .arrow {
+    display: none;
   }
 }

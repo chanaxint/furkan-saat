@@ -1,12 +1,14 @@
+import { Reveal } from "@/components/ui/Reveal";
 import { BRANDS } from "@/lib/data/brands";
+import { BrandRail } from "./BrandRail";
 import { BrandTile } from "./BrandTile";
 import { GenderTiles } from "./GenderTiles";
 import styles from "./BrandReels.module.css";
 
 /**
- * FEATURED BRANDS, after the campaign photograph: equal tiles on a belt that
- * drifts slowly and endlessly to the right (two copies of the row, so the
- * first brand follows the last without a seam); it pauses under the pointer.
+ * 01 — FEATURED BRANDS, straight after the opening: equal tiles side by side
+ * (four in view on desktop), each with the brand's artwork; with more brands
+ * than fit, the row slides sideways with arrows (BrandRail).
  */
 export function BrandReels() {
   return (
@@ -22,24 +24,21 @@ export function BrandReels() {
         data-nav-theme="light"
         aria-label="Markalarımız"
       >
-        <header className={styles.header}>
-          <h2 className={styles.title}>
-            <em>Markalarımız</em>
-          </h2>
-        </header>
-        {/* A belt that never stops: the brands drift slowly to the right, and the first follows the last. */}
-        <div className={styles.belt}>
-          <ul className={styles.track} style={{ "--n": BRANDS.length } as React.CSSProperties}>
-            {[0, 1].map((copy) =>
-              BRANDS.map((b) => (
-                // The second copy is as clickable as the first (it is what is often on screen); only kept out of the tab order and screen readers.
-                <li key={`${copy}-${b.slug}`} aria-hidden={copy === 1 || undefined}>
-                  <BrandTile brand={b} tabIndex={copy === 1 ? -1 : undefined} />
-                </li>
-              )),
-            )}
-          </ul>
-        </div>
+        <BrandRail
+          title={
+            <h2 className={styles.title}>
+              <em>Markalarımız</em>
+            </h2>
+          }
+        >
+          <Reveal as="ul" className={styles.grid} stagger={0.1}>
+            {BRANDS.map((b) => (
+              <li key={b.slug}>
+                <BrandTile brand={b} />
+              </li>
+            ))}
+          </Reveal>
+        </BrandRail>
         <GenderTiles />
       </section>
     </>

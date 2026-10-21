@@ -14,9 +14,50 @@
   overflow: hidden;
   background: #bfb1a1;
 }
+/* The photographs side by side; the row slides one photograph at a time. */
+.slides {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  transition: transform 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+}
 .photo {
   object-fit: cover;
   object-position: 50% 30%;
+}
+.dots {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: clamp(16px, 3%, 30px);
+  display: flex;
+  gap: 10px;
+  transform: translateX(-50%);
+}
+.dot {
+  width: 28px;
+  height: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background-color 0.4s, width 0.4s;
+}
+.dot[aria-current] {
+  width: 44px;
+  background: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .slides {
+    transition: none;
+  }
 }
 
 /* The house name, huge, in gold: on the wall, behind the model. */
@@ -97,32 +138,51 @@
 }
 
 @media (max-width: 767px) {
-  /* Phones: an upright frame cut from the photograph (no zoom), the watch and her hands in it; the line and the button beneath. */
+  /* Phones: an upright frame cut from each photograph (no zoom), the watch in it.  */
   .frame {
-    aspect-ratio: 4 / 5;
-    max-height: 82svh;
+    aspect-ratio: 4 / 5.6;
+    max-height: 86svh;
   }
   .photo {
-    object-position: 46% 50%;
+    object-position: var(--focus, 50% 50%);
+  }
+  /* (the frame's width can be fractionally off the screen's: never show a sliver of the next photograph) */
+  .frame {
+    width: 100vw;
+  }
+  .dots {
+    bottom: 12px;
   }
   .giant {
     font-size: 44vw;
     top: 2%;
   }
+  /* Phones: the lines, the button and the slogan over the foot of the photograph, on a soft shade. */
+  .slide::after {
+    content: "";
+    position: absolute;
+    inset: 45% 0 0 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.55), transparent);
+    pointer-events: none;
+  }
   .copy {
-    position: static;
-    padding: 28px var(--gutter) 8px;
-    color: var(--green-900);
-    text-shadow: none;
+    z-index: 1;
+    left: var(--gutter);
+    bottom: 92px;
+    gap: 6px;
+  }
+  .line {
+    font-size: 0.72rem;
   }
   .button {
-    background: var(--green-900);
-    color: var(--ivory);
+    margin-top: 10px;
+    padding: 13px 30px;
   }
   .slogan {
-    position: static;
-    padding: 12px var(--gutter) 36px;
-    color: var(--green-900);
-    text-shadow: none;
+    z-index: 1;
+    left: var(--gutter);
+    right: auto;
+    bottom: 36px;
+    font-size: 1.35rem;
   }
 }

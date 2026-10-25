@@ -54,7 +54,8 @@ export function ShopRow({
 function ShopCard({ product }: { product: Product }) {
   const [cover, alt] = product.front ? [product.front, product.images[0]] : product.images;
   const brand = brandName(product.brand);
-  const sizes = "(max-width: 767px) 72vw, (max-width: 1100px) 33vw, 20vw";
+  // Generous: the centred row is four wide, and the picture zooms a little on hover.
+  const sizes = "(max-width: 767px) 90vw, (max-width: 1100px) 45vw, 32vw";
   return (
     <HoverCard className={styles.card}>
       <Link href={`/saat/${product.slug}`} className={styles.link}>

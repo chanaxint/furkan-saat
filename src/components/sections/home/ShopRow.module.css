@@ -3,7 +3,8 @@
   background: linear-gradient(to bottom, #ddcfb6, #d8c9ae);
   color: var(--green-900);
   --line-on-light: rgba(60, 45, 25, 0.2);
-  --tile-bg: #e6dbc6;
+  /* The same pale studio grey as the collection's tiles. */
+  --tile-bg: radial-gradient(90% 80% at 50% 38%, #f6f5f3, #e9e7e3);
   padding: clamp(56px, 7vw, 110px) 0 clamp(40px, 5vw, 80px);
 }
 

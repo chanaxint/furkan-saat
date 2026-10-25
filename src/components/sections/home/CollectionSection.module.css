@@ -1,9 +1,10 @@
 .section {
-  /* A white ground round the collection; the watch tiles keep their warm cream, marked by a fine beige line. */
+  /* A white ground round the collection; the watch tiles on a pale studio grey. */
   background: #fff;
   color: var(--green-900);
   --line-on-light: rgba(60, 45, 25, 0.16);
-  --tile-bg: #ebe3d4;
+  /* A soft studio grey for the watch tiles, lit a touch from above (the white ground round them). */
+  --tile-bg: radial-gradient(90% 80% at 50% 38%, #f6f5f3, #e9e7e3);
   padding: clamp(24px, 3vw, 48px) 0 clamp(80px, 9vw, 140px);
   /* Landing here from a link: the title clear of the bar. */
   scroll-margin-top: var(--nav-h);
@@ -30,7 +31,7 @@
   font-size: var(--fs-small);
 }
 
-/* A fine warm-beige line round each watch tile (no pink, as on Essence). */
+/* No line round the tiles: the grey on white is enough. */
 .section :global(article) > a > div[data-front] {
-  box-shadow: inset 0 0 0 1px rgba(150, 125, 90, 0.38);
+  box-shadow: none;
 }

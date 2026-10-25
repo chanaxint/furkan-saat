@@ -1,6 +1,6 @@
 .section {
-  /* Essence's warm cream; the watch tiles on the same cream, marked by a fine beige line. */
-  background: #ebe3d4;
+  /* A white ground round the collection; the watch tiles keep their warm cream, marked by a fine beige line. */
+  background: #fff;
   color: var(--green-900);
   --line-on-light: rgba(60, 45, 25, 0.16);
   --tile-bg: #ebe3d4;

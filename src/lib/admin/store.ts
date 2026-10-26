@@ -19,11 +19,12 @@ import {
 /**
  * Server-side access to the editable data files (src/lib/data/*.json) for the
  * /yonetim panel. Everything written is validated here first. Used only in
- * development — see `isAdminEnabled`.
+ * development — see `isFileEditingEnabled`. Who may use it is decided
+ * separately, by `checkAdmin` / `requireAdmin` (./auth).
  */
 
-/** The panel and its saves exist only while running `npm run dev`. */
-export const isAdminEnabled = () => process.env.NODE_ENV === "development";
+/** The data lives in the project's files, so the panel and its saves work only while running `npm run dev`. */
+export const isFileEditingEnabled = () => process.env.NODE_ENV === "development";
 
 const DATA = path.join(process.cwd(), "src", "lib", "data");
 const file = (name: string) => path.join(DATA, name);

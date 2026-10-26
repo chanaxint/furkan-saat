@@ -1,8 +1,10 @@
 import { SettingsEditor } from "@/components/admin/SettingsEditor";
+import { requireAdmin } from "@/lib/admin/auth";
 import { readSettings } from "@/lib/admin/store";
 import styles from "@/components/admin/admin.module.css";
 
 export default async function AdminSettingsPage() {
+  await requireAdmin("/yonetim/ayarlar");
   return (
     <>
       <header className={styles.head}>

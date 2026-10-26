@@ -2,18 +2,22 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
-import { isAdminEnabled } from "@/lib/admin/store";
+import { requireAdmin } from "@/lib/admin/auth";
+import { isFileEditingEnabled } from "@/lib/admin/store";
 import styles from "./layout.module.css";
 
 export const metadata: Metadata = { title: "Yönetim — Furkan Saat", robots: { index: false, follow: false } };
 
 /**
- * The management panel. It edits the data files in the project, so it exists
- * only while running `npm run dev`; on the live site every /yonetim address is a 404.
+ * The management panel, for signed-in admins only (each page checks again, as
+ * a layout is not re-run between its pages). It edits the data files in the
+ * project, so it exists only while running `npm run dev`; on the live site
+ * every /yonetim address is a 404.
  */
 export default async function AdminLayout({ children }: LayoutProps<"/yonetim">) {
   await connection();
-  if (!isAdminEnabled()) notFound();
+  await requireAdmin();
+  if (!isFileEditingEnabled()) notFound();
   return (
     <div className={styles.shell}>
       <header className={styles.bar}>

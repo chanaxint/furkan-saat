@@ -9,6 +9,8 @@ import { SUPABASE_KEY, SUPABASE_URL, supabaseConfigured } from "@/lib/supabase/c
  *   /hesap/*        only signed in (else to /giris?next=…, back here afterwards)
  *   /giris          signed-in visitors go straight on to their account
  *   /sifre-yenile   only with the session a password-reset link opens
+ *   /yonetim/*      only signed in (else to /giris?next=…); whether the visitor
+ *                   is an admin is decided by the pages and API (requireAdmin)
  * The pages check again on the server; the database's RLS is the final word.
  */
 export async function proxy(request: NextRequest) {
@@ -39,6 +41,7 @@ export async function proxy(request: NextRequest) {
   };
 
   if (pathname.startsWith("/hesap") && !signedIn) return redirect(loginPath(pathname + search));
+  if (pathname.startsWith("/yonetim") && !signedIn) return redirect(loginPath(pathname + search));
   if (pathname === "/giris" && signedIn) return redirect(safeNext(request.nextUrl.searchParams.get("next")));
   if (pathname === "/sifre-yenile" && !signedIn) return redirect("/sifremi-unuttum?hata=baglanti");
 
@@ -46,5 +49,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/hesap", "/hesap/:path*", "/giris", "/sifre-yenile"],
+  matcher: ["/hesap", "/hesap/:path*", "/giris", "/sifre-yenile", "/yonetim", "/yonetim/:path*"],
 };

@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { StageEditor } from "@/components/admin/StageEditor";
 import styles from "@/components/admin/admin.module.css";
+import { requireAdmin } from "@/lib/admin/auth";
 import { readStages } from "@/lib/admin/store";
 import { BRANDS } from "@/lib/data/brands";
 
 /** Turn editor for the brand pages that open on a 3D watch. */
 export default async function AdminStagesPage({ searchParams }: PageProps<"/yonetim/donusler">) {
+  await requireAdmin("/yonetim/donusler");
   const stages = await readStages();
   const brands = BRANDS.filter((b) => b.stage && stages[b.slug]);
   const wanted = (await searchParams).marka;

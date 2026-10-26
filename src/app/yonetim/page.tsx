@@ -1,10 +1,12 @@
 import { ButtonLink } from "@/components/ui/Button";
 import { InventoryTable } from "@/components/admin/InventoryTable";
 import { BRANDS } from "@/lib/data/brands";
+import { requireAdmin } from "@/lib/admin/auth";
 import { readProducts } from "@/lib/admin/store";
 import styles from "@/components/admin/admin.module.css";
 
 export default async function AdminInventoryPage() {
+  await requireAdmin();
   const products = await readProducts();
   return (
     <>

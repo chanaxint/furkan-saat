@@ -10,7 +10,10 @@
     "typecheck": "tsc --noEmit",
     "preview": "node -e \"require('fs').rmSync('.next/dev/types',{recursive:true,force:true})\" && next build && next start -p 4321",
     "db:products": "node scripts/products-seed.mjs",
-    "db:test": "sh scripts/test-db.sh"
+    "db:test": "sh scripts/test-db.sh",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/unit/*.test.mjs\"",
+    "test:admin-http": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 \"tests/admin-http/*.test.mjs\"",
+    "test:admin-http:prod": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 tests/admin-http/prod.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",

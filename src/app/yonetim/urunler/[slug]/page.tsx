@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import { BRAND_CHOICES, COLLECTION_CHOICES } from "@/components/admin/editorOptions";
 import { ProductEditor } from "@/components/admin/ProductEditor";
+import { requireAdmin } from "@/lib/admin/auth";
 import { readProducts } from "@/lib/admin/store";
 import styles from "@/components/admin/admin.module.css";
 
 export default async function AdminProductPage({ params }: PageProps<"/yonetim/urunler/[slug]">) {
   const { slug } = await params;
+  await requireAdmin(`/yonetim/urunler/${encodeURIComponent(slug)}`);
   const product = (await readProducts()).find((p) => p.slug === slug);
   if (!product) notFound();
   return (

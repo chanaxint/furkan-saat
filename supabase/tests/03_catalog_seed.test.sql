@@ -18,7 +18,7 @@ select test.ok((select count(*) from public.products) = 106, 'the seed writes th
 select test.ok((select bool_and(is_active) from public.products), 'all of them are on sale');
 select test.ok((select count(distinct position) = 106 and min(position) = 0 and max(position) = 105 from public.products),
   'each has its own place, 0 to 105, in products.json order');
-select test.ok((select bool_and(updated_by is null) from public.products), 'seeded rows are not marked as edited by an admin');
+select test.ok((select count(*) from public.product_admin_edits) = 0, 'seeded rows are not marked as edited by an admin');
 select test.ok((select bool_and(image = coalesce(front, images[1])) from public.products), 'the card picture is the head-on photo, else the first');
 select test.ok((select count(*) from public.products where price is null) = 71, 'price on request stays null (71 watches)');
 select test.ok((select name = 'Casio Edifice Sapphire Kronograf' and brand = 'Casio' and brand_slug = 'casio' and price = 14950.00
@@ -54,6 +54,15 @@ update public.products set price = 13500 where slug = 'casio-edifice-efr-s108de-
 insert into public.products (slug, name, brand, brand_slug, model, price, currency, images, condition, availability, added_at, tone, position)
 values ('panelden-yeni-saat', 'Casio Yeni', 'Casio', 'casio', 'Yeni', 900, 'TRY', array['/assets/images/watches/yeni.webp'],
         'Yeni', 'Stokta', '2026-10-26', 'deep', 106);
+reset role;
+
+-- A change made for a customer (as a checkout would, inside a security definer
+-- function) is not an admin's edit and leaves no mark.
+set role postgres;
+select set_config('request.jwt.claims', '{"sub":"dddddddd-0000-0000-0000-000000000004","role":"authenticated"}', false);
+update public.products set stock = 0 where slug = 'casio-edifice-efb-730d-3av';
+select test.ok(not exists (select 1 from public.product_admin_edits e join public.products p on p.id = e.product_id
+                            where p.slug = 'casio-edifice-efb-730d-3av'), 'a change made for a customer is not marked as an admin''s');
 reset role;
 
 -- Drift outside the panel (no admin): the seed should put it back.

@@ -7,7 +7,7 @@ import { CollectionSection } from "@/components/sections/home/CollectionSection"
 import { ShopRow } from "@/components/sections/home/ShopRow";
 import { HeroIntro } from "@/components/sections/intro/HeroIntro";
 import styles from "./page.module.css";
-import { getFeatured, getProducts, getProductsInCollection } from "@/lib/services/catalog";
+import { getFeatured, getProducts, getProductsInCollection } from "@/lib/services/products";
 
 /**
  * FURKAN SAAT — Homepage

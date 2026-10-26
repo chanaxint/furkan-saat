@@ -219,16 +219,23 @@ export function compareCatalog(products: Product[], rows: unknown[], brandName: 
 
 /**
  * The active catalogue from Supabase's REST API with the public (publishable)
- * key, in catalogue order. Errors never include the key.
+ * key, in catalogue order. Errors never include the key. `cacheInit` sets how
+ * the request is cached (the site passes Next's `next: { tags, revalidate }`);
+ * by default it is not cached at all.
  */
-export async function fetchCatalogRows(supabaseUrl: string, publishableKey: string, fetchImpl: typeof fetch = fetch) {
+export async function fetchCatalogRows(
+  supabaseUrl: string,
+  publishableKey: string,
+  fetchImpl: typeof fetch = fetch,
+  cacheInit: Record<string, unknown> = { cache: "no-store" },
+) {
   const url = new URL("/rest/v1/products", supabaseUrl);
   url.searchParams.set("select", PRODUCT_COLUMNS.join(","));
   url.searchParams.set("is_active", "eq.true");
   url.searchParams.set("order", "position.asc,slug.asc");
   const res = await fetchImpl(url, {
+    ...cacheInit,
     headers: { apikey: publishableKey, authorization: `Bearer ${publishableKey}`, accept: "application/json" },
-    cache: "no-store",
   });
   if (!res.ok) throw new Error(`Ürünler okunamadı (HTTP ${res.status}).`);
   const rows = (await res.json()) as unknown;

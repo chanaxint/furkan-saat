@@ -5,7 +5,9 @@ import { Navigation } from "@/components/layout/Navigation";
 import { ScrollLine } from "@/components/layout/ScrollLine";
 import { SiteLoader } from "@/components/layout/SiteLoader";
 import { AuthProvider } from "@/components/providers/AuthProvider";
+import { CatalogProvider } from "@/components/providers/CatalogProvider";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
+import { getProducts } from "@/lib/services/products";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://furkansaat.com"),
@@ -25,7 +27,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const products = await getProducts();
   return (
     <html lang="tr">
       <head>
@@ -34,12 +37,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <AuthProvider>
-          <SmoothScroll>
-            <Navigation />
-            {children}
-            <ScrollLine />
-            <SiteLoader />
-          </SmoothScroll>
+          <CatalogProvider products={products}>
+            <SmoothScroll>
+              <Navigation />
+              {children}
+              <ScrollLine />
+              <SiteLoader />
+            </SmoothScroll>
+          </CatalogProvider>
         </AuthProvider>
       </body>
     </html>

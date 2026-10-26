@@ -13,7 +13,8 @@ import { FootCaption } from "@/components/brand/FootCaption";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
 import { SectionMarker } from "@/components/ui/SectionMarker";
-import { getBrand, getBrands, getProductsByBrand } from "@/lib/services/catalog";
+import { getBrand, getBrands } from "@/lib/services/catalog";
+import { getProductsByBrand } from "@/lib/services/products";
 import { whatsappUrl } from "@/lib/services/enquiries";
 import styles from "./page.module.css";
 

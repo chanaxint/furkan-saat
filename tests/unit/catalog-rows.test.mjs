@@ -122,6 +122,20 @@ test("fetchCatalogRows asks for the listed columns, active rows, in catalogue or
   assert.equal(seen.headers.apikey, "pk-test");
 });
 
+test("fetchCatalogRows: not cached by default; the site's cache settings are passed through", async () => {
+  const inits = [];
+  const fake = async (_url, init) => {
+    inits.push(init);
+    return new Response("[]", { status: 200 });
+  };
+  await fetchCatalogRows("https://example.supabase.co", "pk-test", fake);
+  await fetchCatalogRows("https://example.supabase.co", "pk-test", fake, { next: { tags: ["catalog"], revalidate: 300 } });
+  assert.equal(inits[0].cache, "no-store");
+  assert.deepStrictEqual(inits[1].next, { tags: ["catalog"], revalidate: 300 });
+  assert.equal(inits[1].cache, undefined);
+  assert.equal(inits[1].headers.apikey, "pk-test", "the cache settings cannot replace the headers");
+});
+
 test("fetchCatalogRows errors never contain the key", async () => {
   const fake = async () => new Response("nope", { status: 401 });
   await assert.rejects(fetchCatalogRows("https://example.supabase.co", "pk-secret-value", fake), (e) => {

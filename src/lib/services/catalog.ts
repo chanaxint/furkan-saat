@@ -1,36 +1,29 @@
 import { BRANDS } from "@/lib/data/brands";
 import { COLLECTIONS } from "@/lib/data/collections";
-import { PRODUCTS } from "@/lib/data/products";
 import type { Brand, CollectionDef, Product } from "@/lib/data/types";
 import { normalize } from "@/lib/format";
 
 /**
- * Catalogue access. Pages read products only through these functions, so the
- * static data can later be swapped for an API or CMS without touching the UI.
+ * Catalogue helpers that hold no catalogue data: brands and collections (fixed,
+ * in the code), filters, sorting and search over a list of watches. Safe in the
+ * browser. The watches themselves come from lib/services/products (server) or
+ * useCatalog() (browser, from CatalogProvider), so the catalogue can move from
+ * products.json to the database without touching the UI.
  */
 
-export const getProducts = async (): Promise<Product[]> => PRODUCTS;
-export const getProduct = async (slug: string) => PRODUCTS.find((p) => p.slug === slug) ?? null;
-export const getFeatured = async () => PRODUCTS.filter((p) => p.featured);
-export const getProductsByBrand = async (brand: string) => PRODUCTS.filter((p) => p.brand === brand);
 export const getBrands = async (): Promise<Brand[]> => BRANDS;
 export const getBrand = async (slug: string) => BRANDS.find((b) => b.slug === slug) ?? null;
 
 export const getCollections = async (): Promise<CollectionDef[]> => COLLECTIONS;
 export const getCollection = async (slug: string) => COLLECTIONS.find((c) => c.slug === slug) ?? null;
-export const getProductsInCollection = async (slug: string) => PRODUCTS.filter((p) => p.collections.includes(slug));
 
-export const getProductsBySlugs = async (slugs: string[]) => slugs.flatMap((s) => PRODUCTS.find((p) => p.slug === s) ?? []);
+export const brandName = (slug: string) => BRANDS.find((b) => b.slug === slug)?.name ?? slug;
 
 /** Other pieces to show under a watch: same brand first, then the rest. */
-export const getRelated = async (product: Product, limit = 3) =>
-  [...PRODUCTS.filter((p) => p.brand === product.brand), ...PRODUCTS.filter((p) => p.brand !== product.brand)]
+export const relatedTo = (products: Product[], product: Product, limit = 3) =>
+  [...products.filter((p) => p.brand === product.brand), ...products.filter((p) => p.brand !== product.brand)]
     .filter((p) => p.slug !== product.slug)
     .slice(0, limit);
-
-/** Synchronous lookups for client components (search, wishlist, cart). */
-export const brandName = (slug: string) => BRANDS.find((b) => b.slug === slug)?.name ?? slug;
-export const findProduct = (slug: string) => PRODUCTS.find((p) => p.slug === slug) ?? null;
 
 /* ---------------------------------------------------------------- filters */
 
@@ -48,9 +41,9 @@ export const SORTS: { key: SortKey; label: string }[] = [
 /** Who a watch is for: the women's collection; digital classics for anyone; the rest men's. */
 const gender = (p: Product) => (p.collections.includes("kadin") ? "kadin" : p.collections.includes("dijital") ? "unisex" : "erkek");
 /** The women's or the men's watches for /kadin and /erkek, the unisex digital classics after them on both. */
-export const getProductsByGender = async (g: "kadin" | "erkek") => [
-  ...PRODUCTS.filter((p) => gender(p) === g),
-  ...PRODUCTS.filter((p) => gender(p) === "unisex"),
+export const forGender = (products: Product[], g: "kadin" | "erkek") => [
+  ...products.filter((p) => gender(p) === g),
+  ...products.filter((p) => gender(p) === "unisex"),
 ];
 const GENDERS = [
   { value: "kadin", label: "Kadın" },
@@ -131,7 +124,7 @@ export function sortProducts(products: Product[], sort: SortKey) {
 export type SearchResults = { watches: Product[]; brands: Brand[] };
 
 /** Every word must match somewhere: brand, model, reference, caliber, collection — or an article. */
-export function search(query: string): SearchResults {
+export function search(products: Product[], query: string): SearchResults {
   const words = normalize(query).split(" ").filter(Boolean);
   if (!words.length) return { watches: [], brands: [] };
   const hit = (text: string) => {
@@ -139,7 +132,7 @@ export function search(query: string): SearchResults {
     const compact = t.replace(/ /g, "");
     return words.every((w) => t.includes(w) || compact.includes(w));
   };
-  const watches = PRODUCTS.filter((p) =>
+  const watches = products.filter((p) =>
     hit(
       [
         brandName(p.brand),

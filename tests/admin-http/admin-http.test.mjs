@@ -119,8 +119,11 @@ const target = (res) => {
   return url.pathname + url.search;
 };
 
-/** Text only the panel shows: its page titles, a product key, a bank field. */
-const PANEL_DATA = /Saatler ve stok|İletişim ve banka|3D dönüşler|Yeni saat|casio-edifice-efb-730d-3av|"iban"/;
+/**
+ * Text only the panel shows: its page titles, the stock page's note, a bank field.
+ * (Product slugs are not a sign: the public catalogue is on every page, for the cart and search.)
+ */
+const PANEL_DATA = /Saatler ve stok|İletişim ve banka|3D dönüşler|Yeni saat|burada hemen kaydedilir|"iban"/;
 
 /** A client-side move inside the panel: an RSC request, following Next's ?_rsc= redirect like the browser does. */
 async function rsc(page, who) {
@@ -237,6 +240,33 @@ describe(`admin pages (${MODE})`, () => {
       });
   }
 });
+
+if (MODE === "prod")
+  describe("browser bundle (prod)", () => {
+    // The browser gets the catalogue from the server (CatalogProvider), never from a bundled
+    // products.json: otherwise, once the database is the source, the cart and search would
+    // show an outdated catalogue.
+    test("no catalogue data in the browser's JavaScript", () => {
+      const products = JSON.parse(readFileSync(path.join(ROOT, "src/lib/data/products.json"), "utf8"));
+      const marks = [products[0].description, products[products.length - 1].description, products[1].slug];
+      const files = [];
+      const walk = (dir) => {
+        for (const e of readdirSync(dir, { withFileTypes: true }))
+          e.isDirectory() ? walk(path.join(dir, e.name)) : e.name.endsWith(".js") && files.push(path.join(dir, e.name));
+      };
+      walk(path.join(ROOT, ".next/static"));
+      assert.ok(files.length > 0);
+      for (const f of files) {
+        const js = readFileSync(f, "utf8");
+        for (const m of marks) assert.ok(!js.includes(m), `${path.relative(ROOT, f)} contains catalogue data`);
+      }
+    });
+    test("the pages still carry the catalogue for the cart and search", async () => {
+      const products = JSON.parse(readFileSync(path.join(ROOT, "src/lib/data/products.json"), "utf8"));
+      const html = await (await call("GET", "/hakkimizda")).text();
+      assert.ok(html.includes(products[products.length - 1].slug), "the last watch is in the page's catalogue");
+    });
+  });
 
 describe(`customer pages still work (${MODE})`, () => {
   test("/hesap signed out → to the sign-in page", async () => {

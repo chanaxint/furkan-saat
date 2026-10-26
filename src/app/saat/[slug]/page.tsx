@@ -7,7 +7,8 @@ import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductSpecs } from "@/components/product/ProductSpecs";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
 import { RelatedCarousel } from "@/components/product/RelatedCarousel";
-import { brandName, getProduct, getProducts, getRelated } from "@/lib/services/catalog";
+import { brandName } from "@/lib/services/catalog";
+import { getProduct, getProducts, getRelated } from "@/lib/services/products";
 import { refLabel } from "@/lib/format";
 import styles from "./page.module.css";
 

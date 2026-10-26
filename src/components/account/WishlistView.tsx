@@ -2,7 +2,7 @@
 
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { ButtonLink } from "@/components/ui/Button";
-import { findProduct } from "@/lib/services/catalog";
+import { useCatalog } from "@/components/providers/CatalogProvider";
 import { useWishlist } from "@/lib/services/wishlist";
 import styles from "./AccountViews.module.css";
 
@@ -11,7 +11,8 @@ import styles from "./AccountViews.module.css";
 export function WishlistView({ contained = false }: { contained?: boolean }) {
   const wrap = contained ? "" : "container";
   const { slugs } = useWishlist();
-  const products = slugs.flatMap((s) => findProduct(s) ?? []);
+  const { find } = useCatalog();
+  const products = slugs.flatMap((s) => find(s) ?? []);
 
   if (!products.length)
     return (

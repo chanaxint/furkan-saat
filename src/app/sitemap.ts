@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { getBrands, getProducts } from "@/lib/services/catalog";
+import { getBrands } from "@/lib/services/catalog";
+import { getProducts } from "@/lib/services/products";
 
 const SITE = "https://furkansaat.com";
 

@@ -1,7 +1,7 @@
 import { Footer } from "@/components/layout/Footer";
 import { ProductGrid } from "@/components/product/ProductGrid";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { getProductsByGender } from "@/lib/services/catalog";
+import { getProductsByGender } from "@/lib/services/products";
 import styles from "./GenderCollection.module.css";
 
 const COPY = {

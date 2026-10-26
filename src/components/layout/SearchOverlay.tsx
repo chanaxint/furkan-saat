@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useCatalog } from "@/components/providers/CatalogProvider";
 import { useSmoothScroll } from "@/components/providers/SmoothScroll";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { brandName, search } from "@/lib/services/catalog";
@@ -16,7 +17,8 @@ export function SearchOverlay({ open, onClose }: { open: boolean; onClose: () =>
   const [query, setQuery] = useState("");
   const input = useRef<HTMLInputElement>(null);
   const { lenis } = useSmoothScroll();
-  const results = useMemo(() => search(query), [query]);
+  const { products } = useCatalog();
+  const results = useMemo(() => search(products, query), [products, query]);
   const hasQuery = query.trim().length > 0;
 
   useEffect(() => {

@@ -77,6 +77,7 @@ select test.fails($$insert into public.products (slug, name, brand, model) value
 select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/x.webp')$$, 'a visitor cannot upload photographs');
 select test.ok(test.rows($$select * from storage.objects where bucket_id = 'product-images'$$) = 0, 'a visitor cannot list the bucket');
 select test.ok(test.rows('select * from public.products') = 106, 'a visitor reads the catalogue');
+select test.fails('select * from public.product_admin_edits', 'a visitor cannot read who edited a watch');
 reset role;
 
 -- -------------------------------------------------------------- customer ---
@@ -94,6 +95,7 @@ select test.ok(test.rows($$update public.products set price = 1 where slug = 'ca
 select test.fails($$insert into public.products (slug, name, brand, model) values ('sahte-saat', 'x', 'x', 'x')$$, 'a customer cannot add products');
 select test.fails($$delete from public.products$$, 'a customer cannot delete products');
 select test.ok(test.rows('select * from public.admin_audit_log') = 0, 'a customer cannot read the audit log');
+select test.ok(test.rows('select * from public.product_admin_edits') = 0, 'a customer cannot read who edited a watch');
 select test.fails($$insert into public.admin_audit_log (table_name, action) values ('products', 'update')$$, 'a customer cannot write the audit log');
 select test.fails($$insert into public.product_slug_redirects (old_slug, product_id) select 'sahte', id from public.products limit 1$$,
   'a customer cannot add slug redirects');
@@ -120,9 +122,13 @@ select test.fails('select * from public.admin_users', 'even an admin reads the a
 -- Prices and fields.
 select test.ok(test.rows($$update public.products set price = 12345.67 where slug = 'casio-edifice-efb-730d-3av' returning 1$$) = 1,
   'the admin changes a price');
-select test.ok((select updated_by from public.products where slug = 'casio-edifice-efb-730d-3av') = 'cccccccc-0000-0000-0000-000000000003',
-  'updated_by is the verified admin');
-select test.fails($$update public.products set updated_by = 'dddddddd-0000-0000-0000-000000000004'$$, 'updated_by cannot be forged');
+select test.ok((select e.updated_by from public.product_admin_edits e join public.products p on p.id = e.product_id
+                 where p.slug = 'casio-edifice-efb-730d-3av') = 'cccccccc-0000-0000-0000-000000000003',
+  'the edit is marked with the verified admin');
+select test.fails($$insert into public.product_admin_edits (product_id, updated_by)
+  select id, 'dddddddd-0000-0000-0000-000000000004' from public.products where slug = 'casio-edifice-efr-s108de-3av'$$,
+  'the edit mark cannot be written by hand');
+select test.fails($$update public.product_admin_edits set updated_by = 'dddddddd-0000-0000-0000-000000000004'$$, 'the edit mark cannot be forged');
 select test.fails($$update public.products set id = gen_random_uuid() where slug = 'casio-edifice-efb-730d-3av'$$, 'a product id cannot be changed');
 select test.fails($$update public.products set created_at = now()$$, 'created_at cannot be changed');
 select test.fails($$delete from public.products where slug = 'casio-edifice-efb-730d-3av'$$, 'even an admin cannot delete a product (it is retired instead)');
@@ -193,6 +199,9 @@ set role anon;
 select set_config('request.jwt.claims', '{"role":"anon"}', false);
 select test.ok(test.rows($$select * from public.products where slug = 'casio-edifice-efb-730d-3av'$$) = 0, 'a visitor no longer sees a retired watch');
 select test.ok(test.rows($$select * from public.product_slug_redirects where old_slug = 'test-saat-yeni'$$) = 1, 'a visitor can follow slug redirects');
+select test.ok(not exists (select 1 from (select to_jsonb(p) as r from public.products p) x
+                            where r::text like '%cccccccc-0000-0000-0000-000000000003%'),
+  'nothing a visitor reads in the catalogue names the admin');
 reset role;
 
 set role authenticated;

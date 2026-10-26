@@ -1,6 +1,6 @@
 "use client";
 
-import { findProduct } from "./catalog";
+import { useCatalog } from "@/components/providers/CatalogProvider";
 import { createLocalStore } from "./localStore";
 
 export type CartLine = { slug: string; quantity: number };
@@ -13,9 +13,10 @@ const drawer = createLocalStore<boolean>(null, false);
 
 export function useCart() {
   const lines = store.useStore();
+  const { find } = useCatalog();
   // Only priced, existing pieces count — the catalogue may have changed since.
   const items = lines.flatMap((l) => {
-    const product = findProduct(l.slug);
+    const product = find(l.slug);
     return product && product.price !== null ? [{ ...l, product }] : [];
   });
   const subtotal = items.reduce((sum, i) => sum + (i.product.price ?? 0) * i.quantity, 0);

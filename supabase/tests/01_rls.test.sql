@@ -33,6 +33,14 @@ begin
   return n;
 end $$;
 
+-- Rows a DML statement (with RETURNING) changes; 0 when it is refused outright.
+create function test.touches(stmt text) returns bigint language plpgsql as $$
+begin
+  return test.rows(stmt);
+exception when insufficient_privilege then
+  return 0;
+end $$;
+
 grant execute on all functions in schema test to anon, authenticated;
 
 -- --------------------------------------------------------------- set-up ---
@@ -128,7 +136,10 @@ select test.ok(test.rows($$delete from public.favorites where user_id = 'bbbbbbb
 select test.fails($$update public.favorites set user_id = 'bbbbbbbb-0000-0000-0000-000000000002'$$, 'favourites cannot be reassigned');
 
 -- ------------------------------------------------------------- products ---
-select test.fails($$update public.products set price = 1$$, 'customers cannot change prices');
+-- Admins update products through RLS (20261026120000_admin_catalog.sql), so for a
+-- customer the update is filtered to no rows; without that migration it is refused.
+select test.ok(test.touches($$update public.products set price = 1 returning 1$$) = 0
+               and test.rows($$select * from public.products where price = 1$$) = 0, 'customers cannot change prices');
 select test.fails($$insert into public.products (slug, name, brand, model) values ('x', 'x', 'x', 'x')$$, 'customers cannot add products');
 
 -- -------------------------------------------------------------- helpers ---

@@ -21,6 +21,17 @@ export function catalogSourceFrom(value: string | undefined | null): CatalogSour
   throw new Error(`CATALOG_SOURCE "${value}" geçersiz: "json" ya da "db" olmalı.`);
 }
 
+/**
+ * Why a catalogue source cannot be used, or null when it can. db without the
+ * Supabase settings is an error, never a silent fall back to products.json:
+ * the site would otherwise show a different catalogue from the panel.
+ */
+export function catalogConfigError(source: CatalogSource, supabaseConfigured: boolean): string | null {
+  if (source === "db" && !supabaseConfigured)
+    return "CATALOG_SOURCE=db, ancak NEXT_PUBLIC_SUPABASE_URL ve NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY tanımlı değil.";
+  return null;
+}
+
 /** A watch as stored in public.products (the columns the catalogue uses). */
 export type ProductRow = {
   slug: string;
@@ -98,6 +109,16 @@ export function productToRow(p: Product, position: number, brandName: string): P
     stock: p.availability === "Stokta" ? 1 : 0,
     is_active: true,
   };
+}
+
+/**
+ * What the panel writes for a watch: every catalogue column except its place
+ * in the list (kept on edit, chosen on insert). Saving from the panel puts a
+ * watch on sale, so re-using a retired address brings that watch back.
+ */
+export function productWriteFields(p: Product, brandName: string): Omit<ProductRow, "position"> {
+  const { position: _position, ...fields } = productToRow(p, 0, brandName);
+  return { ...fields, is_active: true };
 }
 
 const text = (v: unknown, field: string, slug: string) => {
@@ -217,11 +238,31 @@ export function compareCatalog(products: Product[], rows: unknown[], brandName: 
 
 /* ------------------------------------------------------------- REST read */
 
+const restHeaders = (publishableKey: string) => ({
+  apikey: publishableKey,
+  authorization: `Bearer ${publishableKey}`,
+  accept: "application/json",
+  // The total row count comes back in Content-Range: a list cut short by the
+  // API's row limit (Supabase: 1000 by default) is an error, never silently shorter.
+  prefer: "count=exact",
+});
+
+/** Reads a REST list and checks it is complete; errors never include the key. */
+async function readList(url: URL, publishableKey: string, what: string, fetchImpl: typeof fetch, cacheInit: Record<string, unknown>) {
+  const res = await fetchImpl(url, { ...cacheInit, headers: restHeaders(publishableKey) });
+  if (!res.ok) throw new Error(`${what} okunamadı (HTTP ${res.status}).`);
+  const rows = (await res.json()) as unknown;
+  if (!Array.isArray(rows)) throw new Error(`${what} okunamadı (beklenmeyen yanıt).`);
+  const total = /\/(\d+)$/.exec(res.headers.get("content-range") ?? "")?.[1];
+  if (total !== undefined && Number(total) > rows.length)
+    throw new Error(`${what} eksik geldi: ${rows.length} / ${total} satır (REST satır sınırı).`);
+  return rows as Record<string, unknown>[];
+}
+
 /**
  * The active catalogue from Supabase's REST API with the public (publishable)
- * key, in catalogue order. Errors never include the key. `cacheInit` sets how
- * the request is cached (the site passes Next's `next: { tags, revalidate }`);
- * by default it is not cached at all.
+ * key, in catalogue order. `cacheInit` sets how the request is cached (the
+ * site passes Next's `next: { tags, revalidate }`); by default it is not cached.
  */
 export async function fetchCatalogRows(
   supabaseUrl: string,
@@ -233,12 +274,39 @@ export async function fetchCatalogRows(
   url.searchParams.set("select", PRODUCT_COLUMNS.join(","));
   url.searchParams.set("is_active", "eq.true");
   url.searchParams.set("order", "position.asc,slug.asc");
-  const res = await fetchImpl(url, {
-    ...cacheInit,
-    headers: { apikey: publishableKey, authorization: `Bearer ${publishableKey}`, accept: "application/json" },
-  });
-  if (!res.ok) throw new Error(`Ürünler okunamadı (HTTP ${res.status}).`);
-  const rows = (await res.json()) as unknown;
-  if (!Array.isArray(rows)) throw new Error("Ürünler okunamadı (beklenmeyen yanıt).");
-  return rows as Record<string, unknown>[];
+  return readList(url, publishableKey, "Ürünler", fetchImpl, cacheInit);
+}
+
+/**
+ * Old watch addresses and where they lead now, from rows of
+ * public.product_slug_redirects with their product embedded. A redirect counts
+ * only when its watch is on sale and has another address; anything else (a
+ * retired or missing watch, a malformed row) is left out, so that address is a
+ * 404 rather than a redirect to nowhere.
+ */
+export function slugRedirectMap(rows: unknown[]): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const row of rows) {
+    const r = (row ?? {}) as { old_slug?: unknown; products?: { slug?: unknown; is_active?: unknown } | null };
+    const to = r.products;
+    if (typeof r.old_slug !== "string" || !to || typeof to.slug !== "string" || to.is_active !== true) continue;
+    if (to.slug !== r.old_slug) map.set(r.old_slug, to.slug);
+  }
+  return map;
+}
+
+/**
+ * Every slug redirect in one request (not one per address asked for), so that
+ * visits to unknown addresses cannot each turn into a database query.
+ */
+export async function fetchSlugRedirects(
+  supabaseUrl: string,
+  publishableKey: string,
+  fetchImpl: typeof fetch = fetch,
+  cacheInit: Record<string, unknown> = { cache: "no-store" },
+): Promise<Map<string, string>> {
+  const url = new URL("/rest/v1/product_slug_redirects", supabaseUrl);
+  url.searchParams.set("select", "old_slug,products(slug,is_active)");
+  url.searchParams.set("order", "old_slug.asc");
+  return slugRedirectMap(await readList(url, publishableKey, "Yönlendirmeler", fetchImpl, cacheInit));
 }

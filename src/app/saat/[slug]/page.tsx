@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Footer } from "@/components/layout/Footer";
 import { PriceDisplay } from "@/components/product/PriceDisplay";
 import { ProductGallery } from "@/components/product/ProductGallery";
@@ -8,11 +8,26 @@ import { ProductSpecs } from "@/components/product/ProductSpecs";
 import { PurchasePanel } from "@/components/product/PurchasePanel";
 import { RelatedCarousel } from "@/components/product/RelatedCarousel";
 import { brandName } from "@/lib/services/catalog";
+import { findMovedProduct } from "@/lib/catalog/source";
 import { getProduct, getProducts, getRelated } from "@/lib/services/products";
 import { refLabel } from "@/lib/format";
 import styles from "./page.module.css";
 
-export const dynamicParams = false;
+/**
+ * Every watch known at build time is generated then; a watch added later (in
+ * the database, from the panel) is generated on its first visit and cached like
+ * the others, with no new build. An address that is not a watch is a 404, as
+ * before, unless the watch moved there from it (slug changed in the panel).
+ *
+ * Known trade-off (Next 16.3.6): when notFound() is thrown while a page renders,
+ * Next answers 404 with `noindex` but sends only a minimal HTML shell; the 404
+ * page itself is drawn in the browser. With dynamicParams = false an unknown
+ * address got the prebuilt 404 page in full HTML, but a watch added after the
+ * build could not open without a new build. A check in proxy would avoid it, but
+ * proxy has no data cache in 16.3.6, so it would query the catalogue on every
+ * request. See docs/supabase-kurulum.md, section 7.
+ */
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   return (await getProducts()).map((p) => ({ slug: p.slug }));
@@ -30,8 +45,13 @@ export async function generateMetadata({ params }: PageProps<"/saat/[slug]">): P
 }
 
 export default async function WatchPage({ params }: PageProps<"/saat/[slug]">) {
-  const product = await getProduct((await params).slug);
-  if (!product) notFound();
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  if (!product) {
+    const moved = await findMovedProduct(slug);
+    if (moved) permanentRedirect(`/saat/${moved}`);
+    notFound();
+  }
   const brand = brandName(product.brand);
   const related = await getRelated(product, 12);
 

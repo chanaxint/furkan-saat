@@ -285,6 +285,12 @@ describe(`customer pages still work (${MODE})`, () => {
     assert.equal(res.status, 307);
     assert.equal(target(res), "/yonetim");
   });
+  test("an unknown watch address → 404, without asking the database (products.json mode)", async () => {
+    const rest = () => mock.calls.filter((c) => c.path.startsWith("/rest/v1/") && c.path !== "/rest/v1/rpc/is_admin").length;
+    const before = rest();
+    for (const slug of ["yok-boyle-bir-saat", "baska-bir-yok-saat"]) assert.equal((await call("GET", `/saat/${slug}`)).status, 404, slug);
+    assert.equal(rest(), before, "no REST request for the catalogue or redirects");
+  });
   test("home page and a watch page → 200", async () => {
     assert.equal((await call("GET", "/")).status, 200);
     const slug = JSON.parse(readFileSync(path.join(ROOT, "src/lib/data/products.json"), "utf8"))[0].slug;

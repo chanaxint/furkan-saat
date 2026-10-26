@@ -4,11 +4,15 @@ import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { BRANDS } from "../../src/lib/data/brands.ts";
 import {
+  catalogConfigError,
   catalogSourceFrom,
   compareCatalog,
   fetchCatalogRows,
+  fetchSlugRedirects,
+  slugRedirectMap,
   PRODUCT_COLUMNS,
   productToRow,
+  productWriteFields,
   rowToProduct,
 } from "../../src/lib/catalog/rows.ts";
 
@@ -143,4 +147,79 @@ test("fetchCatalogRows errors never contain the key", async () => {
     assert.doesNotMatch(e.message, /pk-secret-value/);
     return true;
   });
+});
+
+test("without Supabase settings the site stays on products.json; db without them is an error", () => {
+  // Unset CATALOG_SOURCE never means the database, whatever else is configured.
+  assert.equal(catalogSourceFrom(undefined), "json");
+  assert.equal(catalogConfigError("json", false), null, "json needs no Supabase");
+  assert.equal(catalogConfigError("json", true), null);
+  assert.equal(catalogConfigError("db", true), null);
+  assert.match(catalogConfigError("db", false), /CATALOG_SOURCE=db/, "db without settings is refused, not quietly json");
+});
+
+test("productWriteFields: what the panel writes is the seed's row, on sale, without its place in the list", () => {
+  PRODUCTS.forEach((p, i) => {
+    const fields = productWriteFields(p, brandName(p.brand));
+    const { position, ...row } = productToRow(p, i, brandName(p.brand));
+    assert.deepStrictEqual(fields, { ...row, is_active: true }, p.slug);
+    assert.ok(!("position" in fields), "editing keeps the watch's place");
+    assert.deepStrictEqual(rowToProduct({ ...fields, position }), p, "and it reads back as the same watch");
+  });
+});
+
+test("slugRedirectMap: only redirects to a watch on sale, at another address", () => {
+  const map = slugRedirectMap([
+    { old_slug: "eski", products: { slug: "yeni", is_active: true } },
+    { old_slug: "arsivlenmis", products: { slug: "kalkan-saat", is_active: false } }, // retired watch
+    { old_slug: "kopuk", products: null }, // watch missing or hidden by RLS
+    { old_slug: "kendine", products: { slug: "kendine", is_active: true } }, // would loop
+    { old_slug: 5, products: { slug: "x", is_active: true } }, // malformed
+    { products: { slug: "x", is_active: true } },
+    { old_slug: "durum-yok", products: { slug: "x" } }, // is_active not stated: not counted
+    null,
+  ]);
+  assert.deepStrictEqual([...map], [["eski", "yeni"]]);
+});
+
+const listResponse = (rows, total = rows.length, status = 200) =>
+  new Response(JSON.stringify(rows), { status, headers: { "content-range": rows.length ? `0-${rows.length - 1}/${total}` : `*/${total}` } });
+
+test("fetchSlugRedirects: every redirect in one request, with the row count", async () => {
+  const seen = [];
+  const fake = async (url, init) => {
+    seen.push({ url: new URL(url), init });
+    return listResponse([
+      { old_slug: "a", products: { slug: "b", is_active: true } },
+      { old_slug: "c", products: null },
+    ]);
+  };
+  const map = await fetchSlugRedirects("https://example.supabase.co", "pk-test", fake);
+  assert.deepStrictEqual([...map], [["a", "b"]]);
+  assert.equal(seen.length, 1, "one request for all of them");
+  assert.equal(seen[0].url.pathname, "/rest/v1/product_slug_redirects");
+  assert.equal(seen[0].url.searchParams.get("select"), "old_slug,products(slug,is_active)");
+  assert.equal(seen[0].url.searchParams.get("old_slug"), null, "not filtered by the address asked for");
+  assert.equal(seen[0].init.headers.prefer, "count=exact");
+  assert.equal(seen[0].init.cache, "no-store", "not cached unless the caller says so");
+  await fetchSlugRedirects("https://example.supabase.co", "pk-test", fake, { next: { tags: ["catalog"], revalidate: 300 } });
+  assert.deepStrictEqual(seen[1].init.next, { tags: ["catalog"], revalidate: 300 });
+});
+
+test("a list cut short by the REST row limit is an error, not a shorter list", async () => {
+  const short = async () => listResponse([{ old_slug: "a", products: { slug: "b", is_active: true } }], 1200);
+  await assert.rejects(fetchSlugRedirects("https://example.supabase.co", "pk-test", short), /eksik geldi: 1 \/ 1200/);
+  const rows = rowsOf().slice(0, 3);
+  await assert.rejects(fetchCatalogRows("https://example.supabase.co", "pk-test", async () => listResponse(rows, 106)), /Ürünler eksik geldi: 3 \/ 106/);
+  assert.equal((await fetchCatalogRows("https://example.supabase.co", "pk-test", async () => listResponse(rows))).length, 3);
+  assert.equal((await fetchSlugRedirects("https://example.supabase.co", "pk-test", async () => listResponse([], 0))).size, 0, "an empty list is fine");
+});
+
+test("redirect read errors are thrown, never read as 'no redirect', and never contain the key", async () => {
+  for (const res of [new Response("{}", { status: 500 }), new Response("{}", { status: 503 }), new Response('{"x":1}', { status: 200 })])
+    await assert.rejects(fetchSlugRedirects("https://example.supabase.co", "pk-secret-value", async () => res), (e) => {
+      assert.match(e.message, /Yönlendirmeler okunamadı/);
+      assert.doesNotMatch(e.message, /pk-secret-value/);
+      return true;
+    });
 });

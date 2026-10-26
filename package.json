@@ -14,7 +14,8 @@
     "db:test": "sh scripts/test-db.sh",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/unit/*.test.mjs\"",
     "test:admin-http": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 \"tests/admin-http/*.test.mjs\"",
-    "test:admin-http:prod": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 tests/admin-http/prod.mjs"
+    "test:admin-http:prod": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 tests/admin-http/prod.mjs",
+    "test:catalog-db": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 tests/catalog-db/catalog-db.test.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.2",

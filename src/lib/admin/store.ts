@@ -44,6 +44,8 @@ export const readStages = () => readJson<Record<string, StageMotion>>("stages.js
 /* ------------------------------------------------------------- validation */
 
 export class InvalidInput extends Error {}
+/** The database refused the write for this user (Row Level Security). */
+export class AdminForbidden extends Error {}
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;

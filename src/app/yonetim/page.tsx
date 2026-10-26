@@ -1,13 +1,15 @@
+import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/ui/Button";
 import { InventoryTable } from "@/components/admin/InventoryTable";
 import { BRANDS } from "@/lib/data/brands";
 import { requireAdmin } from "@/lib/admin/auth";
-import { readProducts } from "@/lib/admin/store";
+import { adminCatalog, isCatalogEditable } from "@/lib/admin/catalogStore";
 import styles from "@/components/admin/admin.module.css";
 
 export default async function AdminInventoryPage() {
   await requireAdmin();
-  const products = await readProducts();
+  if (!isCatalogEditable()) notFound();
+  const products = await adminCatalog().list();
   return (
     <>
       <header className={styles.head}>

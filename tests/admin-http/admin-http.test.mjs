@@ -9,7 +9,7 @@
 import assert from "node:assert/strict";
 import { spawn, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
@@ -143,6 +143,7 @@ const ROUTES = [
   { method: "PUT", path: "/api/yonetim/urunler", body: () => ({ product: {} }) },
   { method: "DELETE", path: "/api/yonetim/urunler", body: () => undefined }, // no ?slug=
   { method: "POST", path: "/api/yonetim/gorsel", body: form },
+  { method: "DELETE", path: "/api/yonetim/gorsel", body: () => undefined }, // products.json mode: nothing to delete
   { method: "PUT", path: "/api/yonetim/ayarlar", body: () => ({}) },
   { method: "PUT", path: "/api/yonetim/donusler", body: () => ({ slug: "x", motion: {} }) },
 ];
@@ -198,6 +199,40 @@ describe(`admin API (${MODE})`, () => {
     for (const c of rpc) assert.ok(issued.has(c.token), "rpc called with a user's access token");
   });
 });
+
+if (MODE === "dev")
+  describe("watch photographs, products.json mode (dev)", () => {
+    // As before Storage: in development the panel saves photographs to the project's files.
+    const photo = (data, fileName, type) => {
+      const f = new FormData();
+      f.append("name", "Test HTTP Görsel");
+      f.append("file", new Blob([data], { type }), fileName);
+      return f;
+    };
+    const PNG = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(512, 1)]);
+    test("an admin uploads to public/assets/images/watches; no Storage request", async () => {
+      const storage = () => mock.calls.filter((c) => c.path.startsWith("/storage/")).length;
+      const before = storage();
+      const res = await call("POST", "/api/yonetim/gorsel", { who: "admin", body: photo(PNG, "../../x.png", "image/png") });
+      assert.equal(res.status, 200, await res.clone().text());
+      const { path: src, object } = await res.json();
+      try {
+        assert.match(src, /^\/assets\/images\/watches\/test-http-gorsel-[a-z0-9]+\.png$/);
+        assert.equal(object, undefined);
+        assert.ok(readFileSync(path.join(ROOT, "public", src)).equals(PNG));
+        assert.equal(storage(), before);
+      } finally {
+        rmSync(path.join(ROOT, "public", src), { force: true });
+      }
+    });
+    test("SVG and disguised files are refused", async () => {
+      const svg = Buffer.from("<svg xmlns='http://www.w3.org/2000/svg'><script>alert(1)</script></svg>");
+      for (const [data, name, type] of [[svg, "a.svg", "image/svg+xml"], [svg, "a.png", "image/png"], [PNG, "a.jpg", "image/jpeg"]]) {
+        const res = await call("POST", "/api/yonetim/gorsel", { who: "admin", body: photo(data, name, type) });
+        assert.equal(res.status, 400, name);
+      }
+    });
+  });
 
 describe(`admin pages (${MODE})`, () => {
   for (const page of ADMIN_PAGES) {

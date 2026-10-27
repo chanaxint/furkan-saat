@@ -49,11 +49,15 @@ Database → Backups ya da `pg_dump`). Aşağıdaki iki yoldan **birini** seçin
    değişiklik kaydı, `product-images` bucket'ı ve politikaları.
 3. `supabase/migrations/20261027090000_product_admin_edits.sql`: ürünü son
    düzenleyen yöneticiyi herkese açık ürün tablosundan çıkarır.
+4. `supabase/migrations/20261027150000_product_images_policy.sql`:
+   `product-images` yükleme ve yeniden adlandırma politikalarını panelin
+   yazdığı dosya adlarıyla sınırlar.
 
 Ardından seed: `supabase/seed/products.sql` (`products.json`'daki 106 saat).
 Slug'a göre günceller; kimlikler değişmez, hiçbir şey silinmez, yöneticinin
-panelden düzenlediği ürünlere dokunulmaz. Dosya üç migration'ın da uygulanmış
-olmasını bekler. Yeniden üretmek için `npm run db:products` (Node 22.18+).
+panelden düzenlediği ürünlere dokunulmaz. Dosya ilk üç migration'ın uygulanmış
+olmasını bekler (4. migration seed'i etkilemez). Yeniden üretmek için
+`npm run db:products` (Node 22.18+).
 
 ### Yol A — SQL Editor (önerilen)
 
@@ -64,8 +68,9 @@ Komut satırı gerektirmez.
    yapıştırın → **Run**. Hata olmadan bittiğini görün.
 3. Aynı şekilde `20261026120000_admin_catalog.sql` → **Run**.
 4. Aynı şekilde `20261027090000_product_admin_edits.sql` → **Run**.
-5. `supabase/seed/products.sql` → **Run**.
-6. Kontrol için yeni bir sorguda çalıştırın; 106 dönmelidir:
+5. Aynı şekilde `20261027150000_product_images_policy.sql` → **Run**.
+6. `supabase/seed/products.sql` → **Run**.
+7. Kontrol için yeni bir sorguda çalıştırın; 106 dönmelidir:
 
    ```sql
    select count(*) from public.products where is_active;
@@ -89,11 +94,12 @@ Supabase CLI belgelerine göre sıra şöyledir (bu projede denenmedi):
 4. `supabase db push`: `supabase/migrations/` içindeki migration'ları zaman
    damgası sırasıyla uygular.
 5. Seed'i ayrıca çalıştırın: `supabase/seed/products.sql`, CLI'nin varsayılan
-   seed konumunda değildir; en güvenlisi Yol A'nın 5. adımı gibi SQL Editor'da
+   seed konumunda değildir; en güvenlisi Yol A'nın 6. adımı gibi SQL Editor'da
    çalıştırmaktır.
 
 `supabase/rollback/` klasörünü CLI okumaz; geri dönüş dosyaları yalnızca elle,
-yeniden eskiye doğru (önce `20261027…`, sonra `20261026…`) ve yedek alındıktan
+yeniden eskiye doğru (`20261027150000…`, `20261027090000…`, en son
+`20261026…`) ve yedek alındıktan
 sonra çalıştırılır. `20261006…` (müşteri hesapları) için geri dönüş dosyası
 yoktur: geri almak müşteri verisini siler.
 
@@ -261,8 +267,8 @@ Diğer notlar:
   geçersiz kılar (`revalidateTag("catalog", { expire: 0 })`). SQL Editor'dan
   veya seed ile yapılan değişiklikler en geç 5 dakika içinde görünür. Panelden
   sonradan eklenen bir saatin sayfası yeni build gerekmeden açılır.
-- Henüz yalnızca geliştirme modunda olanlar: fotoğraf yükleme (Supabase
-  Storage'a bağlanacak), iletişim/banka ayarları ve 3D dönüşler.
+- Henüz yalnızca geliştirme modunda olanlar: iletişim/banka ayarları ve 3D
+  dönüşler. Fotoğraf yükleme `db` modunda canlıda da çalışır (aşağıda).
 - Eski adres yönlendirmeleri (`product_slug_redirects`) adres başına değil, tek
   bir sorguyla okunur ve katalogla aynı önbellekte tutulur: bilinmeyen adresleri
   ziyaret etmek veritabanına her seferinde sorgu göndermez. Veritabanı
@@ -283,6 +289,66 @@ Diğer notlar:
   durdurur: yeni build başarısız olur, mevcut sayfalar önbellekten sunulmaya
   devam eder. Satırlar sessizce atlanmaz; ürünleri SQL Editor yerine panelden
   düzenleyin (panel tüm alanları doğrular).
+
+### Ürün fotoğrafları (Supabase Storage)
+
+| | `json` | `db` |
+| --- | --- | --- |
+| Nereye | `public/assets/images/watches/` (proje dosyaları) | `product-images` bucket'ı, `watches/` klasörü |
+| Ne zaman | Yalnızca `npm run dev` | Canlı sitede de |
+| En büyük dosya | 15 MB | 4 MB |
+| Kimlik | Yönetici oturumu | Yönetici oturumu; Storage politikaları ayrıca kontrol eder |
+
+- Bucket: `product-images` (public, okuma herkese açık). Migration
+  `20261026120000_admin_catalog.sql` oluşturur; ayrı bir ayar gerekmez. Ek
+  ortam değişkeni yoktur: adresler `NEXT_PUBLIC_SUPABASE_URL`'den üretilir ve
+  `next.config.ts` yalnızca bu projenin
+  `/storage/v1/object/public/product-images/**` yolunu `next/image` için açar.
+- Kabul edilen türler: WebP, JPG/JPEG, PNG, AVIF. SVG, GIF, HEIC ve diğerleri
+  reddedilir. Dosyanın uzantısı, tarayıcının bildirdiği türü ve ilk baytları
+  aynı biçimi göstermelidir (ör. `.png` adı verilmiş bir SVG reddedilir).
+- Boyut: `db` modunda 4 MB. Dosya sitenin sunucusundan geçer ve barındırma
+  hizmetinin istek gövdesi sınırı vardır (Vercel'de yaklaşık 4,5 MB; kendi
+  barındırma ortamınızda kontrol edin). Bucket'ın kendi sınırı 15 MB'tır.
+  Bugünkü en büyük katalog fotoğrafı yaklaşık 0,3 MB.
+- Dosya adı yüklenen dosyadan alınmaz: `watches/<saat-adı>-<rastgele-id>.<uzantı>`.
+  Aynı adlı iki yükleme birbirinin üzerine yazmaz (`upsert` kapalı).
+- Yükleme yöneticinin oturumuyla yapılır; service role / secret anahtar
+  kullanılmaz ve tarayıcıya hiçbir anahtar gönderilmez. Önce sunucu yöneticiyi
+  doğrular, ardından Storage politikaları (`is_admin()`) yeniden kontrol eder.
+- Storage hatalarında panele yalnızca "Fotoğraf yüklenemedi. Lütfen tekrar
+  deneyin." gibi sade bir mesaj gider; ayrıntı gösterilmez, sunucu günlüğüne
+  yalnızca durum kodu yazılır.
+- Bir saat yalnızca yerel `/assets/images/...` yollarını veya bu projenin
+  `product-images` bucket'ındaki adresleri kullanabilir; başka alan adı, başka
+  bucket ya da sorgu parametreli adres kaydedilmez. Mevcut fotoğraflar
+  (`/assets/images/watches/...`) olduğu gibi çalışmaya devam eder.
+- Silme: saati silmek (arşivlemek) fotoğraflarını silmez. Panelde yeni
+  yüklenip saat kaydedilmeden "Kaldır" denen fotoğraf Storage'dan silinir;
+  ancak arşivdekiler dahil herhangi bir saatin kullandığı bir fotoğraf asla
+  silinmez.
+- Sahipsiz dosyalar: kaydedilmemiş yüklemeler varken sayfadan çıkılırsa
+  tarayıcı uyarır; yine de sekme kapatılırsa dosya bucket'ta kalabilir.
+  Otomatik toplu temizlik yoktur. Gerekirse SQL Editor'da hiçbir saatin
+  kullanmadığı nesneler listelenebilir; silmeden önce elle kontrol edin:
+
+  ```sql
+  select o.name, o.created_at from storage.objects o
+   where o.bucket_id = 'product-images'
+     and not exists (
+       select 1 from public.products p
+        where p.front like '%/product-images/' || o.name
+           or exists (select 1 from unnest(p.images) i where i like '%/product-images/' || o.name));
+  ```
+- Storage politikası (`20261027150000_product_images_policy.sql`) yalnızca
+  panelin yazdığı adları kabul eder:
+  `^watches/[a-z0-9]+(-[a-z0-9]+)*\.(webp|jpg|png|avif)$`. Alt klasör, büyük
+  harf, `.jpeg`, boşluk ve `..` içeren adlar yönetici için de reddedilir.
+  Bucket'taki mevcut dosyalara dokunulmaz. Geri dönüş:
+  `supabase/rollback/20261027150000_product_images_policy.down.sql`.
+- Panelde kayıt sürerken form kilitlenir (alanlar, fotoğraf kaldırma, yükleme,
+  saati silme): kaydedilmekte olan bir fotoğraf, kayıt veritabanına
+  ulaşmadan silinemez.
 
 Geçiş sırası: migration'lar → seed → `npm run catalog:verify -- --supabase` →
 ilk yönetici → `CATALOG_SOURCE=db` ile yeniden deploy. Geri dönmek için
@@ -306,6 +372,10 @@ alınmamalıdır:
   hemen görünmesi ve eski adresin yeni adrese yönlenmesi.
 - Hata kodları ve RLS davranışı (yönetici olmayan yazamaz), `count=exact`
   ile satır sayısının gelmesi.
-- Storage: bucket ayarları (15 MB, yalnızca fotoğraf türleri) ve politikalar.
-  Uygulama henüz Storage'a yükleme yapmıyor.
+- Storage: bucket'ın oluştuğu ve public olduğu, ayarları (15 MB, yalnızca
+  fotoğraf türleri) ve politikalar. Yönetici hesabıyla panelden bir fotoğraf
+  yükleyip saate eklemek, sayfada görünmesi (`next/image`), müşteri hesabıyla
+  yüklemenin reddedilmesi, kaydedilmemiş bir fotoğrafı "Kaldır" ile silmek.
+  Hata gövdelerinin (`statusCode`, `message`) taklitteki gibi geldiği ve
+  barındırma ortamının 4 MB'lık isteği kabul ettiği de kontrol edilmeli.
 - Gerçek alan adıyla panel istekleri (Origin kontrolü; `www` ve `www`'suz).

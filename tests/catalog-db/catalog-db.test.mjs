@@ -8,18 +8,22 @@
 //     its old address redirects after a slug change, and it is gone once retired
 //   - in db mode the panel manages watches on the live site, while the pages
 //     that write the project's files stay development-only
+//   - watch photographs go to the Storage bucket, as the signed-in admin, only
+//     after their type, extension, content and size are checked; nothing is
+//     written to the project's files; unused uploads can be deleted, used ones not
 // No real Supabase project is involved: passing here does not show that a real
 // project answers the same way (see docs/supabase-kurulum.md for what to check).
 //   npm run test:catalog-db
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { randomUUID } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { createServer } from "node:net";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
 import { productToRow } from "../../src/lib/catalog/rows.ts";
 import { BRANDS } from "../../src/lib/data/brands.ts";
+import { STORAGE_OBJECT } from "../../src/lib/admin/imageUpload.ts";
 import { startMockSupabase } from "../admin-http/mock-supabase.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "../..");
@@ -238,5 +242,165 @@ describe("catalogue from the database (prod build)", () => {
     assert.equal(await status("/yonetim", { who: "customer" }), 404);
     const upload = await call("PUT", "/api/yonetim/ayarlar", { who: "admin", body: {} });
     assert.equal(upload.status, 403, "settings are still saved only in development");
+  });
+});
+
+// A small JPEG and PNG as far as their first bytes go (all the checks look at).
+const JPEG = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff, 0xe0]), Buffer.alloc(4096, 7)]);
+const PNG = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), Buffer.alloc(2048, 3)]);
+const SVG = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>');
+const LOCAL_PHOTOS = path.join(ROOT, "public/assets/images/watches");
+const localPhotos = () => readdirSync(LOCAL_PHOTOS, { recursive: true }).sort().join("\n");
+
+function upload({ who = "admin", origin = base, name = "Test Fotoğraflı Saat", data = JPEG, fileName = "saat.jpg", type = "image/jpeg" } = {}) {
+  const form = new FormData();
+  form.append("name", name);
+  form.append("file", new Blob([data], { type }), fileName);
+  const headers = {};
+  if (who) headers.cookie = `sb-localhost-auth-token=${users[who].cookie}`;
+  if (origin) headers.origin = origin;
+  return fetch(`${base}/api/yonetim/gorsel`, { method: "POST", headers, body: form });
+}
+const discard = (object, who = "admin") => call("DELETE", `/api/yonetim/gorsel?object=${encodeURIComponent(object)}`, { who });
+
+describe("watch photographs in Supabase Storage (prod build, db mode)", () => {
+  let localBefore;
+  before(() => (localBefore = localPhotos()));
+  after(() => assert.equal(localPhotos(), localBefore, "nothing was written to public/assets/images/watches"));
+
+  test("signed out, a customer, another site: refused, nothing stored", async () => {
+    const stored = mock.objects.size;
+    assert.equal((await upload({ who: null })).status, 401);
+    const customer = await upload({ who: "customer" });
+    assert.equal(customer.status, 403);
+    assert.match((await customer.json()).error, /yetkiniz yok/);
+    assert.equal((await upload({ origin: "https://evil.example" })).status, 403);
+    assert.equal((await upload({ origin: null })).status, 403);
+    assert.equal(mock.objects.size, stored);
+  });
+
+  test("an admin uploads: the bucket gets it under watches/, as the admin, and the page gets its public address", async () => {
+    const res = await upload();
+    assert.equal(res.status, 200, await res.clone().text());
+    const { path: url, object } = await res.json();
+    assert.match(object, /^watches\/test-fotografli-saat-[0-9a-f-]{36}\.jpg$/);
+    assert.equal(url, `http://localhost:${mock.port}/storage/v1/object/public/product-images/${object}`);
+    const stored = mock.objects.get(object);
+    assert.ok(stored, "stored in the bucket");
+    assert.equal(stored.type, "image/jpeg");
+    assert.ok(stored.bytes.equals(JPEG), "the bytes arrive unchanged");
+    const write = mock.calls.filter((c) => c.method === "POST" && c.path.endsWith(object));
+    assert.equal(write.length, 1);
+    assert.equal(write[0].token, users.admin.token, "written with the admin's own session, no other key");
+    const pub = await fetch(url);
+    assert.equal(pub.status, 200);
+    assert.ok(Buffer.from(await pub.arrayBuffer()).equals(JPEG), "readable at its public address");
+  });
+
+  test("refused files: SVG, a disguised SVG or HTML, mismatched type, empty, too large", async () => {
+    const stored = mock.objects.size;
+    const big = Buffer.concat([JPEG, Buffer.alloc(4 * 1024 * 1024)]);
+    for (const [what, opts, message] of [
+      ["SVG", { data: SVG, fileName: "logo.svg", type: "image/svg+xml" }, /WebP, JPG, PNG ya da AVIF/],
+      ["SVG named .png", { data: SVG, fileName: "logo.png", type: "image/png" }, /içeriği/],
+      ["HTML named .jpg", { data: Buffer.from("<html><script>alert(1)</script>"), fileName: "a.jpg", type: "image/jpeg" }, /içeriği/],
+      ["PNG named .jpg", { data: PNG, fileName: "a.jpg", type: "image/jpeg" }, /içeriği/],
+      ["type differs from extension", { data: PNG, fileName: "a.png", type: "image/jpeg" }, /uyuşmuyor/],
+      ["GIF", { data: Buffer.from("GIF89a......"), fileName: "a.gif", type: "image/gif" }, /WebP, JPG, PNG ya da AVIF/],
+      ["empty", { data: Buffer.alloc(0), fileName: "a.jpg", type: "image/jpeg" }, /boş|seçilmedi/],
+      ["just over 4 MB", { data: Buffer.concat([JPEG, Buffer.alloc(4 * 1024 * 1024 - JPEG.length + 1)]) }, /4 MB/],
+      ["well over 4 MB (refused before reading)", { data: big }, /4 MB/],
+    ]) {
+      const res = await upload(opts);
+      assert.equal(res.status, 400, what);
+      assert.match((await res.json()).error, message, what);
+    }
+    assert.equal(mock.objects.size, stored, "none reached the bucket");
+  });
+
+  test("the uploaded file's own name never reaches Storage; equal names never collide", async () => {
+    const objects = [];
+    for (const [name, fileName] of [
+      ["../../etc/passwd", "../../../etc/passwd.jpg"],
+      ["watches/../../gizli", "..\\..\\x.jpg"],
+      ["%2e%2e%2f", "a/b/c.jpg"],
+      ["Aynı Saat", "aynı.jpg"],
+      ["Aynı Saat", "aynı.jpg"],
+    ]) {
+      const res = await upload({ name, fileName });
+      assert.equal(res.status, 200, `${name}: ${await res.clone().text()}`);
+      const { object } = await res.json();
+      assert.match(object, STORAGE_OBJECT, name);
+      assert.equal(object.split("/").length, 2, `${name}: directly under watches/`);
+      assert.ok(!object.includes(".."), name);
+      objects.push(object);
+    }
+    assert.equal(new Set(objects).size, objects.length, "every upload got its own name");
+    for (const o of objects) assert.ok(mock.objects.has(o), "and none overwrote another");
+    for (const o of objects) assert.equal((await discard(o)).status, 200);
+  });
+
+  test("a Storage failure: 502 with a plain message, no internal details", async () => {
+    const stored = mock.objects.size;
+    const logged = log.length;
+    mock.failing.add("storage");
+    try {
+      const res = await upload();
+      assert.equal(res.status, 502);
+      const text = await res.text();
+      assert.match(JSON.parse(text).error, /Fotoğraf yüklenemedi\. Lütfen tekrar deneyin\./);
+      assert.doesNotMatch(text, /10\.0\.0\.7|secret|timeout|sb_publishable|localhost/);
+      assert.doesNotMatch(log.slice(logged).join(""), /10\.0\.0\.7|secret detail/, "nor in the server log");
+    } finally {
+      mock.failing.delete("storage");
+    }
+    assert.equal(mock.objects.size, stored);
+  });
+
+  test("a watch saved with an uploaded photograph shows it; photographs from elsewhere are refused", async () => {
+    const { path: url } = await (await upload({ name: "Test Foto Saat" })).json();
+    const slug = "test-foto-saat";
+    const watch = { ...newWatch(slug), images: [url, PRODUCTS[0].images[0]] };
+    const res = await call("PUT", "/api/yonetim/urunler", { who: "admin", body: { product: watch } });
+    assert.equal(res.status, 200, await res.text());
+    assert.deepEqual(mock.products.find((p) => p.slug === slug).images, watch.images);
+    const html = await (await call("GET", `/saat/${slug}`)).text();
+    assert.ok(html.includes(url) || html.includes(encodeURIComponent(url)), "the page shows the uploaded photograph");
+
+    for (const bad of [
+      "https://evil.example/storage/v1/object/public/product-images/watches/a.jpg",
+      `http://localhost:${mock.port}/storage/v1/object/public/other-bucket/watches/a.jpg`,
+      `${url}?x=1`,
+      `http://localhost:${mock.port}/storage/v1/object/public/product-images/watches/../a.jpg`,
+    ]) {
+      const r = await call("PUT", "/api/yonetim/urunler", { who: "admin", body: { product: { ...watch, images: [bad] }, previous: slug } });
+      assert.equal(r.status, 400, bad);
+    }
+    assert.deepEqual(mock.products.find((p) => p.slug === slug).images, watch.images, "unchanged");
+    // The image optimiser fetches only this project's bucket.
+    const optimised = await call("GET", `/_next/image?url=${encodeURIComponent("https://evil.example/a.jpg")}&w=1080&q=75`);
+    assert.equal(optimised.status, 400);
+  });
+
+  test("deleting: only unused uploads, only by an admin; retiring a watch keeps its photographs", async () => {
+    const unused = (await (await upload({ name: "Kullanılmayan" })).json()).object;
+    assert.equal((await discard(unused, "customer")).status, 403);
+    assert.ok(mock.objects.has(unused), "a customer cannot delete it");
+
+    const used = mock.products.find((p) => p.slug === "test-foto-saat").images[0].split("/product-images/")[1];
+    const refused = await discard(used);
+    assert.equal(refused.status, 400);
+    assert.match((await refused.json()).error, /kullanılıyor/);
+    assert.ok(mock.objects.has(used));
+
+    assert.equal((await call("DELETE", "/api/yonetim/urunler?slug=test-foto-saat", { who: "admin" })).status, 200);
+    assert.ok(mock.objects.has(used), "retiring the watch does not delete its photographs");
+    assert.equal((await discard(used)).status, 400, "nor may they be deleted while a retired watch uses them");
+
+    assert.equal((await discard(unused)).status, 200);
+    assert.ok(!mock.objects.has(unused), "an unused upload is deleted");
+    assert.equal((await discard(unused)).status, 400, "deleting it again: not found");
+    for (const bad of ["../products.json", "watches/../x.jpg", "watches/a/b.jpg", "other/a.jpg", "watches/a.svg", ""])
+      assert.equal((await discard(bad)).status, 400, bad);
   });
 });

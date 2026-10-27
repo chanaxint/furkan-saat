@@ -9,6 +9,11 @@
 // the database's rules (Row Level Security, unique slugs, slug redirects):
 //   GET   /rest/v1/products, /rest/v1/product_slug_redirects
 //   PATCH /rest/v1/products (update), POST /rest/v1/products (insert)
+//   Storage, bucket product-images, with the migration's policies and bucket
+//   settings: POST /storage/v1/object/product-images/<name> (admins only, the
+//   panel's names under watches/, 15 MB, photo types, no overwrite),
+//   DELETE /storage/v1/object/product-images (admins only),
+//   GET /storage/v1/object/public/product-images/<name> (anyone)
 // It mimics PostgREST closely enough for these tests; it is not Supabase, and
 // passing these tests does not show that a real project behaves the same way.
 // REST requests must carry the project key in `apikey`. A new-format key
@@ -25,6 +30,7 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
   const calls = []; // { method, path, token }
   const products = catalog ? catalog.map((r) => ({ id: randomUUID(), ...structuredClone(r) })) : [];
   const redirects = new Map(); // old slug → product id
+  const objects = new Map(); // Storage object name → { bytes, type }
   // Reads to fail on purpose ("products", "redirects"): a database or network error.
   const failing = new Set();
   // A truncated list, as with the REST API's row limit: [table, max rows].
@@ -37,6 +43,13 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
     let out = rows;
     for (const [key, value] of params) {
       if (["select", "order", "limit", "columns"].includes(key)) continue;
+      const cs = /^cs\.\{(.*)\}$/.exec(value);
+      if (cs) {
+        // An array column containing every listed value (postgrest-js .contains(col, [..])).
+        const wanted = cs[1].split(",").map((v) => v.replace(/^"|"$/g, ""));
+        out = out.filter((r) => Array.isArray(r[key]) && wanted.every((v) => r[key].includes(v)));
+        continue;
+      }
       const m = /^eq\.(.*)$/.exec(value);
       if (!m) throw new Error(`mock: unsupported filter ${key}=${value}`);
       out = out.filter((r) => String(r[key]) === m[1]);
@@ -78,9 +91,43 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
       const limited = rowLimit?.[0] === table ? rows.slice(0, rowLimit[1]) : rows;
       return send(200, limited, /count=exact/.test(req.headers.prefer ?? "") ? rows.length : undefined);
     };
-    let raw = "";
-    req.on("data", (d) => (raw += d));
+    const chunks = [];
+    req.on("data", (d) => chunks.push(d));
     req.on("end", () => {
+      const rawBytes = Buffer.concat(chunks);
+      const raw = rawBytes.toString("utf8");
+      const BUCKET = "/storage/v1/object/product-images";
+      if (path.startsWith("/storage/v1/object/public/product-images/") && req.method === "GET") {
+        const o = objects.get(decodeURIComponent(path.slice("/storage/v1/object/public/product-images/".length)));
+        if (!o) return send(400, { statusCode: "404", error: "not_found", message: "Object not found" });
+        res.writeHead(200, { "content-type": o.type });
+        return res.end(o.bytes);
+      }
+      if (path === BUCKET || path.startsWith(`${BUCKET}/`)) {
+        if (req.headers.apikey !== publishableKey) return send(401, { message: "Invalid API key" });
+        // An internal error whose details must not reach the panel.
+        if (failing.has("storage")) return send(500, { statusCode: "500", error: "internal", message: "db host 10.0.0.7 timeout (secret detail)" });
+        const admin = known?.admin === true;
+        if (req.method === "POST") {
+          const name = decodeURIComponent(path.slice(BUCKET.length + 1));
+          // The insert policy (20261027150000_product_images_policy.sql): admins, the panel's names only.
+          if (!admin || !/^watches\/[a-z0-9]+(-[a-z0-9]+)*\.(webp|jpg|png|avif)$/.test(name))
+            return send(400, { statusCode: "403", error: "Unauthorized", message: "new row violates row-level security policy" });
+          // The bucket's settings: 15 MB, photo types.
+          if (rawBytes.length > 15 * 1024 * 1024) return send(413, { statusCode: "413", error: "Payload too large", message: "The object exceeded the maximum allowed size" });
+          if (!["image/webp", "image/jpeg", "image/png", "image/avif"].includes(req.headers["content-type"]))
+            return send(415, { statusCode: "415", error: "invalid_mime_type", message: "mime type not supported" });
+          if (objects.has(name) && req.headers["x-upsert"] !== "true") return send(409, { statusCode: "409", error: "Duplicate", message: "The resource already exists" });
+          objects.set(name, { bytes: rawBytes, type: req.headers["content-type"] });
+          return send(200, { Key: `product-images/${name}`, Id: randomUUID() });
+        }
+        if (req.method === "DELETE" && path === BUCKET) {
+          // Policies hide other users' objects: a non-admin deletes nothing, without an error.
+          const removed = (JSON.parse(raw || "{}").prefixes ?? []).filter((n) => admin && objects.delete(n));
+          return send(200, removed.map((name) => ({ name, bucket_id: "product-images" })));
+        }
+        return send(404, { message: "not mocked" });
+      }
       if (req.method === "GET" && path === "/auth/v1/user") {
         return known ? send(200, known.user) : send(401, { code: 401, error_code: "bad_jwt", msg: "invalid JWT" });
       }
@@ -167,6 +214,7 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
         calls,
         products,
         redirects,
+        objects,
         failing,
         limitRows: (table, max) => (rowLimit = table ? [table, max] : null),
         catalogReads,

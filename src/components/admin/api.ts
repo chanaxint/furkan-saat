@@ -9,9 +9,14 @@ export async function adminFetch<T = Record<string, unknown>>(url: string, init?
 export const putJson = (url: string, body: unknown) =>
   adminFetch(url, { method: "PUT", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
 
+/** Uploads a photograph; `object` is its Storage name when the catalogue is in the database. */
 export async function uploadImage(file: File, name: string) {
   const form = new FormData();
   form.append("file", file);
   form.append("name", name);
-  return (await adminFetch<{ path: string }>("/api/yonetim/gorsel", { method: "POST", body: form })).path;
+  return adminFetch<{ path: string; object?: string }>("/api/yonetim/gorsel", { method: "POST", body: form });
 }
+
+/** Deletes an uploaded photograph that was not kept (the server refuses one a watch uses). */
+export const discardImage = (object: string) =>
+  adminFetch(`/api/yonetim/gorsel?object=${encodeURIComponent(object)}`, { method: "DELETE" });

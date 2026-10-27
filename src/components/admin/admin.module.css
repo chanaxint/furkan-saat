@@ -125,11 +125,18 @@
   gap: 16px 28px;
   align-items: center;
 }
+/* Wraps the editor's fields to lock them while a save is under way; no box of its own. */
+.lock {
+  display: contents;
+}
 .danger {
   color: var(--wine);
   font-size: var(--fs-small);
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+.danger:disabled {
+  opacity: 0.5;
 }
 .help {
   grid-column: 1 / -1;

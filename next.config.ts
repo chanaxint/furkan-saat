@@ -6,6 +6,21 @@ import type { NextConfig } from "next";
 // folder), warns about outputFileTracingRoot on every build.
 const root = path.resolve(__dirname);
 
+/**
+ * Watch photographs uploaded to Supabase Storage (CATALOG_SOURCE=db): only the
+ * public path of this project's product-images bucket, from the project URL
+ * (no keys). Without NEXT_PUBLIC_SUPABASE_URL no remote image is allowed.
+ */
+function productImageHosts() {
+  try {
+    const url = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
+    if (url.protocol !== "https:" && url.protocol !== "http:") return [];
+    return [new URL(`${url.origin}/storage/v1/object/public/product-images/**`)];
+  } catch {
+    return [];
+  }
+}
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: root,
@@ -28,6 +43,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    remotePatterns: productImageHosts(),
   },
 };
 

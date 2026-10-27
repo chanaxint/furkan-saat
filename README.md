@@ -26,6 +26,8 @@ what is still to be checked on a real project): **[`docs/supabase-kurulum.md`](d
   older projects) and `NEXT_PUBLIC_SITE_URL`; without them the build stops with
   an error instead of falling back to the JSON file. The panel then also works
   on the live site, writing as the signed-in admin through Row Level Security.
+  Watch photographs uploaded in the panel go to the `product-images` Storage
+  bucket (WebP, JPG, PNG or AVIF, up to 4 MB, checked by content; no SVG).
   No service role key is used.
 
 Either way `/yonetim` needs a signed-in admin (a row in `public.admin_users`).

@@ -177,21 +177,36 @@ select test.ok(
 select test.fails($$update public.admin_audit_log set actor = null$$, 'the audit log cannot be rewritten');
 select test.fails($$delete from public.admin_audit_log$$, 'the audit log cannot be deleted');
 
--- Photographs.
-select test.ok(test.rows($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/test-saat-1/a1.webp') returning 1$$) = 1,
-  'the admin uploads a photograph under watches/');
-select test.ok(test.rows($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/test-saat-1/a2.JPG') returning 1$$) = 1,
-  'upper-case extensions are accepted');
+-- Photographs: only the names the panel writes (20261027150000_product_images_policy.sql):
+-- directly under watches/, lower-case words joined by dashes, webp/jpg/png/avif.
+select test.ok(test.rows($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/test-saat-1-a1.webp') returning 1$$) = 1,
+  'the admin uploads a photograph directly under watches/');
+select test.ok(test.rows($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/rolex-submariner-3f2a6c1e-0d4b-4c3a-9f1e-1234567890ab.jpg') returning 1$$) = 1,
+  'the name the panel writes (watches/<watch>-<random id>.<ext>) is accepted');
+select test.ok(test.rows($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/a.png'), ('product-images', 'watches/b.avif') returning 1$$) = 2,
+  'png and avif are accepted');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/test-saat-1/a1.webp')$$, 'sub-folders under watches/ are rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/a2.JPG')$$, 'upper-case extensions are rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/Rolex.jpg')$$, 'upper-case names are rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/a.jpeg')$$, '.jpeg is rejected (the panel writes .jpg)');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/../x.webp')$$, 'watches/../x.webp is rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/..webp')$$, 'a name without a word is rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/a b.webp')$$, 'spaces are rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/-a.webp')$$, 'a leading dash is rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/a.webp.svg')$$, 'a photo extension followed by another is rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', E'watches/a.webp\n')$$, 'a trailing newline is rejected');
 select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'baska/a.webp')$$, 'uploads outside watches/ are rejected');
 select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'a.webp')$$, 'uploads at the bucket root are rejected');
-select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/x/kotu.svg')$$, 'non-photo extensions are rejected');
-select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/x/kotu.html')$$, 'html files are rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/kotu.svg')$$, 'non-photo extensions are rejected');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/kotu.html')$$, 'html files are rejected');
 select test.fails($$insert into storage.objects (bucket_id, name) values ('other', 'watches/a.webp')$$, 'admins cannot write to other buckets');
-select test.ok(test.rows($$select * from storage.objects where bucket_id = 'product-images'$$) = 2, 'the admin lists the bucket');
-select test.ok(test.rows($$update storage.objects set name = 'watches/test-saat-1/b1.webp' where name = 'watches/test-saat-1/a1.webp' returning 1$$) = 1,
-  'the admin renames a photograph');
-select test.fails($$update storage.objects set name = 'disari/b1.webp' where name = 'watches/test-saat-1/b1.webp'$$, 'a photograph cannot be moved out of watches/');
-select test.ok(test.rows($$delete from storage.objects where name = 'watches/test-saat-1/a2.JPG' returning 1$$) = 1, 'the admin removes a photograph');
+select test.ok(test.rows($$select * from storage.objects where bucket_id = 'product-images'$$) = 4, 'the admin lists the bucket');
+select test.ok(test.rows($$update storage.objects set name = 'watches/test-saat-1-b1.webp' where name = 'watches/test-saat-1-a1.webp' returning 1$$) = 1,
+  'the admin renames a photograph within the allowed names');
+select test.fails($$update storage.objects set name = 'disari/b1.webp' where name = 'watches/test-saat-1-b1.webp'$$, 'a photograph cannot be moved out of watches/');
+select test.fails($$update storage.objects set name = 'watches/x/b1.webp' where name = 'watches/test-saat-1-b1.webp'$$, 'a photograph cannot be moved into a sub-folder');
+select test.fails($$update storage.objects set name = 'watches/B1.WEBP' where name = 'watches/test-saat-1-b1.webp'$$, 'a photograph cannot be renamed to upper case');
+select test.ok(test.rows($$delete from storage.objects where name = 'watches/a.png' returning 1$$) = 1, 'the admin removes a photograph');
 reset role;
 
 -- ---------------------------------------- after the admin's changes ---
@@ -210,6 +225,8 @@ select test.ok(test.rows('select * from public.favorites') = 1, 'retiring a watc
 select test.ok(test.rows('select * from public.order_items') = 1, 'retiring a watch keeps the customer''s order line');
 select test.ok(test.rows($$select * from storage.objects where bucket_id = 'product-images'$$) = 0, 'the customer still cannot list the bucket');
 select test.ok(test.rows($$delete from storage.objects where bucket_id = 'product-images' returning 1$$) = 0, 'a customer cannot remove photographs');
+select test.ok(test.rows($$update storage.objects set name = 'watches/kendi.webp' where bucket_id = 'product-images' returning 1$$) = 0, 'a customer cannot rename or overwrite photographs');
+select test.fails($$insert into storage.objects (bucket_id, name) values ('product-images', 'watches/rolex-submariner-1.jpg')$$, 'a customer cannot upload, even a well-formed name');
 reset role;
 
 -- -------------------------------------------------------- admin removed ---

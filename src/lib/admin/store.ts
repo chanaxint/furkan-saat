@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import { promises as fs } from "fs";
 import { slugify } from "@/lib/format";
 import path from "path";
@@ -5,6 +6,8 @@ import { BRANDS } from "@/lib/data/brands";
 import { COLLECTIONS } from "@/lib/data/collections";
 import type { Settings } from "@/lib/data/site";
 import type { StageEase, StageMotion } from "@/lib/data/stages";
+import { SUPABASE_URL } from "@/lib/supabase/config";
+import { checkImageUpload, FILES_MAX_BYTES, isAllowedImageSource, LOCAL_IMAGE } from "./imageUpload";
 import {
   AVAILABILITY,
   CONDITIONS,
@@ -46,10 +49,13 @@ export const readStages = () => readJson<Record<string, StageMotion>>("stages.js
 export class InvalidInput extends Error {}
 /** The database refused the write for this user (Row Level Security). */
 export class AdminForbidden extends Error {}
+/** A service the panel depends on (Supabase) failed; the message is safe to show. */
+export class UpstreamFailed extends Error {}
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
-const IMAGE = /^\/assets\/images\/[a-z0-9/_.-]+\.(webp|jpe?g|png|avif)$/i;
+/** A watch photograph: a file under public/assets/images, or one in this project's Storage bucket. */
+const isWatchImage = (v: unknown) => isAllowedImageSource(v, SUPABASE_URL);
 
 const str = (v: unknown, label: string, required = true) => {
   const s = typeof v === "string" ? v.trim() : "";
@@ -69,7 +75,7 @@ export function validateProduct(input: Record<string, unknown>): Product {
   const price = input.price === null || input.price === "" || input.price === undefined ? null : Number(input.price);
   if (price !== null && (!Number.isFinite(price) || price < 0)) throw new InvalidInput("Fiyat geçersiz.");
   const images = Array.isArray(input.images) ? input.images.map(String) : [];
-  if (images.some((i) => !IMAGE.test(i))) throw new InvalidInput("Fotoğraf yolu geçersiz.");
+  if (images.some((i) => !isWatchImage(i))) throw new InvalidInput("Fotoğraf yolu geçersiz.");
   const collections = Array.isArray(input.collections) ? input.collections.map(String) : [];
   if (collections.some((c) => !COLLECTIONS.some((x) => x.slug === c))) throw new InvalidInput("Koleksiyon geçersiz.");
   const addedAt = str(input.addedAt, "Eklenme tarihi");
@@ -83,7 +89,7 @@ export function validateProduct(input: Record<string, unknown>): Product {
     price,
     currency: oneOf(input.currency, CURRENCIES, "Para birimi"),
     images,
-    ...(typeof input.front === "string" && IMAGE.test(input.front) ? { front: input.front } : {}),
+    ...(typeof input.front === "string" && isWatchImage(input.front) ? { front: input.front } : {}),
     description: str(input.description, "Açıklama"),
     specs: {
       movement: oneOf(specs.movement, MOVEMENTS, "Mekanizma"),
@@ -112,7 +118,7 @@ export function validateArticle(input: Record<string, unknown>): Article {
   const date = str(input.date, "Tarih");
   if (!DATE.test(date)) throw new InvalidInput("Tarih geçersiz.");
   const cover = str(input.cover, "Kapak fotoğrafı");
-  if (!IMAGE.test(cover)) throw new InvalidInput("Kapak fotoğrafı geçersiz.");
+  if (!LOCAL_IMAGE.test(cover)) throw new InvalidInput("Kapak fotoğrafı geçersiz.");
   const body = Array.isArray(input.body) ? (input.body as ArticleBlock[]) : [];
   if (!body.length || body.some((b) => !["p", "h", "quote"].includes(b?.type) || typeof b.text !== "string" || !b.text.trim()))
     throw new InvalidInput("Metin boş olamaz.");
@@ -184,18 +190,22 @@ export const saveSettings = (s: Settings) => writeJson("settings.json", s);
 /* ------------------------------------------------------------------ images */
 
 const IMAGE_DIR = path.join(process.cwd(), "public", "assets", "images", "watches");
-const TYPES: Record<string, string> = { "image/webp": "webp", "image/jpeg": "jpg", "image/png": "png", "image/avif": "avif" };
-const MAX_BYTES = 15 * 1024 * 1024;
 
-/** Saves an uploaded photograph and returns its public path. */
+/**
+ * Saves an uploaded photograph in the project's files (CATALOG_SOURCE=json,
+ * development only) and returns its public path. The file's content, extension
+ * and type are checked (./imageUpload); the file name is the watch's, never
+ * the uploaded one, with a random part so two uploads cannot overwrite each other.
+ */
 export async function saveImage(fileIn: File, name: string) {
-  const ext = TYPES[fileIn.type];
-  if (!ext) throw new InvalidInput("Yalnızca WebP, JPG, PNG ya da AVIF yüklenebilir.");
-  if (fileIn.size > MAX_BYTES) throw new InvalidInput("Fotoğraf 15 MB'tan büyük olamaz.");
+  if (fileIn.size > FILES_MAX_BYTES) throw new InvalidInput("Fotoğraf 15 MB'tan büyük olamaz.");
+  const bytes = new Uint8Array(await fileIn.arrayBuffer());
+  const check = checkImageUpload({ bytes, fileName: fileIn.name, mimeType: fileIn.type, maxBytes: FILES_MAX_BYTES });
+  if (!check.ok) throw new InvalidInput(check.error);
   const base = slugify(name) || "saat";
-  const filename = `${base}-${Date.now().toString(36)}.${ext}`;
+  const filename = `${base}-${Date.now().toString(36)}${randomBytes(3).toString("hex")}.${check.ext}`;
   await fs.mkdir(IMAGE_DIR, { recursive: true });
-  await fs.writeFile(path.join(IMAGE_DIR, filename), Buffer.from(await fileIn.arrayBuffer()));
+  await fs.writeFile(path.join(IMAGE_DIR, filename), bytes, { flag: "wx" });
   return `/assets/images/watches/${filename}`;
 }
 

@@ -40,6 +40,14 @@ fi
 echo "ok  catalog-verify notices a changed price"
 rm -f "$ROWS"
 
+echo "== supabase/rollback/20261027150000_product_images_policy.down.sql alone"
+fresh
+run supabase/rollback/20261027150000_product_images_policy.down.sql
+run supabase/tests/product_images_policy_rollback.sql
+# The migration applies again on top of its rollback.
+run supabase/migrations/20261027150000_product_images_policy.sql
+echo "ok  the migration applies again after its rollback"
+
 echo "== rollback, then supabase/tests/01_rls.test.sql"
 fresh
 for f in $(ls -r supabase/rollback/*.down.sql); do run "$f"; done

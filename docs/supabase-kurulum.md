@@ -18,6 +18,10 @@ saklanır; bu projenin tablolarında şifre yoktur.
 
 - Bu iki Supabase değeri tarayıcıya gider ve gizli değildir; kimin neyi
   okuyabileceğine veritabanındaki RLS karar verir.
+- Yeni biçimli publishable anahtar (`sb_publishable_…`) katalog okumalarında
+  yalnızca `apikey` başlığıyla gönderilir; JWT olmadığı için `Authorization`
+  başlığına konmaz. Eski JWT biçimli anon anahtarı ayrıca `Authorization:
+  Bearer` olarak da gönderilir (`@supabase/supabase-js` ile aynı).
 - **`service_role` / secret anahtarını bu dosyaya, koda ya da GitHub'a
   koymayın.** Uygulamanın bugün buna ihtiyacı yok.
 - `.env`, `.env.local` ve diğer `.env.*` dosyaları git'e girmez; yalnızca
@@ -26,31 +30,77 @@ saklanır; bu projenin tablolarında şifre yoktur.
 Değişkenler tanımlı değilken site normal çalışır; üyelik ekranları "Üyelik
 sistemi şu anda hazırlanıyor" der.
 
-## 2. Veritabanı
+## 2. Veritabanı kurulumu
 
-Önce bir test projesinde deneyin; gerçek veri olan bir projede başlamadan önce
-yedek alın (`pg_dump` / `supabase db dump`). Supabase → SQL Editor'da sırayla
-çalıştırın:
+> **Doğrulama durumu:** Bu adımlar yalnızca yerel PostgreSQL ve testlerdeki
+> Supabase taklidiyle denendi. Gerçek bir Supabase projesinde henüz hiç
+> uygulanmadı; ilk uygulama bir **test projesinde** yapılmalı ve sonuçları
+> bölüm 8'deki listeyle kontrol edilmelidir.
 
-1. `supabase/migrations/20261006120000_accounts.sql`: tablolar, RLS
+Gerçek veri olan bir projede başlamadan önce yedek alın (Supabase paneli →
+Database → Backups ya da `pg_dump`). Aşağıdaki iki yoldan **birini** seçin.
+
+### Migration'ların sırası (iki yol için de aynı)
+
+1. `supabase/migrations/20261006120000_accounts.sql`: müşteri tabloları, RLS
    politikaları, tetikleyiciler, `create_order` fonksiyonu.
 2. `supabase/migrations/20261026120000_admin_catalog.sql`: yöneticiler
    (`admin_users`, `is_admin()`), katalog sütunları, slug yönlendirmeleri,
    değişiklik kaydı, `product-images` bucket'ı ve politikaları.
 3. `supabase/migrations/20261027090000_product_admin_edits.sql`: ürünü son
    düzenleyen yöneticiyi herkese açık ürün tablosundan çıkarır.
-4. `supabase/seed/products.sql`: `products.json`'daki 106 saat. Slug'a göre
-   günceller; kimlikler değişmez, hiçbir şey silinmez, yöneticinin panelden
-   düzenlediği ürünlere dokunulmaz. Yeniden üretmek için `npm run db:products`.
 
-Supabase CLI kullanıyorsanız `supabase db push` migration'ları sırayla
-uygular. Geri dönüş: `supabase/rollback/` (yeniden eskiye doğru, elle;
-bu klasörü CLI okumaz).
+Ardından seed: `supabase/seed/products.sql` (`products.json`'daki 106 saat).
+Slug'a göre günceller; kimlikler değişmez, hiçbir şey silinmez, yöneticinin
+panelden düzenlediği ürünlere dokunulmaz. Dosya üç migration'ın da uygulanmış
+olmasını bekler. Yeniden üretmek için `npm run db:products` (Node 22.18+).
+
+### Yol A — SQL Editor (önerilen)
+
+Komut satırı gerektirmez.
+
+1. Supabase paneli → **SQL Editor** → **New query**.
+2. `supabase/migrations/20261006120000_accounts.sql` dosyasının tamamını
+   yapıştırın → **Run**. Hata olmadan bittiğini görün.
+3. Aynı şekilde `20261026120000_admin_catalog.sql` → **Run**.
+4. Aynı şekilde `20261027090000_product_admin_edits.sql` → **Run**.
+5. `supabase/seed/products.sql` → **Run**.
+6. Kontrol için yeni bir sorguda çalıştırın; 106 dönmelidir:
+
+   ```sql
+   select count(*) from public.products where is_active;
+   ```
+
+Her dosya bir kez çalıştırılır. Bir migration'ı ikinci kez çalıştırmak hata
+verir (tablolar zaten vardır); seed ise tekrar çalıştırılabilir.
+
+### Yol B — Supabase CLI (isteğe bağlı)
+
+Bu depoda CLI yapılandırması **yoktur**: `supabase/config.toml` dosyası
+bulunmaz ve depo hiçbir Supabase projesine bağlı değildir. Bu nedenle
+`supabase db push` olduğu gibi **çalışmaz**; önce projenin bağlanması gerekir.
+Supabase CLI belgelerine göre sıra şöyledir (bu projede denenmedi):
+
+1. Supabase CLI'yi kurun ve `supabase login` ile giriş yapın (hesap erişim
+   anahtarı ister; bu anahtarı depoya koymayın).
+2. Proje klasöründe `supabase init`: `supabase/config.toml` oluşturur. Mevcut
+   `supabase/migrations/` klasörü olduğu gibi kullanılır.
+3. `supabase link --project-ref <proje-kimliği>`: veritabanı parolasını ister.
+4. `supabase db push`: `supabase/migrations/` içindeki migration'ları zaman
+   damgası sırasıyla uygular.
+5. Seed'i ayrıca çalıştırın: `supabase/seed/products.sql`, CLI'nin varsayılan
+   seed konumunda değildir; en güvenlisi Yol A'nın 5. adımı gibi SQL Editor'da
+   çalıştırmaktır.
+
+`supabase/rollback/` klasörünü CLI okumaz; geri dönüş dosyaları yalnızca elle,
+yeniden eskiye doğru (önce `20261027…`, sonra `20261026…`) ve yedek alındıktan
+sonra çalıştırılır. `20261006…` (müşteri hesapları) için geri dönüş dosyası
+yoktur: geri almak müşteri verisini siler.
 
 ### RLS testleri
 
-Yerel bir PostgreSQL (15+) üzerinde, iki müşteri ve bir ziyaretçiyle 57
-saldırı/izin senaryosu:
+Yerel bir PostgreSQL (15+) üzerinde; müşteri, yönetici ve ziyaretçi
+senaryoları, seed ve geri dönüş dosyaları (`supabase/tests/`):
 
 ```
 PGHOST=… PGPORT=… PGUSER=postgres npm run db:test
@@ -159,15 +209,51 @@ gönderdiği için gerekirse `handle_new_user` fonksiyonu bunu da okuyacak
 | `json` (varsayılan; tanımsız da `json`) | `src/lib/data/products.json` | Yalnızca `npm run dev` ile; dosyaya yazar |
 | `db` | Supabase `public.products` (yalnızca aktif saatler) | Canlı sitede de; yöneticinin oturumuyla, RLS üzerinden yazar |
 
+Gereken ortam değişkenleri:
+
+| Mod | Gerekli | Not |
+| --- | --- | --- |
+| `json` | Hiçbiri | Supabase değişkenleri yoksa site çalışır; üyelik ekranları "hazırlanıyor" der, panel açılmaz (yönetici girişi gerekir) |
+| `db` | `CATALOG_SOURCE=db`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (ya da eski projelerde `NEXT_PUBLIC_SUPABASE_ANON_KEY`), `NEXT_PUBLIC_SITE_URL` | Service role anahtarı **gerekmez** |
+
 - `db` ile Supabase ayarları eksikse build açık bir hatayla durur; site
   sessizce JSON'a dönmez.
-- Panel yalnızca yöneticilere açıktır. İlk yöneticiyi SQL Editor'da ekleyin
-  (kullanıcı önce siteden üye olmuş olmalı):
+- Panel (`/yonetim`) her iki modda da yalnızca yöneticilere açıktır; yerelde
+  `npm run dev` ile de yönetici girişi gerekir.
 
-  ```sql
-  insert into public.admin_users (user_id, role)
-  select id, 'owner' from auth.users where email = 'YONETICI@ORNEK.COM';
-  ```
+### Yönetici hesabı oluşturma
+
+Yönetici rolü `user_metadata`'da değil, yalnızca `public.admin_users`
+tablosunda tutulur; bu tabloya siteden yazılamaz, yalnızca SQL Editor'dan.
+
+1. Yönetici olacak kişi siteden normal bir müşteri gibi üye olur (`/giris` →
+   Üye Ol) ve e-posta doğrulama bağlantısına tıklar.
+2. Supabase paneli → **SQL Editor**'da, e-posta adresini yazarak:
+
+   ```sql
+   insert into public.admin_users (user_id, role)
+   select id, 'owner' from auth.users where email = 'YONETICI@ORNEK.COM';
+   ```
+
+3. Kontrol (yönetici burada listelenmiyorsa o e-postayla bir üye yoktur ya da
+   e-posta farklı yazılmıştır):
+
+   ```sql
+   select u.email, a.role, a.created_at
+     from public.admin_users a join auth.users u on u.id = a.user_id;
+   ```
+4. Kişi sitede çıkış yapıp yeniden giriş yapar ve `/yonetim` adresini açar.
+   Yetki her istekte veritabanından okunur.
+5. Yetkiyi kaldırmak için:
+
+   ```sql
+   delete from public.admin_users
+    where user_id = (select id from auth.users where email = 'YONETICI@ORNEK.COM');
+   ```
+
+   Etkisi bir sonraki istekte başlar; açık oturum panele giremez.
+
+Diğer notlar:
 - `db` modunda panelde "Sil" saati silmez, arşivler (`is_active = false`):
   müşterilerin favorileri ve geçmiş siparişleri korunur. Slug değiştirilirse
   eski adres kalıcı olarak yeni adrese yönlenir.
@@ -202,3 +288,24 @@ Geçiş sırası: migration'lar → seed → `npm run catalog:verify -- --supaba
 ilk yönetici → `CATALOG_SOURCE=db` ile yeniden deploy. Geri dönmek için
 `CATALOG_SOURCE=json` yapıp yeniden deploy etmek yeterlidir; veritabanı
 değişmez.
+
+## 8. Gerçek projede henüz doğrulanmamış olanlar
+
+Kod ve testler yalnızca yerel PostgreSQL ve Supabase taklidiyle denendi. Bir
+test projesinde şunlar kontrol edilmeden `CATALOG_SOURCE=db` canlıya
+alınmamalıdır:
+
+- Migration'ların hosted Supabase'de hatasız uygulanması; özellikle
+  `storage.buckets`'a kayıt ve `storage.objects` üzerinde politika oluşturma.
+- `npm run catalog:verify -- --supabase` sonucunun "Katalog birebir aynı"
+  olması (publishable anahtarın yalnızca `apikey` başlığıyla kabul edildiğini de
+  gösterir).
+- Giriş: oturum doğrulaması (`getClaims`, JWKS) ve `is_admin` RPC'si; müşteri
+  hesabıyla `/yonetim` 404, yönetici hesabıyla açılmalı.
+- Panelden ekleme, düzenleme, slug değiştirme ve silme (arşivleme); sitede
+  hemen görünmesi ve eski adresin yeni adrese yönlenmesi.
+- Hata kodları ve RLS davranışı (yönetici olmayan yazamaz), `count=exact`
+  ile satır sayısının gelmesi.
+- Storage: bucket ayarları (15 MB, yalnızca fotoğraf türleri) ve politikalar.
+  Uygulama henüz Storage'a yükleme yapmıyor.
+- Gerçek alan adıyla panel istekleri (Origin kontrolü; `www` ve `www`'suz).

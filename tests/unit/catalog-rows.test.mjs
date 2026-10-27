@@ -3,12 +3,14 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import { BRANDS } from "../../src/lib/data/brands.ts";
+import { startMockSupabase } from "../admin-http/mock-supabase.mjs";
 import {
   catalogConfigError,
   catalogSourceFrom,
   compareCatalog,
   fetchCatalogRows,
   fetchSlugRedirects,
+  isNewApiKey,
   slugRedirectMap,
   PRODUCT_COLUMNS,
   productToRow,
@@ -222,4 +224,86 @@ test("redirect read errors are thrown, never read as 'no redirect', and never co
       assert.doesNotMatch(e.message, /pk-secret-value/);
       return true;
     });
+});
+
+/* ---------------------------------------------------------- API key headers
+ * Fake keys only. These tests check the requests this site makes and run them
+ * against the local stand-in (tests/admin-http/mock-supabase.mjs); they do not
+ * show how a real Supabase project answers.
+ */
+const NEW_KEY = "sb_publishable_test_only_fake";
+// An older anon key is a JWT; built here so no JWT-looking text sits in the source.
+const LEGACY_KEY = [{ alg: "HS256", typ: "JWT" }, { role: "anon", iss: "supabase" }]
+  .map((part) => Buffer.from(JSON.stringify(part)).toString("base64url"))
+  .concat("test-signature")
+  .join(".");
+
+test("isNewApiKey: sb_publishable_ and sb_secret_ keys are the new format", () => {
+  assert.equal(isNewApiKey(NEW_KEY), true);
+  assert.equal(isNewApiKey("sb_secret_test_only_fake"), true);
+  assert.equal(isNewApiKey(LEGACY_KEY), false);
+  assert.equal(isNewApiKey("sb_temp_x"), false, "as supabase-js: temporary keys keep the Bearer fallback");
+  assert.equal(isNewApiKey("test-publishable-key"), false);
+});
+
+test("a new-format key is sent only as apikey, never as the Bearer token", async () => {
+  const seen = [];
+  const fake = async (_url, init) => {
+    seen.push(init.headers);
+    return new Response("[]", { status: 200, headers: { "content-range": "*/0" } });
+  };
+  await fetchCatalogRows("https://example.supabase.co", NEW_KEY, fake);
+  await fetchSlugRedirects("https://example.supabase.co", NEW_KEY, fake);
+  for (const h of seen) {
+    assert.equal(h.apikey, NEW_KEY);
+    assert.ok(!("authorization" in h) && !("Authorization" in h), "no Authorization header");
+  }
+});
+
+test("an older JWT-format anon key is still sent as apikey and as the Bearer token", async () => {
+  const seen = [];
+  const fake = async (_url, init) => {
+    seen.push(init.headers);
+    return new Response("[]", { status: 200, headers: { "content-range": "*/0" } });
+  };
+  await fetchCatalogRows("https://example.supabase.co", LEGACY_KEY, fake);
+  await fetchSlugRedirects("https://example.supabase.co", LEGACY_KEY, fake);
+  for (const h of seen) {
+    assert.equal(h.apikey, LEGACY_KEY);
+    assert.equal(h.authorization, `Bearer ${LEGACY_KEY}`);
+  }
+});
+
+/** The stand-in with three watches and one redirect, for the given key. */
+async function standIn(key) {
+  const rows = rowsOf().slice(0, 3);
+  const mock = await startMockSupabase({ catalog: rows, publishableKey: key });
+  mock.redirects.set("eski-adres", mock.products.find((p) => p.slug === rows[1].slug).id);
+  return { mock, url: `http://127.0.0.1:${mock.port}`, rows };
+}
+
+test("stand-in, new-format key: catalogue and redirects are read; the key as Bearer is refused", async () => {
+  const { mock, url, rows } = await standIn(NEW_KEY);
+  try {
+    const read = await fetchCatalogRows(url, NEW_KEY);
+    assert.deepStrictEqual(read.map((r) => r.slug), rows.map((r) => r.slug));
+    assert.deepStrictEqual([...(await fetchSlugRedirects(url, NEW_KEY))], [["eski-adres", rows[1].slug]]);
+    // The request the site used to make: refused by the stand-in.
+    const bearer = await fetch(`${url}/rest/v1/products?select=slug`, { headers: { apikey: NEW_KEY, authorization: `Bearer ${NEW_KEY}` } });
+    assert.equal(bearer.status, 401);
+    await assert.rejects(fetchCatalogRows(url, "sb_publishable_another_fake"), /HTTP 401/, "a wrong key is refused");
+  } finally {
+    await mock.close();
+  }
+});
+
+test("stand-in, older JWT-format anon key: catalogue and redirects are read as before", async () => {
+  const { mock, url, rows } = await standIn(LEGACY_KEY);
+  try {
+    assert.equal((await fetchCatalogRows(url, LEGACY_KEY)).length, rows.length);
+    assert.deepStrictEqual([...(await fetchSlugRedirects(url, LEGACY_KEY))], [["eski-adres", rows[1].slug]]);
+    assert.equal(mock.catalogReads(), 1);
+  } finally {
+    await mock.close();
+  }
 });

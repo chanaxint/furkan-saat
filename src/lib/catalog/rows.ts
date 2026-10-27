@@ -238,9 +238,19 @@ export function compareCatalog(products: Product[], rows: unknown[], brandName: 
 
 /* ------------------------------------------------------------- REST read */
 
+/**
+ * New-format Supabase keys (sb_publishable_…, sb_secret_…) are not JWTs and belong
+ * only in the `apikey` header, as @supabase/supabase-js documents; without an
+ * Authorization header the request is expected to run as the anonymous role
+ * (not yet confirmed on a real project, see docs/supabase-kurulum.md section 8).
+ * Older JWT-format anon keys are also sent as the Bearer token, as supabase-js
+ * sends them.
+ */
+export const isNewApiKey = (key: string) => key.startsWith("sb_publishable_") || key.startsWith("sb_secret_");
+
 const restHeaders = (publishableKey: string) => ({
   apikey: publishableKey,
-  authorization: `Bearer ${publishableKey}`,
+  ...(isNewApiKey(publishableKey) ? {} : { authorization: `Bearer ${publishableKey}` }),
   accept: "application/json",
   // The total row count comes back in Content-Range: a list cut short by the
   // API's row limit (Supabase: 1000 by default) is an error, never silently shorter.

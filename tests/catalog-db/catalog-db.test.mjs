@@ -8,7 +8,8 @@
 //     its old address redirects after a slug change, and it is gone once retired
 //   - in db mode the panel manages watches on the live site, while the pages
 //     that write the project's files stay development-only
-// No real Supabase project is involved.
+// No real Supabase project is involved: passing here does not show that a real
+// project answers the same way (see docs/supabase-kurulum.md for what to check).
 //   npm run test:catalog-db
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
@@ -34,11 +35,14 @@ const freePort = () =>
     });
   });
 
+const KEY = "sb_publishable_test_only_fake";
 let mock, base, server, users;
 const log = [];
 
 before(async () => {
-  mock = await startMockSupabase({ catalog: PRODUCTS.map((p, i) => productToRow(p, i, brandName(p.brand))) });
+  // A fake key in the new format (sb_publishable_…): the stand-in refuses it as a Bearer token,
+  // so every catalogue and redirect read must send it in apikey only.
+  mock = await startMockSupabase({ catalog: PRODUCTS.map((p, i) => productToRow(p, i, brandName(p.brand))), publishableKey: KEY });
   // Redirects already in the database: to a watch on sale, to a retired watch, and to no watch.
   const retired = { ...productToRow({ ...PRODUCTS[2], slug: "arsiv-saat" }, 500, brandName(PRODUCTS[2].brand)), id: randomUUID(), is_active: false };
   mock.products.push(retired);
@@ -56,7 +60,7 @@ before(async () => {
     ...process.env,
     CATALOG_SOURCE: "db",
     NEXT_PUBLIC_SUPABASE_URL: `http://localhost:${mock.port}`,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "test-publishable-key",
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: KEY,
     // The public address differs from the one the tests use, as on a real site behind a
     // domain: the panel's Origin check must accept the address the browser actually used.
     NEXT_PUBLIC_SITE_URL: "https://furkansaat.example",

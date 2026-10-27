@@ -9,7 +9,12 @@
 // the database's rules (Row Level Security, unique slugs, slug redirects):
 //   GET   /rest/v1/products, /rest/v1/product_slug_redirects
 //   PATCH /rest/v1/products (update), POST /rest/v1/products (insert)
-// It mimics PostgREST closely enough for these tests; it is not Supabase.
+// It mimics PostgREST closely enough for these tests; it is not Supabase, and
+// passing these tests does not show that a real project behaves the same way.
+// REST requests must carry the project key in `apikey`. A new-format key
+// (sb_publishable_…, sb_secret_…) sent as the Bearer token is refused: stricter
+// than @supabase/supabase-js (which sends it for REST), so the tests show the
+// site never does. An older JWT-format anon key may be sent as the Bearer token.
 import { createServer } from "node:http";
 import { randomBytes, randomUUID } from "node:crypto";
 
@@ -61,7 +66,7 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
     const known = users.get(token);
     const url = new URL(req.url, "http://mock");
     const path = url.pathname;
-    calls.push({ method: req.method, path, token });
+    calls.push({ method: req.method, path, token, anon: !known });
     const send = (status, body, total) => {
       const headers = { "content-type": "application/json" };
       // As PostgREST with Prefer: count=exact.
@@ -86,8 +91,10 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
       }
       if (!catalog) return send(404, { message: "not mocked" });
 
-      // A request carries a user's token, or only the public key (anon).
-      if (!known && token !== publishableKey) return send(401, { code: "PGRST301", message: "JWT invalid" });
+      if (req.headers.apikey !== publishableKey) return send(401, { message: "Invalid API key" });
+      if (/^sb_(publishable|secret)_/.test(token)) return send(401, { code: "PGRST301", message: "Expected a JWT as the Bearer token" });
+      // A user's token, or anonymous: no Authorization, or an older JWT-format anon key.
+      if (!known && token && token !== publishableKey) return send(401, { code: "PGRST301", message: "JWT invalid" });
       const role = known?.admin ? "admin" : known ? "authenticated" : "anon";
       const params = url.searchParams;
       const body = raw ? JSON.parse(raw) : null;
@@ -147,8 +154,8 @@ export function startMockSupabase({ catalog = null, publishableKey = "test-publi
     return { token, cookie: `base64-${b64url(session)}` };
   }
 
-  /** How many times the site read the public catalogue (the public key, the products list). */
-  const catalogReads = () => calls.filter((c) => c.method === "GET" && c.path === "/rest/v1/products" && c.token === publishableKey).length;
+  /** How many times the site read the public catalogue (anonymous reads of the products list). */
+  const catalogReads = () => calls.filter((c) => c.method === "GET" && c.path === "/rest/v1/products" && c.anon).length;
   /** How many times the site read the slug redirects. */
   const redirectReads = () => calls.filter((c) => c.method === "GET" && c.path === "/rest/v1/product_slug_redirects").length;
 

@@ -11,6 +11,45 @@ npm run preview    # production build on http://localhost:4321 — judge smoothn
 npm run typecheck
 ```
 
+## Catalogue, accounts and admin panel (Supabase)
+
+Setup, in Turkish and step by step (SQL Editor or Supabase CLI, first admin,
+what is still to be checked on a real project): **[`docs/supabase-kurulum.md`](docs/supabase-kurulum.md)**.
+
+`CATALOG_SOURCE` decides where the watches come from:
+
+- `json` (the default, also when unset): `src/lib/data/products.json`. Needs no
+  environment variables; the admin panel (`/yonetim`) edits this file and works
+  only with `npm run dev`.
+- `db`: Supabase `public.products`. Needs `NEXT_PUBLIC_SUPABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (or `NEXT_PUBLIC_SUPABASE_ANON_KEY` on
+  older projects) and `NEXT_PUBLIC_SITE_URL`; without them the build stops with
+  an error instead of falling back to the JSON file. The panel then also works
+  on the live site, writing as the signed-in admin through Row Level Security.
+  No service role key is used.
+
+Either way `/yonetim` needs a signed-in admin (a row in `public.admin_users`).
+Copy `.env.example` to `.env.local`; `.env*` files are never committed.
+
+The repository has no `supabase/config.toml` and is not linked to a project:
+`supabase db push` does not work until `supabase init` and `supabase link` are
+run (see the docs). Migrations are in `supabase/migrations/` (apply in
+timestamp order), the catalogue seed is `supabase/seed/products.sql`, and the
+manual rollback files are in `supabase/rollback/`.
+
+```bash
+npm test                     # unit tests (node --test)
+npm run db:test              # migrations + RLS tests on a throwaway local PostgreSQL (PG* variables)
+npm run test:admin-http      # admin guard against `next dev` and a local Supabase stand-in
+npm run test:admin-http:prod # the same against a production build
+npm run test:catalog-db      # CATALOG_SOURCE=db on a production build, against the stand-in
+npm run db:products          # regenerate supabase/seed/products.sql (Node 22.18+)
+npm run catalog:verify -- --supabase   # compare a project's catalogue with products.json (read-only)
+```
+
+The tests use a local stand-in for Supabase and fake keys; they do not show
+that a real project behaves the same way.
+
 ## Page structure
 
 | #  | Section            | Component                                  |
